@@ -89,6 +89,11 @@ th{color:var(--ink-2);font-weight:500}
 .bars .ref{position:absolute;top:-3px;bottom:-3px;width:0;border-left:1px solid var(--ink-2)}
 .bars .num{font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
 .bars .row.on .num{color:var(--ink);font-weight:600}
+.sklinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin-top:12px}
+.sklinks a{display:block;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--ink);text-decoration:none;font-size:14px;line-height:1.35}
+.sklinks a:hover{border-color:var(--accent)}
+.sklinks a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sklinks small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
 .survey{background:var(--survey-bg);border:1.5px dashed var(--survey-border);border-radius:12px;padding:16px;margin-bottom:12px}
 .survey .pill{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--survey-ink);border:1px solid var(--survey-border);border-radius:999px;padding:1px 8px;margin-bottom:8px}
 .survey h2{font-size:15px;margin:0 0 10px}
@@ -140,6 +145,12 @@ footer p{margin:0 0 8px}
       <div class="bars" id="bars" style="margin-top:10px"></div>
     </section>
   </div>
+
+  <section class="card skills" aria-labelledby="sk" style="margin-bottom:12px">
+    <h2 id="sk"></h2>
+    <p class="hint" id="skHint"></p>
+    <div class="sklinks" id="skLinks"></div>
+  </section>
 
   <section class="survey" aria-labelledby="sv">
     <span class="pill">Survey figures · entered by hand</span>
@@ -308,6 +319,44 @@ function renderBars(){
     </div>`).join('');
 }
 
+/* ---------- skills links (SWDA Jobs-Skills Portal) ---------- */
+// Skills Framework names as listed at jobsandskills.swda.gov.sg/frameworks/sector-information (checked 11 Oct 2026).
+// pdf: file under SFW_BASE; page: a web page used instead where the portal links to one.
+const SFW_BASE = 'https://jobsandskills.skillsfuture.gov.sg/resources/skills-framework-sector/';
+const DEMAND_DASH = 'https://jobsandskills.swda.gov.sg/data-and-tools/dashboards/job-skills-demand-trends-dashboard';
+const SFW_INDEX = 'https://jobsandskills.swda.gov.sg/frameworks/sector-information';
+const SKILLS = {
+  manufacturing: [{n:'Precision Engineering', pdf:'Precision-Engineering.pdf'}, {n:'Electronics', pdf:'Electronics.pdf'}, {n:'Food Manufacturing', pdf:'Food-Manufacturing.pdf'}],
+  construction:  [{n:'Built Environment', pdf:'Built-environment.pdf'}],
+  transport:     [{n:'Logistics', pdf:'Logistics.pdf'}, {n:'Public Transport', pdf:'Public-Transport.pdf'}],
+  food:          [{n:'Food Services', page:'https://www.wsg.gov.sg/home/employers-industry-partners/jobs-transformation-maps/jobs-transformation-map-singapore-food-services-industry', kind:'Jobs Transformation Map (WSG)'},
+                  {n:'Hotel and Accommodation Services', pdf:'Hotel-and-Accommodation%20Services.pdf'}],
+  health:        [{n:'Healthcare', pdf:'Healthcare.pdf'}, {n:'Social Service', pdf:'Social-Service.pdf'}],
+  admin:         [{n:'Security', pdf:'Security.pdf'}, {n:'Environmental Services', pdf:'Environmental-Services.pdf'}],
+  security:      [{n:'Security', pdf:'Security.pdf'}],
+};
+const courseUrl = q => 'https://courses.myskillsfuture.gov.sg/search?q=' + encodeURIComponent(q);
+function renderSkills(){
+  const s = sectorObj(state.sector), list = SKILLS[state.sector];
+  const a = (href, title, sub) => `<a href="${href}" rel="noopener">${title} ↗<small>${sub}</small></a>`;
+  let html = '';
+  if (list) {
+    list.forEach(f => {
+      html += f.pdf ? a(SFW_BASE + f.pdf, `${f.n}: Skills Framework`, 'PDF download · job roles, skills and career paths')
+                    : a(f.page, `${f.n}: ${f.kind}`, 'Web page · how jobs and skills in the sector are changing');
+      html += a(courseUrl(f.n), `${f.n}: courses`, 'MySkillsFuture course search');
+    });
+  } else {
+    html += a(SFW_INDEX, 'Skills Frameworks for 38 sectors', 'SWDA Jobs-Skills Portal');
+  }
+  html += a(DEMAND_DASH, 'Jobs-Skills Demand Trends dashboard', 'Hiring demand and in-demand skills by job role. Pick the sector inside the dashboard.');
+  document.getElementById('sk').textContent = list ? `Skills to train for · ${s.label}` : 'Skills to train for';
+  document.getElementById('skHint').textContent = list
+    ? `Where hiring is tight, these SWDA (SkillsFuture) resources show the job roles and skills employers in this sector ask for. Skills Framework sectors don't match MOM's industry groups exactly.`
+    : 'Pick a sector above for its Skills Framework and courses.';
+  document.getElementById('skLinks').innerHTML = html;
+}
+
 /* ---------- survey card & footer ---------- */
 function renderStatic(){
   const M = D.manual, a = M.sme_ai_adoption;
@@ -329,7 +378,7 @@ function render(){
   buildSeg('metricSeg', [['vac','Vacancies'],['rate','Rate'],['ret','Retrenched']], 'metric');
   buildSeg('rangeSeg', [['5Y','5Y'],['10Y','10Y'],['Max','Max']], 'range');
   state.hover = null;
-  renderKpis(); renderLine(); renderBars();
+  renderKpis(); renderLine(); renderBars(); renderSkills();
 }
 document.getElementById('tblBtn').onclick = e => { state.table = !state.table; const t = document.getElementById('tbl'); t.hidden = !state.table;
   e.target.textContent = state.table ? 'Hide table' : 'Show table'; e.target.setAttribute('aria-expanded', state.table); renderLine(); };
