@@ -1,7 +1,7 @@
 /* Live Workplace Conditions: service worker. Caches the app shell only.
  * It never caches API data, map tiles or any cross-origin request: safety data must always come from the network. */
 'use strict';
-const CACHE = 'wc-shell-v2';
+const CACHE = 'wc-shell-v3';
 const SHELL = ['./', 'index.html', 'styles.css', 'strings.js', 'rules.js', 'air.js', 'data.js', 'app.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', e => {

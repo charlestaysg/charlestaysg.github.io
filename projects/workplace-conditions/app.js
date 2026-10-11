@@ -921,6 +921,8 @@
     steps.push(async () => { state.h24 = await D.loadSimple('h24', D.parse24h, budget); });
     for (let i = 0; i < steps.length; i++) {
       if (i) await D.sleep(D.STEP_GAP_MS);
+      // Give way to a fast cycle (e.g. a manual Refresh) so the two never fire calls together.
+      while (sched && sched.isBusy()) await D.sleep(500);
       try { await steps[i](); } catch (_) { /* slow data is optional */ }
       recomputeAndRender();
     }

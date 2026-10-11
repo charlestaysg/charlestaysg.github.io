@@ -258,21 +258,22 @@
   }
 
   // ------------------------------------------------------------------ scheduler
-  /** Fast cycle every 5 min, slow cycle every 30 min offset by 90 s. One cycle at a time.
-   *  Pauses while hidden. Manual refresh: fast cycle, locked for 30 s, ignored while in flight. */
+  /** Fast cycle every 5 min, slow cycle every 30 min (first one ~15 s after load). Pauses while hidden.
+   *  Fast and slow are tracked separately so a long slow cycle never blocks the Refresh button:
+   *  a manual refresh runs the fast cycle at once, and the slow cycle waits between its steps
+   *  while a fast cycle is running (see isBusy), which keeps calls inside the rate limit.
+   *  Manual refresh: locked for 15 s, ignored while a fast cycle is in flight. */
   function createScheduler(o) {
-    const FAST = o.fastMs || 300000, SLOW = o.slowMs || 1800000, OFFSET = o.slowOffsetMs || 90000;
-    const LOCK = o.lockMs || 30000, VIS = o.visMs || 60000, RETRY = o.retryMs || 60000;
+    const FAST = o.fastMs || 300000, SLOW = o.slowMs || 1800000;
+    const LOCK = o.lockMs || 15000, VIS = o.visMs || 60000, RETRY = o.retryMs || 60000;
     const now = o.now || Date.now;
     const start = now();
-    // First slow cycle runs right after the first fast burst, so UV, wind, forecast and the day chart
-    // aren't blank on load; later slow cycles follow every SLOW ms after the previous one.
     const FIRST_SLOW = o.firstSlowMs != null ? o.firstSlowMs : 15000;
-    let nextFast = start, nextSlow = start + FIRST_SLOW, inflight = false, lastSuccess = 0, lockUntil = 0;
+    let nextFast = start, nextSlow = start + FIRST_SLOW, fastBusy = false, slowBusy = false, lastSuccess = 0, lockUntil = 0;
 
     async function run(kind) {
-      if (inflight) return false;
-      inflight = true;
+      if (kind === 'fast' ? fastBusy : slowBusy) return false;
+      if (kind === 'fast') fastBusy = true; else slowBusy = true;
       try {
         if (kind === 'fast') {
           const ok = await o.runFast();
@@ -284,30 +285,31 @@
         }
       } catch (_) {
         if (kind === 'fast') nextFast = now() + RETRY; else nextSlow = now() + SLOW;
-      } finally { inflight = false; }
+      } finally { if (kind === 'fast') fastBusy = false; else slowBusy = false; }
       return true;
     }
     return {
       tick() {
-        if ((o.isHidden && o.isHidden()) || inflight) return null;
-        if (now() >= nextFast) return run('fast');
-        if (now() >= nextSlow) return run('slow');
+        if (o.isHidden && o.isHidden()) return null;
+        if (!fastBusy && now() >= nextFast) return run('fast');
+        if (!fastBusy && !slowBusy && now() >= nextSlow) return run('slow');
         return null;
       },
       manualRefresh() {
-        if (inflight || now() < lockUntil) return false;
+        if (fastBusy || now() < lockUntil) return false;
         lockUntil = now() + LOCK;
         run('fast');
         return true;
       },
       onVisible() {
-        if (!inflight && now() - lastSuccess > VIS) return run('fast');
+        if (!fastBusy && now() - lastSuccess > VIS) return run('fast');
         return null;
       },
       lockLeftMs() { return Math.max(0, lockUntil - now()); },
       nextFastAt() { return nextFast; },
       lastSuccessAt() { return lastSuccess; },
-      isBusy() { return inflight; },
+      isBusy() { return fastBusy; },
+      isSlowBusy() { return slowBusy; },
     };
   }
 
