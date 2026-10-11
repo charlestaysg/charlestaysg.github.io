@@ -83,6 +83,8 @@ th,td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--grid)}
 th:first-child,td:first-child{text-align:left}
 th{color:var(--ink-2);font-weight:500}
 .tablewrap{max-height:320px;overflow:auto}
+.bars .row,.pm .row{cursor:pointer}
+.bars .row:hover .name,.pm .row:hover .nm{color:var(--ink)}
 .bars .row{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:2px 8px;align-items:center;padding:3px 0;cursor:default}
 .bars .name{font-size:12px;color:var(--ink-2);grid-column:1/-1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bars .row.on .name{color:var(--ink);font-weight:600}
@@ -131,6 +133,7 @@ footer{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:20px}
 footer a{color:var(--ink-2)}
 footer p{margin:0 0 8px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (min-width:861px){.chips{flex-wrap:wrap;overflow:visible;position:static}}
 @media (max-width:860px){.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.sgrid{grid-template-columns:1fr}.kpi .val{font-size:26px}h1{font-size:22px}}
 </style>
@@ -357,7 +360,7 @@ function renderBars(){
   const onKey = state.sector;
   document.getElementById('barHint').textContent = `${qLabel(D.latest)}. Line marks all industries (${nat.toFixed(1)}%).`;
   document.getElementById('bars').innerHTML = items.map(({s,v}) => `
-    <div class="row ${s.key===onKey?'on':''}" title="${s.label}: ${v.toFixed(1)}%">
+    <div class="row ${s.key===onKey?'on':''}" data-k="${s.key}" title="${s.label}: ${v.toFixed(1)}%">
       <div class="name">${s.label}${s.key==='security'?' (part of admin & support)':''}</div>
       <div class="track"><div class="bar" style="width:${v/max*100}%"></div><div class="ref" style="left:${nat/max*100}%"></div></div>
       <div class="num">${v.toFixed(1)}%</div>
@@ -386,7 +389,7 @@ function renderPmet(){
   const line = (v, cls) => v == null ? `<div class="ln"><span class="na">Not published</span><span></span></div>`
     : `<div class="ln"><div class="b ${cls}" style="width:${v/max*100}%"></div><span class="n">${fmt.format(v)}</span></div>`;
   document.getElementById('pm').innerHTML = rows.map(s => `
-    <div class="row ${s.key===sel?'on':''} ${sel!=='all'&&s.key!==sel?'dim':''}" title="${s.label}: ${s.pmet.ret==null?'n/a':fmt.format(s.pmet.ret)} retrenched, ${s.pmet.vac==null?'n/a':fmt.format(s.pmet.vac)} open">
+    <div class="row ${s.key===sel?'on':''} ${sel!=='all'&&s.key!==sel?'dim':''}" data-k="${s.key}" title="${s.label}: ${s.pmet.ret==null?'n/a':fmt.format(s.pmet.ret)} retrenched, ${s.pmet.vac==null?'n/a':fmt.format(s.pmet.vac)} open">
       <div class="nm">${s.label}${s.pmet.ret_missing?'<br><span class="na">some quarters not published</span>':''}</div>
       <div class="pair">${line(s.pmet.ret,'r')}${line(s.pmet.vac,'v')}</div>
     </div>`).join('');
@@ -422,7 +425,7 @@ function renderSctp(){
   rows.push({key:'cross', label:'Any sector (cross-industry skills)', n:cross, open:null}, {key:'other', label:'Other', n:progs.filter(p=>p.sector==='other').length, open:null});
   const max = Math.max(...rows.map(r=>r.n), 1);
   document.getElementById('scBars').innerHTML = rows.map(r => `
-    <div class="row ${r.key===state.sector?'on':''}" title="${r.label}: ${r.n} SCTP programmes">
+    <div class="row ${r.key===state.sector?'on':''}" ${D.sectors.some(x=>x.key===r.key)?`data-k="${r.key}"`:''} title="${r.label}: ${r.n} SCTP programmes">
       <div class="name">${r.label}${r.key==='security'?' (part of admin & support)':''}</div>
       <div class="track"><div class="bar" style="width:${r.n/max*100}%;min-width:${r.n?2:0}px"></div></div>
       <div class="num">${r.n}</div>
@@ -451,6 +454,10 @@ const SKILLS = {
   health:        [{n:'Healthcare', pdf:'Healthcare.pdf'}, {n:'Social Service', pdf:'Social-Service.pdf'}],
   admin:         [{n:'Security', pdf:'Security.pdf'}, {n:'Environmental Services', pdf:'Environmental-Services.pdf'}],
   security:      [{n:'Security', pdf:'Security.pdf'}],
+  retail:        [{n:'Retail', pdf:'Retail.pdf'}, {n:'Wholesale Trade', pdf:'Wholesale-Trade.pdf'}],
+  ict:           [{n:'Infocomm Technology', page:'https://www.wsg.gov.sg/home/employers-industry-partners/jobs-transformation-maps/jobs-transformation-map-ict-and-media-jobs-in-singapore', kind:'Jobs Transformation Map (WSG)'}],
+  finance:       [{n:'Financial Services', pdf:'Financial-Services.pdf'}],
+  publicedu:     [{n:'Training and Adult Education', pdf:'Training-and-Adult-Education.pdf'}],
 };
 const courseUrl = q => 'https://courses.myskillsfuture.gov.sg/search?q=' + encodeURIComponent(q);
 function renderSkills(){
@@ -467,10 +474,11 @@ function renderSkills(){
     html += a(SFW_INDEX, 'Skills Frameworks for 38 sectors', 'SWDA Jobs-Skills Portal');
   }
   html += a(DEMAND_DASH, 'Jobs-Skills Demand Trends dashboard', 'Hiring demand and in-demand skills by job role. Pick the sector inside the dashboard.');
-  document.getElementById('sk').textContent = list ? `Skills to train for · ${s.label}` : 'Skills to train for';
+  document.getElementById('sk').textContent = state.sector==='all' ? 'Skills to train for' : `Skills to train for · ${s.label}`;
   document.getElementById('skHint').textContent = list
     ? `Where hiring is tight, these SWDA (SkillsFuture) resources show the job roles and skills employers in this sector ask for. Skills Framework sectors don't match MOM's industry groups exactly.`
-    : 'Pick a sector above for its Skills Framework and courses.';
+    : state.sector==='all' ? 'Pick a sector above for its Skills Framework and courses.'
+    : `No single Skills Framework matches ${s.label}; browse the frameworks for all 38 sectors.`;
   document.getElementById('skLinks').innerHTML = html;
 }
 
@@ -500,6 +508,12 @@ function render(){
 document.getElementById('tblBtn').onclick = e => { state.table = !state.table; const t = document.getElementById('tbl'); t.hidden = !state.table;
   e.target.textContent = state.table ? 'Hide table' : 'Show table'; e.target.setAttribute('aria-expanded', state.table); renderLine(); };
 let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(renderLine, 120); });
+// tapping a sector row in any chart selects that sector
+['bars','pm','scBars'].forEach(id => document.getElementById(id).addEventListener('click', e => {
+  const r = e.target.closest('.row[data-k]'); if (!r) return;
+  state.sector = r.dataset.k; render();
+  document.querySelector(`.chip[data-k="${r.dataset.k}"]`)?.scrollIntoView({block:'nearest', inline:'center'});
+}));
 buildChips(); renderStatic(); render();
 </script>
 </body>

@@ -22,13 +22,13 @@ SECTORS = [
     ("health", "Health & social", "health and social services", True),
     ("admin", "Admin & support", "administrative and support services", True),
     ("security", "Security", "security and investigation", True),
-    ("retail", "Wholesale & retail", "wholesale and retail trade", False),
-    ("ict", "Info & comms", "information and communications", False),
-    ("finance", "Finance & insurance", "financial and insurance services", False),
-    ("realestate", "Real estate", "real estate services", False),
-    ("professional", "Professional services", "professional services", False),
-    ("publicedu", "Public admin & education", "public administration and education", False),
-    ("arts", "Arts & recreation", "arts, entertainment and recreation", False),
+    ("retail", "Wholesale & retail", "wholesale and retail trade", True),
+    ("ict", "Info & comms", "information and communications", True),
+    ("finance", "Finance & insurance", "financial and insurance services", True),
+    ("realestate", "Real estate", "real estate services", True),
+    ("professional", "Professional services", "professional services", True),
+    ("publicedu", "Public admin & education", "public administration and education", True),
+    ("arts", "Arts & recreation", "arts, entertainment and recreation", True),
 ]
 
 quarters = sorted({r["q"] for r in ds["vacancies_total"]["data"]})
