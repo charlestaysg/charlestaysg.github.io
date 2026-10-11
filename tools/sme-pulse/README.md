@@ -5,6 +5,7 @@ One-page dashboard of Singapore job vacancies, vacancy rates and retrenchments b
 ## Files
 - `fetch.py` — downloads 9 MOM datasets (paged, 10,000 rows per call) from data.gov.sg (no API key; calls spaced for the rate limit) → `data/raw/`, `data/snapshot.json`
 - `data/manual.json` — hand-entered IMDA survey figures; check against the source before each rebuild
+- `data/sctp.json` — SCTP programmes from the public course pages of RP, NP, NYP, SP, TP and ITE (collected by hand, 11 Oct 2026); sector tags are judgement calls. Not refreshed automatically — recollect every few months
 - `template.html` — the page; `build.py` inlines the data → `index.html` (no network calls at runtime)
 - `check.py` — recomputes every headline figure from `data/raw/` and compares it with the page
 

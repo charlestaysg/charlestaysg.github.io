@@ -55,6 +55,13 @@ same("all retrenched 4q", sum(val("retrenched_total", q) for q in qs), page["pme
 # PMET share can't exceed the whole
 fails += page["pmet"]["ret"] > page["pmet"]["ret_all"]
 
+# SCTP list: page carries the file unchanged, and every sector tag is known
+sctp = json.loads((HERE / "data" / "sctp.json").read_text())
+same("SCTP programme count", float(len(sctp["programmes"])), float(len(page["sctp"]["programmes"])))
+known = {s["key"] for s in page["sectors"]} | {"cross", "other"}
+bad = [p["title"] for p in sctp["programmes"] if p["sector"] not in known]
+fails += bool(bad); print(("ok   " if not bad else "FAIL ") + f"SCTP sector tags valid {bad or ''}")
+
 # sector components should add up to the published total (MOM rounds to the nearest 100)
 parts = sum(val("vacancies", latest, n) or 0 for n in ("manufacturing", "construction", "services", "others"))
 print(f"{'ok  ' if abs(parts - val('vacancies_total', latest)) <= 200 else 'WARN'} sum of top-level sectors {parts:.0f} vs total {val('vacancies_total', latest):.0f}")

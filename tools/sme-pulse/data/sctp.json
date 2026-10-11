@@ -1,0 +1,443 @@
+{
+ "_note": "Collected by hand from each institution's public SCTP page. Sector is a judgement from the programme title and, where listed, job roles. Not refreshed automatically.",
+ "collected": "2026-10-11",
+ "institutions": [
+  {
+   "code": "RP",
+   "name": "Republic Polytechnic",
+   "url": "https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/"
+  },
+  {
+   "code": "NP",
+   "name": "Ngee Ann Polytechnic",
+   "url": "https://www.cet.np.edu.sg/career-transition-programme-sctp"
+  },
+  {
+   "code": "NYP",
+   "name": "Nanyang Polytechnic",
+   "url": "https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP"
+  },
+  {
+   "code": "SP",
+   "name": "Singapore Polytechnic",
+   "url": "https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes"
+  },
+  {
+   "code": "TP",
+   "name": "Temasek Polytechnic",
+   "url": "https://www.tp.edu.sg/schools-and-courses/adult-learners/all-courses/skillsfuture-career-transition-programme.html"
+  },
+  {
+   "code": "ITE",
+   "name": "ITE",
+   "url": "https://ite.edu.sg/courses/part-time-courses/skillsfuture-career-transition-programme"
+  }
+ ],
+ "programmes": [
+  {
+   "inst": "RP",
+   "title": "AI-Driven Digital Marketing and E-Commerce",
+   "sector": "cross"
+  },
+  {
+   "inst": "RP",
+   "title": "AI-Driven Market Research Professionals",
+   "sector": "cross"
+  },
+  {
+   "inst": "RP",
+   "title": "AI-nnovate for Business Development",
+   "sector": "cross"
+  },
+  {
+   "inst": "RP",
+   "title": "Automation with AI: Digital Transformation Mastery",
+   "sector": "cross"
+  },
+  {
+   "inst": "RP",
+   "title": "Capture and Create: Mastering Photography and Videography",
+   "sector": "ict"
+  },
+  {
+   "inst": "RP",
+   "title": "Cloud Computing and Cybersecurity for Digital Transformation",
+   "sector": "ict"
+  },
+  {
+   "inst": "RP",
+   "title": "Content Creation using Generative AI",
+   "sector": "cross"
+  },
+  {
+   "inst": "RP",
+   "title": "Digital Transformation in Finance: Skills for the New Economy",
+   "sector": "finance"
+  },
+  {
+   "inst": "RP",
+   "title": "Driving Business Transformation with Digital Technologies",
+   "sector": "cross"
+  },
+  {
+   "inst": "RP",
+   "title": "Engineering Design",
+   "sector": "manufacturing"
+  },
+  {
+   "inst": "RP",
+   "title": "Essential Skills for Social Services",
+   "sector": "health"
+  },
+  {
+   "inst": "RP",
+   "title": "Facade Inspection Using Drone for Facilities Management Professionals",
+   "sector": "admin"
+  },
+  {
+   "inst": "RP",
+   "title": "HR Professionals",
+   "sector": "cross"
+  },
+  {
+   "inst": "RP",
+   "title": "Food & Beverage Entrepreneurship",
+   "sector": "food"
+  },
+  {
+   "inst": "RP",
+   "title": "Sustainability and Environmental Professionals",
+   "sector": "cross"
+  },
+  {
+   "inst": "RP",
+   "title": "Wellness Professionals",
+   "sector": "other"
+  },
+  {
+   "inst": "RP",
+   "title": "Environmental Services for Facility Management",
+   "sector": "admin"
+  },
+  {
+   "inst": "NP",
+   "title": "Supply Chain Operations & Sustainability",
+   "sector": "transport"
+  },
+  {
+   "inst": "NP",
+   "title": "Human-Centric HR: Enhancing People Experience in a Sustainable Business",
+   "sector": "cross"
+  },
+  {
+   "inst": "NP",
+   "title": "Community Care and Support",
+   "sector": "health"
+  },
+  {
+   "inst": "NP",
+   "title": "Data Governance",
+   "sector": "cross"
+  },
+  {
+   "inst": "NP",
+   "title": "Unlocking Gen-AI in Digital Commerce",
+   "sector": "cross"
+  },
+  {
+   "inst": "NP",
+   "title": "Software Quality Assurance",
+   "sector": "ict"
+  },
+  {
+   "inst": "NP",
+   "title": "Smart and Sustainable Facilities Management",
+   "sector": "admin"
+  },
+  {
+   "inst": "NP",
+   "title": "i.am-vitalize Full Stack Developer",
+   "sector": "ict"
+  },
+  {
+   "inst": "NP",
+   "title": "Accountancy Career Launchpad",
+   "sector": "professional"
+  },
+  {
+   "inst": "NP",
+   "title": "Data Science Bootcamp",
+   "sector": "cross"
+  },
+  {
+   "inst": "NP",
+   "title": "Digital Commerce and Content Marketing",
+   "sector": "cross"
+  },
+  {
+   "inst": "NP",
+   "title": "Customer Experience Innovation",
+   "sector": "cross"
+  },
+  {
+   "inst": "NP",
+   "title": "Advanced Data Analytics and Visualisation",
+   "sector": "cross"
+  },
+  {
+   "inst": "NP",
+   "title": "Postnatal Mother and Newborn Care",
+   "sector": "health"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Pharmaceutical Manufacturing",
+   "sector": "manufacturing"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Precision Machining",
+   "sector": "manufacturing"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Food Safety and Analysis",
+   "sector": "manufacturing"
+  },
+  {
+   "inst": "NYP",
+   "title": "WSQ Diploma in Retail (Retail Operations)",
+   "sector": "retail"
+  },
+  {
+   "inst": "NYP",
+   "title": "WSQ Diploma in Retail (E-Commerce: Omni-Channel)",
+   "sector": "retail"
+  },
+  {
+   "inst": "NYP",
+   "title": "WSQ Diploma in Food Services",
+   "sector": "food"
+  },
+  {
+   "inst": "NYP",
+   "title": "WSQ Certificate in Food Services (Culinary Arts)",
+   "sector": "food"
+  },
+  {
+   "inst": "NYP",
+   "title": "WSQ Certificate in Food Services (Pastry & Baking)",
+   "sector": "food"
+  },
+  {
+   "inst": "NYP",
+   "title": "Kitchen Operations Specialist (Culinary Arts)",
+   "sector": "food"
+  },
+  {
+   "inst": "NYP",
+   "title": "Kitchen Operations Specialist (Pastry & Baking)",
+   "sector": "food"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Tourism Innovation",
+   "sector": "food"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Cybersecurity Incident Investigator",
+   "sector": "ict"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in The Art of Motion Graphics",
+   "sector": "ict"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Enhancing Moving Images",
+   "sector": "ict"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in 360 Video Production",
+   "sector": "ict"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Gamification Approach to User Experience Design",
+   "sector": "ict"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Digital Transformation with Cloud and AI",
+   "sector": "cross"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Digital Transformation with Robotic Process Automation",
+   "sector": "cross"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Marketing & Digital Communication",
+   "sector": "cross"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Service Innovation",
+   "sector": "cross"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Data Analytics with Artificial Intelligence",
+   "sector": "cross"
+  },
+  {
+   "inst": "NYP",
+   "title": "Certificate in Digital Marketing & Content Curation",
+   "sector": "cross"
+  },
+  {
+   "inst": "SP",
+   "title": "Intelligent Data-Driven Digitalisation",
+   "sector": "cross"
+  },
+  {
+   "inst": "SP",
+   "title": "Applied HR and Business Digitalisation",
+   "sector": "cross"
+  },
+  {
+   "inst": "SP",
+   "title": "Energy Efficiency and Sustainability Management",
+   "sector": "cross"
+  },
+  {
+   "inst": "SP",
+   "title": "Sustainability Practices and Reporting",
+   "sector": "cross"
+  },
+  {
+   "inst": "SP",
+   "title": "Green and Sustainable Data Centre Technologies",
+   "sector": "ict"
+  },
+  {
+   "inst": "SP",
+   "title": "Data Centre Professionals",
+   "sector": "ict"
+  },
+  {
+   "inst": "SP",
+   "title": "AI and Cloud Services",
+   "sector": "ict"
+  },
+  {
+   "inst": "SP",
+   "title": "Full Stack Development",
+   "sector": "ict"
+  },
+  {
+   "inst": "SP",
+   "title": "Advanced Certificate of Performance in Ophthalmic Dispensing & Refraction",
+   "sector": "health"
+  },
+  {
+   "inst": "SP",
+   "title": "Sustainable Process Operations",
+   "sector": "manufacturing"
+  },
+  {
+   "inst": "SP",
+   "title": "Facilities Operations Management",
+   "sector": "admin"
+  },
+  {
+   "inst": "SP",
+   "title": "Aircraft Maintenance for Technician",
+   "sector": "transport"
+  },
+  {
+   "inst": "TP",
+   "title": "Junior Data Engineer & Analyst",
+   "sector": "cross"
+  },
+  {
+   "inst": "TP",
+   "title": "Cloud Support & DevOps",
+   "sector": "ict"
+  },
+  {
+   "inst": "TP",
+   "title": "Junior Full-Stack Developer",
+   "sector": "ict"
+  },
+  {
+   "inst": "TP",
+   "title": "Patient Service Associate",
+   "sector": "health"
+  },
+  {
+   "inst": "TP",
+   "title": "Environmental Services Specialist",
+   "sector": "admin"
+  },
+  {
+   "inst": "TP",
+   "title": "Beyond the GIG Economy: Elevate your Freelance Career",
+   "sector": "other"
+  },
+  {
+   "inst": "TP",
+   "title": "Security Systems Technician",
+   "sector": "security"
+  },
+  {
+   "inst": "TP",
+   "title": "Security Operations",
+   "sector": "security"
+  },
+  {
+   "inst": "ITE",
+   "title": "Digital Media Marketing",
+   "sector": "cross"
+  },
+  {
+   "inst": "ITE",
+   "title": "Human Resource Professionals",
+   "sector": "cross"
+  },
+  {
+   "inst": "ITE",
+   "title": "Semiconductor Industry Technicians",
+   "sector": "manufacturing"
+  },
+  {
+   "inst": "ITE",
+   "title": "Passenger Services",
+   "sector": "transport"
+  },
+  {
+   "inst": "ITE",
+   "title": "Security Technology",
+   "sector": "security"
+  },
+  {
+   "inst": "ITE",
+   "title": "Attractions Professionals",
+   "sector": "food"
+  },
+  {
+   "inst": "ITE",
+   "title": "Associate Infrastructure Support Engineers",
+   "sector": "ict"
+  },
+  {
+   "inst": "ITE",
+   "title": "Media Creation for Video Content Creators",
+   "sector": "ict"
+  }
+ ]
+}

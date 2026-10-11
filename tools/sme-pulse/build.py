@@ -78,6 +78,7 @@ data = {
     "pmet": {"from": last4[0], "to": last4[-1], **pmet_total},
     "datasets": [{"id": d["id"], "title": d["title"]} for d in ds.values()],
     "manual": manual,
+    "sctp": json.loads((HERE / "data" / "sctp.json").read_text()),
 }
 
 html = (HERE / "template.html").read_text().replace("/*__DATA__*/null", json.dumps(data, separators=(",", ":")))
