@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Workplace Conditions — heat stress and haze for outdoor workers in Singapore (unofficial)</title>
+  <meta id="meta-desc" name="description" content="Unofficial live heat stress (WBGT) and air quality for outdoor workers in Singapore, using NEA open data. Worker and supervisor views.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f5b400">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <noscript><p class="noscript">This page needs JavaScript to show live data. For official readings, see the myENV app or haze.gov.sg.</p></noscript>
+
+  <header class="topbar">
+    <div class="row">
+      <h1><span data-i18n="app.title"></span> <span class="badge" data-i18n="badge.unofficial"></span></h1>
+      <label class="lang"><span class="sr-only" data-i18n="lang.label"></span><select id="lang"></select></label>
+    </div>
+    <div class="row">
+      <div class="seg" role="group" data-i18n-aria="mode.label">
+        <button type="button" id="mode-worker" aria-pressed="true" data-i18n="mode.worker"></button>
+        <button type="button" id="mode-supervisor" aria-pressed="false" data-i18n="mode.supervisor"></button>
+      </div>
+      <span class="status" aria-live="off"><span id="st-nea"></span> &middot; <span id="st-upd"></span> &middot; <span id="st-next"></span></span>
+      <button type="button" id="refresh" class="ghost small"></button>
+    </div>
+    <p class="subline" data-i18n="app.subline"></p>
+  </header>
+
+  <div id="demo-banner" class="demo-banner" hidden data-i18n="banner.demo"></div>
+  <div id="error-banner" class="error-banner" hidden></div>
+  <div id="i18n-notice" class="notice" hidden></div>
+
+  <main id="main" class="main" data-mode="worker">
+
+    <!-- Worker: verdict -->
+    <section class="sec full only-worker" style="--o-w:1;--o-s:1" data-i18n-aria="verdict.section">
+      <div id="verdict-live" class="verdict-card c-grey" role="status" aria-live="polite"></div>
+      <div id="chips" class="chips"></div>
+      <div class="actions">
+        <a id="btn-wa" class="btn btn-big btn-wa" href="#" target="_blank" rel="noopener" data-i18n="btn.whatsapp"></a>
+        <button type="button" id="btn-copy" class="btn" data-i18n="btn.copy"></button>
+        <a id="btn-995" class="btn btn-red" href="tel:995" data-i18n="btn.call995"></a>
+      </div>
+      <p id="demo-note" class="note warn" hidden></p>
+      <details class="preview"><summary data-i18n="msg.preview"></summary><pre id="msg-preview"></pre></details>
+    </section>
+
+    <!-- Worker: water and rest -->
+    <section id="wr-card" class="card sec only-worker" style="--o-w:2;--o-s:2">
+      <h2 data-i18n="wr.title"></h2>
+      <p id="wr-target" class="strong"></p>
+      <p id="wr-tip" class="note"></p>
+      <div id="wr-alert" class="wr-alert" hidden></div>
+      <button type="button" id="wr-done" class="btn btn-big" hidden data-i18n="wr.done"></button>
+      <div class="form-row">
+        <label for="wr-interval" data-i18n="wr.interval"></label>
+        <select id="wr-interval"></select>
+        <button type="button" id="wr-startstop" class="btn" data-running="0"></button>
+      </div>
+      <p id="wr-count" class="countdown" aria-live="off"></p>
+      <div class="form-row">
+        <label class="check"><input type="checkbox" id="wr-mute"> <span data-i18n="wr.mute"></span></label>
+        <button type="button" id="wr-notify" class="ghost small"></button>
+      </div>
+      <p class="note" data-i18n="wr.honest"></p>
+
+    </section>
+
+    <!-- Worker: rest breaks -->
+    <section id="brk-card" class="card sec only-worker" style="--o-w:3;--o-s:3">
+      <h2 data-i18n="brk.title"></h2>
+      <p id="brk-need" class="strong"></p>
+      <p id="brk-unk" class="note warn" hidden></p>
+      <p id="brk-source" class="note"></p>
+      <div id="brk-custom-row" class="form-row" hidden><label for="brk-custom" data-i18n="brk.custom"></label><select id="brk-custom"></select></div>
+      <p id="brk-raised" class="wr-alert" hidden></p>
+      <p id="brk-status"></p>
+      <p id="brk-count" class="big-count" aria-live="off"></p>
+      <p id="brk-water" class="strong" hidden></p>
+      <div id="brk-alert" class="wr-alert" hidden></div>
+      <div id="brk-buttons" class="form-row"></div>
+      <p id="brk-last" class="note"></p>
+      <p class="note" data-i18n="wr.honest"></p>
+    </section>
+
+    <!-- Supervisor: band and schedule -->
+    <section class="card sec full only-supervisor" style="--o-w:20;--o-s:1">
+      <h2 data-i18n="sup.band.title"></h2>
+      <div id="supband-card" class="verdict-card c-grey"></div>
+      <div class="form-row">
+        <span id="work-label" data-i18n="sup.work.label"></span>
+        <div class="seg" role="group" aria-labelledby="work-label">
+          <button type="button" id="work-heavy" data-work="heavy" aria-pressed="true" data-i18n="work.heavy"></button>
+          <button type="button" id="work-light" data-work="light" aria-pressed="false" data-i18n="work.light"></button>
+        </div>
+      </div>
+      <h3 data-i18n="sched.title"></h3>
+      <div class="table-wrap"><table id="sched" class="tbl"></table></div>
+      <p class="note" data-i18n="sched.note"></p>
+      <h3 data-i18n="sup.plan.title"></h3>
+      <p id="plan-body"></p>
+    </section>
+
+    <!-- Both: day chart -->
+    <section class="card sec" style="--o-w:4;--o-s:2">
+      <h2 data-i18n="chart.title"></h2>
+      <p id="chart-note" class="note"></p>
+      <div id="chart-box"></div>
+      <p id="chart-readout" class="strong" aria-live="off"></p>
+      <p id="chart-summary"></p>
+      <p class="note" data-i18n="chart.ref"></p>
+      <details><summary data-i18n="sup.chart.table"></summary><div class="table-wrap"><table id="chart-table" class="tbl"></table></div></details>
+    </section>
+
+    <!-- Both: sun and UV -->
+    <section class="card sec" style="--o-w:5;--o-s:4">
+      <h2 data-i18n="uv.title"></h2>
+      <div id="uv-body"></div>
+      <div class="uv-remind">
+        <label class="check"><input type="checkbox" id="uv-toggle"> <span data-i18n="uv.remind.toggle"></span></label>
+        <p id="uv-suggest" class="note warn" hidden></p>
+        <p id="uv-count" class="countdown" aria-live="off"></p>
+        <div id="uv-alert" class="wr-alert" hidden></div>
+        <div class="form-row">
+          <button type="button" id="uv-done" class="btn" hidden data-i18n="uv.remind.done"></button>
+          <button type="button" id="uv-notify" class="ghost small"></button>
+        </div>
+        <p class="note" data-i18n="wr.honest"></p>
+      </div>
+      <p class="note" id="uv-sources"></p>
+    </section>
+
+    <!-- Both: air -->
+    <section class="card sec" style="--o-w:6;--o-s:3">
+      <h2 data-i18n="air.title"></h2>
+      <div id="air-body"></div>
+    </section>
+
+    <!-- Both: island-wide -->
+    <section class="card sec" style="--o-w:8;--o-s:5">
+      <h2 data-i18n="island.title"></h2>
+      <div id="island-body"></div>
+    </section>
+
+    <!-- Worker: weather tiles -->
+    <section class="card sec" style="--o-w:7;--o-s:10">
+      <h2 data-i18n="tiles.title"></h2>
+      <div id="tiles-body"></div>
+    </section>
+
+    <!-- Supervisor: forecast and checklist -->
+    <section class="card sec only-supervisor" style="--o-w:22;--o-s:6">
+      <h2 data-i18n="sup.fc.title"></h2>
+      <div id="fc24-body"></div>
+    </section>
+    <section class="card sec only-supervisor" style="--o-w:23;--o-s:7">
+      <h2 data-i18n="sup.check.title"></h2>
+      <ul id="check-list"></ul>
+      <h3 data-i18n="sup.check.mand"></h3>
+      <ul id="check-mand"></ul>
+    </section>
+
+    <!-- Both: map in details (Leaflet lazy-loaded on open) -->
+    <section class="card sec" style="--o-w:9;--o-s:11">
+      <details id="map-details">
+        <summary><h2 data-i18n="map.title"></h2></summary>
+        <p id="map-msg" class="note warn" hidden></p>
+        <div id="map" class="map" role="region" data-i18n-aria="map.title"></div>
+        <p class="note" id="map-attr"></p>
+        <h3 data-i18n="map.list"></h3>
+        <div class="table-wrap"><table id="station-table" class="tbl"></table></div>
+      </details>
+    </section>
+
+    <!-- Both: heat illness check -->
+    <section class="card sec" style="--o-w:11;--o-s:8">
+      <details id="sx-details" open>
+        <summary><h2 data-i18n="sx.title"></h2></summary>
+        <p data-i18n="sx.intro"></p>
+        <div id="sx-boxes"></div>
+        <div id="sx-result" class="sx-result lvl-none"></div>
+        <div class="form-row">
+          <a id="sx-wa" class="btn btn-wa" href="#" target="_blank" rel="noopener" hidden data-i18n="sx.tellboss"></a>
+          <button type="button" id="sx-clear" class="ghost small" data-i18n="sx.reset"></button>
+        </div>
+        <p class="strong" data-i18n="sx.disclaimer"></p>
+        <p class="note" data-i18n="sx.note.reload"></p>
+        <p class="note" id="sx-sources"></p>
+      </details>
+    </section>
+
+    <!-- Both: why this verdict -->
+    <section class="card sec" style="--o-w:12;--o-s:13">
+      <details>
+        <summary><h2 data-i18n="why.title"></h2></summary>
+        <h3 data-i18n="why.chain"></h3>
+        <ol id="why-chain"></ol>
+        <h3 data-i18n="why.thresholds"></h3>
+        <div class="table-wrap"><table id="why-th" class="tbl"></table></div>
+        <p class="note" data-i18n="why.th.fresh"></p>
+        <h3 data-i18n="why.demo"></h3>
+        <p class="note" data-i18n="why.demo.help"></p>
+        <label class="check"><input type="checkbox" id="demo-toggle"> <span data-i18n="why.demo"></span></label>
+        <label for="demo-slider" id="demo-label"></label>
+        <input type="range" id="demo-slider" min="24" max="36" step="0.1" value="31">
+        <h3 data-i18n="why.sources"></h3>
+        <ul id="why-sources"></ul>
+      </details>
+    </section>
+
+    <!-- Both: team briefing card -->
+    <section class="card sec" style="--o-w:13;--o-s:9">
+      <h2 data-i18n="brief.title"></h2>
+      <p class="note" data-i18n="brief.sub"></p>
+      <ol id="brief-list"></ol>
+      <button type="button" id="brief-copy" class="btn" data-i18n="brief.copy"></button>
+    </section>
+
+    <!-- Both: my work location -->
+    <section class="card sec" style="--o-w:14;--o-s:12">
+      <h2 data-i18n="loc.title"></h2>
+      <p id="loc-status" class="strong"></p>
+      <form id="loc-form" autocomplete="off">
+        <label for="loc-postal" data-i18n="loc.postal"></label>
+        <div class="form-row">
+          <input id="loc-postal" inputmode="numeric" maxlength="6" pattern="\d{6}" autocomplete="postal-code">
+          <button type="submit" class="btn" data-i18n="loc.set"></button>
+        </div>
+      </form>
+      <div class="form-row">
+        <button type="button" id="loc-geo" class="btn" data-i18n="loc.locate"></button>
+        <button type="button" id="loc-save" class="btn" hidden data-i18n="loc.save"></button>
+        <button type="button" id="loc-forget" class="ghost small" hidden data-i18n="loc.forget"></button>
+      </div>
+      <p id="loc-msg" class="note warn" hidden></p>
+
+      <div class="form-row">
+        <span id="loc-work-label" data-i18n="loc.work.label"></span>
+        <div class="seg" role="group" aria-labelledby="loc-work-label">
+          <button type="button" id="loc-heavy" data-work="heavy" aria-pressed="true" data-i18n="work.heavy"></button>
+          <button type="button" id="loc-light" data-work="light" aria-pressed="false" data-i18n="work.light"></button>
+        </div>
+      </div>
+      <p class="note" data-i18n="loc.work.help"></p>
+
+      <form id="boss-form" autocomplete="off">
+        <label for="boss-name" data-i18n="loc.bossname"></label>
+        <input id="boss-name" maxlength="40" autocomplete="off">
+        <label for="boss-num" data-i18n="loc.boss"></label>
+        <div class="form-row">
+          <input id="boss-num" inputmode="numeric" maxlength="8" pattern="\d{8}" autocomplete="off">
+          <button type="submit" class="btn" data-i18n="loc.set"></button>
+        </div>
+        <p class="note" data-i18n="loc.boss.help"></p>
+        <p id="boss-msg" class="note" hidden></p>
+      </form>
+      <p class="note" data-i18n="loc.privacy"></p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p data-i18n="foot.unofficial"></p>
+    <p id="foot-odl"></p>
+    <p data-i18n="foot.onemap"></p>
+    <p data-i18n="foot.aqi"></p>
+    <p data-i18n="foot.abbr"></p>
+    <p data-i18n="foot.private"></p>
+    <p><a href="../../" data-i18n="foot.back"></a></p>
+  </footer>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="strings.js"></script>
+  <script src="rules.js"></script>
+  <script src="air.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
