@@ -9,7 +9,7 @@ One-page dashboard of Singapore job vacancies, vacancy rates and retrenchments b
 - `check.py` — recomputes every headline figure from `data/raw/` and compares it with the page
 
 ## Refresh
-Automatic: `.github/workflows/sme-pulse-refresh.yml` runs on the 2nd of each month (and on demand from the Actions tab). It fetches, and only if the MOM data changed it rebuilds, runs `check.py`, and commits `projects/sme-pulse/index.html`. A failed check stops the run and leaves the live page as it was.
+Automatic: `.github/workflows/sme-pulse-refresh.yml` runs on the 2nd of each month (and on demand from the Actions tab). It fetches; keeps the new snapshot only if the MOM data changed; writes the check date to `data/last-checked.json` (shown on the page as "checked …"); rebuilds; runs `check.py`; and commits. A failed fetch or check stops the run and leaves the live page as it was. The monthly commit also stops GitHub disabling the schedule after 60 days without repo activity.
 
 Manual (from this folder):
 ```

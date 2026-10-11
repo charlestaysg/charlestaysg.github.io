@@ -166,6 +166,7 @@ footer p{margin:0 0 8px}
 const D = /*__DATA__*/null;
 const fmt = new Intl.NumberFormat('en-SG');
 const qLabel = q => q.replace('-', ' ');
+const fmtDate = d => new Date(d + 'T00:00:00+08:00').toLocaleDateString('en-SG', {day:'numeric', month:'short', year:'numeric', timeZone:'Asia/Singapore'});
 const METRICS = {
   vac:  {label:'Job vacancies', unit:'', title:'Job vacancies', f:v=>fmt.format(v)},
   rate: {label:'Vacancy rate', unit:'%', title:'Job vacancy rate', f:v=>v.toFixed(1)+'%'},
@@ -365,12 +366,12 @@ function renderStatic(){
     <div class="stat"><div class="big">${M.workers_need_ai_upskilling_pct}%</div><div class="what">of workers say they need AI upskilling</div></div>
     <div class="stat"><div class="big">${M.workers_trained_past_year_pct}%</div><div class="what">of workers had AI training in the past year</div></div>`;
   document.getElementById('surveyCap').textContent = `${M.source}. These are survey results, not part of the quarterly MOM series, and are not broken down by the sector filter above. Entered by hand on ${M.retrieved}.`;
-  document.getElementById('fresh').textContent = `Data as of ${qLabel(D.latest)} · fetched ${D.fetched}`;
+  document.getElementById('fresh').textContent = `Data as of ${qLabel(D.latest)} · checked ${fmtDate(D.checked)}`;
   const titles = D.datasets.map(d=>`<a href="https://data.gov.sg/datasets/${d.id}/view">${d.title}</a>`).join('; ');
   document.getElementById('foot').innerHTML = `
     <p>Contains information from ${titles}, accessed on ${D.fetched} from data.gov.sg, which is made available under the terms of the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence version 1.0</a>. Original source: Labour Market Survey, Manpower Research &amp; Statistics Department, Ministry of Manpower.</p>
     <p>Survey figures: ${D.manual.source}.</p>
-    <p>This is an unofficial teaching example, not a product of MOM, IMDA or any government agency. Figures are a snapshot taken on ${D.fetched} and are not updated live; MOM publishes new quarterly data a few months after each quarter ends. Not advice.</p>`;
+    <p>This is an unofficial teaching example, not a product of MOM, IMDA or any government agency. Figures were fetched on ${fmtDate(D.fetched)} and are not live. The page checks data.gov.sg for new MOM figures each month (last checked ${fmtDate(D.checked)}); MOM publishes each quarter a few months after it ends. Not advice.</p>`;
 }
 
 function render(){

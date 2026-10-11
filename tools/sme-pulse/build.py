@@ -8,6 +8,9 @@ import json, pathlib, datetime
 HERE = pathlib.Path(__file__).parent
 snap = json.loads((HERE / "data" / "snapshot.json").read_text())
 manual = json.loads((HERE / "data" / "manual.json").read_text())
+# written by the monthly GitHub Actions run on every check, changed data or not
+lc_path = HERE / "data" / "last-checked.json"
+checked = json.loads(lc_path.read_text())["checked"] if lc_path.exists() else snap["fetched_at"][:10]
 ds = snap["datasets"]
 
 # key, short label, MOM industry name, show as filter chip?
@@ -43,6 +46,7 @@ def series(key, industry=None):
 data = {
     "quarters": quarters,
     "fetched": snap["fetched_at"][:10],
+    "checked": checked,
     "latest": quarters[-1],
     "total": {"vac": series("vacancies_total"), "rate": series("vacancy_rate_total"),
               "ret": series("retrenched_total"), "vu": series("vu_ratio")},
@@ -55,4 +59,4 @@ data = {
 
 html = (HERE / "template.html").read_text().replace("/*__DATA__*/null", json.dumps(data, separators=(",", ":")))
 (HERE / "index.html").write_text(html)
-print(f"built index.html ({len(html) // 1024} KB), latest {data['latest']}, fetched {data['fetched']}")
+print(f"built index.html ({len(html) // 1024} KB), latest {data['latest']}, fetched {data['fetched']}, checked {data['checked']}")

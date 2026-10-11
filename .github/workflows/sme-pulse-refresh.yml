@@ -1,6 +1,8 @@
 # Monthly refresh of the SME Workforce Pulse page (projects/sme-pulse/).
-# Fetches MOM data from data.gov.sg, rebuilds, runs the independent check, and commits
-# only when the underlying data has changed and every check passes.
+# Fetches MOM data from data.gov.sg. If the data changed, the new snapshot is kept; if not,
+# the old one is restored. Either way it records the check date in data/last-checked.json,
+# rebuilds, runs the independent check, and commits. The monthly commit also keeps the repo
+# active, so GitHub does not disable this schedule after 60 quiet days.
 name: Refresh SME Workforce Pulse
 
 on:
@@ -45,25 +47,31 @@ jobs:
           print("changed=" + ("true" if old != new else "false"))
           EOF
 
-      - name: Build and check
-        if: steps.diff.outputs.changed == 'true'
+      - name: Keep the old snapshot if nothing changed
+        if: steps.diff.outputs.changed != 'true'
+        run: git checkout -- data/snapshot.json data/raw
+
+      - name: Record check date, build and check
         run: |
+          result=$([ "${{ steps.diff.outputs.changed }}" = "true" ] && echo updated || echo unchanged)
+          printf '{"checked": "%s", "result": "%s"}\n' "$(TZ=Asia/Singapore date +%F)" "$result" > data/last-checked.json
           python build.py
           python check.py
           cp index.html ../../projects/sme-pulse/index.html
           rm index.html
 
       - name: Commit
-        if: steps.diff.outputs.changed == 'true'
         working-directory: .
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
           git add tools/sme-pulse/data projects/sme-pulse/index.html
           latest=$(python -c "import json;print(json.load(open('tools/sme-pulse/data/snapshot.json'))['datasets']['vacancies_total']['latest'])")
-          git commit -m "SME Workforce Pulse: refresh data (latest $latest)"
+          if [ "${{ steps.diff.outputs.changed }}" = "true" ]; then
+            msg="SME Workforce Pulse: new MOM data (latest $latest)"
+          else
+            msg="SME Workforce Pulse: monthly check, no new MOM data (latest $latest)"
+          fi
+          git diff --cached --quiet && { echo "Nothing to commit (already checked today)."; exit 0; }
+          git commit -m "$msg"
           git push
-
-      - name: No change
-        if: steps.diff.outputs.changed != 'true'
-        run: echo "MOM data unchanged since last snapshot; nothing to publish."
