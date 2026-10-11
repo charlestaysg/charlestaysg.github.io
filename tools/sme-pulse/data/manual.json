@@ -1,0 +1,9 @@
+{
+  "_note": "Hand-entered survey figures. Not from the quarterly MOM series. Check against the source before each rebuild.",
+  "source": "IMDA, Singapore Digital Economy Report 2026 (released 5 Oct 2026)",
+  "url": "https://www.imda.gov.sg/",
+  "retrieved": "2026-10-11",
+  "sme_ai_adoption": [{"year": 2024, "pct": 14.5}, {"year": 2025, "pct": 23.4}],
+  "workers_need_ai_upskilling_pct": 68,
+  "workers_trained_past_year_pct": 37
+}

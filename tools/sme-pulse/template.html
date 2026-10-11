@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SME Workforce Pulse</title>
+<meta name="description" content="Singapore job vacancies, vacancy rates and retrenchments by sector, from MOM open data. Unofficial teaching example.">
+<style>
+:root{
+  color-scheme:light;
+  --page:#f9f9f7; --surface:#fcfcfb; --card:#ffffff;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#6f6d68;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,.10);
+  --accent:#2a78d6; --accent-soft:rgba(42,120,214,.12);
+  --other:#c9c7bf; --bar-other:#b9c9dc;
+  --survey-bg:#fbf7ee; --survey-border:#d9c9a3; --survey-ink:#6b5a2e;
+  --chip-on-ink:#ffffff;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --card:#1a1a19;
+    --ink:#ffffff; --ink-2:#c3c2b7; --muted:#9a988f;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+    --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
+    --other:#4a4a46; --bar-other:#34465c;
+    --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface:#1a1a19; --card:#1a1a19;
+  --ink:#ffffff; --ink-2:#c3c2b7; --muted:#9a988f;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+  --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
+  --other:#4a4a46; --bar-other:#34465c;
+  --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--page);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 40px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 24px;margin-bottom:16px}
+h1{font-size:26px;line-height:1.2;margin:0;letter-spacing:-.01em}
+.sub{color:var(--ink-2);margin:4px 0 0;font-size:14px}
+.fresh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.badge{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:1px 8px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;margin:0 -16px 8px;padding-left:16px;padding-right:16px;scrollbar-width:none;position:sticky;top:0;background:var(--page);z-index:5}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer;min-height:36px}
+.chip:hover{border-color:var(--axis)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--chip-on-ink)}
+.chip:focus-visible,.seg button:focus-visible,.linkbtn:focus-visible,.plot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.kpi .lab{font-size:13px;color:var(--ink-2);display:flex;justify-content:space-between;gap:8px}
+.kpi .q{color:var(--muted);white-space:nowrap;font-size:12px}
+.kpi .val{font-size:32px;font-weight:600;line-height:1.15;margin:6px 0 4px;letter-spacing:-.01em}
+.kpi .val.na{font-size:18px;font-weight:500;color:var(--ink-2);padding:9px 0 5px}
+.kpi .delta{font-size:13px;color:var(--ink-2)}
+.kpi .gloss{font-size:12px;color:var(--muted);margin-top:2px}
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px}
+.card h2{font-size:15px;margin:0;font-weight:600}
+.card .hint{font-size:13px;color:var(--ink-2);margin:2px 0 0}
+.chead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px 16px;margin-bottom:8px}
+.seg{display:inline-flex;background:var(--page);border:1px solid var(--border);border-radius:8px;padding:2px}
+.seg button{border:0;background:transparent;color:var(--ink-2);font:inherit;font-size:13px;padding:5px 10px;border-radius:6px;cursor:pointer;min-height:30px}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 0 0 1px var(--border)}
+.readout{font-size:13px;color:var(--ink-2);min-height:20px;font-variant-numeric:tabular-nums}
+.readout b{color:var(--ink);font-weight:600}
+.plot{width:100%;display:block;touch-action:pan-y}
+.plot text{font-size:11px;fill:var(--muted);font-variant-numeric:tabular-nums}
+.plot .lbl{font-size:12px;fill:var(--ink);font-weight:600}
+.plot .lbl2{font-size:11px;fill:var(--ink-2)}
+.below{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.linkbtn{background:none;border:0;color:var(--accent);font:inherit;font-size:13px;cursor:pointer;padding:4px 0}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;font-variant-numeric:tabular-nums}
+th,td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--grid)}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--ink-2);font-weight:500}
+.tablewrap{max-height:320px;overflow:auto}
+.bars .row{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:2px 8px;align-items:center;padding:3px 0;cursor:default}
+.bars .name{font-size:12px;color:var(--ink-2);grid-column:1/-1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bars .row.on .name{color:var(--ink);font-weight:600}
+.bars .track{position:relative;height:10px}
+.bars .bar{height:10px;border-radius:0 4px 4px 0;background:var(--bar-other)}
+.bars .row.on .bar{background:var(--accent)}
+.bars .ref{position:absolute;top:-3px;bottom:-3px;width:0;border-left:1px solid var(--ink-2)}
+.bars .num{font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.bars .row.on .num{color:var(--ink);font-weight:600}
+.survey{background:var(--survey-bg);border:1.5px dashed var(--survey-border);border-radius:12px;padding:16px;margin-bottom:12px}
+.survey .pill{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--survey-ink);border:1px solid var(--survey-border);border-radius:999px;padding:1px 8px;margin-bottom:8px}
+.survey h2{font-size:15px;margin:0 0 10px}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stat .big{font-size:28px;font-weight:600;line-height:1.1}
+.stat .what{font-size:13px;color:var(--ink-2)}
+.stat .was{font-size:12px;color:var(--muted)}
+.survey .cap{font-size:12px;color:var(--ink-2);margin:12px 0 0}
+footer{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:20px}
+footer a{color:var(--ink-2)}
+footer p{margin:0 0 8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.sgrid{grid-template-columns:1fr}.kpi .val{font-size:26px}h1{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>SME Workforce Pulse <span class="badge">Unofficial</span></h1>
+      <p class="sub">Job vacancies, vacancy rates and retrenchments in Singapore, by sector. Source: MOM Labour Market Survey via data.gov.sg.</p>
+    </div>
+    <div class="fresh"><span class="dot" aria-hidden="true"></span><span id="fresh"></span></div>
+  </header>
+
+  <nav class="chips" id="chips" aria-label="Sector"></nav>
+
+  <section class="kpis" id="kpis" aria-live="polite"></section>
+
+  <div class="grid2">
+    <section class="card">
+      <div class="chead">
+        <div><h2 id="lineTitle"></h2><p class="hint" id="lineHint"></p></div>
+        <div class="seg" id="metricSeg" role="group" aria-label="Measure"></div>
+      </div>
+      <div class="readout" id="readout"></div>
+      <svg class="plot" id="line" tabindex="0" role="img" aria-describedby="lineHint"></svg>
+      <div class="below">
+        <div class="seg" id="rangeSeg" role="group" aria-label="Time range"></div>
+        <button class="linkbtn" id="tblBtn" aria-expanded="false">Show table</button>
+      </div>
+      <div class="tablewrap" id="tbl" hidden></div>
+    </section>
+
+    <section class="card">
+      <h2>Vacancy rate by sector</h2>
+      <p class="hint" id="barHint"></p>
+      <div class="bars" id="bars" style="margin-top:10px"></div>
+    </section>
+  </div>
+
+  <section class="survey" aria-labelledby="sv">
+    <span class="pill">Survey figures · entered by hand</span>
+    <h2 id="sv">AI at work: adoption is rising faster than training</h2>
+    <div class="sgrid" id="survey"></div>
+    <p class="cap" id="surveyCap"></p>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const D = /*__DATA__*/null;
+const fmt = new Intl.NumberFormat('en-SG');
+const qLabel = q => q.replace('-', ' ');
+const METRICS = {
+  vac:  {label:'Job vacancies', unit:'', title:'Job vacancies', f:v=>fmt.format(v)},
+  rate: {label:'Vacancy rate', unit:'%', title:'Job vacancy rate', f:v=>v.toFixed(1)+'%'},
+  ret:  {label:'Retrenchments', unit:'', title:'Retrenchments', f:v=>fmt.format(v)},
+};
+const RANGES = {'5Y':20,'10Y':40,'Max':Infinity};
+const state = {sector:'all', metric:'vac', range:'10Y', hover:null, table:false};
+const N = D.quarters.length, L = N - 1;
+
+function sectorObj(key){
+  if (key === 'all') return {key:'all', label:'All industries', vac:D.total.vac, rate:D.total.rate, ret:D.total.ret};
+  return D.sectors.find(s => s.key === key);
+}
+function lastIdx(arr, from=L){ for (let i=from;i>=0;i--) if (arr[i]!=null) return i; return -1; }
+
+/* ---------- chips & segmented controls ---------- */
+function buildChips(){
+  const el = document.getElementById('chips');
+  const items = [{key:'all',label:'All industries'}, ...D.sectors.filter(s=>s.chip)];
+  el.innerHTML = items.map(s=>`<button class="chip" data-k="${s.key}" aria-pressed="${s.key===state.sector}">${s.label}</button>`).join('');
+  el.onclick = e => { const b = e.target.closest('.chip'); if (!b) return; state.sector = b.dataset.k; render(); };
+}
+function buildSeg(id, opts, key){
+  const el = document.getElementById(id);
+  el.innerHTML = opts.map(([k,l])=>`<button data-k="${k}" aria-pressed="${state[key]===k}">${l}</button>`).join('');
+  el.onclick = e => { const b = e.target.closest('button'); if (!b) return; state[key] = b.dataset.k; render(); };
+}
+
+/* ---------- KPI tiles ---------- */
+function deltaText(arr, i, kind){
+  const fmtD = (a,b) => {
+    if (a==null || b==null) return null;
+    const d = a-b;
+    if (kind==='pp') return (d>0?'▲ ':d<0?'▼ ':'')+Math.abs(d).toFixed(1)+' pts';
+    if (kind==='ratio') return (d>0?'▲ ':d<0?'▼ ':'')+Math.abs(d).toFixed(2);
+    const pct = b ? (d/b*100) : 0;
+    return (d>0?'▲ ':d<0?'▼ ':'')+fmt.format(Math.abs(d))+` (${Math.abs(pct).toFixed(0)}%)`;
+  };
+  const qoq = fmtD(arr[i], arr[i-1]), yoy = fmtD(arr[i], arr[i-4]);
+  const parts = [];
+  if (qoq) parts.push(qoq+' vs last quarter');
+  if (yoy) parts.push(yoy+' vs a year ago');
+  return parts.join('<br>');
+}
+function renderKpis(){
+  const s = sectorObj(state.sector);
+  const tile = (lab, arr, f, kind, gloss) => {
+    const i = lastIdx(arr);
+    if (i !== L) {
+      return `<div class="card kpi"><div class="lab"><span>${lab}</span><span class="q">${qLabel(D.latest)}</span></div>
+        <div class="val na">Not published</div><div class="gloss">MOM does not publish this figure for ${qLabel(D.latest)} (counts too small to report).${i>=0?' Last published: '+f(arr[i])+' in '+qLabel(D.quarters[i])+'.':''}</div></div>`;
+    }
+    return `<div class="card kpi"><div class="lab"><span>${lab}</span><span class="q">${qLabel(D.quarters[i])}</span></div>
+      <div class="val">${f(arr[i])}</div><div class="delta">${deltaText(arr,i,kind)}</div>${gloss?`<div class="gloss">${gloss}</div>`:''}</div>`;
+  };
+  const vu = D.total.vu, vi = lastIdx(vu);
+  document.getElementById('kpis').innerHTML =
+    tile('Job vacancies', s.vac, METRICS.vac.f, 'n', '') +
+    tile('Vacancy rate', s.rate, METRICS.rate.f, 'pp', 'Unfilled jobs as a share of all jobs (filled and unfilled)') +
+    tile('Retrenchments', s.ret, METRICS.ret.f, 'n', '') +
+    `<div class="card kpi"><div class="lab"><span>Vacancies per jobseeker</span><span class="q">${qLabel(D.quarters[vi])}</span></div>
+      <div class="val">${vu[vi].toFixed(2)}</div><div class="delta">${deltaText(vu,vi,'ratio')}</div>
+      <div class="gloss">All of Singapore, not by sector. Above 1 means more open jobs than unemployed people.</div></div>`;
+}
+
+/* ---------- line chart ---------- */
+function niceMax(v){ const p = Math.pow(10, Math.floor(Math.log10(v))); for (const m of [1,1.5,2,2.5,3,4,5,6,8,10]) if (m*p >= v) return m*p; return 10*p; }
+function renderLine(){
+  const svg = document.getElementById('line');
+  const W = svg.parentElement.clientWidth - 32 || 600, H = Math.max(220, Math.min(320, W*0.5));
+  const m = {t:12, r:W<480?16:110, b:26, l:44};
+  const met = METRICS[state.metric];
+  const sel = sectorObj(state.sector);
+  // grey comparison lines only for the rate, where sectors share a scale; counts differ by 10x+
+  const others = state.sector==='all' || state.metric!=='rate' ? [] : D.sectors.filter(s=>s.chip && s.key!==state.sector);
+  const span = RANGES[state.range];
+  let i0 = Math.max(0, N - span);
+  const first = sel[state.metric].findIndex(v=>v!=null);
+  if (state.range==='Max') i0 = first;
+  const xs = i => m.l + (i - i0) / (L - i0) * (W - m.l - m.r);
+  const vals = [sel, ...others].flatMap(s => s[state.metric].slice(i0)).filter(v=>v!=null);
+  const ymax = niceMax(Math.max(...vals) || 1);
+  const ys = v => m.t + (1 - v/ymax) * (H - m.t - m.b);
+  const path = arr => { let d='', pen=false; for (let i=i0;i<=L;i++){ const v=arr[i]; if (v==null){pen=false;continue;} d += (pen?'L':'M')+xs(i).toFixed(1)+','+ys(v).toFixed(1); pen=true; } return d; };
+  let g = '';
+  for (let k=0;k<=4;k++){ const v=ymax*k/4, y=ys(v);
+    g += `<line x1="${m.l}" x2="${W-m.r}" y1="${y}" y2="${y}" stroke="var(--${k?'grid':'axis'})" stroke-width="1"/>`;
+    g += `<text x="${m.l-6}" y="${y+4}" text-anchor="end">${state.metric==='rate'?v.toFixed(1)+'%':v>=1000?(+(v/1000).toFixed(1))+'k':fmt.format(Math.round(v))}</text>`; }
+  const years = []; for (let i=i0;i<=L;i++) if (D.quarters[i].endsWith('Q1')) years.push(i);
+  const step = Math.ceil(years.length / (W<480?4:7));
+  years.filter((_,j)=>j%step===0).forEach(i => g += `<text x="${xs(i)}" y="${H-6}" text-anchor="middle">${D.quarters[i].slice(0,4)}</text>`);
+  const c20 = D.quarters.indexOf('2020-Q2');
+  if (c20 >= i0) g += `<line x1="${xs(c20)}" x2="${xs(c20)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--axis)" stroke-width="1"/><text x="${xs(c20)+4}" y="${m.t+10}">Covid-19</text>`;
+  others.forEach(s => g += `<path d="${path(s[state.metric])}" fill="none" stroke="var(--other)" stroke-width="1.25"/>`);
+  const sp = path(sel[state.metric]);
+  const li = lastIdx(sel[state.metric]);
+  if (li >= i0) {
+    const fi = Math.max(i0, first);
+    g += `<path d="${sp} L${xs(li)},${ys(0)} L${xs(fi)},${ys(0)} Z" fill="var(--accent-soft)" stroke="none"/>`;
+  }
+  g += `<path d="${sp}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>`;
+  if (li >= 0 && W >= 480) g += `<text class="lbl" x="${xs(li)+8}" y="${ys(sel[state.metric][li])+4}">${sel.label.length>16?sel.label.split(' ')[0]:sel.label}</text>`;
+  if (others.length && W >= 480) g += `<text class="lbl2" x="${W-m.r+8}" y="${m.t+10}">Grey: other</text><text class="lbl2" x="${W-m.r+8}" y="${m.t+24}">sectors</text>`;
+  // hover layer
+  const h = state.hover;
+  if (h != null && h >= i0) {
+    g += `<line x1="${xs(h)}" x2="${xs(h)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--ink-2)" stroke-width="1"/>`;
+    const v = sel[state.metric][h];
+    if (v != null) g += `<circle cx="${xs(h)}" cy="${ys(v)}" r="5" fill="var(--accent)" stroke="var(--card)" stroke-width="2"/>`;
+  }
+  g += `<rect x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent" id="hit"/>`;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('height', H); svg.innerHTML = g;
+  svg.setAttribute('aria-label', `${met.title}, ${sel.label}, ${qLabel(D.quarters[i0])} to ${qLabel(D.latest)}. Use left and right arrow keys to read values.`);
+  // readout
+  const ri = h!=null && h>=i0 ? h : li;
+  const rv = sel[state.metric][ri];
+  document.getElementById('readout').innerHTML = ri>=0 ? `<b>${qLabel(D.quarters[ri])}</b> · ${sel.label}: <b>${rv==null?'not published':met.f(rv)}</b>` : '';
+  svg.onpointermove = e => { const r = svg.getBoundingClientRect(); const x = (e.clientX - r.left) * W / r.width;
+    const i = Math.round(i0 + (x - m.l) / (W - m.l - m.r) * (L - i0)); state.hover = Math.min(L, Math.max(i0, i)); renderLine(); };
+  svg.onpointerleave = () => { state.hover = null; renderLine(); };
+  svg.onkeydown = e => { if (e.key!=='ArrowLeft' && e.key!=='ArrowRight') return; e.preventDefault();
+    const cur = state.hover ?? L; state.hover = Math.min(L, Math.max(i0, cur + (e.key==='ArrowRight'?1:-1))); renderLine(); };
+  // titles
+  document.getElementById('lineTitle').textContent = `${met.title} · ${sel.label}`;
+  const notes = [];
+  if (first > 0 && state.sector!=='all') notes.push(`Series starts ${qLabel(D.quarters[first])} (current industry codes).`);
+  if (state.metric==='ret' && state.sector==='security') notes.push('Most quarters not published (small counts).');
+  const lead = others.length ? 'Selected sector in blue, other sectors in grey. '
+    : state.sector==='all' ? 'Quarterly, all industries. '
+    : 'Quarterly. Switch to Rate to compare sectors. ';
+  document.getElementById('lineHint').textContent = lead + notes.join(' ');
+  if (state.table) renderTable(sel, met, i0);
+}
+function renderTable(sel, met, i0){
+  const rows = []; for (let i=L;i>=i0;i--) { const v = sel[state.metric][i]; rows.push(`<tr><td>${qLabel(D.quarters[i])}</td><td>${v==null?'–':met.f(v)}</td></tr>`); }
+  document.getElementById('tbl').innerHTML = `<table><caption class="sr">${met.title}, ${sel.label}</caption><thead><tr><th>Quarter</th><th>${met.label}</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+}
+
+/* ---------- bars ---------- */
+function renderBars(){
+  const items = D.sectors.map(s => ({s, v:s.rate[L]})).filter(x=>x.v!=null).sort((a,b)=>b.v-a.v);
+  const max = Math.max(...items.map(x=>x.v), D.total.rate[L]);
+  const nat = D.total.rate[L];
+  const onKey = state.sector;
+  document.getElementById('barHint').textContent = `${qLabel(D.latest)}. Line marks all industries (${nat.toFixed(1)}%).`;
+  document.getElementById('bars').innerHTML = items.map(({s,v}) => `
+    <div class="row ${s.key===onKey?'on':''}" title="${s.label}: ${v.toFixed(1)}%">
+      <div class="name">${s.label}${s.key==='security'?' (part of admin & support)':''}</div>
+      <div class="track"><div class="bar" style="width:${v/max*100}%"></div><div class="ref" style="left:${nat/max*100}%"></div></div>
+      <div class="num">${v.toFixed(1)}%</div>
+    </div>`).join('');
+}
+
+/* ---------- survey card & footer ---------- */
+function renderStatic(){
+  const M = D.manual, a = M.sme_ai_adoption;
+  document.getElementById('survey').innerHTML = `
+    <div class="stat"><div class="big">${a[1].pct}%</div><div class="what">of SMEs used AI in ${a[1].year}</div><div class="was">up from ${a[0].pct}% in ${a[0].year}</div></div>
+    <div class="stat"><div class="big">${M.workers_need_ai_upskilling_pct}%</div><div class="what">of workers say they need AI upskilling</div></div>
+    <div class="stat"><div class="big">${M.workers_trained_past_year_pct}%</div><div class="what">of workers had AI training in the past year</div></div>`;
+  document.getElementById('surveyCap').textContent = `${M.source}. These are survey results, not part of the quarterly MOM series, and are not broken down by the sector filter above. Entered by hand on ${M.retrieved}.`;
+  document.getElementById('fresh').textContent = `Data as of ${qLabel(D.latest)} · fetched ${D.fetched}`;
+  const titles = D.datasets.map(d=>`<a href="https://data.gov.sg/datasets/${d.id}/view">${d.title}</a>`).join('; ');
+  document.getElementById('foot').innerHTML = `
+    <p>Contains information from ${titles}, accessed on ${D.fetched} from data.gov.sg, which is made available under the terms of the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence version 1.0</a>. Original source: Labour Market Survey, Manpower Research &amp; Statistics Department, Ministry of Manpower.</p>
+    <p>Survey figures: ${D.manual.source}.</p>
+    <p>This is an unofficial teaching example, not a product of MOM, IMDA or any government agency. Figures are a snapshot taken on ${D.fetched} and are not updated live; MOM publishes new quarterly data a few months after each quarter ends. Not advice.</p>`;
+}
+
+function render(){
+  document.querySelectorAll('#chips .chip').forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===state.sector));
+  buildSeg('metricSeg', [['vac','Vacancies'],['rate','Rate'],['ret','Retrenched']], 'metric');
+  buildSeg('rangeSeg', [['5Y','5Y'],['10Y','10Y'],['Max','Max']], 'range');
+  state.hover = null;
+  renderKpis(); renderLine(); renderBars();
+}
+document.getElementById('tblBtn').onclick = e => { state.table = !state.table; const t = document.getElementById('tbl'); t.hidden = !state.table;
+  e.target.textContent = state.table ? 'Hide table' : 'Show table'; e.target.setAttribute('aria-expanded', state.table); renderLine(); };
+let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(renderLine, 120); });
+buildChips(); renderStatic(); render();
+</script>
+</body>
+</html>

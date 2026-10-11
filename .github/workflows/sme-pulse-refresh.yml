@@ -1,0 +1,69 @@
+# Monthly refresh of the SME Workforce Pulse page (projects/sme-pulse/).
+# Fetches MOM data from data.gov.sg, rebuilds, runs the independent check, and commits
+# only when the underlying data has changed and every check passes.
+name: Refresh SME Workforce Pulse
+
+on:
+  schedule:
+    - cron: "0 1 2 * *"   # 09:00 SGT on the 2nd of each month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sme-pulse-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: tools/sme-pulse
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Keep previous snapshot
+        run: cp data/snapshot.json "$RUNNER_TEMP/old-snapshot.json"
+
+      - name: Fetch from data.gov.sg
+        run: python fetch.py
+
+      - name: Did the data change?
+        id: diff
+        run: |
+          python - <<'EOF' >> "$GITHUB_OUTPUT"
+          import json, os
+          old = json.load(open(os.environ["RUNNER_TEMP"] + "/old-snapshot.json"))["datasets"]
+          new = json.load(open("data/snapshot.json"))["datasets"]
+          print("changed=" + ("true" if old != new else "false"))
+          EOF
+
+      - name: Build and check
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          python build.py
+          python check.py
+          cp index.html ../../projects/sme-pulse/index.html
+          rm index.html
+
+      - name: Commit
+        if: steps.diff.outputs.changed == 'true'
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git add tools/sme-pulse/data projects/sme-pulse/index.html
+          latest=$(python -c "import json;print(json.load(open('tools/sme-pulse/data/snapshot.json'))['datasets']['vacancies_total']['latest'])")
+          git commit -m "SME Workforce Pulse: refresh data (latest $latest)"
+          git push
+
+      - name: No change
+        if: steps.diff.outputs.changed != 'true'
+        run: echo "MOM data unchanged since last snapshot; nothing to publish."
