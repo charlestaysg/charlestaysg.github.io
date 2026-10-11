@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skills Training Landscape</title>
+<meta name="description" content="SkillsFuture-listed courses in Singapore by sector, provider and type, from MySkillsFuture open data. Unofficial teaching example.">
+<style>
+:root{
+  color-scheme:light;
+  --page:#f9f9f7; --surface:#fcfcfb; --card:#ffffff;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#6f6d68;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,.10);
+  --accent:#2a78d6; --accent-soft:rgba(42,120,214,.12);
+  --other:#c9c7bf; --bar-other:#b9c9dc;
+  --survey-bg:#fbf7ee; --survey-border:#d9c9a3; --survey-ink:#6b5a2e;
+  --chip-on-ink:#ffffff;
+  --c-ret:#eb6834;
+  --c-sup:#1baf7a; --t-ihl:#2a78d6; --t-university:#1baf7a; --t-public:#eda100; --t-private:#4a3aa7;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --card:#1a1a19;
+    --ink:#ffffff; --ink-2:#c3c2b7; --muted:#9a988f;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+    --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
+    --other:#4a4a46; --bar-other:#34465c;
+    --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
+    --c-ret:#d95926;
+    --c-sup:#199e70; --t-ihl:#3987e5; --t-university:#199e70; --t-public:#c98500; --t-private:#9085e9;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface:#1a1a19; --card:#1a1a19;
+  --ink:#ffffff; --ink-2:#c3c2b7; --muted:#9a988f;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+  --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
+  --other:#4a4a46; --bar-other:#34465c;
+  --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
+  --c-ret:#d95926;
+  --c-sup:#199e70; --t-ihl:#3987e5; --t-university:#199e70; --t-public:#c98500; --t-private:#9085e9;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--page);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 40px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 24px;margin-bottom:16px}
+h1{font-size:26px;line-height:1.2;margin:0;letter-spacing:-.01em}
+.sub{color:var(--ink-2);margin:4px 0 0;font-size:14px}
+.fresh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.badge{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:1px 8px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;margin:0 -16px 8px;padding-left:16px;padding-right:16px;scrollbar-width:none;position:sticky;top:0;background:var(--page);z-index:5}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer;min-height:36px}
+.chip:hover{border-color:var(--axis)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--chip-on-ink)}
+.chip:focus-visible,.seg button:focus-visible,.linkbtn:focus-visible,.plot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.kpi .lab{font-size:13px;color:var(--ink-2);display:flex;justify-content:space-between;gap:8px}
+.kpi .q{color:var(--muted);white-space:nowrap;font-size:12px}
+.kpi .val{font-size:32px;font-weight:600;line-height:1.15;margin:6px 0 4px;letter-spacing:-.01em}
+.kpi .val.na{font-size:18px;font-weight:500;color:var(--ink-2);padding:9px 0 5px}
+.kpi .delta{font-size:13px;color:var(--ink-2)}
+.kpi .gloss{font-size:12px;color:var(--muted);margin-top:2px}
+.grid2{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px}
+.card h2{font-size:15px;margin:0;font-weight:600}
+.card .hint{font-size:13px;color:var(--ink-2);margin:2px 0 0}
+.chead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px 16px;margin-bottom:8px}
+.seg{display:inline-flex;background:var(--page);border:1px solid var(--border);border-radius:8px;padding:2px}
+.seg button{border:0;background:transparent;color:var(--ink-2);font:inherit;font-size:13px;padding:5px 10px;border-radius:6px;cursor:pointer;min-height:30px}
+.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 0 0 1px var(--border)}
+.readout{font-size:13px;color:var(--ink-2);min-height:20px;font-variant-numeric:tabular-nums}
+.readout b{color:var(--ink);font-weight:600}
+.plot{width:100%;display:block;touch-action:pan-y}
+.plot text{font-size:11px;fill:var(--muted);font-variant-numeric:tabular-nums}
+.plot .lbl{font-size:12px;fill:var(--ink);font-weight:600}
+.plot .lbl2{font-size:11px;fill:var(--ink-2)}
+.below{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.linkbtn{background:none;border:0;color:var(--accent);font:inherit;font-size:13px;cursor:pointer;padding:4px 0}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;font-variant-numeric:tabular-nums}
+th,td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--grid)}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--ink-2);font-weight:500}
+.tablewrap{max-height:320px;overflow:auto}
+.bars .row,.pm .row{cursor:pointer}
+.bars .row:hover .name,.pm .row:hover .nm{color:var(--ink)}
+.bars .row{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:2px 8px;align-items:center;padding:3px 0;cursor:default}
+.bars .name{font-size:12px;color:var(--ink-2);grid-column:1/-1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bars .row.on .name{color:var(--ink);font-weight:600}
+.bars .track{position:relative;height:10px}
+.bars .bar{height:10px;border-radius:0 4px 4px 0;background:var(--bar-other)}
+.bars .row.on .bar{background:var(--accent)}
+.bars .ref{position:absolute;top:-3px;bottom:-3px;width:0;border-left:1px solid var(--ink-2)}
+.bars .num{font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.bars .row.on .num{color:var(--ink);font-weight:600}
+.pm-sum{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:12px 0 4px}
+.pm-sum .big{font-size:26px;font-weight:600;line-height:1.15}
+.pm-sum .what{font-size:13px;color:var(--ink-2)}
+.pm-sel{font-size:14px;margin:10px 0 0;padding:10px 12px;border-radius:8px;background:var(--page)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--ink-2);margin:14px 0 6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.pm .row{display:grid;grid-template-columns:minmax(110px,170px) 1fr;gap:4px 12px;align-items:center;padding:6px 0;border-top:1px solid var(--grid)}
+.pm .row.dim{opacity:.45}
+.pm .row.on .nm{font-weight:600;color:var(--ink)}
+.pm .nm{font-size:13px;color:var(--ink-2)}
+.pm .pair{display:grid;gap:2px}
+.pm .ln{display:grid;grid-template-columns:1fr 52px;gap:8px;align-items:center}
+.pm .b{height:9px;border-radius:0 4px 4px 0;min-width:2px}
+.pm .b.r{background:var(--c-ret)} .pm .b.v{background:var(--accent)}
+.pm .n{font-size:12px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pm .na{font-size:12px;color:var(--muted)}
+@media (max-width:560px){.pm .row{grid-template-columns:1fr}.pm-sum{grid-template-columns:1fr}}
+.bars .sub{font-size:11px;color:var(--muted);grid-column:1/-1;margin-top:-2px}
+.sclist{margin-top:14px;font-size:13px}
+.sclist h3{font-size:13px;margin:12px 0 4px;font-weight:600}
+.sclist ul{margin:0;padding-left:18px;color:var(--ink-2)}
+.sclist a{color:var(--ink-2)}
+.sklinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin-top:12px}
+.sklinks a{display:block;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--ink);text-decoration:none;font-size:14px;line-height:1.35}
+.sklinks a:hover{border-color:var(--accent)}
+.sklinks a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sklinks small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.survey{background:var(--survey-bg);border:1.5px dashed var(--survey-border);border-radius:12px;padding:16px;margin-bottom:12px}
+.survey .pill{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--survey-ink);border:1px solid var(--survey-border);border-radius:999px;padding:1px 8px;margin-bottom:8px}
+.survey h2{font-size:15px;margin:0 0 10px}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stat .big{font-size:28px;font-weight:600;line-height:1.1}
+.stat .what{font-size:13px;color:var(--ink-2)}
+.stat .was{font-size:12px;color:var(--muted)}
+.survey .cap{font-size:12px;color:var(--ink-2);margin:12px 0 0}
+footer{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:20px}
+footer a{color:var(--ink-2)}
+footer p{margin:0 0 8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (min-width:861px){.chips{flex-wrap:wrap;overflow:visible;position:static}}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.sgrid{grid-template-columns:1fr}.kpi .val{font-size:26px}h1{font-size:22px}}
+/* ---- Landscape additions ---- */
+.companion{font-size:13px;color:var(--ink-2);margin:6px 0 0}
+.companion a{color:var(--accent)}
+.cover{font-size:12px;color:var(--muted);margin:10px 0 0}
+.ds .head,.ds .row{display:grid;grid-template-columns:minmax(110px,170px) 1fr 1fr 64px;gap:4px 12px;align-items:center}
+.ds .head{font-size:12px;color:var(--ink-2);padding:0 0 6px}
+.ds .head i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.ds .row{padding:6px 0;border-top:1px solid var(--grid);cursor:pointer}
+.ds .row.on .nm{font-weight:600;color:var(--ink)}
+.ds .row.dim{opacity:.45}
+.ds .nm{font-size:13px;color:var(--ink-2)}
+.ds .ln{display:grid;grid-template-columns:1fr 48px;gap:6px;align-items:center}
+.ds .b{height:9px;border-radius:0 4px 4px 0;min-width:2px}
+.ds .b.v{background:var(--accent)} .ds .b.s{background:var(--c-sup)}
+.ds .n{font-size:12px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.ds .na{font-size:12px;color:var(--muted)}
+.ds .ratio{font-size:12px;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
+.ds .per{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:560px){
+  .ds .head{grid-template-columns:1fr 1fr;}
+  .ds .head .h0,.ds .head .h3{display:none}
+  .ds .row{grid-template-columns:1fr 1fr}
+  .ds .nm{grid-column:1/-1}
+  .ds .ratio{grid-column:1/-1;text-align:left;color:var(--ink-2)}
+  .ds .per{position:static;width:auto;height:auto;overflow:visible;clip:auto}
+}
+.mix{display:flex;height:14px;gap:2px;margin:12px 0 6px}
+.mix span{display:block;height:100%}
+.mix span:first-child{border-radius:4px 0 0 4px}.mix span:last-child{border-radius:0 4px 4px 0}
+.mixleg{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12px;color:var(--ink-2);margin-bottom:8px}
+.mixleg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.prov .row{display:grid;grid-template-columns:minmax(0,1fr) 92px;gap:2px 10px;align-items:center;padding:5px 0;border-top:1px solid var(--grid)}
+.prov .pn{font-size:13px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prov .tag{font-size:11px;color:var(--muted);margin-left:6px}
+.prov .tag i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:0}
+.prov .track{grid-column:1/-1;height:8px}
+.prov .bar{height:8px;border-radius:0 4px 4px 0;background:var(--bar-other)}
+.prov .num{font-size:12px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums;grid-row:1;grid-column:2}
+.grid2.even{grid-template-columns:1fr 1fr}
+.shape{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px;margin-top:12px}
+.shape h3{font-size:13px;font-weight:600;margin:0 0 6px}
+.shape .bars .row{grid-template-columns:minmax(0,1fr) 92px}
+.xlink{display:inline-block;font-size:13px;color:var(--accent);margin-top:10px}
+.plot rect.col{fill:var(--bar-other)}
+.plot rect.col.on{fill:var(--accent)}
+.plot rect.col.part{fill:var(--accent-soft);stroke:var(--accent);stroke-dasharray:3 2}
+@media (max-width:860px){.grid2.even{grid-template-columns:1fr}.shape{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Skills Training Landscape <span class="badge">Unofficial</span></h1>
+      <p class="sub">SkillsFuture-listed courses in Singapore, by sector and provider. Source: MySkillsFuture course data (SWDA) via data.gov.sg.</p>
+      <p class="companion">Supply side of the <a id="pulseLink" href="#">SME Workforce Pulse</a>, which shows where hiring is tight.</p>
+    </div>
+    <div class="fresh"><span class="dot" aria-hidden="true"></span><span id="fresh"></span></div>
+  </header>
+
+  <nav class="chips" id="chips" aria-label="Sector"></nav>
+
+  <section class="kpis" id="kpis" aria-live="polite"></section>
+
+  <section class="card" aria-labelledby="dsh" style="margin-bottom:12px">
+    <h2 id="dsh">Open PMET roles and courses listed, by sector</h2>
+    <p class="hint" id="dsHint"></p>
+    <p class="pm-sel" id="dsSel" hidden></p>
+    <div class="ds" id="ds" style="margin-top:12px"></div>
+    <p class="cover" id="dsCover"></p>
+    <div class="below"><span></span><button class="linkbtn" id="dsTblBtn" aria-expanded="false">Show table</button></div>
+    <div class="tablewrap" id="dsTbl" hidden></div>
+  </section>
+
+  <section class="card" aria-labelledby="pvh" style="margin-bottom:12px">
+    <h2 id="pvh"></h2>
+    <p class="hint" id="pvHint"></p>
+    <div class="mix" id="mix" role="img"></div>
+    <div class="mixleg" id="mixLeg"></div>
+    <div class="prov" id="prov"></div>
+    <div class="below"><span></span><button class="linkbtn" id="pvTblBtn" aria-expanded="false">Show table</button></div>
+    <div class="tablewrap" id="pvTbl" hidden></div>
+  </section>
+
+  <section class="card" aria-labelledby="shh" style="margin-bottom:12px">
+    <h2 id="shh"></h2>
+    <p class="hint" id="shHint"></p>
+    <div class="shape" id="shape"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card" aria-labelledby="aih">
+      <h2 id="aih">AI-related courses by sector</h2>
+      <p class="hint" id="aiHint"></p>
+      <div class="bars" id="aiBars" style="margin-top:10px"></div>
+    </section>
+    <section class="card" aria-labelledby="aph">
+      <h2 id="aph"></h2>
+      <p class="hint" id="apHint"></p>
+      <div class="prov" id="aiProv" style="margin-top:10px"></div>
+    </section>
+  </div>
+
+  <div class="grid2 even">
+    <section class="card" aria-labelledby="ruh">
+      <h2 id="ruh"></h2>
+      <p class="hint" id="ruHint"></p>
+      <div class="readout" id="ruRead"></div>
+      <svg class="plot" id="ruPlot" role="img"></svg>
+    </section>
+    <section class="card" aria-labelledby="yrh">
+      <div class="chead">
+        <div><h2 id="yrh"></h2><p class="hint" id="yrHint"></p></div>
+        <div class="seg" id="yrSeg" role="group" aria-label="Measure"></div>
+      </div>
+      <div class="readout" id="yrRead"></div>
+      <svg class="plot" id="yrPlot" role="img"></svg>
+    </section>
+  </div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const D = /*__DATA__*/null;
+const fmt = new Intl.NumberFormat('en-SG');
+const money = v => '$' + fmt.format(Math.round(v));
+const pct = (a, b) => b ? Math.round(a / b * 100) + '%' : '–';
+const qLabel = q => q.replace('-', ' ');
+const fmtDate = d => new Date(d.slice(0, 10) + 'T00:00:00+08:00').toLocaleDateString('en-SG', {day:'numeric', month:'short', year:'numeric', timeZone:'Asia/Singapore'});
+const TYPES = Object.keys(D.type_labels);
+const state = {sector:'all', dsTable:false, pvTable:false};
+const ALL = D.groups.all;
+const label = k => k === 'all' ? 'All courses' : k === 'general' ? 'Cross-sector' : D.sectors.find(s => s.key === k).label;
+
+/* ---------- chips ---------- */
+function buildChips(){
+  const el = document.getElementById('chips');
+  const items = [{key:'all', label:'All courses'}, ...D.sectors, {key:'general', label:'Cross-sector'}];
+  el.innerHTML = items.map(s => `<button class="chip" data-k="${s.key}" aria-pressed="${s.key === state.sector}">${s.label}</button>`).join('');
+  el.onclick = e => { const b = e.target.closest('.chip'); if (b) select(b.dataset.k); };
+}
+function select(k){
+  state.sector = k; render();
+  document.querySelector(`.chip[data-k="${k}"]`)?.scrollIntoView({block:'nearest', inline:'center'});
+}
+
+/* ---------- KPI tiles ---------- */
+function renderKpis(){
+  const g = D.groups[state.sector], all = state.sector === 'all';
+  const tile = (lab, val, gloss) => `<div class="card kpi"><div class="lab"><span>${lab}</span></div><div class="val">${val}</div><div class="gloss">${gloss}</div></div>`;
+  const first = D.history.length < 2 ? 'First snapshot; change shows from next month.' : '';
+  document.getElementById('kpis').innerHTML =
+    tile('Courses listed', fmt.format(g.n), all ? `${first || 'On MySkillsFuture.'}` : `${pct(g.n, ALL.n)} of all ${fmt.format(ALL.n)} courses`) +
+    tile('Providers', fmt.format(g.providers), all ? 'Counted by business registration number (UEN)' : `of ${fmt.format(ALL.providers)} running any listed course`) +
+    tile('Median full fee', g.fee_median == null ? '–' : money(g.fee_median), 'Before subsidies. University programmes left out.') +
+    tile('AI-related courses', fmt.format(g.ai), `${pct(g.ai, g.n)} of courses here have an AI term in the title`);
+}
+
+/* ---------- demand vs supply ---------- */
+function renderDemandSupply(){
+  const q = qLabel(D.demand_quarter), mapped = ALL.n - D.groups.general.n;
+  document.getElementById('dsHint').textContent = `Left: PMET vacancies open at the end of ${q} (MOM, as on the Pulse). Right: courses listed whose title or description matches the sector. Different units, so each column has its own scale: compare the order of sectors, not bar lengths across columns. A course listing is not a class place, and many courses suit more than one sector.`;
+  const rows = D.sectors.map(s => ({...s, n: D.groups[s.key].n})).sort((a, b) => (b.pmet_open ?? -1) - (a.pmet_open ?? -1));
+  const vmax = Math.max(...rows.map(r => r.pmet_open || 0)), smax = Math.max(...rows.map(r => r.n));
+  const sel = state.sector;
+  const bar = (v, max, cls) => v == null ? `<div class="ln"><span class="na">Not published</span><span></span></div>`
+    : `<div class="ln"><div class="b ${cls}" style="width:${v / max * 100}%"></div><span class="n">${fmt.format(v)}</span></div>`;
+  const ratio = r => r.pmet_open ? (r.n / r.pmet_open * 100) : null;
+  document.getElementById('ds').innerHTML =
+    `<div class="head" aria-hidden="true"><span class="h0">Sector</span><span><i style="background:var(--accent)"></i>PMET roles open, ${q}</span><span><i style="background:var(--c-sup)"></i>Courses listed</span><span class="h3" style="text-align:right">per 100 roles</span></div>` +
+    rows.map(r => `<div class="row ${r.key === sel ? 'on' : ''} ${sel !== 'all' && sel !== 'general' && r.key !== sel ? 'dim' : ''}" data-k="${r.key}" title="${r.label}: ${r.pmet_open == null ? 'roles not published' : fmt.format(r.pmet_open) + ' PMET roles open'}, ${fmt.format(r.n)} courses">
+      <div class="nm">${r.label}${r.key === 'security' ? '<br><span class="na">roles are part of admin &amp; support</span>' : r.key === 'publicedu' ? '<br><span class="na">much training is in-service</span>' : ''}</div>
+      ${bar(r.pmet_open, vmax, 'v')}${bar(r.n, smax, 's')}
+      <div class="ratio">${ratio(r) == null ? '' : `${fmt.format(Math.round(ratio(r)))}<span class="per"> courses per 100 open roles</span>`}</div>
+    </div>`).join('');
+  document.getElementById('dsCover').textContent = `A sector was found for ${fmt.format(mapped)} of ${fmt.format(ALL.n)} courses (${pct(mapped, ALL.n)}). The other ${fmt.format(D.groups.general.n)} teach skills used in any sector, such as leadership, data, safety or customer service, and are under "Cross-sector". Sectors are matched by keyword, so some courses will be misplaced.`;
+  const el = document.getElementById('dsSel'), r = rows.find(x => x.key === sel);
+  if (!r) { el.hidden = true; }
+  else {
+    el.hidden = false;
+    el.textContent = r.pmet_open == null
+      ? `${r.label}: ${fmt.format(r.n)} courses listed. MOM does not publish PMET vacancies for this sector on its own.`
+      : `${r.label}: ${fmt.format(r.pmet_open)} PMET roles open in ${q} and ${fmt.format(r.n)} courses listed, about ${fmt.format(Math.round(ratio(r)))} courses per 100 open roles. Ranked ${rows.filter(x => x.pmet_open != null).indexOf(r) + 1} of ${rows.filter(x => x.pmet_open != null).length} for open roles and ${[...rows].sort((a, b) => b.n - a.n).indexOf(r) + 1} of ${rows.length} for courses.`;
+    if (r.key === 'publicedu') el.textContent += ' Many public-service and teaching roles are filled and trained through the agencies’ own routes (for example the Civil Service College and NIE), which are not MySkillsFuture listings, so a low course count here does not mean these roles lack training.';
+    el.innerHTML = el.innerHTML + `<br><a class="xlink" href="${D.pulse_url}?sector=${r.key}">Open roles and retrenchments for ${r.label} on the Pulse →</a>`;
+  }
+  if (state.dsTable) document.getElementById('dsTbl').innerHTML = `<table><caption class="sr">Open PMET roles and courses listed by sector</caption><thead><tr><th>Sector</th><th>PMET roles open, ${q}</th><th>Courses listed</th><th>Courses per 100 roles</th></tr></thead><tbody>${
+    rows.map(r => `<tr><td>${r.label}</td><td>${r.pmet_open == null ? '–' : fmt.format(r.pmet_open)}</td><td>${fmt.format(r.n)}</td><td>${ratio(r) == null ? '–' : fmt.format(Math.round(ratio(r)))}</td></tr>`).join('')}
+    <tr><td>Cross-sector</td><td>–</td><td>${fmt.format(D.groups.general.n)}</td><td>–</td></tr></tbody></table>`;
+}
+
+/* ---------- who supplies it ---------- */
+function renderProviders(){
+  const g = D.groups[state.sector], lab = label(state.sector);
+  document.getElementById('pvh').textContent = state.sector === 'all' ? 'Who runs the courses' : `Who runs the courses · ${lab}`;
+  document.getElementById('pvHint').textContent = `Share of ${fmt.format(g.n)} courses listed by type of provider, then the ten providers listing the most. A provider listing many courses is not necessarily training the most people.`;
+  const mix = TYPES.map(t => ({t, n: g.types[t]})).filter(x => x.n);
+  document.getElementById('mix').innerHTML = mix.map(x => `<span style="flex:${x.n};background:var(--t-${x.t})" title="${D.type_labels[x.t]}: ${fmt.format(x.n)} (${pct(x.n, g.n)})"></span>`).join('');
+  document.getElementById('mix').setAttribute('aria-label', 'Courses by provider type: ' + mix.map(x => `${D.type_labels[x.t]} ${pct(x.n, g.n)}`).join(', '));
+  document.getElementById('mixLeg').innerHTML = mix.map(x => `<span><i style="background:var(--t-${x.t})"></i>${D.type_labels[x.t]} ${pct(x.n, g.n)}</span>`).join('');
+  const max = Math.max(...g.top.map(p => p[2]), 1);
+  document.getElementById('prov').innerHTML = g.top.map(([name, t, n]) => `
+    <div class="row" title="${name}: ${fmt.format(n)} courses (${pct(n, g.n)})">
+      <div class="pn">${name}<span class="tag"><i style="background:var(--t-${t})"></i>${D.type_labels[t]}</span></div>
+      <div class="num">${fmt.format(n)} (${pct(n, g.n)})</div>
+      <div class="track"><div class="bar" style="width:${n / max * 100}%"></div></div>
+    </div>`).join('');
+  if (state.pvTable) document.getElementById('pvTbl').innerHTML = `<table><caption class="sr">Top providers, ${lab}</caption><thead><tr><th>Provider</th><th>Type</th><th>Courses</th><th>Share</th></tr></thead><tbody>${
+    g.top.map(([name, t, n]) => `<tr><td>${name}</td><td style="text-align:left">${D.type_labels[t]}</td><td>${fmt.format(n)}</td><td>${pct(n, g.n)}</td></tr>`).join('')}</tbody></table>`;
+}
+
+/* ---------- shape of supply: mode, length, fee ---------- */
+function barList(items, total, onIdx){
+  const max = Math.max(...items.map(x => x[1]), 1);
+  return items.map(([lab, n], i) => `<div class="row ${i === onIdx ? 'on' : ''}" title="${lab}: ${fmt.format(n)} (${pct(n, total)})">
+    <div class="name">${lab}</div><div class="track"><div class="bar" style="width:${n / max * 100}%;min-width:${n ? 2 : 0}px"></div></div>
+    <div class="num">${fmt.format(n)} (${pct(n, total)})</div></div>`).join('');
+}
+function renderShape(){
+  const g = D.groups[state.sector], lab = label(state.sector);
+  document.getElementById('shh').textContent = state.sector === 'all' ? 'What form the courses take' : `What form the courses take · ${lab}`;
+  const feeN = g.fees.reduce((a, b) => a + b, 0);
+  document.getElementById('shHint').textContent = `Study mode and length as listed by the provider. Days assume about 8 hours of training a day. Fees are full fees before subsidies, for the ${fmt.format(feeN)} courses not run by universities; most Singaporeans and SME-sponsored staff pay much less.`;
+  const modeLab = {'Part Time':'Part time', 'Full Time':'Full time', 'Full & part time':'Full or part time', 'Not stated':'Not stated'};
+  document.getElementById('shape').innerHTML =
+    `<div><h3>Study mode</h3><div class="bars">${barList(D.modes.map((m, i) => [modeLab[m], g.modes[i]]), g.n)}</div></div>` +
+    `<div><h3>Length</h3><div class="bars">${barList(D.hours_bands.map((b, i) => [b, g.hours[i]]), g.n)}</div></div>` +
+    `<div><h3>Full fee</h3><div class="bars">${barList(D.fee_bands.map((b, i) => [b, g.fees[i]]), feeN)}</div></div>`;
+}
+
+/* ---------- AI share ---------- */
+function renderAi(){
+  const all = ALL.ai / ALL.n * 100;
+  const items = [...D.sectors.map(s => ({key:s.key, label:s.label})), {key:'general', label:'Cross-sector'}]
+    .map(s => ({...s, g: D.groups[s.key]})).map(s => ({...s, v: s.g.ai / s.g.n * 100})).sort((a, b) => b.v - a.v);
+  const max = Math.max(...items.map(x => x.v), all);
+  document.getElementById('aiHint').textContent = `Share of each sector's courses with an AI term in the title (AI, generative, machine learning, Copilot and similar). Line marks all courses (${all.toFixed(1)}%). A title test misses AI taught inside broader courses.`;
+  document.getElementById('aiBars').innerHTML = items.map(s => `
+    <div class="row ${s.key === state.sector ? 'on' : ''}" data-k="${s.key}" title="${s.label}: ${fmt.format(s.g.ai)} of ${fmt.format(s.g.n)} courses (${s.v.toFixed(1)}%)">
+      <div class="name">${s.label}</div>
+      <div class="track"><div class="bar" style="width:${s.v / max * 100}%;min-width:${s.g.ai ? 2 : 0}px"></div><div class="ref" style="left:${all / max * 100}%"></div></div>
+      <div class="num">${s.v.toFixed(1)}%</div>
+    </div>`).join('');
+  const g = D.groups[state.sector], lab = label(state.sector);
+  document.getElementById('aph').textContent = state.sector === 'all' ? 'Who lists the most AI courses' : `Who lists the most AI courses · ${lab}`;
+  document.getElementById('apHint').textContent = g.ai ? `${fmt.format(g.ai)} AI-related courses here, from these providers first.` : 'No AI-related course titles in this group.';
+  const max2 = Math.max(...g.ai_top.map(p => p[1]), 1);
+  document.getElementById('aiProv').innerHTML = g.ai_top.map(([name, n]) => `
+    <div class="row" title="${name}: ${fmt.format(n)} AI-related courses"><div class="pn">${name}</div><div class="num">${fmt.format(n)} (${pct(n, g.ai)})</div>
+    <div class="track"><div class="bar" style="width:${n / max2 * 100}%"></div></div></div>`).join('');
+}
+
+/* ---------- column chart (runs by month, courses by year) ---------- */
+function columns(svgId, readId, cols, f, aria){
+  const svg = document.getElementById(svgId), read = document.getElementById(readId);
+  const W = svg.parentElement.clientWidth - 32 || 480, H = 200, m = {t:10, r:4, b:24, l:40};
+  const max = niceMax(Math.max(...cols.map(c => c.v), 1));
+  const bw = (W - m.l - m.r) / cols.length, ys = v => m.t + (1 - v / max) * (H - m.t - m.b);
+  let g = '';
+  for (let k = 0; k <= 4; k++) { const v = max * k / 4, y = ys(v);
+    g += `<line x1="${m.l}" x2="${W - m.r}" y1="${y}" y2="${y}" stroke="var(--${k ? 'grid' : 'axis'})"/><text x="${m.l - 6}" y="${y + 4}" text-anchor="end">${f.axis(v)}</text>`; }
+  const every = Math.ceil(cols.length / Math.max(4, Math.floor(W / 56)));
+  cols.forEach((c, i) => {
+    const x = m.l + i * bw + 1, h = ys(0) - ys(c.v);
+    g += `<rect class="col ${c.cls || ''}" x="${x}" y="${ys(c.v)}" width="${Math.max(1, bw - 2)}" height="${Math.max(0, h)}" rx="2"><title>${c.label}: ${f.val(c)}</title></rect>`;
+    if (i % every === 0 || i === cols.length - 1) g += `<text x="${x + bw / 2 - 1}" y="${H - 6}" text-anchor="middle">${c.tick}</text>`;
+  });
+  g += `<rect x="${m.l}" y="${m.t}" width="${W - m.l - m.r}" height="${H - m.t - m.b}" fill="transparent"/>`;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('height', H); svg.innerHTML = g;
+  svg.setAttribute('aria-label', aria);
+  const show = i => { const c = cols[i]; read.innerHTML = `<b>${c.label}</b> · ${f.val(c)}`; };
+  show(f.def ?? cols.length - 1);
+  svg.onpointermove = e => { const r = svg.getBoundingClientRect(); const i = Math.floor(((e.clientX - r.left) * W / r.width - m.l) / bw);
+    if (i >= 0 && i < cols.length) show(i); };
+  svg.onpointerleave = () => show(f.def ?? cols.length - 1);
+}
+function niceMax(v){ const p = Math.pow(10, Math.floor(Math.log10(v))); for (const k of [1,1.5,2,2.5,3,4,5,6,8,10]) if (k * p >= v) return k * p; return 10 * p; }
+const kfmt = v => v >= 1000 ? (+(v / 1000).toFixed(1)) + 'k' : fmt.format(Math.round(v));
+const monthLab = (ym, long) => new Date(ym + '-01T00:00:00+08:00').toLocaleDateString('en-SG', long ? {month:'long', year:'numeric'} : {month:'short'});
+
+function renderRuns(){
+  const g = D.groups[state.sector], lab = label(state.sector);
+  document.getElementById('ruh').textContent = state.sector === 'all' ? 'Course runs starting, next 12 months' : `Course runs starting · ${lab}`;
+  document.getElementById('ruHint').textContent = `Scheduled class start dates on MySkillsFuture. Providers post dates only a few months ahead, so later months look emptier than they will be. ${pct(D.runs_undated, D.runs_total)} of all listed runs have no date and are left out.`;
+  const cols = D.months.map((ym, i) => ({label: monthLab(ym, true), tick: monthLab(ym), v: g.runs[i]}));
+  columns('ruPlot', 'ruRead', cols, {axis: kfmt, val: c => `${fmt.format(c.v)} runs starting`, def: 0},
+    `Course runs starting per month, ${cols[0].label} to ${cols[cols.length - 1].label}, ${lab}.`);
+}
+
+function renderYears(){
+  const g = D.groups[state.sector], lab = label(state.sector);
+  const yrs = Object.keys(g.years).map(Number), first = 2018, last = Math.max(...Object.keys(ALL.years).map(Number));
+  const before = yrs.filter(y => y < first).reduce((a, y) => [a[0] + g.years[y][0], a[1] + g.years[y][1]], [0, 0]);
+  const rows = [{label: `Before ${first}`, tick: `<${String(first).slice(2)}`, n: before[0], ai: before[1]}];
+  for (let y = first; y <= last; y++) { const [n, ai] = g.years[y] || [0, 0];
+    rows.push({label: y === last ? `${y} (to ${monthLab(D.datasets.directory.updated.slice(0, 7))})` : String(y), tick: String(y).slice(2), n, ai, part: y === last}); }
+  const share = state.yr === 'ai';
+  const cols = rows.map(r => ({...r, v: share ? (r.n ? r.ai / r.n * 100 : 0) : r.n, cls: r.part ? 'part' : ''}));
+  document.getElementById('yrh').textContent = state.sector === 'all' ? 'Courses by year registered' : `Courses by year registered · ${lab}`;
+  document.getElementById('yrHint').textContent = `Courses still listed today, by the year in their course reference number. Courses that were registered and later withdrawn are not counted, so older years look smaller than they were. The latest year is partial. A month-by-month series starts building from this snapshot.`;
+  columns('yrPlot', 'yrRead', cols, share
+    ? {axis: v => v.toFixed(0) + '%', val: c => `${c.v.toFixed(1)}% AI-related (${fmt.format(c.ai)} of ${fmt.format(c.n)})`}
+    : {axis: kfmt, val: c => `${fmt.format(c.n)} courses still listed`},
+    `${share ? 'Share of AI-related courses' : 'Courses still listed'} by year registered, ${lab}.`);
+  const seg = document.getElementById('yrSeg');
+  seg.innerHTML = [['n', 'Courses'], ['ai', 'AI share']].map(([k, l]) => `<button data-k="${k}" aria-pressed="${state.yr === k}">${l}</button>`).join('');
+  seg.onclick = e => { const b = e.target.closest('button'); if (b) { state.yr = b.dataset.k; renderYears(); } };
+}
+
+/* ---------- static parts ---------- */
+function renderStatic(){
+  const dir = D.datasets.directory, run = D.datasets.runs;
+  document.getElementById('fresh').textContent = `Data published ${fmtDate(dir.updated)} · checked ${fmtDate(D.checked)}`;
+  const titles = [dir, run].map(d => `<a href="https://data.gov.sg/datasets/${d.id}/view">${d.title}</a>`).join(' and ');
+  document.getElementById('foot').innerHTML = `
+    <p>Contains information from ${titles}, accessed on ${fmtDate(D.built)} from data.gov.sg, which is made available under the terms of the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence version 1.0</a>. Publisher: ${dir.publisher}. Open PMET roles: Labour Market Survey, Manpower Research &amp; Statistics Department, Ministry of Manpower, via the <a href="${D.pulse_url}">SME Workforce Pulse</a>.</p>
+    <p>How the figures are made: one course per course reference number (a course offered both full and part time is listed twice in the source and counted once here). Providers are grouped by UEN. Sectors come from keyword rules on each course's title and description; ${pct(ALL.n - D.groups.general.n, ALL.n)} of courses matched a sector. "AI-related" means the title contains a term such as AI, generative, machine learning or Copilot. Fees are full fees before subsidies; the source does not say which subsidy its net fee assumes, so the page does not use it.</p>
+    <p>This is an unofficial teaching example, not a product of SWDA, MOM or any government agency. Courses listed are not class places, enrolments or a measure of quality. The data is a snapshot, not live; the page checks data.gov.sg for a new version each month (last checked ${fmtDate(D.checked)}). Not advice.</p>`;
+  document.getElementById('pulseLink').href = D.pulse_url;
+}
+
+function render(){
+  document.querySelectorAll('#chips .chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === state.sector));
+  try { const u = new URL(location.href); state.sector === 'all' ? u.searchParams.delete('sector') : u.searchParams.set('sector', state.sector); history.replaceState(null, '', u); } catch (e) {}
+  renderKpis(); renderDemandSupply(); renderProviders(); renderShape(); renderAi(); renderRuns(); renderYears();
+}
+// ?sector=<key> picks a sector on load, so the Pulse can link straight to one
+{ const k = new URLSearchParams(location.search).get('sector'); if (k && D.groups[k]) state.sector = k; }
+state.yr = 'n';
+let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { renderRuns(); renderYears(); }, 120); });
+const toggle = (btn, box, key, fn) => document.getElementById(btn).onclick = e => {
+  state[key] = !state[key]; document.getElementById(box).hidden = !state[key];
+  e.target.textContent = state[key] ? 'Hide table' : 'Show table'; e.target.setAttribute('aria-expanded', state[key]); fn(); };
+toggle('dsTblBtn', 'dsTbl', 'dsTable', renderDemandSupply);
+toggle('pvTblBtn', 'pvTbl', 'pvTable', renderProviders);
+['ds', 'aiBars'].forEach(id => document.getElementById(id).addEventListener('click', e => {
+  if (e.target.closest('a')) return;
+  const r = e.target.closest('.row[data-k]'); if (r) select(r.dataset.k); }));
+buildChips(); renderStatic(); render();
+if (state.sector !== 'all') document.querySelector(`.chip[data-k="${state.sector}"]`)?.scrollIntoView({block:'nearest', inline:'center'});
+</script>
+</body>
+</html>

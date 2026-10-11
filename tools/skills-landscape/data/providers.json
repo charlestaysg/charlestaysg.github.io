@@ -1,0 +1,38 @@
+{
+ "_note": "Provider type by UEN. Anything not listed is 'private' (companies, non-profits, associations). Hand-kept; check when a new institution appears.",
+ "ihl": {
+  "T08GB0056A": "Singapore Polytechnic",
+  "T08GB0032G": "Nanyang Polytechnic",
+  "T08GB0046G": "Republic Polytechnic",
+  "T08GB0039A": "Ngee Ann Polytechnic",
+  "T08GB0062L": "Temasek Polytechnic",
+  "T08GB0022B": "Institute of Technical Education"
+ },
+ "university": {
+  "200000267Z": "Singapore Management University",
+  "200604346E": "National University of Singapore",
+  "200504979Z": "Singapore University of Social Sciences",
+  "200604393R": "Nanyang Technological University",
+  "200917667D": "Singapore Institute of Technology",
+  "200913519C": "Singapore University of Technology and Design"
+ },
+ "public_prefixes": [
+  "T08GB",
+  "T09GB",
+  "T16GB",
+  "T08GA"
+ ],
+ "names": {
+  "_note": "Display-name fixes where title-casing a shouted alias reads wrongly",
+  "200409359E": "NTUC LearningHub",
+  "201933324M": "SIM (Singapore Institute of Management)",
+  "S80TU0496C": "Singapore National Employers Federation (SNEF)",
+  "201200696W": "Tertiary Infotech Academy",
+  "198200913C": "At-Sunrice GlobalChef Academy",
+  "200202841R": "Lithan Academy",
+  "201016621D": "@ASK Training",
+  "201003423H": "KLC International Institute",
+  "53374841X": "Singapore Institute of Manufacturing Technology (SIMTech)",
+  "T16GB0003C": "Skills and Workforce Development Agency"
+ }
+}

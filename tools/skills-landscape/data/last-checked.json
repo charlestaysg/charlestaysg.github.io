@@ -1,0 +1,18 @@
+{
+ "checked": "2026-10-11",
+ "changed": false,
+ "datasets": {
+  "directory": {
+   "id": "d_b5802b76f409764c16dde4bf2feb19cd",
+   "title": "MySkillsFuture Course Directory",
+   "publisher": "Skills and Workforce Development Agency",
+   "updated": "2026-09-29T18:16:30+08:00"
+  },
+  "runs": {
+   "id": "d_60e4423c61d7bbe3c4cf07552197987b",
+   "title": "MySkillsFuture Course Run",
+   "publisher": "Skills and Workforce Development Agency",
+   "updated": "2026-09-29T18:13:58+08:00"
+  }
+ }
+}

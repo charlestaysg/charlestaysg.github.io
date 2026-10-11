@@ -1,0 +1,63 @@
+# Monthly refresh of the Skills Training Landscape page (projects/skills-landscape/).
+# Runs the day after the Pulse refresh, because it reads the Pulse's MOM snapshot for open PMET roles.
+# Downloads the two MySkillsFuture course files from data.gov.sg (not committed; about 16 MB),
+# rebuilds, runs the independent check, and commits the small aggregated snapshot and the page.
+# A failed fetch, build or check stops the run and leaves the live page as it was.
+name: Refresh Skills Training Landscape
+
+on:
+  schedule:
+    - cron: "0 1 3 * *"   # 09:00 SGT on the 3rd of each month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: skills-landscape-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: tools/skills-landscape
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install openpyxl
+        run: pip install openpyxl==3.1.5
+
+      - name: Fetch from data.gov.sg
+        run: python fetch.py
+
+      - name: Build and check
+        run: |
+          python build.py
+          python check.py
+          cp index.html ../../projects/skills-landscape/index.html
+          rm index.html
+
+      - name: Commit
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git add tools/skills-landscape/data projects/skills-landscape/index.html
+          published=$(python -c "import json;print(json.load(open('tools/skills-landscape/data/last-checked.json'))['datasets']['directory']['updated'][:10])")
+          changed=$(python -c "import json;print(json.load(open('tools/skills-landscape/data/last-checked.json'))['changed'])")
+          if [ "$changed" = "True" ]; then
+            msg="Skills Training Landscape: new course data (published $published)"
+          else
+            msg="Skills Training Landscape: monthly check, no new course data (published $published)"
+          fi
+          git diff --cached --quiet && { echo "Nothing to commit (already checked today)."; exit 0; }
+          git commit -m "$msg"
+          git pull --rebase
+          git push
