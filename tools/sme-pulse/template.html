@@ -15,6 +15,7 @@
   --other:#c9c7bf; --bar-other:#b9c9dc;
   --survey-bg:#fbf7ee; --survey-border:#d9c9a3; --survey-ink:#6b5a2e;
   --chip-on-ink:#ffffff;
+  --c-ret:#eb6834;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -25,6 +26,7 @@
     --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
     --other:#4a4a46; --bar-other:#34465c;
     --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
+    --c-ret:#d95926;
   }
 }
 :root[data-theme="dark"]{
@@ -35,6 +37,7 @@
   --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
   --other:#4a4a46; --bar-other:#34465c;
   --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
+  --c-ret:#d95926;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -89,6 +92,23 @@ th{color:var(--ink-2);font-weight:500}
 .bars .ref{position:absolute;top:-3px;bottom:-3px;width:0;border-left:1px solid var(--ink-2)}
 .bars .num{font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
 .bars .row.on .num{color:var(--ink);font-weight:600}
+.pm-sum{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:12px 0 4px}
+.pm-sum .big{font-size:26px;font-weight:600;line-height:1.15}
+.pm-sum .what{font-size:13px;color:var(--ink-2)}
+.pm-sel{font-size:14px;margin:10px 0 0;padding:10px 12px;border-radius:8px;background:var(--page)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--ink-2);margin:14px 0 6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.pm .row{display:grid;grid-template-columns:minmax(110px,170px) 1fr;gap:4px 12px;align-items:center;padding:6px 0;border-top:1px solid var(--grid)}
+.pm .row.dim{opacity:.45}
+.pm .row.on .nm{font-weight:600;color:var(--ink)}
+.pm .nm{font-size:13px;color:var(--ink-2)}
+.pm .pair{display:grid;gap:2px}
+.pm .ln{display:grid;grid-template-columns:1fr 52px;gap:8px;align-items:center}
+.pm .b{height:9px;border-radius:0 4px 4px 0;min-width:2px}
+.pm .b.r{background:var(--c-ret)} .pm .b.v{background:var(--accent)}
+.pm .n{font-size:12px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pm .na{font-size:12px;color:var(--muted)}
+@media (max-width:560px){.pm .row{grid-template-columns:1fr}.pm-sum{grid-template-columns:1fr}}
 .sklinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin-top:12px}
 .sklinks a{display:block;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--ink);text-decoration:none;font-size:14px;line-height:1.35}
 .sklinks a:hover{border-color:var(--accent)}
@@ -146,6 +166,17 @@ footer p{margin:0 0 8px}
     </section>
   </div>
 
+  <section class="card" aria-labelledby="pmh" style="margin-bottom:12px">
+    <h2 id="pmh">PMETs: retrenched vs open roles</h2>
+    <p class="hint" id="pmHint"></p>
+    <div class="pm-sum" id="pmSum"></div>
+    <p class="pm-sel" id="pmSel" hidden></p>
+    <div class="legend" aria-hidden="true"><span><i style="background:var(--c-ret)"></i><span id="pmLegR"></span></span><span><i style="background:var(--accent)"></i><span id="pmLegV"></span></span></div>
+    <div class="pm" id="pm"></div>
+    <div class="below"><span></span><button class="linkbtn" id="pmTblBtn" aria-expanded="false">Show table</button></div>
+    <div class="tablewrap" id="pmTbl" hidden></div>
+  </section>
+
   <section class="card skills" aria-labelledby="sk" style="margin-bottom:12px">
     <h2 id="sk"></h2>
     <p class="hint" id="skHint"></p>
@@ -173,7 +204,7 @@ const METRICS = {
   ret:  {label:'Retrenchments', unit:'', title:'Retrenchments', f:v=>fmt.format(v)},
 };
 const RANGES = {'5Y':20,'10Y':40,'Max':Infinity};
-const state = {sector:'all', metric:'vac', range:'10Y', hover:null, table:false};
+const state = {sector:'all', metric:'vac', range:'10Y', hover:null, table:false, pmTable:false};
 const N = D.quarters.length, L = N - 1;
 
 function sectorObj(key){
@@ -320,6 +351,48 @@ function renderBars(){
     </div>`).join('');
 }
 
+/* ---------- PMET retrenched vs open roles ---------- */
+// Plain-language reading of one sector's figures. Thresholds are deliberately coarse.
+function pmetReading(p){
+  if (p.ret == null || p.vac == null) return '';
+  if (p.vac >= 5 * p.ret) return ' Few PMETs are being let go and many roles are open, so this sector is a likely destination for people moving in from other sectors.';
+  if (p.vac >= 0.9 * p.ret) return ' The sector is letting PMETs go while still hiring them, which points to a skills gap within the sector.';
+  return ' More PMETs were retrenched than there are open PMET roles here, so moving into other sectors matters more.';
+}
+function renderPmet(){
+  const P = D.pmet, from = qLabel(P.from), to = qLabel(P.to);
+  document.getElementById('pmHint').textContent = `Professionals, managers, executives and technicians. Retrenched is the total for ${from} to ${to}; open roles are vacancies at the end of ${to}. One is a year's total and the other a count on one day, so compare them side by side rather than as a ratio. A vacancy is not necessarily a fit for someone retrenched.`;
+  document.getElementById('pmSum').innerHTML = `
+    <div><div class="big">${fmt.format(P.ret)}</div><div class="what">PMETs retrenched, ${from}–${to} (${Math.round(P.ret/P.ret_all*100)}% of all ${fmt.format(P.ret_all)} retrenchments)</div></div>
+    <div><div class="big">${fmt.format(P.vac)}</div><div class="what">PMET vacancies open at the end of ${to}</div></div>`;
+  document.getElementById('pmLegR').textContent = `Retrenched, ${from}–${to}`;
+  document.getElementById('pmLegV').textContent = `Open roles, ${to}`;
+  const rows = D.sectors.filter(s => s.pmet.ret != null || s.pmet.vac != null).sort((a,b) => (b.pmet.ret||0) - (a.pmet.ret||0));
+  const max = Math.max(...rows.flatMap(s => [s.pmet.ret||0, s.pmet.vac||0]));
+  const sel = state.sector;
+  const line = (v, cls) => v == null ? `<div class="ln"><span class="na">Not published</span><span></span></div>`
+    : `<div class="ln"><div class="b ${cls}" style="width:${v/max*100}%"></div><span class="n">${fmt.format(v)}</span></div>`;
+  document.getElementById('pm').innerHTML = rows.map(s => `
+    <div class="row ${s.key===sel?'on':''} ${sel!=='all'&&s.key!==sel?'dim':''}" title="${s.label}: ${s.pmet.ret==null?'n/a':fmt.format(s.pmet.ret)} retrenched, ${s.pmet.vac==null?'n/a':fmt.format(s.pmet.vac)} open">
+      <div class="nm">${s.label}${s.pmet.ret_missing?'<br><span class="na">some quarters not published</span>':''}</div>
+      <div class="pair">${line(s.pmet.ret,'r')}${line(s.pmet.vac,'v')}</div>
+    </div>`).join('');
+  const el = document.getElementById('pmSel'), s = sel==='all' ? null : D.sectors.find(x=>x.key===sel);
+  if (!s) { el.hidden = true; }
+  else if (s.pmet.ret == null && s.pmet.vac == null) { el.hidden = false; el.textContent = `${s.label}: MOM does not publish PMET figures for this sector (counts too small).`; }
+  else {
+    el.hidden = false;
+    el.textContent = `${s.label}: ${s.pmet.ret==null?'retrenchments not published':fmt.format(s.pmet.ret)+' PMETs retrenched in the past year'}; ${s.pmet.vac==null?'vacancies not published':fmt.format(s.pmet.vac)+' PMET roles open in '+to}.`
+      + pmetReading(s.pmet);
+  }
+  if (state.pmTable) {
+    document.getElementById('pmTbl').innerHTML = `<table><caption class="sr">PMETs retrenched vs open roles by sector</caption><thead><tr><th>Sector</th><th>Retrenched, ${from}–${to}</th><th>Open roles, ${to}</th></tr></thead><tbody>${
+      rows.map(s=>`<tr><td>${s.label}</td><td>${s.pmet.ret==null?'–':fmt.format(s.pmet.ret)}</td><td>${s.pmet.vac==null?'–':fmt.format(s.pmet.vac)}</td></tr>`).join('')}</tbody></table>`;
+  }
+}
+document.getElementById('pmTblBtn').onclick = e => { state.pmTable = !state.pmTable; document.getElementById('pmTbl').hidden = !state.pmTable;
+  e.target.textContent = state.pmTable ? 'Hide table' : 'Show table'; e.target.setAttribute('aria-expanded', state.pmTable); renderPmet(); };
+
 /* ---------- skills links (SWDA Jobs-Skills Portal) ---------- */
 // Skills Framework names as listed at jobsandskills.swda.gov.sg/frameworks/sector-information (checked 11 Oct 2026).
 // pdf: file under SFW_BASE; page: a web page used instead where the portal links to one.
@@ -379,7 +452,7 @@ function render(){
   buildSeg('metricSeg', [['vac','Vacancies'],['rate','Rate'],['ret','Retrenched']], 'metric');
   buildSeg('rangeSeg', [['5Y','5Y'],['10Y','10Y'],['Max','Max']], 'range');
   state.hover = null;
-  renderKpis(); renderLine(); renderBars(); renderSkills();
+  renderKpis(); renderLine(); renderBars(); renderPmet(); renderSkills();
 }
 document.getElementById('tblBtn').onclick = e => { state.table = !state.table; const t = document.getElementById('tbl'); t.hidden = !state.table;
   e.target.textContent = state.table ? 'Hide table' : 'Show table'; e.target.setAttribute('aria-expanded', state.table); renderLine(); };

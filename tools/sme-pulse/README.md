@@ -3,7 +3,7 @@
 One-page dashboard of Singapore job vacancies, vacancy rates and retrenchments by sector (MOM data via data.gov.sg), plus hand-entered IMDA survey figures. Unofficial teaching example.
 
 ## Files
-- `fetch.py` — downloads 7 MOM datasets from data.gov.sg (no API key; calls spaced for the rate limit) → `data/raw/`, `data/snapshot.json`
+- `fetch.py` — downloads 9 MOM datasets (paged, 10,000 rows per call) from data.gov.sg (no API key; calls spaced for the rate limit) → `data/raw/`, `data/snapshot.json`
 - `data/manual.json` — hand-entered IMDA survey figures; check against the source before each rebuild
 - `template.html` — the page; `build.py` inlines the data → `index.html` (no network calls at runtime)
 - `check.py` — recomputes every headline figure from `data/raw/` and compares it with the page
@@ -27,5 +27,7 @@ python3 fetch.py && python3 build.py && python3 check.py && cp index.html ../../
 | vacancies_total | d_59a34aef12e0ecf666de5746e50586e8 | Number of Job Vacancy - Quarterly |
 | vacancy_rate_total | d_c57f5cd0558e429e2ac055d83030e75f | Job Vacancy Rate - Quarterly |
 | retrenched_total | d_000d49cda016c13522d7d5be6a050f59 | Number of Retrenched Employees - Quarterly |
+| retrenched_occ | d_cdde7c4701d917ae58aa63e4015490aa | Number of Retrenched Employees by Industry and Occupation - Quarterly |
+| vacancies_occ | d_d3f02543c4d0dd197c56637eefc32624 | Number of Job Vacancy by Industry and Occupation - Quarterly |
 
 Licence: Singapore Open Data Licence v1.0 (attribution in the page footer).

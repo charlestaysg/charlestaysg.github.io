@@ -18,19 +18,33 @@ DATASETS = {
     "vacancies_total": ("d_59a34aef12e0ecf666de5746e50586e8", "Number of Job Vacancy - Quarterly", None),
     "vacancy_rate_total": ("d_c57f5cd0558e429e2ac055d83030e75f", "Job Vacancy Rate - Quarterly", "job_vacancy_rate"),
     "retrenched_total": ("d_000d49cda016c13522d7d5be6a050f59", "Number of Retrenched Employees - Quarterly", "retrench"),
+    "retrenched_occ": ("d_cdde7c4701d917ae58aa63e4015490aa", "Number of Retrenched Employees by Industry and Occupation - Quarterly", "retrench"),
+    "vacancies_occ": ("d_d3f02543c4d0dd197c56637eefc32624", "Number of Job Vacancy by Industry and Occupation - Quarterly", "job_vacancy"),
 }
-URL = "https://data.gov.sg/api/action/datastore_search?resource_id={}&limit=10000"
+PAGE = 10000
+URL = "https://data.gov.sg/api/action/datastore_search?resource_id={}&limit={}&offset={}"
 
 
-def get(rid):
+def get_page(rid, offset):
     for attempt in range(5):
         try:
-            with urllib.request.urlopen(URL.format(rid), timeout=60) as r:
-                return json.load(r)["result"]["records"]
+            with urllib.request.urlopen(URL.format(rid, PAGE, offset), timeout=60) as r:
+                return json.load(r)["result"]
         except Exception as e:  # 429 or transient error: back off
             print(f"  retry {attempt + 1} for {rid}: {e}")
             time.sleep(12 * (attempt + 1))
     raise SystemExit(f"failed: {rid}")
+
+
+def get(rid):
+    rows, offset = [], 0
+    while True:
+        res = get_page(rid, offset)
+        rows += res["records"]
+        offset += PAGE
+        if offset >= res["total"]:
+            return rows
+        time.sleep(6)
 
 
 def num(v):
@@ -46,8 +60,8 @@ for key, (rid, title, col) in DATASETS.items():
     rows = get(rid)
     (RAW / f"{key}.json").write_text(json.dumps(rows))
     if col is None:  # value column name not known in advance: the one field that isn't quarter/_id
-        col = next(k for k in rows[0] if k not in ("quarter", "_id", "industry"))
-    tidy = [{"q": r["quarter"], **({"industry": r["industry"]} if "industry" in r else {}), "v": num(r[col])} for r in rows]
+        col = next(k for k in rows[0] if k not in ("quarter", "_id", "industry", "occupation"))
+    tidy = [{"q": r["quarter"], **{k: r[k] for k in ("industry", "occupation") if k in r}, "v": num(r[col])} for r in rows]
     snapshot["datasets"][key] = {"id": rid, "title": title, "rows": len(tidy),
                                  "latest": max(r["q"] for r in tidy), "data": tidy}
     time.sleep(6)

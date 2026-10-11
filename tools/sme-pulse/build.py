@@ -43,6 +43,28 @@ def series(key, industry=None):
     return out
 
 
+# PMET view: retrenchments summed over the last 4 quarters vs open vacancies in the latest quarter
+PMET = "professionals, managers, executives and technicians"
+last4 = quarters[-4:]
+
+
+def occ(key, industry, qs):
+    vals = [r["v"] for r in ds[key]["data"]
+            if r.get("industry") == industry and r.get("occupation") == PMET and r["q"] in qs]
+    known = [v for v in vals if v is not None]
+    return (sum(known) if known else None), len(qs) - len(known)
+
+
+def pmet_row(industry):
+    ret, ret_missing = occ("retrenched_occ", industry, last4)
+    vac, _ = occ("vacancies_occ", industry, [quarters[-1]])
+    return {"ret": ret, "ret_missing": ret_missing, "vac": vac}
+
+
+TOP = ["manufacturing", "construction", "services", "others"]  # top-level groups that add up to the total
+pmet_total = {"ret": sum(pmet_row(i)["ret"] or 0 for i in TOP), "vac": sum(pmet_row(i)["vac"] or 0 for i in TOP),
+              "ret_all": sum(r["v"] or 0 for r in ds["retrenched_total"]["data"] if r["q"] in last4)}
+
 data = {
     "quarters": quarters,
     "fetched": snap["fetched_at"][:10],
@@ -52,7 +74,8 @@ data = {
               "ret": series("retrenched_total"), "vu": series("vu_ratio")},
     "sectors": [{"key": k, "label": lab, "mom": name, "chip": chip,
                  "vac": series("vacancies", name), "rate": series("vacancy_rate", name),
-                 "ret": series("retrenched", name)} for k, lab, name, chip in SECTORS],
+                 "ret": series("retrenched", name), "pmet": pmet_row(name)} for k, lab, name, chip in SECTORS],
+    "pmet": {"from": last4[0], "to": last4[-1], **pmet_total},
     "datasets": [{"id": d["id"], "title": d["title"]} for d in ds.values()],
     "manual": manual,
 }
