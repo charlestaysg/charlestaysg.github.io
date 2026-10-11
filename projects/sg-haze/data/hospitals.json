@@ -1,0 +1,158 @@
+[
+  {
+    "name": "Singapore General Hospital",
+    "type": "public",
+    "edUrl": "https://www.sgh.com.sg/clinic-visit/emergency-care",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "ED relocated Jan 2026 to the new Emergency/NNI building"
+  },
+  {
+    "name": "Changi General Hospital",
+    "type": "public",
+    "edUrl": "https://www.cgh.com.sg/our-specialties/emergency-medicine",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "No paediatric, obstetric or gynae emergency cover"
+  },
+  {
+    "name": "Sengkang General Hospital",
+    "type": "public",
+    "edUrl": "https://www.skh.com.sg/our-specialties/emergency-medicine",
+    "waitTimesUrl": null,
+    "verified": "curl"
+  },
+  {
+    "name": "Tan Tock Seng Hospital",
+    "type": "public",
+    "edUrl": "https://www.nhghealth.com.sg/find-care/Clinic/ttsh-emergency-department",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "nhghealth.com.sg intermittently rate-limits (429); this page returned 200"
+  },
+  {
+    "name": "Khoo Teck Puat Hospital",
+    "type": "public",
+    "edUrl": "https://www.nhghealth.com.sg/find-care/Clinic/ktph-acute-emergency-care",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "A&E page https://www.nhghealth.com.sg/ktph/i-want-to/visit-a-e reportedly shows queue counts but could not be verified (429)"
+  },
+  {
+    "name": "Woodlands Hospital",
+    "type": "public",
+    "edUrl": "https://www.nhghealth.com.sg/find-care/Clinic/wh-emergency-department",
+    "waitTimesUrl": null,
+    "verified": "curl"
+  },
+  {
+    "name": "National University Hospital (adult ED)",
+    "type": "public",
+    "edUrl": "https://www.nuh.com.sg/care-at-nuh/services/emergency-medicine/visit-the-emergency-department",
+    "waitTimesUrl": "https://www.nuhs.edu.sg/patient-care/emergency-department-wait-times",
+    "verified": "curl"
+  },
+  {
+    "name": "National University Hospital (Children's Emergency)",
+    "type": "public",
+    "edUrl": "https://www.nuh.com.sg/care-at-nuh/services/emergency-medicine/visit-the-emergency-department",
+    "waitTimesUrl": "https://www.nuhs.edu.sg/patient-care/emergency-department-wait-times",
+    "verified": "curl",
+    "note": "Same NUH page covers Children's Emergency (under 18)"
+  },
+  {
+    "name": "Ng Teng Fong General Hospital",
+    "type": "public",
+    "edUrl": "https://www.ntfgh.com.sg/for-patients-and-visitors/visit-emergency-department",
+    "waitTimesUrl": "https://www.nuhs.edu.sg/patient-care/emergency-department-wait-times",
+    "verified": "curl",
+    "note": "No paediatric facilities; critical under-16s transferred to NUH"
+  },
+  {
+    "name": "Alexandra Hospital (Urgent Care Centre)",
+    "type": "public",
+    "edUrl": "https://www.ah.com.sg/our-services/urgent-care-centre",
+    "waitTimesUrl": "https://www.nuhs.edu.sg/patient-care/emergency-department-wait-times",
+    "verified": "curl",
+    "note": "24-hour Urgent Care Centre; full ED not yet operating"
+  },
+  {
+    "name": "KK Women's and Children's Hospital (Children's Emergency)",
+    "type": "public",
+    "edUrl": "https://www.kkh.com.sg/our-specialties/childrens-emergency",
+    "waitTimesUrl": null,
+    "verified": "curl"
+  },
+  {
+    "name": "KK Women's and Children's Hospital (Urgent O&G Centre)",
+    "type": "public",
+    "edUrl": "https://www.kkh.com.sg/our-specialties/urgent-og-centre",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "24-hour walk-in for women with urgent O&G problems"
+  },
+  {
+    "name": "Mount Elizabeth Hospital (Orchard)",
+    "type": "private",
+    "edUrl": "https://www.mountelizabeth.com.sg/24hr-urgent-care-centre/overview",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "24-hour Urgent Care Centre (formerly A&E)"
+  },
+  {
+    "name": "Mount Elizabeth Novena Hospital",
+    "type": "private",
+    "edUrl": "https://www.mountelizabeth.com.sg/24hr-urgent-care-centre/overview",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "24-hour Urgent Care Centre; shared Mount Elizabeth page"
+  },
+  {
+    "name": "Gleneagles Hospital",
+    "type": "private",
+    "edUrl": "https://www.gleneagles.com.sg/24hr-urgent-care-centre/overview",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "24-hour Urgent Care Centre"
+  },
+  {
+    "name": "Parkway East Hospital",
+    "type": "private",
+    "edUrl": "https://www.parkwayeast.com.sg/24hr-urgent-care-centre/overview",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "24-hour Urgent Care Centre; separate paediatric UCC"
+  },
+  {
+    "name": "Mount Alvernia Hospital",
+    "type": "private",
+    "edUrl": "https://mtalvernia.sg/clinical_services/24hr-urgent-care-centre/",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "24-hour walk-in clinic and emergency"
+  },
+  {
+    "name": "Raffles Hospital",
+    "type": "private",
+    "edUrl": "https://www.rafflesmedicalgroup.com/clinic/raffles24-acute-and-critical-care/",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "Raffles24 Acute & Critical Care, 24 hours"
+  },
+  {
+    "name": "Thomson Medical Centre",
+    "type": "private",
+    "edUrl": "https://www.thomsonmedical.com/centres/urgent-care-centre",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "24-hour Urgent Care Centre, not a full ED"
+  },
+  {
+    "name": "Farrer Park Hospital",
+    "type": "private",
+    "edUrl": "https://www.farrerpark.com/Services/24HRMUC.html",
+    "waitTimesUrl": null,
+    "verified": "curl",
+    "note": "24-hour Medical Urgency Clinic, not a full ED"
+  }
+]

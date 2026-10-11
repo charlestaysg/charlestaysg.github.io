@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Singapore Haze — Hourly (unofficial)</title>
+  <meta name="description" content="Unofficial hourly Singapore haze dashboard: NEA PM2.5 readings by region alongside the computed US AQI, wind, 2-hour rain, nearby GP clinics and haze news.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Singapore Haze — Hourly (unofficial)">
+  <meta property="og:description" content="NEA hourly PM2.5 vs US AQI by region, wind, rain, nearby GP clinics, A&amp;E links and haze news. Unofficial; see haze.gov.sg for official readings.">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-row">
+      <a class="back" href="../../">← Charles Tay</a>
+      <h1>Singapore Haze — Hourly <span class="badge">UNOFFICIAL</span></h1>
+    </div>
+    <div class="topbar-row">
+      <div id="status"><abbr title="National Environment Agency">NEA</abbr> data as of <time id="nea-time">—</time> · updated <span id="nea-ago">—</span> · refresh in <span id="countdown">—</span></div>
+      <span class="chips"><span id="wind-chip" class="chip" hidden></span><span id="rain-chip" class="chip" hidden></span></span>
+    </div>
+    <nav class="official-links" aria-label="Official sources">
+      <a href="https://www.haze.gov.sg" target="_blank" rel="noopener">haze.gov.sg (official)</a>
+      <a href="https://www.nea.gov.sg/" target="_blank" rel="noopener">NEA</a>
+      <a href="https://www.nea.gov.sg/corporate-functions/weather/myenv" target="_blank" rel="noopener">myENV app</a>
+    </nav>
+  </header>
+
+  <main class="layout">
+    <section class="left">
+      <section id="myarea" class="panel" aria-live="polite">
+        <h2>My area</h2>
+        <p id="myarea-headline" class="myarea-headline">Loading…</p>
+        <p id="myarea-verdict" class="myarea-verdict"></p>
+        <p id="myarea-rain" class="myarea-verdict" hidden></p>
+        <form id="myarea-form" autocomplete="off">
+          <label for="myarea-postal">Your postal code</label>
+          <input id="myarea-postal" inputmode="numeric" maxlength="6" placeholder="e.g. 570150">
+          <button type="submit">Set</button>
+          <a href="#" id="myarea-forget" hidden>Forget</a>
+        </form>
+        <p id="myarea-msg" class="note" hidden></p>
+        <p class="note">Based on NEA's 1-hour PM2.5 bands. Your postal code stays in this browser only.</p>
+      </section>
+      <div id="map-wrap"><div id="map" aria-label="Map of PM2.5 by region"><p class="map-fallback" hidden>Map unavailable</p></div>
+        <label class="map-toggle"><input type="checkbox" id="weather-toggle"> Show 2-hour weather icons</label>
+      </div>
+      <div id="error-banner" role="alert" hidden></div>
+
+      <section id="regions" aria-label="Regional readings">
+        <article class="region-card skeleton" id="region-north"></article>
+        <article class="region-card skeleton" id="region-south"></article>
+        <article class="region-card skeleton" id="region-east"></article>
+        <article class="region-card skeleton" id="region-west"></article>
+        <article class="region-card skeleton" id="region-central"></article>
+      </section>
+
+      <section id="ed" class="panel">
+        <h2><abbr title="Accident &amp; Emergency (Emergency Department)">A&amp;E</abbr> status</h2>
+        <a class="ed-card" href="https://www.nuhs.edu.sg/patient-care/emergency-department-wait-times" target="_blank" rel="noopener">Live wait times — <abbr title="Alexandra Hospital">AH</abbr>, <abbr title="National University Hospital">NUH</abbr>, <abbr title="Ng Teng Fong General Hospital">NTFGH</abbr> (<abbr title="National University Health System">NUHS</abbr>) →</a>
+        <h3>Hospital A&amp;E and urgent care pages</h3>
+        <div id="hospital-links"></div>
+        <p class="note">Not an emergency? Call NurseFirst <strong class="tel-text">6262 6262</strong> for advice (<abbr title="National University Health System">NUHS</abbr>). In an emergency call <strong class="tel-text">995</strong>.</p>
+        <p class="note">MOH publishes official ED waiting times on a two-week delay.</p>
+      </section>
+
+      <section id="trend" class="panel">
+        <h2>Today's hourly trend</h2>
+        <fieldset id="trend-toggle">
+          <legend class="sr-only">Trend metric</legend>
+          <label><input type="radio" name="trend-metric" value="nea" checked> NEA µg/m³</label>
+          <label><input type="radio" name="trend-metric" value="aqi"> US <abbr title="Air Quality Index">AQI</abbr></label>
+        </fieldset>
+        <div class="chart-wrap"><canvas id="trend-chart"></canvas></div>
+      </section>
+
+      <section id="explainer" class="panel">
+        <h2>Why the numbers differ</h2>
+        <ul>
+          <li>NEA reports the raw 1-hour <abbr title="fine particles 2.5 micrometres or smaller">PM2.5</abbr> concentration in <abbr title="micrograms per cubic metre">µg/m³</abbr> with four bands (Normal/Elevated/High/Very High).</li>
+          <li>aqicn.org takes NEA's readings and converts them to the US EPA AQI (0–500) using a weighted 12-hour "<abbr title="US EPA method that weights the last 12 hours of readings">NowCast</abbr>", so the number and category names differ.</li>
+          <li>Both describe the same air; use NEA's bands for official Singapore advisories and the US AQI to compare with other countries or apps.</li>
+        </ul>
+      </section>
+    </section>
+
+    <aside class="news">
+      <div class="news-head">
+        <div role="tablist" aria-label="News topics">
+          <button role="tab" id="tab-sg-govt" data-topic="sg-govt" aria-selected="true" aria-controls="news-list">SG govt response</button>
+          <button role="tab" id="tab-impact" data-topic="impact" aria-selected="false" aria-controls="news-list">Impact in SG</button>
+          <button role="tab" id="tab-indonesia" data-topic="indonesia" aria-selected="false" aria-controls="news-list">Indonesia action</button>
+        </div>
+        <span id="news-updated" class="muted"></span>
+      </div>
+      <div id="news-list" role="tabpanel"><p class="muted">Loading…</p></div>
+
+      <section class="panel feedback-card" id="feedback-card">
+        <h2>Suggest an improvement</h2>
+        <p class="note" style="margin-top:0">Comment on what to fix or add. Needs a claude.ai sign-in.</p>
+        <p><a class="feedback-link" href="#" target="_blank" rel="noopener">Leave a suggestion ↗</a></p>
+      </section>
+
+      <section id="gp" class="panel">
+        <h2>Find a GP clinic near you</h2>
+        <form id="gp-form" autocomplete="off">
+          <label for="gp-postal" class="sr-only">Postal code</label>
+          <input id="gp-postal" inputmode="numeric" maxlength="6" placeholder="6-digit postal code" pattern="\d{6}">
+          <button type="submit">Search</button>
+          <button type="button" id="gp-locate" class="ghost">Use my location</button>
+        </form>
+        <div id="gp-results" aria-live="polite"></div>
+        <p class="note"><abbr title="Community Health Assist Scheme">CHAS</abbr> clinic list from <abbr title="Ministry of Health">MOH</abbr> (last updated Jun 2024). Opening hours not included — call before going.</p>
+        <div class="tele">
+          <h3>Can't get to a clinic?</h3>
+          <ul>
+            <li><a href="https://doctoranywhere.com" target="_blank" rel="noopener">Doctor Anywhere</a></li>
+            <li><a href="https://www.manadr.com" target="_blank" rel="noopener">MaNaDr</a></li>
+            <li><a href="https://www.whitecoat.com.sg" target="_blank" rel="noopener">WhiteCoat</a></li>
+            <li><a href="https://speedoc.com/sg" target="_blank" rel="noopener">Speedoc</a> (home visits)</li>
+            <li><a href="https://www.nuhs.edu.sg" target="_blank" rel="noopener">NUHS TeleConsult</a> (via NUHS App)</li>
+          </ul>
+          <p class="note">Teleconsults suit mild symptoms. Go to A&amp;E or call 995 for chest pain, severe breathlessness or confusion.</p>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <footer>
+    <details id="abbreviations"><summary>Abbreviations</summary><dl><dt>A&amp;E</dt><dd>Accident &amp; Emergency (Emergency Department)</dd><dt>AH</dt><dd>Alexandra Hospital</dd><dt>AQI</dt><dd>Air Quality Index (US EPA scale, 0–500)</dd><dt>ASEAN</dt><dd>Association of Southeast Asian Nations</dd><dt>ASMC</dt><dd>ASEAN Specialised Meteorological Centre (regional haze monitoring)</dd><dt>BNPB</dt><dd>Indonesia's National Disaster Management Agency</dd><dt>CGH</dt><dd>Changi General Hospital</dd><dt>CHAS</dt><dd>Community Health Assist Scheme (MOH subsidy scheme for GP and dental visits)</dd><dt>ED</dt><dd>Emergency Department</dd><dt>KKH</dt><dd>KK Women's and Children's Hospital</dd><dt>KLHK</dt><dd>Indonesia's Ministry of Environment and Forestry</dd><dt>KTPH</dt><dd>Khoo Teck Puat Hospital</dd><dt>MOE</dt><dd>Ministry of Education</dd><dt>MOH</dt><dd>Ministry of Health</dd><dt>MOM</dt><dd>Ministry of Manpower</dd><dt>NEA</dt><dd>National Environment Agency</dd><dt>NowCast</dt><dd>US EPA method that weights the last 12 hours of readings</dd><dt>NTFGH</dt><dd>Ng Teng Fong General Hospital</dd><dt>NUH</dt><dd>National University Hospital</dd><dt>NUHS</dt><dd>National University Health System (public healthcare cluster running AH, NUH and NTFGH)</dd><dt>PM2.5</dt><dd>fine particles 2.5 micrometres or smaller, the main haze pollutant</dd><dt>SGH</dt><dd>Singapore General Hospital</dd><dt>SKH</dt><dd>Sengkang General Hospital</dd><dt>TTSH</dt><dd>Tan Tock Seng Hospital</dd><dt>US EPA</dt><dd>United States Environmental Protection Agency</dd><dt>µg/m³</dt><dd>micrograms per cubic metre</dd></dl></details>
+    Not affiliated with NEA. Readings © Government of Singapore, data.gov.sg Open Data Licence. AQI computed locally using US EPA NowCast + 2024 breakpoints. News via CNA and ANTARA RSS.
+    <a class="feedback-link" href="#" target="_blank" rel="noopener">Suggest an improvement</a>
+    <a href="../../">← Charles Tay</a>
+  </footer>
+
+  <div id="toast" role="status" hidden></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

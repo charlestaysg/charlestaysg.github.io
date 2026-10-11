@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://charlestaysg.github.io/sitemap.xml
