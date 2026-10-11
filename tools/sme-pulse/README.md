@@ -18,6 +18,18 @@ python3 fetch.py && python3 build.py && python3 check.py && cp index.html ../../
 ```
 `data/manual.json` (IMDA survey figures) is never refreshed automatically — update it by hand when IMDA publishes a new report.
 
+## Update by hand
+Everything from MOM refreshes on its own (see Refresh). These parts don't:
+
+| What | File | When | How |
+|---|---|---|---|
+| IMDA survey figures (SME AI adoption, workers needing AI upskilling, workers trained) | `data/manual.json` | Once a year, when IMDA publishes the next Singapore Digital Economy Report (next expected around Oct 2027) | Check each figure against the press release, update `url` and `retrieved`, rebuild |
+| SCTP programme list (81 programmes, 11 Oct 2026) | `data/sctp.json` | Every few months (next by Jan 2027) | Recollect from the six institutions' SCTP pages listed in the file; tag each programme's sector the same way |
+| Skills Framework and Jobs Transformation Map links | `template.html` (`SKILLS`, `SFW_BASE`, `DEMAND_DASH`) | When a link breaks; SWDA sites are split across two domains as of Oct 2026 | Fix the URL and rebuild |
+| Sector list | `build.py` (`SECTORS`) | Only if MOM renames an industry | Edit the name; the Skills Training Landscape's `check.py` fails until its list matches |
+
+After any hand edit: `python3 build.py && python3 check.py`, then copy `index.html` to `projects/sme-pulse/`.
+
 ## Datasets
 | Key | data.gov.sg ID | Title |
 |---|---|---|
@@ -31,4 +43,4 @@ python3 fetch.py && python3 build.py && python3 check.py && cp index.html ../../
 | retrenched_occ | d_cdde7c4701d917ae58aa63e4015490aa | Number of Retrenched Employees by Industry and Occupation - Quarterly |
 | vacancies_occ | d_d3f02543c4d0dd197c56637eefc32624 | Number of Job Vacancy by Industry and Occupation - Quarterly |
 
-Licence: Singapore Open Data Licence v1.0 (attribution in the page footer).
+Licence: code under MIT (see `LICENSE` at the repo root). MOM data under the Singapore Open Data Licence v1.0 (attribution in the page footer). IMDA figures and SCTP titles are quoted from public pages with links; they are not open-licensed.

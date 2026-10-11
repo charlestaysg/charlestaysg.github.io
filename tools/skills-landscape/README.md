@@ -36,6 +36,18 @@ pip install openpyxl
 python3 fetch.py && python3 build.py && python3 check.py && cp index.html ../../projects/skills-landscape/ && rm index.html
 ```
 
+## Update by hand
+Everything from SWDA's course files and MOM's open roles refreshes on its own (see Refresh). These parts don't:
+
+| What | File | When | How |
+|---|---|---|---|
+| Provider types and display names | `data/providers.json` | Rarely: when a new university or public agency starts listing courses, or a shouted name reads badly | Add the UEN under `ihl`, `university` or `names`; rebuild |
+| Sector keyword rules | `sectors.py` | Optional: if the "sector found for X%" figure drops, or `review_mapping.py` samples look wrong | Edit the keywords, run `review_mapping.py`, check the samples and the SCTP agreement (must stay at 90%+), rebuild |
+| AI-related test | `ai.py` | When new AI terms become common in course titles | Edit the pattern; check a sample of matches by eye |
+| Sector list | `build.py` (`SECTORS`) | Only when the Pulse's list changes | Copy it from `../sme-pulse/build.py`; `check.py` fails until they match |
+
+After any hand edit: `python3 build.py && python3 check.py`, then copy `index.html` to `projects/skills-landscape/`. Needs the raw files: run `python3 fetch.py` first.
+
 ## Known limits
 - **Sector coverage:** a sector is found for 48% of courses (Sep 2026 data). The rest teach cross-sector skills.
 - **AI-related courses:** only titles are tested, so AI taught inside broader courses is missed.
@@ -43,4 +55,4 @@ python3 fetch.py && python3 build.py && python3 check.py && cp index.html ../../
 - **Undated runs:** 43% of course runs have no date.
 - **Fees:** only the full fee before subsidies is used. The source doesn't state which subsidy its net fee assumes.
 
-Licence: Singapore Open Data Licence v1.0.
+Licence: code under MIT (see `LICENSE` at the repo root). Data: Singapore Open Data Licence v1.0 (attribution in the page footer).
