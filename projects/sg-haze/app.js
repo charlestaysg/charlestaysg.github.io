@@ -150,6 +150,8 @@ function textOn(hex) {
   });
   return (0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2]) > 0.55 ? '#111111' : '#ffffff';
 }
+// MOH's list has a few blank or malformed numbers; only 8-digit SG numbers get a call link.
+function validTel(tel) { return /^[3689]\d{7}$/.test(String(tel || '').replace(/\D/g, '')); }
 function formatPhone(tel) {
   const d = String(tel || '').replace(/\D/g, '');
   return d.length === 8 ? `${d.slice(0, 4)} ${d.slice(4)}` : d;
@@ -255,7 +257,7 @@ function parseFeed(xmlText, source, Parser) {
 
 if (typeof module !== 'undefined') {
   module.exports = { nowcast, pm25ToAqi, neaBand, haversine, nearest, compass, meanWind, isRain, textOn,
-    formatPhone, rainSummary, hospitalLabel, parseWind, aqiCategory, sgDateStr, sgHM,
+    formatPhone, validTel, rainSummary, hospitalLabel, parseWind, aqiCategory, sgDateStr, sgHM,
     organiseNews, routeNews, isHazeNews, parseFeed, titleWords, jaccard, stripHtml };
 }
 
@@ -513,12 +515,19 @@ if (typeof document !== 'undefined') {
   /* ---------- rendering: map ---------- */
   function initMap() {
     if (typeof L === 'undefined') { document.querySelector('.map-fallback').hidden = false; return; }
-    map = L.map('map', { scrollWheelZoom: false }).setView([1.3521, 103.8198], 11);
+    map = L.map('map', { scrollWheelZoom: false, zoomSnap: 0.25 }).setView([1.3521, 103.8198], 11);
     setTiles();
+    fitRegions();
+    window.addEventListener('resize', fitRegions);
     windLayer = L.layerGroup().addTo(map);
     weatherLayer = L.layerGroup();
     clinicLayer = L.layerGroup().addTo(map);
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', setTiles);
+  }
+  // On narrow screens, zoom out just enough that all five region badges stay fully inside the map.
+  function fitRegions() {
+    if (!map || window.innerWidth >= 500) return;
+    map.fitBounds([[1.41803, 103.70], [1.29587, 103.94]], { paddingTopLeft: [48, 24], paddingBottomRight: [48, 24] });
   }
   function setTiles() {
     if (!map) return;
@@ -526,7 +535,7 @@ if (typeof document !== 'undefined') {
     const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     // OneMap (Singapore Land Authority) basemap: free, no key; Grey keeps band colours readable.
     tileLayer = L.tileLayer(`https://www.onemap.gov.sg/maps/tiles/${dark ? 'Night' : 'Grey'}/{z}/{x}/{y}.png`, {
-      minZoom: 11, maxZoom: 19, detectRetina: true,
+      minZoom: 9, minNativeZoom: 11, maxZoom: 19, detectRetina: true, // detectRetina adds 1 to minZoom on high-DPI screens
       attribution: '<img src="https://www.onemap.gov.sg/web-assets/images/logo/om_logo.png" style="height:14px;width:14px"> <a href="https://www.onemap.gov.sg/" target="_blank" rel="noopener">OneMap</a> © contributors | <a href="https://www.sla.gov.sg/" target="_blank" rel="noopener">Singapore Land Authority</a>',
     }).addTo(map);
   }
@@ -759,7 +768,8 @@ if (typeof document !== 'undefined') {
     if (clinicLayer) clinicLayer.clearLayers();
     renderMyArea();
   }
-  async function runGp() {
+  // zoomToClinics=false on page load, so a remembered postal code keeps the island overview.
+  async function runGp(zoomToClinics = true) {
     const out = $('gp-results');
     const p = state.postal;
     if (!p) return;
@@ -772,7 +782,9 @@ if (typeof document !== 'undefined') {
       h('div', { class: 'name' }, c.name),
       h('div', { class: 'addr' }, `${c.address} · ${c.km.toFixed(1)} km`),
       h('div', { class: 'links' },
-        c.tel ? h('span', { class: 'tel' }, 'Tel ', h('a', { href: `tel:+65${c.tel}` }, formatPhone(c.tel))) : null,
+        validTel(c.tel)
+          ? h('span', { class: 'tel' }, 'Tel ', h('a', { href: `tel:+65${String(c.tel).replace(/\D/g, '')}` }, formatPhone(c.tel)))
+          : h('span', { class: 'tel muted' }, 'No phone listed'),
         h('a', { href: `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}`, target: '_blank', rel: 'noopener' }, 'Directions')))));
     if (map) {
       clinicLayer.clearLayers();
@@ -784,7 +796,7 @@ if (typeof document !== 'undefined') {
           .bindTooltip(c.name).addTo(clinicLayer);
         pts.push([c.lat, c.lng]);
       }
-      map.fitBounds(pts, { padding: [30, 30], maxZoom: 15 });
+      if (zoomToClinics) map.fitBounds(pts, { padding: [30, 30], maxZoom: 15 });
     }
   }
   function useMyLocation() { // only ever called from a click
@@ -844,7 +856,7 @@ if (typeof document !== 'undefined') {
     const hadStored = loadStoredPostal();
     loadHospitals();
     loadAllNews();
-    loadData().then(() => loadForecast()).then(() => { if (hadStored) runGp(); });
+    loadData().then(() => loadForecast()).then(() => { if (hadStored) runGp(false); });
 
     setInterval(() => { if (!document.hidden) { renderStatus(); } }, 1000);
     setInterval(() => { if (!document.hidden) loadData(); }, DATA_MS);
