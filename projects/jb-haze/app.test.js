@@ -159,4 +159,13 @@ for (const lang of ['en', 'ms']) {
   assert.strictEqual(S.STRINGS[lang].compass.length, 16);
   assert.ok(!new RegExp(['NA' + 'CE', 'poly' + 'technic'].join('|'), 'i').test(JSON.stringify(S.STRINGS[lang])));
 }
+// Scale bar: segments follow band ranges up to the cap; marker position is clamped.
+{
+  const segs = A.scaleSegments(A.API_BANDS, 400);
+  assert.deepStrictEqual(segs.map(x => x.to), [50, 100, 200, 300, 400]);
+  assert.ok(Math.abs(segs.reduce((t, x) => t + x.pct, 0) - 100) < 1e-9);
+  assert.strictEqual(A.scalePos(200, 400), 50);
+  assert.strictEqual(A.scalePos(900, 400), 100);
+  assert.strictEqual(A.scalePos(null, 400), null);
+}
 console.log('app.test.js: all checks passed');

@@ -73,6 +73,12 @@ const AQI_CATS = [
   { key: 'usg', max: 150, color: '#ff7e00' }, { key: 'unh', max: 200, color: '#ff0000' },
   { key: 'vunh', max: 300, color: '#8f3f97' }, { key: 'haz', max: Infinity, color: '#7e0023' },
 ];
+// Position (0-100 %) of a value on a banded scale capped at `cap`; segment widths follow each band's range.
+function scaleSegments(bands, cap) {
+  let lo = 0;
+  return bands.map(b => { const hi = Math.min(b.max, cap); const seg = { key: b.key, color: b.color, from: lo, to: hi, pct: (hi - lo) / cap * 100 }; lo = hi; return seg; }).filter(s => s.pct > 0);
+}
+function scalePos(v, cap) { return v == null || isNaN(v) ? null : Math.max(0, Math.min(100, v / cap * 100)); }
 function aqiCategory(aqi) { return AQI_CATS.find(c => aqi <= c.max) || AQI_CATS[5]; }
 function pm25ToAqi(c) {
   if (c == null || isNaN(c)) return null;
@@ -274,7 +280,7 @@ function sortNews(items, lang) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { apiBand, API_BANDS, pm25ToAqi, usAqiFor, nowcastAqi, usAqiBest, sgNowcastAqi, psiBand, sgRegion, aqiCategory, nowcast, pm25ToApi, haversine, nearest, compass,
+  module.exports = { scaleSegments, scalePos, apiBand, API_BANDS, pm25ToAqi, usAqiFor, nowcastAqi, usAqiBest, sgNowcastAqi, psiBand, sgRegion, aqiCategory, nowcast, pm25ToApi, haversine, nearest, compass,
     windTo, arrowRotation, fromSumatra, textOn, agoParts, fmtHM, lastN, hourStamps, sparkPath, headlineStation,
     hotspotMode, filterHotspots, hhmm, mdParts, safeUrl, sortNews, DATA_BASE, RAW_BASE, LOCAL_BASE, COMPASS_EN };
 }
@@ -722,17 +728,34 @@ if (typeof document !== 'undefined') {
     body.append(h('div', { class: 'd-tiles' },
       tile(T('idx.my'), st.api == null ? '–' : st.api, bandWord(b), T('detail.basis.api'), col),
       tile(T('idx.us'), aq ? aq.aqi : '–', aq ? T('aqi.' + aq.key) : bandWord(NODATA_BAND), T(aq && aq.basis === '24h' ? 'detail.basis.us24' : 'detail.basis.us'), ac)));
+    const bar = (label, v, bands, cap, word) => {
+      const pos = scalePos(v, cap);
+      return h('div', { class: 'scale', role: 'img', 'aria-label': `${label}: ${v == null ? '–' : v} ${word}` },
+        h('div', { class: 'scale-l' }, label),
+        h('div', { class: 'scale-track' },
+          ...scaleSegments(bands, cap).map(sg => h('span', { class: 'scale-seg', style: `width:${sg.pct}%;background:${sg.color}` })),
+          pos == null ? null : h('span', { class: 'scale-mark', style: `left:${pos}%` })),
+        h('div', { class: 'scale-ticks' }, ...scaleSegments(bands, cap).slice(0, -1).map(sg => h('span', { style: `left:${sg.to / cap * 100}%` }, String(sg.to)))));
+    };
+    body.append(h('div', { class: 'd-scales' },
+      bar(T('scale.my'), st.api, API_BANDS, 400, bandWord(b)),
+      bar(T('scale.us'), aq ? aq.aqi : null, AQI_CATS, 400, aq ? T('aqi.' + aq.key) : '')));
     const us24 = usAqiFor(st);
     body.append(h('p', { class: 'note d-us24' }, T('detail.us24'), ' ', h('b', {}, us24 ? us24.aqi : '–')));
     body.append(h('p', { class: 'd-advice' }, T('advice.' + b.key)));
     const kv = h('dl', { class: 'kv' });
     const row = (k, v) => { if (v != null && v !== '') kv.append(h('dt', {}, k), h('dd', {}, v)); };
-    const u = ' ' + T('unit.ugm3');
-    row(T('detail.pm25_1h'), st.pm25 == null ? null : st.pm25 + u);
-    row(T('detail.pm25_24h'), st.pm25_24h == null ? null : st.pm25_24h + u);
-    kv.append(h('dt', {}, ''), h('dd', {}, h('a', { href: '#explainer' }, T('detail.why'))));
-    row(T('detail.pm10_1h'), st.pm10 == null ? null : st.pm10 + u);
-    row(T('detail.pm10_24h'), st.pm10_24h == null ? null : st.pm10_24h + u);
+    // Pollutant table: latest hour and 24-hour average where DOE gives one.
+    const fmt = (v, unit) => v == null ? '–' : `${v} ${unit}`;
+    const ug = T('unit.ugm3'), mg = T('unit.mgm3');
+    const pols = [['pol.pm25', st.pm25, st.pm25_24h, ug], ['pol.pm10', st.pm10, st.pm10_24h, ug],
+      ['pol.o3', st.o3, null, ug], ['pol.no2', st.no2, null, ug], ['pol.so2', st.so2, null, ug], ['pol.co', st.co, null, mg]]
+      .filter(r => r[1] != null || r[2] != null);
+    body.append(h('table', { class: 'pol' },
+      h('caption', {}, T('detail.pollutants')),
+      h('thead', {}, h('tr', {}, h('th', { scope: 'col' }, ''), h('th', { scope: 'col' }, T('detail.now')), h('th', { scope: 'col' }, T('detail.avg24')))),
+      h('tbody', {}, ...pols.map(([k, now, avg, unit]) => h('tr', {}, h('th', { scope: 'row' }, T(k)), h('td', {}, fmt(now, unit)), h('td', {}, avg == null ? '' : fmt(avg, unit)))))));
+    body.append(h('p', { class: 'note' }, T('detail.unitsNote'), ' ', h('a', { href: '#explainer' }, T('detail.why'))));
     row(T('detail.temp'), st.temp == null ? null : st.temp + ' °C');
     row(T('detail.rh'), st.rh == null ? null : st.rh + ' %');
     // Station wind (DOE): direction only

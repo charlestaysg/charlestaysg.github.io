@@ -254,3 +254,18 @@ details#abbreviations dd { margin: 0; }
 @keyframes src-pulse { 50% { opacity: .35; } }
 @media (prefers-reduced-motion: reduce) { .src-pill.is-live .src-dot { animation: none; } }
 @media (prefers-color-scheme: dark) { .src-pill.is-live { color: #5ccf7a; } }
+
+/* Station details: band scale bars with a marker, and the pollutant table */
+.d-scales { display: grid; gap: 10px; margin: 10px 0 4px; }
+.scale-l { font-size: .72rem; color: var(--muted); margin-bottom: 3px; }
+.scale-track { position: relative; display: flex; height: 8px; border-radius: 4px; overflow: visible; }
+.scale-seg:first-child { border-radius: 4px 0 0 4px; }
+.scale-seg:last-child { border-radius: 0 4px 4px 0; }
+.scale-mark { position: absolute; top: -4px; width: 4px; height: 16px; margin-left: -2px; border-radius: 2px; background: var(--text); box-shadow: 0 0 0 2px var(--card); }
+.scale-ticks { position: relative; height: 14px; font-size: .65rem; color: var(--muted); }
+.scale-ticks span { position: absolute; transform: translateX(-50%); top: 1px; }
+table.pol { width: 100%; border-collapse: collapse; margin: 10px 0 2px; font-size: .85rem; }
+table.pol caption { text-align: left; font-weight: 700; font-size: .85rem; margin-bottom: 4px; }
+table.pol th, table.pol td { padding: 5px 4px; border-bottom: 1px solid var(--border); text-align: right; font-variant-numeric: tabular-nums; }
+table.pol th[scope=row], table.pol thead th:first-child { text-align: left; font-weight: 500; }
+table.pol thead th { font-size: .72rem; color: var(--muted); font-weight: 600; }
