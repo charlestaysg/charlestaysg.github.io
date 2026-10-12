@@ -353,8 +353,8 @@ async function fetchRecord(uen, id){
   if (!slim) {
     const o = (await ds(D.ids.other, id, {filters: {uen}}))[0];
     if (!o) return {notFound: true, uen};
-    return {kind: 'other', uen, name: o.entity_name, status: o.uen_status_desc, type: o.entity_type_desc, issuer: o.issuance_agency_desc,
-            issued: o.uen_issue_date, street: o.reg_street_name, postal: o.reg_postal_code, fetched: Date.now()};
+    return hideOwnerName({kind: 'other', uen, name: o.entity_name, status: o.uen_status_desc, type: o.entity_type_desc, issuer: o.issuance_agency_desc,
+            issued: o.uen_issue_date, street: o.reg_street_name, postal: o.reg_postal_code, fetched: Date.now()});
   }
   const rec = {kind: 'acra', uen, name: slim.entity_name, status: slim.uen_status_desc, statusFromAcra: false, type: slim.entity_type_desc,
                issued: slim.uen_issue_date, inc: null, street: slim.reg_street_name, postal: slim.reg_postal_code,
@@ -376,7 +376,7 @@ async function fetchRecord(uen, id){
     for (let i = 1; i <= 5; i++) { const a = clean(r['name_of_audit_firm' + i]); if (a) rec.audit.push(a); }
     break;
   }
-  return rec;
+  return hideOwnerName(rec);
 }
 
 /* ---------- SSIC and sector placement ---------- */
@@ -408,6 +408,13 @@ function placeSector(r){
 const yearsSince = d => { if (!d) return null; const a = new Date(d + 'T00:00:00+08:00'), n = new Date(); let y = n.getFullYear() - a.getFullYear(); if (n.getMonth() < a.getMonth() || (n.getMonth() === a.getMonth() && n.getDate() < a.getDate())) y--; return Math.max(0, y); };
 const isLive = st => /^live/i.test(st || '') || st === 'Registered';
 const isSole = t => /sole|partnership/i.test(t || '');
+// A sole proprietorship's or partnership's business name is often the owner's own name, so it is
+// never shown, cached or used in a question. Applied on fetch and again on render (older cached copies).
+const SOLE_LABEL = 'Sole proprietorship or partnership';
+function hideOwnerName(rec){
+  if (rec && isSole(rec.type)) { rec.name = null; rec.former = []; rec.nameHidden = true; }
+  return rec;
+}
 
 /* ---------- rendering ---------- */
 const delta = (a, b, unit) => {
@@ -431,12 +438,14 @@ function render(rec, how){
   if (rec.partial) msgs.push('SSIC not retrieved: the entity is in the register index but its detailed record was not found. Sector and activity are unknown.');
   banner.hidden = !msgs.length; banner.innerHTML = msgs.join('<br>');
 
-  $('eh').textContent = rec.name || rec.uen;
+  hideOwnerName(rec);
+  $('eh').textContent = rec.name || (rec.nameHidden ? SOLE_LABEL : rec.uen);
   const pill = $('pill'); pill.textContent = rec.status || 'Unknown'; pill.className = 'pill' + (live ? ' live' : '');
   const sector = rec.kind === 'acra' ? placeSector(rec) : {p: null, s: null, key: '', notes: []};
   const yrs = yearsSince(rec.inc || rec.issued);
   const rows = [];
   const row = (k, v) => v ? rows.push(`<dt>${k}</dt><dd>${v}</dd>`) : 0;
+  if (rec.nameHidden) row('Name', '<small>Not shown. The name of a sole proprietorship or partnership is often the owner\'s own name. It is on <a href="https://www.bizfile.gov.sg" rel="noopener">ACRA Bizfile</a> if you need it.</small>');
   row('UEN', esc(rec.uen));
   row('Entity type', esc(rec.type) + (rec.kind === 'other' && rec.issuer ? ` <small>· issued by ${esc(rec.issuer)}</small>` : ''));
   if (rec.inc) row('Incorporated', `${fmtDate(rec.inc)} <small>· ${yrs} year${yrs === 1 ? '' : 's'}</small>`);
@@ -627,7 +636,7 @@ async function searchName(text){
       || (b.entity_name.toLowerCase().startsWith(t)) - (a.entity_name.toLowerCase().startsWith(t)) || a.entity_name.length - b.entity_name.length);
     if (!recs.length) { setStatus('No names matched. Try fewer words, or the UEN.', true); busy(false); return; }
     const shown = recs.slice(0, 10);
-    $('matches').innerHTML = shown.map(r => `<li><button class="match" type="button" data-u="${esc(r.uen)}"><b>${esc(r.entity_name)}</b><span>${esc(r.uen)}</span><span>${esc(r.reg_postal_code || '')}</span><span>${esc(r.uen_status_desc || '')}</span></button></li>`).join('');
+    $('matches').innerHTML = shown.map(r => `<li><button class="match" type="button" data-u="${esc(r.uen)}"><b>${isSole(r.entity_type_desc) ? SOLE_LABEL + ' <small>(name not shown)</small>' : esc(r.entity_name)}</b><span>${esc(r.uen)}</span><span>${esc(r.reg_postal_code || '')}</span><span>${esc(r.uen_status_desc || '')}</span></button></li>`).join('');
     setStatus(`${recs.length >= 40 ? 'Many matches; showing the first 10 of the closest 40' : 'Showing ' + shown.length + ' of ' + recs.length}. Pick the right company.`);
   } catch (e) {
     if (id !== run) return;
