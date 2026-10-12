@@ -244,3 +244,13 @@ details#abbreviations dd { margin: 0; }
   .sites .full { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .sites .short { display: inline; }
 }
+
+/* Data-source label in the status line: green "Live" from the Worker, grey "Backup copy" otherwise */
+.src-pill { display: inline-flex; align-items: center; gap: 5px; padding: 1px 8px; border-radius: 999px; font-size: .75rem; font-weight: 700; vertical-align: 1px; border: 1px solid currentColor; }
+.src-pill.is-live { color: #1e8e3e; }
+.src-pill.is-backup { color: var(--muted); }
+.src-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.src-pill.is-live .src-dot { animation: src-pulse 2s ease-in-out infinite; }
+@keyframes src-pulse { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .src-pill.is-live .src-dot { animation: none; } }
+@media (prefers-color-scheme: dark) { .src-pill.is-live { color: #5ccf7a; } }

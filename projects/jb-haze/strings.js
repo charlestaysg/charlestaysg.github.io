@@ -18,7 +18,10 @@
     'i18n.unreviewed': 'This Malay translation has not been checked by a native speaker yet. English is the reference.',
     'noscript': 'This page needs JavaScript to show live readings. For official readings, see APIMS (eqms.doe.gov.my).',
 
-    'status.backup': ' · backup copy',
+    'status.backup': 'Backup copy',
+    'status.backup.title': 'The live data service could not be reached, so this is the saved copy (updated hourly).',
+    'status.live': 'Live',
+    'status.live.title': 'Readings fetched just now from DOE APIMS through this site’s data service.',
     'status.line': 'APIMS reading {time} MYT · page data {ago} · next check {mmss}',
     'status.loading': 'Loading readings…',
     'status.refresh': 'Refresh now',
@@ -227,7 +230,10 @@
     'i18n.unreviewed': 'Terjemahan Bahasa Melayu ini belum disemak oleh penutur jati. Versi Inggeris ialah rujukan.',
     'noscript': 'Laman ini memerlukan JavaScript untuk memaparkan bacaan langsung. Untuk bacaan rasmi, lihat APIMS (eqms.doe.gov.my).',
 
-    'status.backup': ' · salinan sandaran',
+    'status.backup': 'Salinan sandaran',
+    'status.backup.title': 'Perkhidmatan data langsung tidak dapat dihubungi, jadi ini salinan yang disimpan (dikemas kini setiap jam).',
+    'status.live': 'Langsung',
+    'status.live.title': 'Bacaan diambil sebentar tadi daripada APIMS JAS melalui perkhidmatan data laman ini.',
     'status.line': 'Bacaan APIMS {time} MYT · data laman {ago} · semakan seterusnya {mmss}',
     'status.loading': 'Memuatkan bacaan…',
     'nav.sg': 'Singapura',

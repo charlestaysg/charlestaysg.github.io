@@ -507,10 +507,15 @@ if (typeof document !== 'undefined') {
     const el = $('status');
     if (!state.latest) { el.textContent = state.fetchError ? T('banner.nodata') : T('status.loading'); setBanner(state.fetchError ? T('banner.nodata') : ''); return; }
     const left = Math.max(0, Math.round((state.nextAt - Date.now()) / 1000));
-    el.textContent = T('status.line', {
-      time: fmtHM(state.latest.readingTime), ago: agoText(Date.now() - Date.parse(state.latest.generated)),
-      mmss: `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`,
-    }) + (state.latestSource === 'backup' ? T('status.backup') : '');
+    // Live = readings came from the Worker just now; Backup = the hourly saved copy (Worker unreachable).
+    const live = state.latestSource !== 'backup';
+    el.replaceChildren(
+      h('span', { class: 'src-pill ' + (live ? 'is-live' : 'is-backup'), title: T(live ? 'status.live.title' : 'status.backup.title') },
+        h('span', { class: 'src-dot', 'aria-hidden': 'true' }), T(live ? 'status.live' : 'status.backup')),
+      ' ' + T('status.line', {
+        time: fmtHM(state.latest.readingTime), ago: agoText(Date.now() - Date.parse(state.latest.generated)),
+        mmss: `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`,
+      }));
     const readingAgeH = (Date.now() - Date.parse(state.latest.readingTime)) / 3600000;
     if (readingAgeH > STALE_READING_H) setBanner(T('banner.stale', { ago: agoText(Date.now() - Date.parse(state.latest.readingTime)) }));
     else if (state.fetchError) setBanner(T('banner.error'));
