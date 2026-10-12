@@ -1,0 +1,16 @@
+{
+  "note": "Coarse boxes [south, west, north, east], first match wins. Counts are approximate by region, not by administrative boundary.",
+  "order": ["johor", "semenanjung", "sarawak", "kalteng", "kalbar", "sumut_sumbar", "riau", "jambi", "sumsel", "other"],
+  "regions": {
+    "johor":        {"en": "Johor", "ms": "Johor", "boxes": [[1.2, 102.3, 2.8, 104.6]]},
+    "semenanjung":  {"en": "Peninsular Malaysia (excl. Johor)", "ms": "Semenanjung Malaysia (tidak termasuk Johor)", "boxes": [[2.8, 99.6, 7.0, 104.7], [1.2, 102.0, 2.8, 104.7]]},
+    "sarawak":      {"en": "Sarawak", "ms": "Sarawak", "boxes": [[0.8, 109.5, 5.0, 115.7]]},
+    "kalteng":      {"en": "Central Kalimantan", "ms": "Kalimantan Tengah", "boxes": [[-3.7, 111.0, -0.3, 116.0]]},
+    "kalbar":       {"en": "West Kalimantan", "ms": "Kalimantan Barat", "boxes": [[-3.2, 108.6, 2.2, 114.3]]},
+    "sumut_sumbar": {"en": "North and West Sumatra", "ms": "Sumatera Utara dan Barat", "boxes": [[-3.0, 95.0, 5.8, 100.4]]},
+    "riau":         {"en": "Riau", "ms": "Riau", "boxes": [[-1.2, 100.4, 2.6, 104.2]]},
+    "jambi":        {"en": "Jambi", "ms": "Jambi", "boxes": [[-2.8, 100.4, -1.2, 104.5]]},
+    "sumsel":       {"en": "South Sumatra", "ms": "Sumatera Selatan", "boxes": [[-4.9, 102.0, -2.8, 106.3]]},
+    "other":        {"en": "Elsewhere in the area", "ms": "Kawasan lain", "boxes": []}
+  }
+}

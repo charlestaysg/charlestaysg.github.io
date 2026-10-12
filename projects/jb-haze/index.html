@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en-MY">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Johor Bahru Haze — Hourly (unofficial)</title>
+  <meta id="meta-desc" name="description" content="Unofficial hourly haze readings for Johor Bahru and Johor: DOE Malaysia API by station, wind, satellite fire hotspots, a 24-hour trend and haze news. English and Bahasa Melayu.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Johor Bahru Haze — Hourly (unofficial)">
+  <meta property="og:description" content="Hourly DOE Malaysia API for Johor stations, wind, fire hotspots, 24-hour trend and haze news. Unofficial; see APIMS for official readings.">
+  <link rel="alternate" hreflang="en" href="https://charlestaysg.github.io/projects/jb-haze/">
+  <link rel="alternate" hreflang="ms" href="https://charlestaysg.github.io/projects/jb-haze/?lang=ms">
+  <link rel="alternate" hreflang="x-default" href="https://charlestaysg.github.io/projects/jb-haze/">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#f5b400">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <noscript><p class="noscript" data-i18n="noscript">This page needs JavaScript to show live readings. For official readings, see APIMS (eqms.doe.gov.my).</p></noscript>
+
+  <header class="topbar">
+    <div class="tb-row">
+      <a class="back" href="../../" data-i18n="back">← Charles Tay</a>
+      <div class="lang" role="group" data-i18n-aria="lang.label" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
+        <button type="button" data-lang="ms" aria-pressed="false" lang="ms">BM</button>
+      </div>
+    </div>
+    <div class="hero">
+      <div class="rings">
+        <div class="rg"><div class="ring" id="ring" aria-hidden="true"><span id="ring-num">–</span></div><span class="rl" id="lbl-my">Malaysia API</span></div>
+        <div class="rg"><div class="ring ring-us" id="ring-us" aria-hidden="true"><span id="ring-us-num">–</span></div><span class="rl" id="lbl-us">US AQI</span></div>
+      </div>
+      <div class="hero-text" aria-live="polite">
+        <h1><span class="h1-text" data-i18n="app.title">Johor Bahru Haze — Hourly</span> <span class="badge" data-i18n="badge.unofficial">UNOFFICIAL</span></h1>
+        <p id="hero-line" class="hero-line">…</p>
+        <p id="hero-sub" class="hero-sub"></p>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div class="left">
+      <p id="ms-notice" class="notice" hidden data-i18n="i18n.unreviewed"></p>
+      <div id="error-banner" role="alert" hidden></div>
+
+      <section class="statusbar" aria-label="Status">
+        <p id="status" class="status" data-i18n="status.loading">Loading readings…</p>
+        <p class="chips"><span id="wind-chip" class="chip" data-i18n="wind.loading">Wind: loading</span></p>
+        <p id="wind-note" class="wind-note" hidden></p>
+        <nav class="official-links" aria-label="Official sources">
+          <a href="https://eqms.doe.gov.my/APIMS/main" target="_blank" rel="noopener" data-i18n="link.apims">APIMS (official)</a>
+          <a href="https://www.met.gov.my/" target="_blank" rel="noopener" data-i18n="link.met">MetMalaysia</a>
+          <a href="https://asmc.asean.org/" target="_blank" rel="noopener" data-i18n="link.asmc">ASMC</a>
+        </nav>
+      </section>
+
+      <section id="map-wrap" aria-label="Map">
+        <div id="map" role="region" data-i18n-aria="map.label" aria-label="Map of haze readings in Johor Bahru"><p class="map-fallback" hidden data-i18n="map.unavailable">The map could not be loaded.</p></div>
+        <button type="button" id="btn-lock" class="map-btn lock" hidden data-i18n="map.tap">Tap to move the map</button>
+        <button type="button" id="btn-back-jb" class="map-btn backjb" hidden data-i18n="map.back">Back to JB</button>
+        <div class="map-tools">
+          <button type="button" id="btn-locate" class="icon-btn" data-i18n-aria="map.locate" data-i18n-title="map.locate" aria-label="Use my location" title="Use my location">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <details id="layers" class="tool-pop">
+            <summary class="icon-btn" data-i18n-aria="map.layers" aria-label="Layers" title="Layers">
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5M3 17l9 5 9-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="pop">
+              <label><input type="checkbox" id="chk-wind" checked> <span data-i18n="layer.wind">Wind arrows</span></label>
+              <label><input type="checkbox" id="chk-hs"> <span data-i18n="layer.hotspots">Hotspots (regional view)</span></label>
+              <label><input type="checkbox" id="chk-others"> <span data-i18n="layer.others">Other Johor stations</span></label>
+            </div>
+          </details>
+        </div>
+        <details id="legend" class="legend">
+          <summary data-i18n="map.legend">Legend</summary>
+          <ul id="legend-list"></ul>
+        </details>
+      </section>
+
+      <section id="stations" class="panel" aria-labelledby="stations-h">
+        <h2 id="stations-h" data-i18n="list.title">Stations</h2>
+        <div id="station-list" class="station-list"></div>
+      </section>
+
+      <section id="causeway" class="panel" aria-labelledby="cw-h" hidden>
+        <h2 id="cw-h">Across the Causeway</h2>
+        <div id="cw-body" class="cw-grid"></div>
+        <p id="cw-time" class="note"></p>
+        <p id="cw-basis" class="note"></p>
+        <p class="note cw-links"><a id="cw-sglink" href="../sg-haze/">Singapore haze page →</a> <a id="cw-nea" href="https://www.haze.gov.sg" target="_blank" rel="noopener">NEA (official) ↗</a></p>
+      </section>
+
+      <section id="trend" class="panel" aria-labelledby="trend-h">
+        <h2 id="trend-h" data-i18n="trend.title">24-hour trend</h2>
+        <div class="trend-ctl">
+          <fieldset class="seg" id="trend-metric">
+            <legend class="sr-only" data-i18n="trend.metric">Show</legend>
+            <label><input type="radio" name="tmetric" value="api" checked> <span data-i18n="trend.api">API</span></label>
+            <label><input type="radio" name="tmetric" value="pm25"> <span data-i18n="trend.pm25">PM2.5</span></label>
+          </fieldset>
+          <div class="compare"><span class="muted" data-i18n="trend.compare">Compare with</span><span id="compare-list"></span></div>
+        </div>
+        <div class="chart-wrap"><canvas id="trend-chart" role="img" data-i18n-aria="trend.aria" aria-label="Line chart of the last 24 hours for the selected stations"></canvas></div>
+        <p id="trend-summary" class="note"></p>
+        <p class="note" data-i18n="trend.note">The API history comes from DOE. The PM2.5 trend builds up after launch.</p>
+      </section>
+
+      <section id="hotspots" class="panel" aria-labelledby="hs-h">
+        <h2 id="hs-h" data-i18n="hs.title">Fire hotspots (satellite)</h2>
+        <p><button type="button" id="btn-hs" class="primary" data-i18n="hs.show">Show hotspots on the map</button></p>
+        <fieldset class="seg" id="hs-conf">
+          <legend class="seg-legend" data-i18n="hs.conf">Confidence</legend>
+          <label><input type="radio" name="hsconf" value="all" checked> <span data-i18n="hs.conf.all">High and nominal</span></label>
+          <label><input type="radio" name="hsconf" value="high"> <span data-i18n="hs.conf.high">High only</span></label>
+        </fieldset>
+        <div id="hs-counts"></div>
+        <p id="hs-passes" class="note"></p>
+        <p class="note" data-i18n="hs.caveat">Hotspots are satellite heat detections, not confirmed fires. Clouds hide fires.</p>
+        <p class="note"><a href="https://asmc.asean.org/home/" target="_blank" rel="noopener" data-i18n="hs.asmc">ASMC regional haze outlook ↗</a></p>
+      </section>
+
+      <section id="advice" class="panel" aria-labelledby="adv-h">
+        <h2 id="adv-h" data-i18n="adv.title">What the bands mean</h2>
+        <div id="advice-list" class="advice-list"></div>
+        <p class="note" data-i18n="adv.school"></p>
+        <p class="note" id="adv-causeway"></p>
+      </section>
+
+      <section id="explainer" class="panel" aria-labelledby="exp-h">
+        <h2 id="exp-h" data-i18n="exp.title">Why the numbers differ</h2>
+        <ul>
+          <li id="exp-1"></li>
+          <li id="exp-2"></li>
+          <li data-i18n="exp.2b"></li>
+          <li data-i18n="exp.2c"></li>
+          <li data-i18n="exp.3"></li>
+        </ul>
+      </section>
+    </div>
+
+    <aside class="side">
+      <section id="detail" class="panel sheet" role="dialog" aria-modal="false" aria-labelledby="detail-title" aria-hidden="true">
+        <div class="sheet-handle" aria-hidden="true"></div>
+        <div class="detail-head">
+          <h2 id="detail-title" data-i18n="detail.title">Station details</h2>
+          <button type="button" id="detail-close" class="close" data-i18n-aria="detail.close" aria-label="Close">×</button>
+        </div>
+        <div id="detail-body"></div>
+      </section>
+
+      <section id="news" class="panel" aria-labelledby="news-h">
+        <h2 id="news-h" data-i18n="news.title">Haze news</h2>
+        <div class="tabs" role="tablist" data-i18n-aria="news.tabs" aria-label="News topics">
+          <button type="button" role="tab" id="tab-impact" data-topic="impact" aria-selected="true" aria-controls="news-list"></button>
+          <button type="button" role="tab" id="tab-govt" data-topic="govt" aria-selected="false" aria-controls="news-list" tabindex="-1"></button>
+          <button type="button" role="tab" id="tab-indonesia" data-topic="indonesia" aria-selected="false" aria-controls="news-list" tabindex="-1"></button>
+        </div>
+        <p id="news-updated" class="note"></p>
+        <div id="news-list" role="tabpanel" aria-labelledby="tab-impact"></div>
+      </section>
+    </aside>
+  </main>
+
+  <footer>
+    <details id="abbreviations"><summary data-i18n="foot.abbrTitle">Abbreviations</summary><dl id="abbr-list"></dl></details>
+    <p id="foot-main"></p>
+    <p id="foot-fire"></p>
+    <p id="foot-other"></p>
+    <p id="foot-private"></p>
+    <p id="foot-sg"></p>
+    <p><a href="../../" data-i18n="back">← Charles Tay</a></p>
+  </footer>
+
+  <div id="toast" role="status" hidden></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="strings.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "CA29J",
+    "name": "Segamat",
+    "nameMs": "Segamat",
+    "lat": 2.49401,
+    "lng": 102.863487,
+    "category": "Sub Urban",
+    "jb": false,
+    "aqicn": "segamat"
+  },
+  {
+    "id": "CA31J",
+    "name": "Batu Pahat",
+    "nameMs": "Batu Pahat",
+    "lat": 1.919098,
+    "lng": 102.86584,
+    "category": "Sub Urban",
+    "jb": false,
+    "aqicn": "batu-pahat"
+  },
+  {
+    "id": "CA32J",
+    "name": "Kluang",
+    "nameMs": "Kluang",
+    "lat": 2.036936,
+    "lng": 103.312179,
+    "category": "Rural",
+    "jb": false,
+    "aqicn": "kluang"
+  },
+  {
+    "id": "CA33J",
+    "name": "Larkin, Johor Bahru",
+    "nameMs": "Larkin, Johor Bahru",
+    "lat": 1.494616,
+    "lng": 103.735922,
+    "category": "Urban",
+    "jb": true,
+    "aqicn": "larkin-lama"
+  },
+  {
+    "id": "CA34J",
+    "name": "Pasir Gudang",
+    "nameMs": "Pasir Gudang",
+    "lat": 1.470121,
+    "lng": 103.89366,
+    "category": "Sub Urban",
+    "jb": true,
+    "aqicn": "pasir-gudang"
+  },
+  {
+    "id": "CA35J",
+    "name": "Pengerang",
+    "nameMs": "Pengerang",
+    "lat": 1.389999,
+    "lng": 104.14956,
+    "category": "Industry",
+    "jb": true,
+    "aqicn": "pengerang"
+  },
+  {
+    "id": "CA36J",
+    "name": "Kota Tinggi (Bandar Penawar)",
+    "nameMs": "Kota Tinggi (Bandar Penawar)",
+    "lat": 1.564027,
+    "lng": 104.22533,
+    "category": "Sub Urban",
+    "jb": true,
+    "aqicn": "kota-tinggi"
+  },
+  {
+    "id": "CA66J",
+    "name": "Tangkak",
+    "nameMs": "Tangkak",
+    "lat": 2.295748,
+    "lng": 102.571313,
+    "category": "Sub Urban",
+    "jb": false,
+    "aqicn": "tangkak"
+  }
+]

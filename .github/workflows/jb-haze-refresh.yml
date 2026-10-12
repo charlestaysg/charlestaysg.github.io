@@ -1,0 +1,83 @@
+# Hourly refresh of the Johor Bahru haze page data (projects/jb-haze/).
+# Fetches DOE Malaysia APIMS (server-side, because APIMS blocks browser requests from other sites),
+# NASA FIRMS hotspots (needs repo secret FIRMS_MAP_KEY; without it the page uses the public WMS overlay)
+# and haze headlines, then force-pushes ONE commit to the orphan branch `jb-haze-data`.
+# The data never touches main, so the site history stays clean. The page reads the branch via
+# raw.githubusercontent.com. A stage that fails keeps its previous file; the others still publish.
+name: Refresh JB haze data
+
+on:
+  schedule:
+    - cron: "25 * * * *"   # 15 minutes after APIMS posts the hourly reading
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jb-haze-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch the previous data from the data branch
+        run: |
+          mkdir -p "$RUNNER_TEMP/jbdata"
+          if git fetch --depth=1 origin jb-haze-data:refs/remotes/origin/jb-haze-data; then
+            for f in latest.json history.json news.json hotspots.json; do
+              git show "origin/jb-haze-data:$f" > "$RUNNER_TEMP/jbdata/$f" 2>/dev/null || rm -f "$RUNNER_TEMP/jbdata/$f"
+            done
+          else
+            echo "No data branch yet; starting fresh."
+          fi
+
+      - name: Fetch new data
+        env:
+          FIRMS_MAP_KEY: ${{ secrets.FIRMS_MAP_KEY }}
+        run: python tools/jb-haze/fetch.py --out "$RUNNER_TEMP/jbdata"
+
+      - name: Check
+        run: python tools/jb-haze/check.py "$RUNNER_TEMP/jbdata"
+
+      - name: Publish to the data branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Skip the push when nothing changed apart from the "generated" stamps.
+          if git show-ref --verify --quiet refs/remotes/origin/jb-haze-data && python - <<'PY'
+          import json, os, subprocess, sys
+          d = os.path.join(os.environ["RUNNER_TEMP"], "jbdata")
+          for f in ("latest.json", "history.json", "news.json", "hotspots.json"):
+              try:
+                  old = json.loads(subprocess.run(["git", "show", "origin/jb-haze-data:" + f], capture_output=True, text=True, check=True).stdout)
+                  new = json.load(open(os.path.join(d, f)))
+              except Exception:
+                  sys.exit(1)
+              old.pop("generated", None); new.pop("generated", None)
+              if old != new:
+                  sys.exit(1)
+          sys.exit(0)
+          PY
+          then
+            echo "No data change; nothing pushed."
+            exit 0
+          fi
+          PUB="$RUNNER_TEMP/jbpublish"
+          rm -rf "$PUB"; mkdir -p "$PUB"
+          cp "$RUNNER_TEMP"/jbdata/*.json "$PUB"/
+          cd "$PUB"
+          git init -q -b jb-haze-data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -q -m "JB haze data $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:jb-haze-data
