@@ -17,6 +17,7 @@ import json
 import os
 import sys
 import urllib.parse
+import time
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
@@ -68,16 +69,20 @@ NEWS_FEEDS = [f for f in NEWS_FEEDS if f[1]]
 
 
 # ------------------------------------------------------------------ helpers
-def http_get(url, accept=None):
+def http_get(url, accept=None, timeout=TIMEOUT, retries=RETRIES):
     last = None
-    for attempt in range(RETRIES):
+    for attempt in range(retries):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": UA, **({"Accept": accept} if accept else {})})
-            with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
                 return r.read()
         except Exception as e:  # never include the URL: FIRMS URLs carry a key
             last = e
-    raise RuntimeError("request failed: %s" % type(last).__name__)
+            if attempt + 1 < retries:
+                time.sleep(3)
+    # HTTP status or the network reason (e.g. "timed out") never contains the URL, so it is safe to log.
+    detail = getattr(last, "code", None) or getattr(last, "reason", None) or ""
+    raise RuntimeError("request failed: %s %s" % (type(last).__name__, str(detail)[:80]))
 
 
 def epoch_ms_to_myt(ms):
@@ -345,15 +350,17 @@ def build_hotspots(rows, regions, now=None):
 def stage_hotspots(out_dir):
     path = os.path.join(out_dir, "hotspots.json")
     key = os.environ.get("FIRMS_MAP_KEY", "").strip()
-    if not key:
+    def write_wms():
         save_json(path, {"generated": iso_utc_now(), "mode": "wms", "window": "24h", "bbox": FIRMS_BBOX,
                          "sources": [], "passes": {}, "counts": {}, "total": 0, "truncated": False, "points": []})
+    if not key:
+        write_wms()
         return
     rows, ok = [], 0
     bbox = ",".join(str(x) for x in FIRMS_BBOX)
     for src in FIRMS_SOURCES:
         try:
-            text = http_get(FIRMS_URL % (key, src, bbox)).decode("utf-8", "replace")
+            text = http_get(FIRMS_URL % (key, src, bbox), timeout=90, retries=3).decode("utf-8", "replace")
             if text.lstrip().startswith("latitude"):
                 rows += parse_firms_csv(text)
                 ok += 1
@@ -362,6 +369,9 @@ def stage_hotspots(out_dir):
         except Exception as e:
             print("hotspots %s failed: %s" % (src, e))
     if not ok:
+        # First run (no earlier file to keep): fall back to the keyless overlay so the page still has a file.
+        if not os.path.exists(path):
+            write_wms()
         raise RuntimeError("no FIRMS source answered")
     save_json(path, build_hotspots(rows, load_regions()))
 
