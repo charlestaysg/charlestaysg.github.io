@@ -60,6 +60,16 @@
         </nav>
       </section>
 
+      <section id="place-panel" class="panel place" aria-labelledby="pl-h">
+        <h2 id="pl-h" data-i18n="pl.label">Find your area</h2>
+        <div class="place-field">
+          <input id="place-q" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-controls="place-list" aria-label="Search a place in Johor" placeholder="Search a place in Johor" maxlength="100">
+          <button type="button" id="place-clear" class="place-x" hidden aria-label="Clear place" title="Clear place">&times;</button>
+        </div>
+        <ul id="place-list" class="place-list" hidden></ul>
+        <div id="place-card" class="place-card" hidden aria-live="polite"></div>
+      </section>
+
       <section id="map-wrap" aria-label="Map">
         <div id="map" role="region" data-i18n-aria="map.label" aria-label="Map of haze readings in Johor Bahru"><p class="map-fallback" hidden data-i18n="map.unavailable">The map could not be loaded.</p></div>
         <button type="button" id="btn-lock" class="map-btn lock" hidden data-i18n="map.tap">Tap to move the map</button>
@@ -83,6 +93,20 @@
           <summary data-i18n="map.legend">Legend</summary>
           <ul id="legend-list"></ul>
         </details>
+      </section>
+
+      <section id="time-panel" class="panel timebar" aria-labelledby="tm-h" hidden>
+        <div class="tm-head">
+          <h2 id="tm-h" data-i18n="tm.title">Map: last 24 hours</h2>
+          <button type="button" id="tm-now" class="tm-now" hidden data-i18n="tm.backnow">Back to now</button>
+        </div>
+        <p id="tm-label" class="tm-label" aria-live="polite"></p>
+        <div class="tm-row">
+          <button type="button" id="tm-play" class="tm-play" data-i18n="tm.play">Play</button>
+          <input id="tm-range" type="range" min="0" max="23" step="1" value="23" aria-label="Hour shown on the map">
+        </div>
+        <div class="tm-ends" aria-hidden="true"><span id="tm-start"></span><span data-i18n="tm.nowshort">Now</span></div>
+        <p class="note tm-note" data-i18n="tm.note">Map only; other figures show the latest hour.</p>
       </section>
 
       <section id="stations" class="panel" aria-labelledby="stations-h">
@@ -175,6 +199,7 @@
     <p id="foot-fire"></p>
     <p id="foot-other"></p>
     <p id="foot-private"></p>
+    <p id="foot-place"></p>
     <p id="foot-sg"></p>
     <p><a href="../../" data-i18n="back">← Charles Tay</a></p>
       <p class="note"><span data-i18n="ref.label">Reference:</span> <a href="https://www.channelnewsasia.com/singapore/haze-psi-aqi-air-quality-pm25-6452896" target="_blank" rel="noopener">CNA, “Haze: PSI, AQI and PM2.5 explained”</a>.</p>

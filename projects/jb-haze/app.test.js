@@ -168,4 +168,77 @@ for (const lang of ['en', 'ms']) {
   assert.strictEqual(A.scalePos(900, 400), 100);
   assert.strictEqual(A.scalePos(null, 400), null);
 }
+// Time slider helpers: hour steps, nearest step, value at an hour, NowCast at an hour
+{
+  const hist = { start: '2026-10-10T01:00:00+08:00', hours: 30, stations: {
+    A: { api: Array.from({ length: 30 }, (_, i) => (i === 28 ? null : 100 + i)), pm25: Array.from({ length: 30 }, (_, i) => (i === 28 ? null : 40 + i)) },
+    B: { api: Array(30).fill(null), pm25: Array(30).fill(null) } } };
+  const st = A.timeSteps(hist, 24);
+  assert.strictEqual(st.length, 23);                      // 24 hours minus idx 28, where no station has data
+  assert.strictEqual(st[0].idx, 6);                        // oldest of the last 24 (30 - 24)
+  assert.strictEqual(st[st.length - 1].idx, 29);
+  assert.strictEqual(new Date(st[st.length - 1].ms).toISOString(), '2026-10-10T22:00:00.000Z'); // start + 29 h
+  assert.strictEqual(A.stepAgoHours(st[0].ms, st[st.length - 1].ms), 23);
+  assert.strictEqual(A.stepAgoHours(st[st.length - 1].ms, st[st.length - 1].ms), 0);
+  assert.strictEqual(A.stepIndexForMs(st, st[5].ms), 5);
+  assert.strictEqual(A.stepIndexForMs(st, st[5].ms + 1000), 5);
+  assert.strictEqual(A.stepIndexForMs(st, 0), 0);          // rolled out of the window: oldest step
+  assert.strictEqual(A.stepIndexForMs([], 5), -1);
+  assert.deepStrictEqual(A.timeSteps(null), []);
+  // value at an hour
+  assert.strictEqual(A.stationAtStep(hist, 'A', 15).api, 115);
+  assert.strictEqual(A.stationAtStep(hist, 'A', 28).api, null);
+  assert.strictEqual(A.stationAtStep(hist, 'nope', 15).api, null);
+  // NowCast at an hour: only hours up to the chosen one count; PM2.5 55 flat -> AQI 150 band
+  const flat = { start: '2026-10-10T01:00:00+08:00', hours: 20, stations: { F: { api: Array(20).fill(120), pm25: Array(20).fill(12.0).map((v, i) => (i < 10 ? 12.0 : 55.0)) } } };
+  assert.strictEqual(A.stationAtStep(flat, 'F', 5).aq.aqi, A.pm25ToAqi(12.0).aqi);
+  assert.strictEqual(A.stationAtStep(flat, 'F', 5).aq.basis, 'nowcast');
+  assert.ok(A.stationAtStep(flat, 'F', 19).aq.aqi > A.stationAtStep(flat, 'F', 5).aq.aqi);
+  // NowCast needs two of the last three hours; with a 24-h mean over 12+ values it falls back to the '24h' tag
+  const sparse = { start: '2026-10-10T01:00:00+08:00', hours: 20, stations: { S: { api: Array(20).fill(80), pm25: Array(20).fill(20).map((v, i) => (i >= 17 ? null : v)) } } };
+  const fb = A.stationAtStep(sparse, 'S', 19);
+  assert.strictEqual(fb.aq.basis, '24h');
+  assert.strictEqual(fb.aq.aqi, A.pm25ToAqi(20).aqi);
+  const none = { start: '2026-10-10T01:00:00+08:00', hours: 5, stations: { N: { api: [1, 2, 3, 4, 5], pm25: [null, null, null, null, null] } } };
+  assert.strictEqual(A.stationAtStep(none, 'N', 4).aq, null);
+}
+// Place search helpers
+{
+  assert.ok(A.JOHOR_PLACES.length >= 45);
+  for (const p of A.JOHOR_PLACES) assert.ok(p.lat > 1.2 && p.lat < 2.7 && p.lng > 102.4 && p.lng < 104.4, p.name);
+  assert.strictEqual(A.normText("Bandar Dato' Onn"), 'bandar dato onn');
+  assert.strictEqual(A.normText('  Sénai  '), 'senai');
+  assert.strictEqual(A.matchPlaces('skud')[0].name, 'Skudai');
+  assert.strictEqual(A.matchPlaces('KULAI')[0].name, 'Kulai');
+  assert.strictEqual(A.matchPlaces('Pasir Gu')[0].name, 'Pasir Gudang');
+  assert.strictEqual(A.matchPlaces('Johor Baharu')[0].name, 'Johor Bahru city centre');
+  assert.strictEqual(A.matchPlaces('jb')[0].name, 'Johor Bahru city centre');
+  assert.strictEqual(A.matchPlaces('Dato Onn')[0].name, "Bandar Dato' Onn");
+  assert.strictEqual(A.matchPlaces('kupang')[0].name, 'Second Link (Tanjung Kupang)');
+  assert.ok(A.matchPlaces('bukit').length >= 2);
+  assert.deepStrictEqual(A.matchPlaces('zzzz'), []);
+  assert.deepStrictEqual(A.matchPlaces('   '), []);
+  assert.ok(A.matchPlaces('a').length <= 6);
+  // nearest station to a place
+  const stns = [{ id: 'L', lat: 1.4977, lng: 103.7405 }, { id: 'M', lat: 2.0442, lng: 102.5689 }];
+  const sk = A.matchPlaces('Skudai')[0];
+  assert.strictEqual(A.nearest(stns, sk.lat, sk.lng, 1)[0].id, 'L');
+  const mu = A.matchPlaces('Muar')[0];
+  assert.strictEqual(A.nearest(stns, mu.lat, mu.lng, 1)[0].id, 'M');
+  // Nominatim: URL carries only the fixed query parameters, result parsing drops anything outside Johor
+  const u = new URL(A.nominatimUrl('Aeon Bukit Indah', 'ms'));
+  assert.strictEqual(u.origin + u.pathname, 'https://nominatim.openstreetmap.org/search');
+  assert.deepStrictEqual([...u.searchParams.keys()].sort(), ['accept-language', 'bounded', 'countrycodes', 'format', 'limit', 'q', 'viewbox']);
+  assert.strictEqual(u.searchParams.get('accept-language'), 'ms');
+  assert.strictEqual(u.searchParams.get('q'), 'Aeon Bukit Indah');
+  const parsed = A.parseNominatim([{ name: 'Aeon Bukit Indah', display_name: 'Aeon Bukit Indah, Iskandar Puteri, Johor, Malaysia', lat: '1.4811', lon: '103.6890' },
+    { name: 'Far', display_name: 'Far, Kedah', lat: '6.1', lon: '100.4' }, { display_name: 'bad', lat: 'x', lon: 'y' }]);
+  assert.strictEqual(parsed.length, 1);
+  assert.strictEqual(parsed[0].detail, 'Iskandar Puteri, Johor');
+  assert.deepStrictEqual(A.parseNominatim(null), []);
+}
+// Strings for the new features exist in both languages
+for (const k of ['tm.title', 'tm.now', 'tm.showing', 'tm.play', 'tm.pause', 'tm.backnow', 'tm.note', 'pl.label', 'pl.ph', 'pl.locate', 'pl.more', 'pl.credit', 'pl.nearest', 'foot.place']) {
+  for (const lang of ['en', 'ms']) assert.ok(S.STRINGS[lang][k], lang + ' ' + k);
+}
 console.log('app.test.js: all checks passed');

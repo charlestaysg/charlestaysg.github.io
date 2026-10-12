@@ -46,6 +46,8 @@ const COMPASS_EN = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW'
 const NOWCAST_HOURS = 12;
 const LS_LANG = 'jbHaze.lang';
 const LS_STATION = 'jbHaze.station';
+const LS_PLACE = 'jbHaze.place';
+const PLAY_MS = 800;
 const APIMS_URL = 'https://eqms.doe.gov.my/APIMS/main';
 
 // Malaysia API bands (DOE). Order: blue / green / yellow / orange / red.
@@ -279,10 +281,145 @@ function sortNews(items, lang) {
   return list.map((it, i) => ({ it, i })).sort((a, b) => rank(a.it) - rank(b.it) || a.i - b.i).map(x => x.it);
 }
 
+// ---- time slider and place search helpers
+/** Hourly steps for the map slider: the last `n` hours of the history window in which at least one station has a value. Oldest first.
+ * `idx` indexes the history series; `ms` is that hour's timestamp. The last step is treated as "Now". */
+function timeSteps(history, n = 24) {
+  if (!history || !history.stations || !history.hours) return [];
+  const start = Date.parse(history.start);
+  if (isNaN(start)) return [];
+  const all = Object.values(history.stations), out = [];
+  for (let i = Math.max(0, history.hours - n); i < history.hours; i++) {
+    if (all.some(s => (s.api || [])[i] != null || (s.pm25 || [])[i] != null)) out.push({ idx: i, ms: start + i * 3600000 });
+  }
+  return out;
+}
+/** Whole hours between a step and the newest step. */
+function stepAgoHours(ms, newestMs) { return Math.max(0, Math.round((newestMs - ms) / 3600000)); }
+/** Index of the step closest to `ms` (or -1 for no steps). Used to keep the chosen hour across a data refresh. */
+function stepIndexForMs(steps, ms) {
+  if (!steps.length) return -1;
+  let best = 0;
+  steps.forEach((s, i) => { if (Math.abs(s.ms - ms) < Math.abs(steps[best].ms - ms)) best = i; });
+  return best;
+}
+/** API and US AQI for one station at one history index. AQI is NowCast of the PM2.5 up to that hour; if NowCast cannot be
+ * worked out, the mean of the last 24 hourly values (needs 12 of them) tagged basis '24h'; else null. */
+function stationAtStep(history, id, idx) {
+  const s = history && history.stations && history.stations[id];
+  if (!s) return { api: null, aq: null };
+  const a = (s.api || [])[idx];
+  const pm = (s.pm25 || []).slice(0, idx + 1);
+  let aq = nowcastAqi(pm, null);
+  if (aq) aq = Object.assign({ basis: 'nowcast' }, aq);
+  else {
+    const w = pm.slice(-24).filter(x => x != null);
+    if (w.length >= 12) aq = Object.assign({ basis: '24h' }, pm25ToAqi(w.reduce((t, x) => t + x, 0) / w.length));
+  }
+  return { api: a == null ? null : a, aq: aq || null };
+}
+
+/** Lower-case, accents and punctuation removed, single spaces. "Bandar Dato' Onn" -> "bandar dato onn". */
+function normText(s) {
+  return String(s == null ? '' : s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/['’`]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+}
+// Johor places for the search box: [name, lat, lng, other spellings]. Coordinates are approximate (about 1 km).
+const JOHOR_PLACES = [
+  ['Johor Bahru city centre', 1.4655, 103.7578, ['Johor Baharu', 'JB', 'Bandar Johor Bahru', 'JB city']],
+  ['JB Sentral', 1.4619, 103.7637, ['Johor Bahru Sentral']],
+  ['Bukit Chagar', 1.4570, 103.7687, ['RTS Link', 'Bukit Chagar RTS']],
+  ['CIQ Bangunan Sultan Iskandar', 1.4637, 103.7677, ['CIQ', 'BSI', 'Woodlands Causeway', 'Customs']],
+  ['Stulang', 1.4640, 103.7795, ['Stulang Laut']],
+  ['Larkin', 1.4977, 103.7405, ['Larkin Sentral']],
+  ['Taman Pelangi', 1.4761, 103.7753, []],
+  ['Danga Bay', 1.4700, 103.7260, ['Teluk Danga']],
+  ['Taman Perling', 1.4862, 103.6800, ['Perling']],
+  ['Tampoi', 1.5100, 103.7130, []],
+  ['Bandar Dato\' Onn', 1.5470, 103.7400, ['Dato Onn']],
+  ['Kempas', 1.5288, 103.7051, ['Taman Kempas']],
+  ['Taman Molek', 1.5286, 103.7908, ['Molek']],
+  ['Tebrau', 1.5628, 103.7883, []],
+  ['Mount Austin', 1.5507, 103.7860, ['Austin Heights', 'Taman Mount Austin']],
+  ['Johor Jaya', 1.5435, 103.8040, []],
+  ['Permas Jaya', 1.4880, 103.8180, ['Bandar Baru Permas Jaya', 'Permas']],
+  ['Masai', 1.4950, 103.8730, []],
+  ['Seri Alam', 1.5079, 103.8661, ['Bandar Seri Alam']],
+  ['Plentong', 1.5200, 103.8400, []],
+  ['Pasir Gudang', 1.4727, 103.9035, ['Bandar Pasir Gudang']],
+  ['Ulu Tiram', 1.6010, 103.8190, ['Hulu Tiram']],
+  ['Skudai', 1.5370, 103.6590, []],
+  ['Taman Universiti', 1.5400, 103.6350, ['UTM', 'Universiti Teknologi Malaysia']],
+  ['Bukit Indah', 1.4801, 103.6596, ['Taman Bukit Indah']],
+  ['Horizon Hills', 1.4576, 103.6456, []],
+  ['Iskandar Puteri', 1.4272, 103.6395, []],
+  ['Nusajaya', 1.4170, 103.6370, []],
+  ['Kota Iskandar', 1.4227, 103.6526, []],
+  ['Puteri Harbour', 1.4240, 103.6624, []],
+  ['Legoland Malaysia', 1.4271, 103.6307, ['Legoland']],
+  ['Gelang Patah', 1.4529, 103.5992, []],
+  ['Tanjung Pelepas', 1.3640, 103.5470, ['Port of Tanjung Pelepas', 'PTP']],
+  ['Second Link (Tanjung Kupang)', 1.3821, 103.5936, ['Tanjung Kupang', 'Kupang', 'Linkedua', 'Laluan Kedua']],
+  ['Kulai', 1.6561, 103.6003, []],
+  ['Senai', 1.6030, 103.6420, []],
+  ['Pontian', 1.4860, 103.3890, ['Pontian Kechil']],
+  ['Kukup', 1.3300, 103.4400, []],
+  ['Batu Pahat', 1.8548, 102.9325, []],
+  ['Yong Peng', 2.0127, 103.0580, []],
+  ['Ayer Hitam', 1.9230, 103.1830, ['Air Hitam']],
+  ['Simpang Renggam', 1.8267, 103.3087, []],
+  ['Kluang', 2.0300, 103.3180, []],
+  ['Muar', 2.0442, 102.5689, ['Bandar Maharani']],
+  ['Tangkak', 2.2680, 102.5450, []],
+  ['Segamat', 2.5148, 102.8158, []],
+  ['Labis', 2.3850, 103.0210, []],
+  ['Mersing', 2.4300, 103.8400, []],
+  ['Kota Tinggi', 1.7380, 103.8990, []],
+  ['Desaru', 1.5550, 104.2650, ['Desaru Coast']],
+  ['Bandar Penawar', 1.5538, 104.2308, ['Penawar']],
+  ['Pengerang', 1.3870, 104.1500, []],
+].map(([name, lat, lng, alt]) => ({ name, lat, lng, alt, keys: [name].concat(alt).map(normText) }));
+
+/** Local place suggestions. Every word typed must start a word of the place name (or of another spelling), so "baharu" and
+ * "pasir gu" both work. Names that start with the query come first. */
+function matchPlaces(query, places = JOHOR_PLACES, limit = 6) {
+  const q = normText(query);
+  if (!q) return [];
+  const toks = q.split(' ');
+  const hits = [];
+  places.forEach((p, i) => {
+    let best = null;
+    p.keys.forEach((k, ki) => {
+      const words = k.split(' ');
+      if (!toks.every(t => words.some(w => w.startsWith(t)))) return;
+      const score = k === q ? -1 : k.startsWith(q) ? (ki === 0 ? 0 : 1) : 2;
+      if (best == null || score < best) best = score;
+    });
+    if (best != null) hits.push({ p, i, score: best });
+  });
+  return hits.sort((a, b) => a.score - b.score || a.i - b.i).slice(0, limit).map(x => x.p);
+}
+/** Nominatim result -> {name, lat, lng}, or null when it is malformed or outside Johor's rough box. */
+function parseNominatim(list) {
+  if (!Array.isArray(list)) return [];
+  const out = [];
+  for (const r of list) {
+    const lat = parseFloat(r && r.lat), lng = parseFloat(r && r.lon);
+    if (!isFinite(lat) || !isFinite(lng) || lat < 1.1 || lat > 3.0 || lng < 102.3 || lng > 104.6) continue;
+    const name = String((r.name || String(r.display_name || '').split(',')[0] || '')).trim();
+    const where = String(r.display_name || '').split(',').slice(1, 3).map(x => x.trim()).filter(Boolean).join(', ');
+    if (name) out.push({ name, detail: where, lat, lng });
+  }
+  return out;
+}
+function nominatimUrl(q, lang) {
+  return 'https://nominatim.openstreetmap.org/search?format=jsonv2&countrycodes=my&viewbox=102.4,2.9,104.5,1.2&bounded=1&limit=5&accept-language='
+    + (lang === 'ms' ? 'ms' : 'en') + '&q=' + encodeURIComponent(String(q).trim().slice(0, 100));
+}
+
 if (typeof module !== 'undefined') {
   module.exports = { scaleSegments, scalePos, apiBand, API_BANDS, pm25ToAqi, usAqiFor, nowcastAqi, usAqiBest, sgNowcastAqi, psiBand, sgRegion, aqiCategory, nowcast, pm25ToApi, haversine, nearest, compass,
     windTo, arrowRotation, fromSumatra, textOn, agoParts, fmtHM, lastN, hourStamps, sparkPath, headlineStation,
-    hotspotMode, filterHotspots, hhmm, mdParts, safeUrl, sortNews, DATA_BASE, RAW_BASE, LOCAL_BASE, COMPASS_EN };
+    hotspotMode, filterHotspots, timeSteps, stepAgoHours, stepIndexForMs, stationAtStep, normText, matchPlaces, parseNominatim, nominatimUrl, JOHOR_PLACES, hhmm, mdParts, safeUrl, sortNews, DATA_BASE, RAW_BASE, LOCAL_BASE, COMPASS_EN };
 }
 
 // ------------------------------------------------------------------ browser app
@@ -295,6 +432,7 @@ if (typeof document !== 'undefined') {
     layers: { wind: true, hs: false, others: false }, hotspotView: false, topic: 'impact',
     latestSource: 'worker', windJB: null, windRegional: null, nextAt: 0, fetchedAt: 0, loadedOnce: false, fetchError: false,
     chartSeen: false, sheetOpen: false, lastFocus: null,
+    viewMs: null, place: null, nom: null, nomBusy: false,
   };
   const desktopMQ = window.matchMedia('(min-width: 900px)');
   const darkMQ = window.matchMedia('(prefers-color-scheme: dark)');
@@ -384,13 +522,16 @@ if (typeof document !== 'undefined') {
     for (const k of ['impact', 'govt', 'indonesia']) $('tab-' + k).textContent = T('news.tab.' + k);
     const foot = (id, key) => { const el = $(id); el.replaceChildren(); appendMd(el, T(key)); };
     foot('foot-main', 'foot.main'); foot('foot-fire', 'foot.fire'); foot('foot-other', 'foot.other');
-    foot('foot-private', 'foot.private'); foot('foot-sg', 'foot.sg');
+    foot('foot-private', 'foot.private'); foot('foot-place', 'foot.place'); foot('foot-sg', 'foot.sg');
     $('cw-h').textContent = T('strip.title'); $('cw-basis').textContent = T('strip.basis');
     $('cw-sglink').textContent = T('strip.sglink'); $('cw-nea').textContent = T('strip.nea') + ' ↗'; foot('adv-causeway', 'adv.causeway');
     $('abbr-list').replaceChildren(...T('foot.abbr').flatMap(([a, b]) => [h('dt', {}, a), h('dd', {}, b)]));
     $('legend-list').replaceChildren(...API_BANDS.map(b => h('li', {}, h('span', { class: 'sw', style: 'background:' + b.color }), `${bandWord(b)} (${T('range.' + b.key)})`)),
       h('li', {}, h('span', { class: 'sw', style: 'background:' + NODATA_BAND.color }), bandWord(NODATA_BAND)));
     $('btn-lock').textContent = lockOn ? T('map.lock') : T('map.tap');
+    $('place-q').setAttribute('placeholder', T('pl.ph')); $('place-q').setAttribute('aria-label', T('pl.ph'));
+    $('place-clear').setAttribute('aria-label', T('pl.clear')); $('place-clear').setAttribute('title', T('pl.clear'));
+    $('tm-range').setAttribute('aria-label', T('tm.slider'));
     $('btn-hs').textContent = state.hotspotView ? T('map.back') : T('hs.show');
   }
 
@@ -472,7 +613,7 @@ if (typeof document !== 'undefined') {
   // ---------------------------------------------------------------- render
   const headline = () => headlineStation(stations(), { myId: state.myId, loc: state.loc });
   function renderAll() {
-    renderHero(); renderStatus(); renderMap(); renderList(); renderStrip(); renderDetail(); renderTrend();
+    renderHero(); renderStatus(); renderTime(); renderMap(); renderPlace(); renderSuggest(); renderList(); renderStrip(); renderDetail(); renderTrend();
     renderHotspotPanel(); renderAdvice(); renderExplainer(); renderNews(); renderWindText();
   }
   function renderHero() {
@@ -580,17 +721,25 @@ if (typeof document !== 'undefined') {
     darkMQ.addEventListener && darkMQ.addEventListener('change', setTiles);
     window.addEventListener('resize', () => map.invalidateSize());
   }
+  /** What a pin shows for a station: the latest reading, or the chosen hour from history when the slider is not at Now. */
+  function viewOf(st) {
+    const step = viewStep();
+    if (!step) return { api: st.api, aq: usOf(st), past: false };
+    const v = stationAtStep(state.history, st.id, step.idx);
+    return { api: v.api, aq: v.aq, past: true };
+  }
   function pinIcon(st) {
-    const b = apiBand(st.api), col = b.color, aq = usOf(st);
-    const cls = 'pin' + (st.id === state.selectedId ? ' sel' : '') + (st.id === state.myId ? ' mine' : '');
-    const html = `<span class="${cls}" style="background:${col};color:${textOn(col)}"><b>${st.api == null ? '–' : Number(st.api)}</b><i>${bandWord(b)}</i>${aq ? `<u>${T('idx.us.short')} ${aq.aqi}${tag24(aq)}</u>` : ''}</span>`;
+    const v = viewOf(st), b = apiBand(v.api), col = b.color, aq = v.aq;
+    const cls = 'pin' + (st.id === state.selectedId ? ' sel' : '') + (st.id === state.myId ? ' mine' : '') + (v.past ? ' past' : '');
+    const html = `<span class="${cls}" style="background:${col};color:${textOn(col)}"><b>${v.api == null ? '–' : Number(v.api)}</b><i>${bandWord(b)}</i>${aq ? `<u>${T('idx.us.short')} ${aq.aqi}${tag24(aq)}</u>` : (v.past ? `<u>${T('idx.us.short')} –</u>` : '')}</span>`;
     return L.divIcon({ className: 'pin-wrap', html, iconSize: [84, 56], iconAnchor: [42, 28] });
   }
   function renderMap() {
     if (!map) return;
     groups.stations.clearLayers(); groups.others.clearLayers();
     for (const st of stations()) {
-      const m = L.marker([st.lat, st.lng], { icon: pinIcon(st), keyboard: true, alt: T('pin.aria', { name: stName(st), idx: T('idx.name'), api: st.api == null ? '–' : st.api, band: bandWord(apiBand(st.api)) }), title: stName(st) });
+      const v = viewOf(st);
+      const m = L.marker([st.lat, st.lng], { icon: pinIcon(st), keyboard: true, alt: T('pin.aria', { name: stName(st), idx: T('idx.name'), api: v.api == null ? '–' : v.api, band: bandWord(apiBand(v.api)) }), title: stName(st) });
       m.on('click', () => openDetail(st.id));
       (st.jb ? groups.stations : groups.others).addLayer(m);
     }
@@ -637,7 +786,179 @@ if (typeof document !== 'undefined') {
     } else {
       fitHome();
     }
-    syncLayers(); drawWind(); renderHotspotPanel(); renderStatic();
+    syncLayers(); drawWind(); renderHotspotPanel(); renderStatic(); renderTime();
+  }
+
+  // ---- time slider (map only)
+  let playTimer = null;
+  const steps = () => timeSteps(state.history, 24);
+  /** The step the map is showing, or null when it is at Now. */
+  function viewStep() {
+    if (state.viewMs == null) return null;
+    const st = steps();
+    if (st.length < 2) return null;
+    const i = stepIndexForMs(st, state.viewMs);
+    return i >= st.length - 1 ? null : st[i];
+  }
+  function stopPlay() { if (playTimer) { clearInterval(playTimer); playTimer = null; } if ($('tm-play')) $('tm-play').textContent = T('tm.play'); }
+  function renderTime() {
+    const panel = $('time-panel'), st = steps();
+    const ok = st.length >= 2 && !state.hotspotView;
+    panel.hidden = !ok;
+    if (st.length < 2) state.viewMs = null;
+    if (!ok) { stopPlay(); return; }
+    const range = $('tm-range');
+    // Snap the chosen hour to a step that still exists after a refresh; the last step is Now.
+    let i = state.viewMs == null ? st.length - 1 : stepIndexForMs(st, state.viewMs);
+    state.viewMs = i >= st.length - 1 ? null : st[i].ms;
+    if (state.viewMs == null) i = st.length - 1;
+    range.max = String(st.length - 1); range.value = String(i);
+    const now = state.viewMs == null;
+    const txt = now ? T('tm.now') : T('tm.showing', { time: fmtHM(new Date(st[i].ms)), h: stepAgoHours(st[i].ms, st[st.length - 1].ms) });
+    $('tm-label').textContent = txt;
+    range.setAttribute('aria-valuetext', txt);
+    $('tm-now').hidden = now;
+    $('tm-play').textContent = playTimer ? T('tm.pause') : T('tm.play');
+    $('tm-play').setAttribute('aria-pressed', String(!!playTimer));
+    $('tm-start').textContent = fmtHM(new Date(st[0].ms));
+    panel.classList.toggle('is-past', !now);
+  }
+  function setStep(i) {
+    const st = steps();
+    if (st.length < 2) return;
+    i = Math.max(0, Math.min(st.length - 1, i));
+    state.viewMs = i === st.length - 1 ? null : st[i].ms;
+    renderTime(); renderMap();
+  }
+  const curStepIdx = () => { const st = steps(); return state.viewMs == null ? st.length - 1 : stepIndexForMs(st, state.viewMs); };
+  function togglePlay() {
+    if (playTimer) { stopPlay(); return; }
+    const st = steps();
+    if (st.length < 2) return;
+    // From Now, start again at the oldest hour; from a past hour, carry on from there.
+    setStep(state.viewMs == null ? 0 : curStepIdx());
+    playTimer = setInterval(() => {
+      const next = curStepIdx() + 1;
+      setStep(next);
+      if (next >= steps().length - 1) { stopPlay(); renderTime(); }
+    }, PLAY_MS);
+    renderTime();
+  }
+
+  // ---- place search
+  function clampPlace(o) {
+    if (!o || typeof o.n !== 'string' || !isFinite(o.lat) || !isFinite(o.lng)) return null;
+    if (o.lat < 1.1 || o.lat > 3.0 || o.lng < 102.3 || o.lng > 104.6) return null;
+    return { name: o.n.slice(0, 80), lat: o.lat, lng: o.lng, saved: true };
+  }
+  let placeMarker = null;
+  function drawPlaceMarker() {
+    if (!map) return;
+    if (placeMarker) { map.removeLayer(placeMarker); placeMarker = null; }
+    const p = state.place;
+    if (!p || p.loc) return;
+    placeMarker = L.marker([p.lat, p.lng], { icon: L.divIcon({ className: 'place-wrap', html: '<div class="place-pin"></div>', iconSize: [26, 34], iconAnchor: [13, 32] }), interactive: false, keyboard: false, zIndexOffset: 800 }).addTo(map);
+  }
+  function showPlaceOnMap() {
+    drawPlaceMarker();
+    const p = state.place;
+    if (!map || !p || p.loc) return;
+    if (state.hotspotView) setHotspotView(false);
+    const n = nearest(stations(), p.lat, p.lng, 1)[0];
+    // Stations outside the JB area are hidden by default; show them so the nearest one is on the map.
+    if (n && !n.jb && !state.layers.others) { state.layers.others = true; syncLayers(); renderMap(); }
+    const pts = [[p.lat, p.lng]]; if (n) pts.push([n.lat, n.lng]);
+    map.stop(); map.setMaxBounds(null); map.setMinZoom(3);
+    map.invalidateSize(false);
+    map.fitBounds(pts, { padding: [60, 60], maxZoom: 13, animate: !reduceMotion });
+    map.setMinZoom(Math.min(8, map.getZoom())); map.setMaxBounds(JB_MAX);
+  }
+  function choosePlace(p) {
+    state.place = { name: p.name, lat: p.lat, lng: p.lng, saved: true };
+    safeStore(LS_PLACE, JSON.stringify({ n: p.name, lat: p.lat, lng: p.lng }));
+    state.nom = null;
+    $('place-q').value = p.name;
+    $('place-list').hidden = true; $('place-q').blur();
+    const n = nearest(stations(), p.lat, p.lng, 1)[0];
+    if (n) state.selectedId = n.id;
+    showPlaceOnMap();
+    renderAll();
+  }
+  function clearPlace() {
+    state.place = null; state.nom = null; safeStore(LS_PLACE, null);
+    $('place-q').value = ''; $('place-list').hidden = true;
+    drawPlaceMarker(); renderPlace();
+  }
+  function renderPlace() {
+    const card = $('place-card'), p = state.place;
+    $('place-clear').hidden = !p && !$('place-q').value;
+    if (!p || !stations().length) { card.hidden = true; return; }
+    const n = nearest(stations(), p.lat, p.lng, 1)[0];
+    const st = n && stationById(n.id);
+    if (!st) { card.hidden = true; return; }
+    const b = apiBand(st.api), aq = usOf(st), mine = state.myId === st.id;
+    card.hidden = false;
+    card.replaceChildren(
+      h('p', { class: 'pc-place' }, h('b', {}, p.loc ? T('pl.mylocation') : p.name)),
+      h('p', { class: 'pc-line' }, h('b', {}, T('pl.nearest', { name: stName(st), km: n.km.toFixed(1) })), ' · ',
+        `${T('idx.name')} ${st.api == null ? '–' : st.api} ${bandWord(b)}`, ' · ', `${T('idx.us')} ${aq ? aq.aqi : '–'}${tag24(aq)}`),
+      h('div', { class: 'pc-actions' },
+        h('button', { type: 'button', class: 'primary' + (mine ? ' on' : ''), 'aria-pressed': String(mine), onclick: () => setMyStation(mine ? null : st.id) }, mine ? T('detail.unset') : T('detail.set')),
+        h('button', { type: 'button', class: 'pc-sec', onclick: () => openDetail(st.id) }, T('pl.details'))));
+  }
+  function renderSuggest() {
+    const ul = $('place-list'), inp = $('place-q');
+    if (ul.hidden && document.activeElement !== inp) return;
+    const q = inp.value.trim();
+    $('place-clear').hidden = !state.place && !inp.value;
+    const li = (...kids) => h('li', {}, ...kids);
+    const item = (label, sub, fn) => li(h('button', { type: 'button', class: 'pl-item', onclick: fn }, h('span', { class: 'pl-n' }, label), sub ? h('span', { class: 'pl-s' }, sub) : null));
+    const kids = [item(T('pl.locate'), '', locateMe)];
+    const local = matchPlaces(q);
+    local.forEach(p => kids.push(item(p.name, '', () => choosePlace(p))));
+    const nom = state.nom && state.nom.q === q ? state.nom : null;
+    if (q.length >= 3 && !local.length) {
+      if (!nom) kids.push(li(h('p', { class: 'pl-msg' }, T('pl.nolocal')), h('button', { type: 'button', class: 'pl-item pl-more', onclick: searchMore }, T('pl.more'))));
+      else if (nom.busy) kids.push(li(h('p', { class: 'pl-msg' }, T('pl.searching'))));
+      else if (nom.error) kids.push(li(h('p', { class: 'pl-msg' }, T('pl.error'))));
+      else if (!nom.items.length) kids.push(li(h('p', { class: 'pl-msg' }, T('pl.none'))));
+      else nom.items.forEach(p => kids.push(item(p.name, p.detail, () => choosePlace(p))));
+      if (nom && !nom.busy) { const c = h('p', { class: 'pl-credit' }); appendMd(c, T('pl.credit')); kids.push(li(c)); }
+    }
+    ul.replaceChildren(...kids);
+    ul.hidden = false;
+  }
+  async function searchMore() {
+    const q = $('place-q').value.trim();
+    if (q.length < 3 || state.nomBusy) return;
+    state.nomBusy = true; state.nom = { q, busy: true }; renderSuggest();
+    const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 8000);
+    try {
+      const r = await fetch(nominatimUrl(q, state.lang), { signal: ctl.signal });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      state.nom = { q, items: parseNominatim(await r.json()) };
+    } catch (_) { state.nom = { q, error: true }; } finally { clearTimeout(to); state.nomBusy = false; }
+    renderSuggest();
+  }
+  function locateMe() {
+    $('place-list').hidden = true; $('place-q').blur();
+    if (!navigator.geolocation) { toast(T('locate.denied')); return; }
+    navigator.geolocation.getCurrentPosition(pos => {
+      state.loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      const n = nearest(stations(), state.loc.lat, state.loc.lng, 1)[0];
+      if (n && n.km > 60) toast(T('locate.far'));
+      if (map) {
+        if (meMarker) map.removeLayer(meMarker);
+        meMarker = L.marker([state.loc.lat, state.loc.lng], { icon: L.divIcon({ className: 'me-wrap', html: '<div class="me-dot"></div>', iconSize: [16, 16], iconAnchor: [8, 8] }), interactive: false, keyboard: false }).addTo(map);
+      }
+      // The location is shown on the card for this visit only; it is never saved (unlike a chosen place).
+      state.place = { name: '', lat: state.loc.lat, lng: state.loc.lng, loc: true, saved: false };
+      $('place-q').value = '';
+      if (n) { state.selectedId = n.id; }
+      drawPlaceMarker();
+      renderAll();
+      if (n && map && !state.hotspotView) map.panTo([n.lat, n.lng]);
+    }, () => toast(T('locate.denied')), { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
   }
 
   // ---- wind (Open-Meteo, client side)
@@ -954,21 +1275,21 @@ if (typeof document !== 'undefined') {
         if (j >= 0) { e.preventDefault(); state.topic = tabs[j].dataset.topic; renderNews(); tabs[j].focus(); }
       });
     });
-    $('btn-locate').addEventListener('click', () => {
-      if (!navigator.geolocation) { toast(T('locate.denied')); return; }
-      navigator.geolocation.getCurrentPosition(pos => {
-        state.loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-        const n = nearest(stations(), state.loc.lat, state.loc.lng, 1)[0];
-        if (n && n.km > 60) toast(T('locate.far'));
-        if (map) {
-          if (meMarker) map.removeLayer(meMarker);
-          meMarker = L.marker([state.loc.lat, state.loc.lng], { icon: L.divIcon({ className: 'me-wrap', html: '<div class="me-dot"></div>', iconSize: [16, 16], iconAnchor: [8, 8] }), interactive: false, keyboard: false }).addTo(map);
-        }
-        if (n) { state.selectedId = n.id; }
-        renderAll();
-        if (n && map && !state.hotspotView) map.panTo([n.lat, n.lng]);
-      }, () => toast(T('locate.denied')), { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
+    $('btn-locate').addEventListener('click', locateMe);
+    // time slider
+    $('tm-range').addEventListener('input', e => { stopPlay(); setStep(Number(e.target.value)); });
+    $('tm-play').addEventListener('click', togglePlay);
+    $('tm-now').addEventListener('click', () => { stopPlay(); setStep(Infinity); });
+    // place search: suggestions come from the built-in list; the network is used only by the "Search more places" button
+    const pq = $('place-q');
+    pq.addEventListener('input', () => { renderSuggest(); });
+    pq.addEventListener('focus', () => { $('place-list').hidden = false; renderSuggest(); });
+    pq.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { $('place-list').hidden = true; }
+      else if (e.key === 'Enter') { e.preventDefault(); const m = matchPlaces(pq.value); if (m.length) choosePlace(m[0]); }
     });
+    $('place-panel').addEventListener('focusout', e => { if (!e.relatedTarget || !$('place-panel').contains(e.relatedTarget)) setTimeout(() => { if (!$('place-panel').contains(document.activeElement)) $('place-list').hidden = true; }, 250); });
+    $('place-clear').addEventListener('click', () => { clearPlace(); pq.focus(); });
     document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() >= state.nextAt) loadData(false); });
     if ('IntersectionObserver' in window) {
       new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { state.chartSeen = true; o.disconnect(); renderTrend(); } }, { rootMargin: '200px' }).observe($('trend'));
@@ -978,6 +1299,8 @@ if (typeof document !== 'undefined') {
 
   async function start() {
     state.myId = safeLoad(LS_STATION);
+    try { state.place = clampPlace(Object.assign({}, JSON.parse(safeLoad(LS_PLACE) || 'null'))); } catch (_) { state.place = null; }
+    if (state.place) $('place-q').value = state.place.name;
     bind();
     initMap();
     applyLang(initialLang(), true);
@@ -990,6 +1313,7 @@ if (typeof document !== 'undefined') {
       if (Date.now() >= state.nextAt) loadData(false);
     }, 1000);
     // second pass: list/detail names need meta
+    drawPlaceMarker();
     renderAll();
     syncSheetAria();
   }
