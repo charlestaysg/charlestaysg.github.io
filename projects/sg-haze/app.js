@@ -553,7 +553,7 @@ if (typeof document !== 'undefined') {
       const m = state.regionMeta[key];
       if (!m) continue;
       const c = state.computed[key], aq = aqiFor(key);
-      const icon = L.divIcon({ className: 'leaflet-div-icon pill-icon', html: pillHtml(key), iconSize: [64, 24], iconAnchor: [32, 12] });
+      const icon = L.divIcon({ className: 'leaflet-div-icon pill-icon', html: pillHtml(key), iconSize: [88, 26], iconAnchor: [44, 13] });
       const title = c && c.pm != null ? `${cap(key)}: NEA ${c.pm} µg/m³ · US AQI ${aq ? aq.aqi : '—'}` : `${cap(key)}: no data`;
       if (pillMarkers[key]) { pillMarkers[key].setIcon(icon); pillMarkers[key].getElement() && pillMarkers[key].getElement().setAttribute('title', title); }
       else {
