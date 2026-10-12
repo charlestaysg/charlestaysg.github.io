@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Models as Insider Risks: how it was made · Charles Tay</title>
+<meta name="description" content="The tools behind an 82-second motion graphic breaking down Satya Nadella's essay on treating AI like a new staff member.">
+<link rel="canonical" href="https://charlestaysg.github.io/projects/models-as-insider-risks/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Models as Insider Risks: how it was made">
+<meta property="og:description" content="The tools behind an 82-second motion graphic breaking down Satya Nadella's essay, from source text to final MP4.">
+<meta property="og:url" content="https://charlestaysg.github.io/projects/models-as-insider-risks/">
+<meta property="og:image" content="https://charlestaysg.github.io/projects/models-as-insider-risks/poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one reading column; a vertical pipeline rail (source → output) carries the stages, mirroring the video's console look. */
+  :root {
+    --bg: #F3F6FA;
+    --panel: #FFFFFF;
+    --ink: #0B1324;
+    --muted: #536079;
+    --line: #D6DEE9;
+    --green: #148A4E;
+    --green-soft: #E3F4EA;
+    --amber: #9A6200;
+    --amber-soft: #FBF0D9;
+    --font-display: "Barlow", "Helvetica Neue", Arial, sans-serif;
+    --font-body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1324; --panel: #121D33; --ink: #E6EDF7; --muted: #8A96AB; --line: #1F2A40;
+      --green: #3DDC84; --green-soft: rgba(61,220,132,.12); --amber: #F5B83D; --amber-soft: rgba(245,184,61,.12);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B1324; --panel: #121D33; --ink: #E6EDF7; --muted: #8A96AB; --line: #1F2A40;
+    --green: #3DDC84; --green-soft: rgba(61,220,132,.12); --amber: #F5B83D; --amber-soft: rgba(245,184,61,.12);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: var(--font-body); font-size: 17px; line-height: 1.55;
+    margin: 0; padding-inline: 20px; padding-block: 48px 72px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 44px; }
+
+  .label {
+    font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+  }
+
+  header { display: flex; flex-direction: column; gap: 14px; }
+  h1 {
+    font-family: var(--font-display); font-weight: 900; text-transform: lowercase;
+    letter-spacing: -.035em; line-height: .95; margin: 0;
+    font-size: clamp(40px, 8vw, 72px); text-wrap: balance;
+  }
+  h1 em { font-style: normal; color: var(--green); }
+  .dek { font-size: 19px; color: var(--muted); max-width: 62ch; margin: 0; }
+
+  .spec {
+    display: flex; flex-wrap: wrap; gap: 0; border: 1px solid var(--line); background: var(--panel);
+  }
+  .spec div {
+    flex: 1 1 140px; padding: 14px 16px; border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 2px; min-width: 0;
+  }
+  .spec div:last-child { border-right: 0; }
+  .spec b {
+    font-family: var(--font-mono); font-weight: 600; font-size: 20px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .summary {
+    border-left: 3px solid var(--green); padding: 4px 0 4px 18px; margin: 0;
+    font-size: 20px; line-height: 1.45; max-width: 62ch;
+  }
+  .summary strong { font-weight: 700; }
+
+  /* pipeline */
+  .pipeline { display: flex; flex-direction: column; gap: 0; }
+  .stage {
+    display: grid; grid-template-columns: 56px 1fr; gap: 0 18px;
+  }
+  .rail { position: relative; display: flex; justify-content: center; }
+  .rail::before {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line);
+  }
+  .stage:first-child .rail::before { top: 18px; }
+  .stage:last-child .rail::before { bottom: auto; height: 18px; }
+  .node {
+    position: relative; margin-top: 6px; width: 26px; height: 26px;
+    border: 1px solid var(--green); background: var(--bg);
+    font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--green);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stage-body { padding-bottom: 34px; min-width: 0; }
+  .stage h2 {
+    font-family: var(--font-display); font-weight: 900; text-transform: lowercase;
+    letter-spacing: -.02em; font-size: 28px; line-height: 1.1; margin: 0 0 4px;
+  }
+  .stage .why { color: var(--muted); margin: 0 0 14px; max-width: 62ch; }
+
+  .tools { display: flex; flex-direction: column; border: 1px solid var(--line); background: var(--panel); }
+  .tool {
+    display: grid; grid-template-columns: minmax(170px, 230px) 1fr; gap: 6px 18px;
+    padding: 14px 16px; border-bottom: 1px solid var(--line);
+  }
+  .tool:last-child { border-bottom: 0; }
+  .tool .name { font-family: var(--font-mono); font-weight: 600; font-size: 14px; line-height: 1.4; }
+  .tool .what { font-size: 16px; min-width: 0; }
+  .tool.dropped .name { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--amber); }
+  .tool.dropped .what { color: var(--muted); }
+  .pill {
+    display: inline-block; font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .1em; text-transform: uppercase; padding: 2px 7px; margin-left: 6px;
+    border: 1px solid currentColor; vertical-align: 2px; text-decoration: none;
+  }
+  .pill.green { color: var(--green); background: var(--green-soft); }
+  .pill.amber { color: var(--amber); background: var(--amber-soft); }
+
+  .cost { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .cost div { border: 1px solid var(--line); background: var(--panel); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+  .cost p { margin: 0; }
+
+  footer { border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: 15px; }
+  footer p { margin: 0; max-width: 70ch; }
+
+  @media (max-width: 560px) {
+    body { font-size: 16px; padding-block: 32px 56px; padding-inline: 16px; }
+    .stage { grid-template-columns: 34px 1fr; gap: 0 12px; }
+    .tool { grid-template-columns: 1fr; }
+    .spec div { border-right: 0; border-bottom: 1px solid var(--line); }
+    .spec div:last-child { border-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav style="font-family:var(--font-mono);font-size:14px"><a href="/" style="color:var(--green)">← Charles Tay</a></nav>
+  <header>
+    <span class="label">How it was made · 11 Oct 2026</span>
+    <h1>models as insider risks: <em>the build</em></h1>
+    <p class="dek">The tools behind an 82-second motion graphic that breaks down Satya Nadella's essay on treating AI like a new staff member, from the source text to the final MP4.</p>
+  </header>
+
+  <video controls preload="none" playsinline poster="poster.jpg" style="width:100%;max-width:560px;aspect-ratio:1/1;background:#0B1324;border:1px solid var(--line);display:block" aria-label="Models as Insider Risks: an 82-second motion graphic with on-screen text and music, no narration"><source src="video.mp4" type="video/mp4"></video>
+
+  <div class="spec" aria-label="Video specification">
+    <div><span class="label">Length</span><b>82.5 s</b></div>
+    <div><span class="label">Format</span><b>1080×1080</b></div>
+    <div><span class="label">Frames</span><b>14</b></div>
+    <div><span class="label">Tempo</span><b>96 BPM</b></div>
+    <div><span class="label">Render time</span><b>31 s</b></div>
+  </div>
+
+  <p class="summary"><strong>In short:</strong> Claude Code ran the workflow, HyperFrames built and rendered the video, GarageBand played the music, and Mobbin supplied interface references.</p>
+
+  <section class="pipeline" aria-label="Build pipeline, in order">
+
+    <div class="stage">
+      <div class="rail"><span class="node">1</span></div>
+      <div class="stage-body">
+        <h2>source</h2>
+        <p class="why">Getting the full essay and filing it before anything was designed.</p>
+        <div class="tools">
+          <div class="tool"><span class="name">fxtwitter API (curl)</span><span class="what">Fetched the full X Article text, because x.com blocked direct fetching.</span></div>
+          <div class="tool"><span class="name">Obsidian vault</span><span class="what">Saved the essay as a source with wiki pages. That text became the video's script material.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="node">2</span></div>
+      <div class="stage-body">
+        <h2>design research</h2>
+        <p class="why">Finding real interface patterns so the principle cards look like believable software, not clip-art.</p>
+        <div class="tools">
+          <div class="tool"><span class="name">Mobbin (MCP connector)</span><span class="what">Layout references from Revolut, n8n, Vanta, Klaviyo, AutoSend, incident.io and others. A background Sonnet agent ran the searches. It changed the core visual in about 5 of the 14 frames.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="node">3</span></div>
+      <div class="stage-body">
+        <h2>video framework</h2>
+        <p class="why">The system that turns a storyboard into timed, animated frames.</p>
+        <div class="tools">
+          <div class="tool"><span class="name">HyperFrames · faceless explainer</span><span class="what">Brief, storyboard, sketch sheet, frame-by-frame build, assembly and checks.</span></div>
+          <div class="tool"><span class="name">Broadside preset, remixed</span><span class="what">The base look, recoloured to navy with green for "allowed", amber for "checking" and red for the off switch only.</span></div>
+          <div class="tool"><span class="name">GSAP</span><span class="what">The animation engine inside each frame. Every reveal is timed to a beat of the music.</span></div>
+          <div class="tool"><span class="name">Barlow + IBM Plex Mono</span><span class="what">Headline and interface fonts from Fontsource, embedded so the render works offline.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="node">4</span></div>
+      <div class="stage-body">
+        <h2>music</h2>
+        <p class="why">An original score, written as code so every cut lands on a bar line.</p>
+        <div class="tools">
+          <div class="tool"><span class="name">Python script</span><span class="what">Wrote the score: 96 BPM, D minor resolving to D major, with a bell hit on each principle and a single stop hit at 1:03.75 for the off switch.</span></div>
+          <div class="tool"><span class="name">GarageBand + MCP bridge</span><span class="what">Played the score on real instruments (synth bass, pad, bell, piano, strings, drums) and exported the WAV.</span></div>
+          <div class="tool"><span class="name">ffmpeg</span><span class="what">Trimmed the track to 82.5 s, added the fade-out and set loudness to −16 LUFS for social media.</span></div>
+          <div class="tool dropped"><span class="name">HeyGen music library</span><span class="what">Tried first. The track was only 30 s and untitled, so it could not be credited. <span class="pill amber">Dropped</span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="node">5</span></div>
+      <div class="stage-body">
+        <h2>build</h2>
+        <p class="why">Writing the plan, then building all 14 frames at once.</p>
+        <div class="tools">
+          <div class="tool"><span class="name">Claude Code (Opus 5.5)</span><span class="what">Ran the whole workflow: brief, storyboard, plain-language rewrite, shot timings and the final fixes.</span></div>
+          <div class="tool"><span class="name">14 builder agents</span><span class="what">One per frame, working in parallel. Each turned its approved sketch into an animated frame.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="node">6</span></div>
+      <div class="stage-body">
+        <h2>quality checks</h2>
+        <p class="why">Catching problems before the render, not after.</p>
+        <div class="tools">
+          <div class="tool"><span class="name">HyperFrames lint · check · snapshot</span><span class="what">Layout, motion and contrast checks, plus contact sheets of every frame. <span class="pill green">135/135 contrast pass</span></span></div>
+          <div class="tool"><span class="name">Claude's built-in browser</span><span class="what">Reviewing the sketch sheet and the live Studio preview with music.</span></div>
+          <div class="tool"><span class="name">ffprobe</span><span class="what">Confirmed the final file: resolution, duration and that the audio is present.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="rail"><span class="node">7</span></div>
+      <div class="stage-body">
+        <h2>output</h2>
+        <p class="why">The finished video and a record of how it was made.</p>
+        <div class="tools">
+          <div class="tool"><span class="name">HyperFrames render</span><span class="what">Produced the 1080×1080 MP4, 13 MB, in 31 seconds.</span></div>
+          <div class="tool"><span class="name">Git</span><span class="what">Committed the project source and score so the video can be rebuilt. The MP4 and WAV stay local.</span></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="cost" aria-label="Cost">
+    <div><span class="label">Free or already installed</span><p>Claude Code, HyperFrames, GSAP, the fonts, Python, GarageBand, ffmpeg and Git.</p></div>
+    <div><span class="label">Paid</span><p>Mobbin Pro plan, for the interface references.</p></div>
+    <div><span class="label">Tried, not used</span><p>HeyGen music library, on a free plan.</p></div>
+  </section>
+
+  <footer>
+    <p>Source: Satya Nadella, "Models as Insider Risks in the Super Intelligence Era", X Article, 10 Oct 2026. The video is an independent summary, not affiliated with or endorsed by Microsoft.</p>
+    <p>Breakdown and design: Charles Tay.</p>
+  </footer>
+</div>
+
+</body>
+</html>
