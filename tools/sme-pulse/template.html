@@ -46,6 +46,8 @@ body{background:var(--page);color:var(--ink);font:15px/1.5 system-ui,-apple-syst
 header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 24px;margin-bottom:16px}
 h1{font-size:26px;line-height:1.2;margin:0;letter-spacing:-.01em}
 .sub{color:var(--ink-2);margin:4px 0 0;font-size:14px}
+.companion{font-size:13px;color:var(--ink-2);margin:6px 0 0}
+.companion a{color:var(--accent)}
 .fresh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
 .badge{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:1px 8px}
@@ -144,6 +146,7 @@ footer p{margin:0 0 8px}
     <div>
       <h1>SME Workforce Pulse <span class="badge">Unofficial</span></h1>
       <p class="sub">Job vacancies, vacancy rates and retrenchments in Singapore, by sector. Source: MOM Labour Market Survey via data.gov.sg.</p>
+      <p class="companion">Meeting a company? Look it up on the <a href="../uen-sheet/">Pre-visit Fact Sheet</a> for its ACRA record, sector figures and questions to ask.</p>
     </div>
     <div class="fresh"><span class="dot" aria-hidden="true"></span><span id="fresh"></span></div>
   </header>
