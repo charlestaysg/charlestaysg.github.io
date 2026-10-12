@@ -12,7 +12,7 @@ Feeds `projects/jb-haze/` (Johor Bahru haze page). Standard library only; Python
 
 ## How the data gets to the page
 
-`.github/workflows/jb-haze-refresh.yml` runs at :25 every hour, builds the four JSON files and
+`.github/workflows/jb-haze-refresh.yml` runs at :17 every hour, builds the four JSON files and
 force-pushes them as a single commit to the orphan branch `jb-haze-data`. The page reads
 `https://raw.githubusercontent.com/charlestaysg/charlestaysg.github.io/jb-haze-data/<file>`.
 On localhost it reads `projects/jb-haze/data/` instead. Copies of the four files also sit in

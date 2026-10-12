@@ -8,7 +8,7 @@ name: Refresh JB haze data
 
 on:
   schedule:
-    - cron: "25 * * * *"   # 15 minutes after APIMS posts the hourly reading
+    - cron: "17 * * * *"   # about 15 minutes after APIMS posts the hourly reading (GitHub often starts late)
   workflow_dispatch:
 
 permissions:
