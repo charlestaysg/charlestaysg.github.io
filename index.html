@@ -152,6 +152,44 @@
           <p class="credit">Based on Satya Nadella, "Models as Insider Risks in the Super Intelligence Era", X Article, 10 Oct 2026. Independent summary; not affiliated with or endorsed by Microsoft.</p>
         </div>
       </article>
+      <article class="project" id="sunny-side" style="grid-template-columns:1fr;margin-top:48px">
+        <video controls preload="none" playsinline poster="projects/sunny-side/poster.jpg" style="aspect-ratio:16/9;max-width:760px"
+               aria-label="Sunny Side: a music video with flat, bright shapes and sing-along lyrics">
+          <source src="projects/sunny-side/video.mp4" type="video/mp4">
+        </video>
+        <div class="project-body">
+          <span class="spec" data-spec>75 s · 1920×1080 · 5 sections · sing-along lyrics</span>
+          <h3>Sunny Side</h3>
+          <p>A happy little song with a music video to match. The sun, clouds and confetti move on the beat and the chord changes, and each lyric lights up as it's sung. The Chinese and Japanese versions are new songs with lyrics written to be sung, not translated line by line.</p>
+          <div class="links" role="group" aria-label="Choose a language">
+            <a href="projects/sunny-side/video.mp4" data-lang="en" aria-current="true">English</a>
+            <a href="projects/sunny-side/video-zh.mp4" data-lang="zh" lang="zh-Hans">中文 · 阳光那一方</a>
+            <a href="projects/sunny-side/video-ja.mp4" data-lang="ja" lang="ja">日本語 · ひなたの道へ</a>
+          </div>
+          <p class="credit" data-credit>Music and video by Charles Tay. Made with Claude, MiniMax-Music3 and HyperFrames. The music and vocals are AI-generated.</p>
+        </div>
+      </article>
+      <script>
+        (() => {
+          const card = document.getElementById('sunny-side');
+          const v = card.querySelector('video');
+          const versions = {
+            en: { src: 'video.mp4', poster: 'poster.jpg', spec: '75 s · 1920×1080 · 5 sections · sing-along lyrics', made: 'MiniMax-Music3' },
+            zh: { src: 'video-zh.mp4', poster: 'poster-zh.jpg', spec: '94 s · 1920×1080 · Mandarin · sing-along lyrics', made: 'MiniMax-Music3' },
+            ja: { src: 'video-ja.mp4', poster: 'poster-ja.jpg', spec: '103 s · 1920×1080 · Japanese with English subtitles', made: 'ChatCut, Mureka' }
+          };
+          card.querySelectorAll('[data-lang]').forEach(a => a.addEventListener('click', e => {
+            e.preventDefault();
+            const x = versions[a.dataset.lang], base = 'projects/sunny-side/';
+            v.poster = base + x.poster;
+            v.querySelector('source').src = base + x.src;
+            v.load();
+            card.querySelector('[data-spec]').textContent = x.spec;
+            card.querySelector('[data-credit]').textContent = 'Music and video by Charles Tay. Made with Claude, ' + x.made + ' and HyperFrames. The music and vocals are AI-generated.';
+            card.querySelectorAll('[data-lang]').forEach(b => b.toggleAttribute('aria-current', b === a));
+          }));
+        })();
+      </script>
     </div>
   </section>
 
