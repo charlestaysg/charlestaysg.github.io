@@ -148,6 +148,7 @@ function agoParts(ms) {
 const mytTime = typeof Intl !== 'undefined'
   ? new Intl.DateTimeFormat('en-GB', { timeZone: TZ, hour: '2-digit', minute: '2-digit', hour12: false }) : null;
 function fmtHM(dateOrIso) {
+  if (dateOrIso == null || dateOrIso === '') return '—'; // new Date(null) is 1970, which would print 07:30 MYT
   const d = dateOrIso instanceof Date ? dateOrIso : new Date(dateOrIso);
   if (isNaN(d)) return '—';
   return mytTime ? mytTime.format(d) : d.toISOString().slice(11, 16);
@@ -462,16 +463,25 @@ if (typeof document !== 'undefined') {
     map.fitBounds(JB_VIEW, Object.assign({ animate: false }, FIT_PAD));
     map.setMinZoom(Math.min(8, map.getZoom())); map.setMaxBounds(JB_MAX);
   }
+  function fitHome() { if (state.layers.others) fitJohor(); else fitJB(); }
+  function fitJohor() {
+    const pts = stations().filter(st => st.lat != null && st.lng != null).map(st => [st.lat, st.lng]);
+    if (!pts.length) return;
+    map.stop(); map.setMaxBounds(null); map.setMinZoom(3);
+    map.invalidateSize(false);
+    map.fitBounds(pts, Object.assign({ animate: false }, FIT_PAD));
+    map.setMinZoom(Math.min(8, map.getZoom())); map.setMaxBounds(JB_MAX);
+  }
   function initMap() {
     if (typeof L === 'undefined') { document.querySelector('.map-fallback').hidden = false; return; }
     map = L.map('map', { preferCanvas: true, zoomSnap: 0.25, scrollWheelZoom: false, zoomControl: false, minZoom: 8, maxZoom: 16, maxBounds: JB_MAX, maxBoundsViscosity: 1 });
     L.control.zoom({ position: 'bottomright' }).addTo(map);
     fitJB();
     // The container can still be settling (sticky header, fonts); re-measure once layout is done and on resize.
-    requestAnimationFrame(() => setTimeout(() => { if (!state.hotspotView) fitJB(); }, 60));
+    requestAnimationFrame(() => setTimeout(() => { if (!state.hotspotView) fitHome(); }, 60));
     // Width only: phone browsers fire resize when the address bar hides on scroll.
     let lastW = window.innerWidth;
-    window.addEventListener('resize', () => { if (window.innerWidth !== lastW) { lastW = window.innerWidth; if (!state.hotspotView) fitJB(); } });
+    window.addEventListener('resize', () => { if (window.innerWidth !== lastW) { lastW = window.innerWidth; if (!state.hotspotView) fitHome(); } });
     setTiles();
     for (const k of ['stations', 'others', 'wind']) groups[k] = L.layerGroup().addTo(map);
     hsCanvas = L.canvas({ padding: 0.4 });
@@ -535,7 +545,7 @@ if (typeof document !== 'undefined') {
       map.setMinZoom(3); map.setMaxBounds(null); map.fitBounds(REGION_VIEW);
       loadRegionalWind();
     } else {
-      fitJB();
+      fitHome();
     }
     syncLayers(); drawWind(); renderHotspotPanel(); renderStatic();
   }
@@ -825,7 +835,12 @@ if (typeof document !== 'undefined') {
     $('btn-hs').addEventListener('click', () => { setHotspotView(!state.hotspotView); if (state.hotspotView) $('map-wrap').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' }); });
     $('chk-hs').addEventListener('change', e => setHotspotView(e.target.checked));
     $('chk-wind').addEventListener('change', e => { state.layers.wind = e.target.checked; syncLayers(); });
-    $('chk-others').addEventListener('change', e => { state.layers.others = e.target.checked; syncLayers(); });
+    // The other Johor stations sit 60–150 km north of JB, so zoom out to show them (and back to JB when hidden).
+    $('chk-others').addEventListener('change', e => {
+      state.layers.others = e.target.checked; syncLayers();
+      if (state.hotspotView) return;
+      if (e.target.checked) fitJohor(); else fitJB();
+    });
     document.querySelectorAll('input[name=hsconf]').forEach(r => r.addEventListener('change', () => { state.conf = r.value; if (r.checked) { renderHotspotsOnMap(); renderHotspotPanel(); } }));
     document.querySelectorAll('input[name=tmetric]').forEach(r => r.addEventListener('change', () => { if (r.checked) { state.metric = r.value; renderTrend(); } }));
     document.querySelectorAll('#news [role=tab]').forEach(b => {

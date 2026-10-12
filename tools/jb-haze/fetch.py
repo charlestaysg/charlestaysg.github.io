@@ -175,8 +175,24 @@ def stage_latest(out_dir, stations_meta):
     payload = json.loads(http_get(APIMS_QUERY + "?" + params).decode("utf-8"))
     latest = parse_latest(payload, stations_meta)
     del payload  # raw response is never written anywhere
+    carry_forward(latest, load_json(os.path.join(out_dir, "latest.json")))
     save_json(os.path.join(out_dir, "latest.json"), latest)
     return latest
+
+
+def carry_forward(latest, prev, max_hours=3):
+    """Stations post the hourly reading at slightly different times. If a station has no reading yet
+    this hour, keep its previous one (with its own older timestamp) for up to max_hours."""
+    if not prev or not latest.get("readingTime"):
+        return
+    now = datetime.strptime(latest["readingTime"][:19], "%Y-%m-%dT%H:%M:%S")
+    old = {s["id"]: s for s in prev.get("stations", []) if s.get("api") is not None and s.get("ts")}
+    for i, st in enumerate(latest["stations"]):
+        p = old.get(st["id"])
+        if st.get("api") is None and p:
+            age = (now - datetime.strptime(p["ts"][:19], "%Y-%m-%dT%H:%M:%S")).total_seconds() / 3600.0
+            if 0 <= age <= max_hours:
+                latest["stations"][i] = p
 
 
 # ------------------------------------------------------------------ stage: history

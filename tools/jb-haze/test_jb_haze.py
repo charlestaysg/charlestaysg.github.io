@@ -92,6 +92,27 @@ class Datetimes(unittest.TestCase):
         self.assertEqual(fetch.iso_myt(d), "2026-10-11T18:00:00+08:00")
 
 
+class CarryForward(unittest.TestCase):
+    def latest(self, api, ts):
+        return {"readingTime": "2026-10-12T20:00:00+08:00", "stations": [{"id": "CA33J", "api": api, "ts": ts}]}
+
+    def test_late_station_keeps_last_reading(self):
+        new = self.latest(None, None)
+        fetch.carry_forward(new, self.latest(164.0, "2026-10-12T19:00:00+08:00"))
+        self.assertEqual(new["stations"][0]["api"], 164.0)
+        self.assertEqual(new["stations"][0]["ts"], "2026-10-12T19:00:00+08:00")
+
+    def test_old_reading_is_not_kept(self):
+        new = self.latest(None, None)
+        fetch.carry_forward(new, self.latest(164.0, "2026-10-12T15:00:00+08:00"))
+        self.assertIsNone(new["stations"][0]["api"])
+
+    def test_fresh_reading_wins(self):
+        new = self.latest(170.0, "2026-10-12T20:00:00+08:00")
+        fetch.carry_forward(new, self.latest(164.0, "2026-10-12T19:00:00+08:00"))
+        self.assertEqual(new["stations"][0]["api"], 170.0)
+
+
 class History(unittest.TestCase):
     def test_merge_shifts_window_and_keeps_gaps(self):
         meta = [{"id": "CA33J", "name": "Larkin", "lat": 1.49, "lng": 103.73, "category": "Urban", "jb": True}]
