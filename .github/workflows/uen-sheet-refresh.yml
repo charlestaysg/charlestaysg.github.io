@@ -1,0 +1,66 @@
+# Monthly refresh of the pre-visit fact sheet (projects/uen-sheet/).
+# Runs the day after the Skills Training Landscape refresh, because it bakes in the latest Pulse
+# and Landscape figures. The company lookup itself is live in the browser and needs no refresh.
+# Downloads the MySkillsFuture course file (not committed), rebuilds, runs the check, and commits
+# only when the baked data changed. A failed fetch, build or check leaves the live page as it was.
+name: Refresh pre-visit fact sheet
+
+on:
+  schedule:
+    - cron: "0 2 4 * *"   # 10:00 SGT on the 4th of each month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: uen-sheet-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install openpyxl
+        run: pip install openpyxl==3.1.5
+
+      - name: Download course file from data.gov.sg
+        working-directory: tools/skills-landscape
+        run: python fetch.py --force
+
+      - name: Build and check
+        working-directory: tools/uen-sheet
+        run: |
+          python build.py
+          python check.py
+          cp index.html ../../projects/uen-sheet/index.html
+          rm index.html
+
+      - name: Commit if the data changed
+        run: |
+          git checkout -- tools/skills-landscape
+          # the build date changes every run; commit only if anything else in the baked data moved
+          if python - <<'PY'
+          import json, subprocess, sys
+          old = json.loads(subprocess.run(["git", "show", "HEAD:tools/uen-sheet/data/baked.json"], capture_output=True, text=True, check=True).stdout)
+          new = json.load(open("tools/uen-sheet/data/baked.json"))
+          for d in (old, new):
+              d["asof"].pop("built", None)
+          sys.exit(0 if old == new else 1)
+          PY
+          then
+            echo "No data change; nothing committed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
+          git add tools/uen-sheet/data projects/uen-sheet/index.html
+          git commit -m "Pre-visit fact sheet: new Pulse/Landscape figures baked in"
+          git push

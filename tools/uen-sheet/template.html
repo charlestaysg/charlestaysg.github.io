@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pre-visit fact sheet</title>
+<meta name="description" content="Look up a Singapore company by UEN or name: its public ACRA record, its sector, and sector hiring and training figures. Unofficial teaching example.">
+<style>
+
+:root{
+  color-scheme:light;
+  --page:#f9f9f7; --surface:#fcfcfb; --card:#ffffff;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#6f6d68;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,.10);
+  --accent:#2a78d6; --accent-soft:rgba(42,120,214,.12);
+  --other:#c9c7bf; --bar-other:#b9c9dc;
+  --survey-bg:#fbf7ee; --survey-border:#d9c9a3; --survey-ink:#6b5a2e;
+  --chip-on-ink:#ffffff;
+  --c-ret:#eb6834;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --card:#1a1a19;
+    --ink:#ffffff; --ink-2:#c3c2b7; --muted:#9a988f;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+    --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
+    --other:#4a4a46; --bar-other:#34465c;
+    --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
+    --c-ret:#d95926;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface:#1a1a19; --card:#1a1a19;
+  --ink:#ffffff; --ink-2:#c3c2b7; --muted:#9a988f;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+  --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
+  --other:#4a4a46; --bar-other:#34465c;
+  --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
+  --c-ret:#d95926;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--page);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 40px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 24px;margin-bottom:16px}
+h1{font-size:26px;line-height:1.2;margin:0;letter-spacing:-.01em}
+.sub{color:var(--ink-2);margin:4px 0 0;font-size:14px}
+.fresh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.badge{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:1px 8px}
+.chip{flex:none;border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer;min-height:36px}
+.chip:hover{border-color:var(--axis)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--chip-on-ink)}
+.chip:focus-visible,.seg button:focus-visible,.linkbtn:focus-visible,.plot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.kpi .lab{font-size:13px;color:var(--ink-2);display:flex;justify-content:space-between;gap:8px}
+.kpi .q{color:var(--muted);white-space:nowrap;font-size:12px}
+.kpi .val{font-size:32px;font-weight:600;line-height:1.15;margin:6px 0 4px;letter-spacing:-.01em}
+.kpi .val.na{font-size:18px;font-weight:500;color:var(--ink-2);padding:9px 0 5px}
+.kpi .delta{font-size:13px;color:var(--ink-2)}
+.kpi .gloss{font-size:12px;color:var(--muted);margin-top:2px}
+.linkbtn{background:none;border:0;color:var(--accent);font:inherit;font-size:13px;cursor:pointer;padding:4px 0}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;font-variant-numeric:tabular-nums}
+th,td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--grid)}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--ink-2);font-weight:500}
+.sklinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin-top:12px}
+.sklinks a{display:block;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--ink);text-decoration:none;font-size:14px;line-height:1.35}
+.sklinks a:hover{border-color:var(--accent)}
+.sklinks a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sklinks small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.survey{background:var(--survey-bg);border:1.5px dashed var(--survey-border);border-radius:12px;padding:16px;margin-bottom:12px}
+.survey .pill{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--survey-ink);border:1px solid var(--survey-border);border-radius:999px;padding:1px 8px;margin-bottom:8px}
+.survey h2{font-size:15px;margin:0 0 10px}
+.stat .big{font-size:28px;font-weight:600;line-height:1.1}
+.stat .what{font-size:13px;color:var(--ink-2)}
+.stat .was{font-size:12px;color:var(--muted)}
+.survey .cap{font-size:12px;color:var(--ink-2);margin:12px 0 0}
+footer{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:20px}
+footer a{color:var(--ink-2)}
+footer p{margin:0 0 8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+.card h2{font-size:15px;margin:0;font-weight:600}
+.card .hint{font-size:13px;color:var(--ink-2);margin:2px 0 0}
+.card{margin-bottom:12px}
+.kpis .card{margin-bottom:0}
+.src{font-size:12px;color:var(--muted);margin:8px 0 0}
+.kpi .src{margin-top:6px}
+.wrap{padding-bottom:32px}
+.lookup form{display:flex;flex-wrap:wrap;gap:8px}
+.lookup input{flex:1 1 240px;min-width:0;font:inherit;font-size:16px;color:var(--ink);background:var(--page);border:1px solid var(--axis);border-radius:8px;padding:9px 12px;min-height:44px}
+.lookup input:focus-visible,.btn:focus-visible,.match:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{font:inherit;font-size:15px;border-radius:8px;padding:9px 16px;min-height:44px;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--ink)}
+.btn.go{background:var(--accent);border-color:var(--accent);color:var(--chip-on-ink);font-weight:600}
+.btn:disabled{opacity:.6;cursor:wait}
+.status{font-size:13px;color:var(--ink-2);margin:8px 0 0;min-height:20px}
+.status.err{color:var(--c-ret)}
+.eg{font-size:13px;color:var(--muted);margin:6px 0 0}
+.eg button{background:none;border:0;padding:0;font:inherit;color:var(--accent);cursor:pointer;text-decoration:underline}
+.matches{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.match{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;width:100%;text-align:left;font:inherit;font-size:14px;color:var(--ink);background:var(--page);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer}
+.match:hover{border-color:var(--accent)}
+.match b{font-weight:600}
+.match span{color:var(--ink-2);font-size:13px}
+.ehead{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-bottom:10px}
+.ehead h2{font-size:20px;line-height:1.25;letter-spacing:-.005em}
+.pill{display:inline-block;font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px;border:1px solid var(--border);background:var(--page);color:var(--muted)}
+.pill.live{background:var(--accent);border-color:var(--accent);color:var(--chip-on-ink)}
+.rows{display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:0 16px;margin:0;font-size:14px}
+.rows dt,.rows dd{margin:0;padding:6px 0;border-top:1px solid var(--grid)}
+.rows dt{color:var(--ink-2)}
+.rows dd small{color:var(--muted);font-size:12px}
+.banner{margin:0 0 12px;padding:10px 12px;border-radius:8px;background:var(--survey-bg);border:1px solid var(--survey-border);color:var(--survey-ink);font-size:14px}
+.tag{display:inline-block;border:1px solid var(--border);background:var(--accent-soft);color:var(--ink);border-radius:999px;padding:3px 12px;font-size:14px;font-weight:500}
+.kpi .val.chipval{font-size:16px;padding:6px 0 2px;line-height:1.3}
+.note{font-size:13px;color:var(--ink-2);margin:10px 0 0}
+.unknowns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.unknown{border:1px dashed var(--axis);color:var(--ink-2);border-radius:999px;padding:4px 12px;font-size:13px;background:var(--page)}
+.unknown a{color:var(--ink-2)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 16px;margin-top:12px}
+.stats .big{font-size:24px;font-weight:600;line-height:1.15}
+.stats .what{font-size:13px;color:var(--ink-2)}
+.stats .was{font-size:12px;color:var(--muted)}
+.survey.mini{padding:12px;margin:12px 0 0}
+.survey.mini .stat .big{font-size:22px}
+.two{display:grid;grid-template-columns:1fr 1.6fr;gap:16px;margin-top:12px}
+.two h3,.sc h3{font-size:13px;margin:0 0 4px;font-weight:600}
+.two ol,.two ul,.sc ul{margin:0;padding-left:18px;font-size:13px;color:var(--ink-2)}
+.two li{padding:1px 0}
+.two li span{color:var(--muted);font-size:12px}
+.sc{font-size:13px;margin-top:12px}
+.sc p{margin:0 0 4px;color:var(--ink-2)}
+.qlist{margin:10px 0 0;padding-left:20px;font-size:14px}
+.qlist li{padding:4px 0}
+.qlist li span{display:block;color:var(--ink-2);font-size:13px}
+.foot-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-bottom:10px}
+.empty{color:var(--ink-2);font-size:14px;margin:0 0 12px}
+@media (max-width:860px){.kpis,.stats{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
+@media (max-width:560px){.kpi .val{font-size:26px}h1{font-size:22px}.rows{grid-template-columns:1fr}.rows dt{border-bottom:0;padding-bottom:0}.rows dd{border-top:0;padding-top:0;padding-bottom:8px}.fresh{white-space:normal}}
+@media print{
+  @page{size:A4;margin:9mm}
+  :root:root:root{color-scheme:light;--page:#fff;--surface:#fff;--card:#fff;--ink:#0b0b0b;--ink-2:#444;--muted:#666;--grid:#ddd;--axis:#bbb;--border:rgba(11,11,11,.25);--accent:#1a5fb4;--accent-soft:#eef3fa;--survey-bg:#fff;--survey-border:#999;--survey-ink:#333;--chip-on-ink:#fff;--c-ret:#a33}
+  html{font-size:10pt}
+  body{font-size:9.5pt;line-height:1.35;background:#fff}
+  .wrap{max-width:none;padding:0}
+  .lookup,.matches,.noprint,.btn,.linkbtn,.sklinks,.eg{display:none!important}
+  h1{font-size:15pt}
+  .sub{font-size:8.5pt;margin:2px 0 0}
+  header{margin-bottom:6px}
+  .card,.survey,.kpi{break-inside:avoid;page-break-inside:avoid;box-shadow:none;padding:6px 9px;margin-bottom:5px;border-radius:6px}
+  .kpis{gap:5px;margin-bottom:5px}
+  .kpi .val{font-size:15pt;margin:1px 0}
+  .kpi .val.na{font-size:10pt;padding:2px 0}
+  .kpi .val.chipval{font-size:9pt;padding:1px 0}
+  .kpi .gloss,.kpi .delta,.src,.note,.stats .was,.stats .what,.two ol,.two ul,.sc ul,.sc p,.qlist li span,.hint,.rows dd small{font-size:7.5pt}
+  .kpi .lab{font-size:8pt}
+  .card h2{font-size:10.5pt}
+  .ehead{margin-bottom:3px;gap:3px 8px}
+  .ehead h2{font-size:12pt}
+  .rows{font-size:8.5pt;grid-template-columns:100px 1fr}
+  .rows dt,.rows dd{padding:1.5px 0}
+  .unknowns{margin-top:4px;gap:4px}
+  .unknown,.tag{font-size:8pt;padding:1px 8px}
+  .stats{margin-top:5px;gap:4px 10px}
+  .stats .big{font-size:12pt}
+  .survey.mini{padding:5px 8px;margin-top:5px}
+  .survey.mini .stat .big{font-size:11pt}
+  .two{margin-top:5px;gap:10px}
+  .sc{margin-top:5px;font-size:8pt}
+  .qlist{margin-top:3px;font-size:8.5pt;columns:2;column-gap:14px;padding-left:14px}
+  .qlist li{padding:1.5px 0;break-inside:avoid}
+  .banner{font-size:8.5pt;padding:4px 8px;margin-bottom:5px}
+  footer{font-size:6.5pt;line-height:1.35;margin-top:4px}
+  footer p{margin:0 0 3px}
+  .kpis,.stats{grid-template-columns:repeat(4,1fr)!important}
+  .two{grid-template-columns:1fr 1.7fr!important}
+  .rows{grid-template-columns:100px 1fr!important}
+  .rows dt,.rows dd{border-top:1px solid var(--grid)!important;padding:1.5px 0!important}
+  .sub,.card .hint.skip,#thint,#shint{display:none}
+  .kpi .src{display:none}
+  .kpis .card{padding:4px 8px}
+  .wrap{zoom:.8}
+  .rows{grid-template-columns:82px 1fr 82px 1fr!important;column-gap:10px!important}
+  .rows dt:first-of-type{}
+  #cUnknown .src,.kpi .gloss{display:none}
+  #cUnknown{padding:4px 9px}
+  #cUnknown h2{display:inline-block;margin-right:8px}
+  .unknowns{display:inline-flex;margin-top:0;vertical-align:middle}
+  .survey.mini{display:flex;align-items:center;gap:10px}
+  .survey.mini .pill{margin-bottom:0}
+  .survey.mini .stat{display:flex;align-items:baseline;gap:8px}
+  .stats .was{display:none}
+  .two li{padding:0;line-height:1.25}
+  .two h3{font-size:8pt}
+  #sctp h3{font-size:8pt}
+  #sctp p{font-size:7pt}
+  #cQ .hint{display:none}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Pre-visit fact sheet <span class="badge">Unofficial</span></h1>
+      <p class="sub">Look up a Singapore company by UEN or name before a visit: its public ACRA record, the sector it sits in, and what is known about hiring and training in that sector.</p>
+    </div>
+    <div class="fresh"><span class="dot" aria-hidden="true"></span><span id="fresh"></span></div>
+  </header>
+
+  <section class="card lookup" aria-labelledby="lk">
+    <h2 id="lk" class="sr">Look up a company</h2>
+    <form id="form" autocomplete="off">
+      <label class="sr" for="q">UEN or company name</label>
+      <input id="q" name="q" type="text" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="UEN (e.g. 201912480G) or part of a company name" maxlength="80">
+      <button class="btn go" id="go" type="submit">Look up</button>
+    </form>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+    <p class="eg" id="eg">Try an SME: <button type="button" data-u="198004626C">198004626C</button> (Fong Lee Metal), <button type="button" data-u="200207824E">200207824E</button> (Lim Kee Food) or the name <button type="button" data-n="chia siang heng">chia siang heng</button>.</p>
+    <ul class="matches" id="matches"></ul>
+  </section>
+
+  <p class="empty" id="empty">Enter a UEN or a company name above. The record is fetched from data.gov.sg when you press Look up; nothing is stored on a server.</p>
+
+  <main id="sheet" hidden>
+    <div class="banner" id="banner" hidden></div>
+
+    <section class="card" id="cEntity" aria-labelledby="eh">
+      <div class="ehead"><h2 id="eh"></h2><span class="pill" id="pill"></span></div>
+      <dl class="rows" id="rows"></dl>
+      <p class="src" id="srcEntity"></p>
+    </section>
+
+    <section class="kpis" id="kpis" aria-label="Key facts"></section>
+    <p class="note" id="mapnote" hidden></p>
+
+    <section class="card" id="cUnknown" aria-labelledby="uh">
+      <h2 id="uh">What the data can't tell you</h2>
+      <div class="unknowns">
+        <span class="unknown">Headcount unknown</span>
+        <span class="unknown">Revenue unknown</span>
+        <span class="unknown">SME status unknown (<a href="https://www.tpgateway.gov.sg" rel="noopener">check on TPGateway</a>)</span>
+        <span class="unknown">Training history unknown</span>
+      </div>
+      <p class="src">ACRA records carry neither headcount nor revenue, and the number of officers is not the number of employees.</p>
+    </section>
+
+    <section class="card" id="cSector" aria-labelledby="sh">
+      <h2 id="sh"></h2>
+      <p class="hint" id="shint"></p>
+      <div class="stats" id="stats"></div>
+      <div class="survey mini" id="imda"></div>
+      <p class="src" id="srcSector"></p>
+      <a class="linkbtn noprint" id="pulseLink" href="#">Open this sector in the SME Workforce Pulse →</a>
+    </section>
+
+    <section class="card" id="cTrain" aria-labelledby="th">
+      <h2 id="th"></h2>
+      <p class="hint" id="thint"></p>
+      <div class="stats" id="tstats"></div>
+      <div class="two" id="two"></div>
+      <div class="sc" id="sctp"></div>
+      <div class="sklinks noprint" id="skLinks"></div>
+      <p class="src" id="srcTrain"></p>
+      <a class="linkbtn noprint" id="landLink" href="#">Open this sector in the Skills Training Landscape →</a>
+    </section>
+
+    <section class="card" id="cQ" aria-labelledby="qh">
+      <h2 id="qh">Questions to ask</h2>
+      <p class="hint">Generated from the facts above by fixed rules, not written by a person or a language model. Each one says why it is on the list.</p>
+      <ol class="qlist" id="qlist"></ol>
+    </section>
+  </main>
+
+  <footer id="foot"></footer>
+</div>
+<script>
+const D = /*__DATA__*/null;
+const fmt = new Intl.NumberFormat('en-SG');
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const qLabel = q => q.replace('-', ' ');
+const fmtDate = d => new Date(d + 'T00:00:00+08:00').toLocaleDateString('en-SG', {day:'numeric', month:'short', year:'numeric', timeZone:'Asia/Singapore'});
+const fmtStamp = t => new Date(t).toLocaleString('en-SG', {day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:false, timeZone:'Asia/Singapore'});
+const fmtTime = t => new Date(t).toLocaleTimeString('en-SG', {hour:'2-digit', minute:'2-digit', hour12:false, timeZone:'Asia/Singapore'});
+const API = 'https://data.gov.sg/api/action/datastore_search';
+const UEN_RE = /^(\d{8}|\d{9})[A-Z]$|^[TSR]\d{2}[A-Z]{2}\d{4}[A-Z]$/;
+// Live dashboards on the public site; full URLs so the links work wherever this page is opened
+const SITE = 'https://charlestaysg.github.io/projects/';
+const LANDSCAPE = SITE + 'skills-landscape/', PULSE = SITE + 'sme-pulse/';
+const SFW_BASE = 'https://jobsandskills.skillsfuture.gov.sg/resources/skills-framework-sector/';
+const DEMAND_DASH = 'https://jobsandskills.swda.gov.sg/data-and-tools/dashboards/job-skills-demand-trends-dashboard';
+const SFW_INDEX = 'https://jobsandskills.swda.gov.sg/frameworks/sector-information';
+// Skills Framework names as listed at jobsandskills.swda.gov.sg/frameworks/sector-information (copied from the SME Workforce Pulse, checked 11 Oct 2026).
+const SKILLS = {
+  manufacturing: [{n:'Precision Engineering', pdf:'Precision-Engineering.pdf'}, {n:'Electronics', pdf:'Electronics.pdf'}, {n:'Food Manufacturing', pdf:'Food-Manufacturing.pdf'}],
+  construction:  [{n:'Built Environment', pdf:'Built-environment.pdf'}],
+  transport:     [{n:'Logistics', pdf:'Logistics.pdf'}, {n:'Public Transport', pdf:'Public-Transport.pdf'}],
+  food:          [{n:'Food Services', page:'https://www.wsg.gov.sg/home/employers-industry-partners/jobs-transformation-maps/jobs-transformation-map-singapore-food-services-industry', kind:'Jobs Transformation Map (WSG)'},
+                  {n:'Hotel and Accommodation Services', pdf:'Hotel-and-Accommodation%20Services.pdf'}],
+  health:        [{n:'Healthcare', pdf:'Healthcare.pdf'}, {n:'Social Service', pdf:'Social-Service.pdf'}],
+  admin:         [{n:'Security', pdf:'Security.pdf'}, {n:'Environmental Services', pdf:'Environmental-Services.pdf'}],
+  security:      [{n:'Security', pdf:'Security.pdf'}],
+  retail:        [{n:'Retail', pdf:'Retail.pdf'}, {n:'Wholesale Trade', pdf:'Wholesale-Trade.pdf'}],
+  ict:           [{n:'Infocomm Technology', page:'https://www.wsg.gov.sg/home/employers-industry-partners/jobs-transformation-maps/jobs-transformation-map-ict-and-media-jobs-in-singapore', kind:'Jobs Transformation Map (WSG)'}],
+  finance:       [{n:'Financial Services', pdf:'Financial-Services.pdf'}],
+  publicedu:     [{n:'Training and Adult Education', pdf:'Training-and-Adult-Education.pdf'}],
+};
+const courseUrl = q => 'https://courses.myskillsfuture.gov.sg/search?q=' + encodeURIComponent(q);
+
+/* ---------- session cache (entity fields only; every access guarded) ---------- */
+function cacheGet(uen){ try { const v = sessionStorage.getItem('uen-sheet:' + uen); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+function cacheSet(uen, rec){ try { sessionStorage.setItem('uen-sheet:' + uen, JSON.stringify({t: Date.now(), rec})); } catch (e) {} }
+
+/* ---------- data.gov.sg calls ---------- */
+let run = 0;
+const wait = ms => new Promise(r => setTimeout(r, ms));
+function setStatus(msg, err){ const s = $('status'); s.textContent = msg || ''; s.className = 'status' + (err ? ' err' : ''); }
+class RateLimited extends Error {}
+async function getJson(url, id){
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(url);
+    if (res.status !== 429) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }
+    const delay = [5, 10, 20][attempt];
+    if (delay == null) throw new RateLimited();
+    for (let s = delay; s > 0; s--) {
+      if (id !== run) throw new Error('superseded');
+      setStatus(`data.gov.sg is busy. Retrying in ${s} s…`);
+      await wait(1000);
+    }
+  }
+}
+async function ds(resource, id, {filters, q, limit = 1} = {}){
+  const p = new URLSearchParams({resource_id: resource, limit: String(limit)});
+  if (filters) p.set('filters', JSON.stringify(filters));
+  if (q) p.set('q', JSON.stringify(q));
+  const j = await getJson(API + '?' + p, id);
+  return j.result.records || [];
+}
+const na = v => v == null || v === '' || String(v).trim().toLowerCase() === 'na';
+const clean = v => na(v) ? null : String(v).trim();
+
+async function fetchRecord(uen, id){
+  const slim = (await ds(D.ids.slim, id, {filters: {uen}}))[0];
+  if (!slim) {
+    const o = (await ds(D.ids.other, id, {filters: {uen}}))[0];
+    if (!o) return {notFound: true, uen};
+    return {kind: 'other', uen, name: o.entity_name, status: o.uen_status_desc, type: o.entity_type_desc, issuer: o.issuance_agency_desc,
+            issued: o.uen_issue_date, street: o.reg_street_name, postal: o.reg_postal_code, fetched: Date.now()};
+  }
+  const rec = {kind: 'acra', uen, name: slim.entity_name, status: slim.uen_status_desc, statusFromAcra: false, type: slim.entity_type_desc,
+               issued: slim.uen_issue_date, inc: null, street: slim.reg_street_name, postal: slim.reg_postal_code,
+               ssic1: null, ssic2: null, act1: null, act2: null, former: [], audit: [], officers: null, partial: true, fetched: Date.now()};
+  const first = (slim.entity_name || '').trim().charAt(0).toUpperCase();
+  const tries = [/^[A-Z]$/.test(first) ? first : 'Others'];
+  if (tries[0] !== 'Others') tries.push('Others');
+  for (const k of tries) {
+    const r = (await ds(D.shards[k], id, {filters: {uen}}))[0];
+    if (!r) continue;
+    rec.partial = false;
+    rec.status = r.entity_status_description || rec.status; rec.statusFromAcra = true;
+    rec.type = r.entity_type_description || rec.type;
+    rec.inc = clean(r.registration_incorporation_date);
+    rec.ssic1 = clean(r.primary_ssic_code); rec.ssic2 = clean(r.secondary_ssic_code);
+    rec.act1 = clean(r.primary_user_described_activity); rec.act2 = clean(r.secondary_user_described_activity);
+    rec.officers = clean(r.no_of_officers);
+    for (let i = 1; i <= 3; i++) { const f = clean(r['former_entity_name' + i]); if (f) rec.former.push(f); }
+    for (let i = 1; i <= 5; i++) { const a = clean(r['name_of_audit_firm' + i]); if (a) rec.audit.push(a); }
+    break;
+  }
+  return rec;
+}
+
+/* ---------- SSIC and sector placement ---------- */
+function ssicInfo(raw){
+  if (na(raw)) return null;
+  let c = String(raw).trim().toUpperCase();
+  if (/^\d+$/.test(c)) c = c.padStart(5, '0');
+  const div = c.slice(0, 2), title = D.ssic[c] || null;
+  return {code: c, div, title, sector: title ? (D.divSector[div] || '') : '', holding: title ? D.holding[c] || null : null, amb: title && D.ambiguous.includes(div)};
+}
+function placeSector(r){
+  const p = ssicInfo(r.ssic1), s = ssicInfo(r.ssic2);
+  const out = {p, s, key: '', via: 'primary', notes: []};
+  if (!p) { out.notes.push('No SSIC code recorded for this entity.'); return out; }
+  if (!p.title) { out.notes.push(`SSIC ${p.code} is not in the SSIC 2025 table, so no sector is assigned.`); return out; }
+  if (p.holding) {
+    if (s && s.title && !s.holding && s.sector) {
+      out.key = s.sector; out.via = 'secondary';
+      out.notes.push(`${p.holding}. Sector taken from the secondary activity (${s.code}, ${s.title}).`);
+    } else out.notes.push(`${p.holding}. Operating sector unknown.`);
+    return out;
+  }
+  if (p.sector) {
+    out.key = p.sector;
+    if (p.amb) out.notes.push(`Placed by SSIC division ${p.div}, which can sit in more than one sector. Confirm the sector on the day.`);
+  } else out.notes.push(`No Pulse sector for SSIC division ${p.div} (${D.divTitle[p.div] || 'division'}).`);
+  return out;
+}
+const yearsSince = d => { if (!d) return null; const a = new Date(d + 'T00:00:00+08:00'), n = new Date(); let y = n.getFullYear() - a.getFullYear(); if (n.getMonth() < a.getMonth() || (n.getMonth() === a.getMonth() && n.getDate() < a.getDate())) y--; return Math.max(0, y); };
+const isLive = st => /^live/i.test(st || '') || st === 'Registered';
+const isSole = t => /sole|partnership/i.test(t || '');
+
+/* ---------- rendering ---------- */
+const delta = (a, b, unit) => {
+  if (a == null || b == null) return '';
+  const d = a - b;
+  if (unit === 'pp') return (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '') + Math.abs(d).toFixed(1) + ' pts vs a year ago';
+  const pct = b ? Math.abs(d / b * 100).toFixed(0) : '0';
+  return (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '') + fmt.format(Math.abs(d)) + ` (${pct}%) vs a year ago`;
+};
+const kpi = (lab, qtr, val, sub, src, cls) => `<div class="card kpi"><div class="lab"><span>${lab}</span><span class="q">${qtr || ''}</span></div>
+  ${val.startsWith('<div') ? val : `<div class="val ${cls || ''}">${val}</div>`}${sub ? `<div class="gloss">${sub}</div>` : ''}<div class="src">${src}</div></div>`;
+const NA = t => `<div class="val na">${t}</div>`;
+
+function render(rec, how){
+  $('empty').hidden = true; $('sheet').hidden = false;
+  const live = isLive(rec.status);
+  const banner = $('banner');
+  const msgs = [];
+  if (how && how.offline) msgs.push(`Could not reach data.gov.sg, so this is the copy fetched at ${fmtTime(rec.fetched)}.`);
+  if (rec.kind === 'acra' && !live) msgs.push(`ACRA lists this entity as "${esc(rec.status)}", not live. Confirm which entity is operating before the visit.`);
+  if (rec.partial) msgs.push('SSIC not retrieved: the entity is in the register index but its detailed record was not found. Sector and activity are unknown.');
+  banner.hidden = !msgs.length; banner.innerHTML = msgs.join('<br>');
+
+  $('eh').textContent = rec.name || rec.uen;
+  const pill = $('pill'); pill.textContent = rec.status || 'Unknown'; pill.className = 'pill' + (live ? ' live' : '');
+  const sector = rec.kind === 'acra' ? placeSector(rec) : {p: null, s: null, key: '', notes: []};
+  const yrs = yearsSince(rec.inc || rec.issued);
+  const rows = [];
+  const row = (k, v) => v ? rows.push(`<dt>${k}</dt><dd>${v}</dd>`) : 0;
+  row('UEN', esc(rec.uen));
+  row('Entity type', esc(rec.type) + (rec.kind === 'other' && rec.issuer ? ` <small>· issued by ${esc(rec.issuer)}</small>` : ''));
+  if (rec.inc) row('Incorporated', `${fmtDate(rec.inc)} <small>· ${yrs} year${yrs === 1 ? '' : 's'}</small>`);
+  else if (rec.issued) row('UEN issued', `${fmtDate(rec.issued)} <small>· ${yrs} year${yrs === 1 ? '' : 's'} ago</small>`);
+  const ssicLine = (i, act) => i ? `${esc(i.code)} · ${i.title ? esc(i.title) : '<em>not in SSIC 2025 table</em>'}${act ? `<br><small>Described by the entity as: ${esc(act)}</small>` : ''}` : '';
+  if (rec.kind === 'acra' && !rec.partial) {
+    row('Primary activity (SSIC 2025)', sector.p ? ssicLine(sector.p, rec.act1) : '<small>Not recorded</small>');
+    row('Secondary activity', sector.s ? ssicLine(sector.s, rec.act2) : '');
+  } else if (rec.kind === 'other') row('Primary activity (SSIC 2025)', '<small>Not held: entities from other registries have no SSIC in this dataset</small>');
+  else row('Primary activity (SSIC 2025)', '<small>Not retrieved</small>');
+  row('Registered office', rec.street || rec.postal ? `${esc(rec.street || '')}${rec.street && rec.postal ? ', ' : ''}${esc(rec.postal ? 'Singapore ' + rec.postal : '')}` : '');
+  row('Former names', rec.former && rec.former.length ? rec.former.map(esc).join('; ') : '');
+  const sole = isSole(rec.type);
+  if (!sole) row('Audit firm on record', rec.audit && rec.audit.length ? rec.audit.slice(0, 2).map(esc).join('; ') + (rec.audit.length > 2 ? ` <small>· +${rec.audit.length - 2} more</small>` : '') : '');
+  if (!sole && rec.officers && Number(rec.officers) > 0) row('Officers on record', `${esc(rec.officers)} <small>· officers, not employees</small>`);
+  $('rows').innerHTML = rows.join('');
+  $('srcEntity').textContent = rec.kind === 'other'
+    ? `Source: Entities registered with other issuers, via data.gov.sg, fetched ${fmtStamp(rec.fetched)} (live lookup). Not in the ACRA register.`
+    : `Source: ACRA via data.gov.sg, fetched ${fmtStamp(rec.fetched)} (live lookup). ACRA's own data is refreshed monthly (last update ${fmtDate(D.asof.acra)}).`;
+
+  // fact tiles
+  const S = sector.key ? {key: sector.key, ...D.sectors[sector.key]} : null, N = D.national, P = S ? S.pulse : null, q = qLabel(D.asof.pulse_q);
+  const tiles = [];
+  tiles.push(kpi(rec.inc ? 'Years registered' : 'Years since UEN issued', '', yrs == null ? '–' : String(yrs), (rec.inc || rec.issued) ? (rec.inc ? 'Since ' : 'UEN issued ') + fmtDate(rec.inc || rec.issued) : '', (rec.kind === 'other' ? 'Registry data' : 'ACRA') + ' via data.gov.sg, fetched ' + fmtTime(rec.fetched)));
+  tiles.push(kpi('Pulse sector', '', S ? `<span class="tag">${esc(S.label)}</span>` : '<span class="tag" style="background:none;border-style:dashed">No Pulse sector</span>',
+    S ? (sector.via === 'secondary' ? 'From the secondary SSIC' : 'From the primary SSIC') : 'See note below', rec.kind === 'other' ? 'No SSIC held, so no sector' : 'SSIC from ACRA; sectors as in the SME Workforce Pulse (MOM groupings)', 'chipval'));
+  if (P && P.rate != null) tiles.push(kpi('Sector vacancy rate', q, P.rate.toFixed(1) + '%', `All industries: ${N.rate.toFixed(1)}%`, 'MOM Labour Market Survey via data.gov.sg'));
+  else tiles.push(kpi('Sector vacancy rate', S ? q : '', NA(S ? 'Not published' : 'No Pulse sector'), '', S ? 'MOM does not publish this figure for the sector this quarter' : 'No sector to compare'));
+  if (P && P.pmet_vac != null) tiles.push(kpi('PMET roles open in sector', q, fmt.format(P.pmet_vac), 'Professionals, managers, executives and technicians', 'MOM Labour Market Survey via data.gov.sg'));
+  else tiles.push(kpi('PMET roles open in sector', S ? q : '', NA(S ? 'Not published' : 'No Pulse sector'), '', S ? 'MOM does not publish PMET figures for this sector (counts too small)' : 'No sector to compare'));
+  $('kpis').innerHTML = tiles.join('');
+  const mn = $('mapnote');
+  if (rec.kind === 'other') sector.notes.push('Not in the ACRA register, so no SSIC code is held and no sector can be assigned.');
+  mn.hidden = !sector.notes.length; mn.textContent = sector.notes.join(' ');
+
+  renderSector(S, P);
+  renderTraining(S, sector);
+  renderQuestions(rec, sector, S, P, yrs, live);
+  renderFooter();
+  try { const u = new URL(location.href); u.searchParams.set('uen', rec.uen); u.searchParams.delete('q'); history.replaceState(null, '', u); } catch (e) {}
+  document.title = `${rec.name || rec.uen} · Pre-visit fact sheet`;
+}
+
+function renderSector(S, P){
+  const N = D.national, q = qLabel(D.asof.pulse_q), M = D.imda, a = M.sme_ai_adoption;
+  $('sh').textContent = S ? `Sector at a glance · ${S.label}` : 'Sector at a glance · all industries';
+  const stat = (big, what, was) => `<div><div class="big">${big}</div><div class="what">${what}</div>${was ? `<div class="was">${was}</div>` : ''}</div>`;
+  const nat = N.rate.toFixed(1) + '%';
+  if (S && P) {
+    $('shint').textContent = `${q}. Hiring and retrenchment figures for the MOM industry group "${S.mom}".` + (S.key === 'security' ? ' Security is part of admin & support in MOM tables.' : '');
+    $('stats').innerHTML =
+      stat(P.vac == null ? 'Not published' : fmt.format(P.vac), 'job vacancies', delta(P.vac, P.vac_ya)) +
+      stat(P.rate == null ? 'Not published' : P.rate.toFixed(1) + '%', 'vacancy rate', `All industries ${nat}. ` + delta(P.rate, P.rate_ya, 'pp')) +
+      stat(P.ret == null ? 'Not published' : fmt.format(P.ret), 'retrenchments in the quarter', delta(P.ret, P.ret_ya)) +
+      stat(P.pmet_ret == null ? 'Not published' : fmt.format(P.pmet_ret), `PMETs retrenched, ${qLabel(D.asof.pmet_from)}–${q}`, P.pmet_vac == null ? 'Open PMET roles not published' : `against ${fmt.format(P.pmet_vac)} PMET roles open at the end of ${q}`);
+    $('pulseLink').href = PULSE + '?sector=' + encodeURIComponent(S.key);
+  } else {
+    $('shint').textContent = `${q}. No Pulse sector applies to this entity, so these are the national figures for all industries.`;
+    $('stats').innerHTML =
+      stat(fmt.format(N.vac), 'job vacancies', delta(N.vac, N.vac_ya)) +
+      stat(nat, 'vacancy rate', delta(N.rate, N.rate_ya, 'pp')) +
+      stat(fmt.format(N.ret), 'retrenchments in the quarter', delta(N.ret, N.ret_ya)) +
+      stat(fmt.format(N.pmet_ret), `PMETs retrenched, ${qLabel(D.asof.pmet_from)}–${q}`, `against ${fmt.format(N.pmet_vac)} PMET roles open at the end of ${q}`);
+    $('pulseLink').href = PULSE;
+  }
+  $('imda').innerHTML = `<span class="pill">Survey figure · all of Singapore, not this sector</span>
+    <div class="stat"><div class="big">${a[1].pct}%</div><div class="what">of SMEs used AI in ${a[1].year}, up from ${a[0].pct}% in ${a[0].year}</div></div>`;
+  $('srcSector').innerHTML = `Source: MOM Labour Market Survey via data.gov.sg, ${q} (baked into this page on ${fmtDate(D.asof.built)}, not live). Survey tile: <a href="${esc(M.url)}" rel="noopener">${esc(M.source)}</a>, entered by hand ${fmtDate(M.retrieved)}.`;
+}
+
+function renderTraining(S, sector){
+  const C = S ? S.courses : D.allCourses, q = fmtDate(D.asof.courses);
+  $('th').textContent = S ? `Training supply for this sector · ${S.label}` : 'Training supply · all sectors';
+  $('thint').textContent = S
+    ? `SkillsFuture-listed courses that our keyword rules place in this sector. A course is placed by its title, so treat the counts as a guide.`
+    : 'No Pulse sector applies, so these are the figures for all SkillsFuture-listed courses.';
+  const aiPct = C.n ? Math.round(C.ai / C.n * 100) : 0;
+  $('tstats').innerHTML =
+    `<div><div class="big">${fmt.format(C.n)}</div><div class="what">courses listed</div></div>
+     <div><div class="big">${fmt.format(C.providers)}</div><div class="what">providers</div></div>
+     <div><div class="big">${fmt.format(C.ai)} (${aiPct}%)</div><div class="what">AI-related, by title</div></div>
+     <div><div class="big">${C.fee_median == null ? '–' : '$' + fmt.format(C.fee_median)}</div><div class="what">median full fee</div><div class="was">universities left out</div></div>`;
+  const top = C.top.slice(0, 5).map(t => `<li>${esc(t[0])} <span>· ${fmt.format(t[2])} courses</span></li>`).join('');
+  const titles = C.titles.map(t => `<li>${esc(t[0])} <span>· ${esc(t[1])} · ${fmt.format(t[2])} attended</span></li>`).join('');
+  $('two').innerHTML = `<div><h3>Top providers by courses listed</h3><ol>${top}</ol></div><div><h3>Most-attended courses</h3><ol>${titles}</ol></div>`;
+  // SCTPs and Skills Framework links need a sector
+  const sc = $('sctp'), sk = $('skLinks');
+  if (S) {
+    const progs = S.sctp, insts = D.sctpInst;
+    sc.innerHTML = progs.length
+      ? `<h3>Career-switch programmes (SCTP) tagged to this sector: ${progs.length}</h3><p>${progs.map(p => `${esc(p[1])} <span style="color:var(--muted)">(${esc(p[0])})</span>`).join('; ')}</p>`
+      : `<h3>Career-switch programmes (SCTP)</h3><p>None found on the polytechnic and ITE pages for this sector on ${fmtDate(D.sctpCollected)}.</p>`;
+    const list = SKILLS[S.key];
+    const a = (href, title, sub) => `<a href="${href}" rel="noopener">${title} ↗<small>${sub}</small></a>`;
+    let h = '';
+    if (list) list.forEach(f => {
+      h += f.pdf ? a(SFW_BASE + f.pdf, `${esc(f.n)}: Skills Framework`, 'PDF · job roles, skills and career paths') : a(f.page, `${esc(f.n)}: ${esc(f.kind)}`, 'Web page · how jobs and skills are changing');
+      h += a(courseUrl(f.n), `${esc(f.n)}: courses`, 'MySkillsFuture course search');
+    }); else h += a(SFW_INDEX, 'Skills Frameworks for 38 sectors', 'SWDA Jobs-Skills Portal');
+    h += a(DEMAND_DASH, 'Jobs-Skills Demand Trends dashboard', 'In-demand skills by job role');
+    sk.innerHTML = h; sk.hidden = false;
+    $('landLink').href = LANDSCAPE + '?sector=' + encodeURIComponent(S.key);
+  } else {
+    sc.innerHTML = `<h3>Career-switch programmes (SCTP)</h3><p>Not shown: they are tagged by sector, and no sector applies here.</p>`;
+    sk.innerHTML = `<a href="${SFW_INDEX}" rel="noopener">Skills Frameworks for 38 sectors ↗<small>SWDA Jobs-Skills Portal</small></a>`;
+    $('landLink').href = LANDSCAPE;
+  }
+  $('srcTrain').innerHTML = `Source: MySkillsFuture Course Directory (SWDA/SSG) via data.gov.sg, published ${q}; sector placement by keyword rules (Skills Training Landscape). SCTP lists collected by hand ${fmtDate(D.sctpCollected)} from public pages of ${D.sctpInst.map(i => esc(i)).join(', ')}. Baked into this page, not live.`;
+}
+
+function renderQuestions(rec, sector, S, P, yrs, live){
+  const N = D.national, q = qLabel(D.asof.pulse_q), rules = [];
+  const add = (a, b) => rules.push([a, b]);
+  // Vacancy gaps under VAC_GAP percentage points are within quarter-to-quarter noise, so no question.
+  const VAC_GAP = 0.5;
+  if (S && P && P.rate != null && P.rate - N.rate >= VAC_GAP) add('Which roles are hardest to fill, and how long do they stay open?', `${S.label} has a vacancy rate of ${P.rate.toFixed(1)}% against ${N.rate.toFixed(1)}% for all industries (${q}).`);
+  else if (S && P && P.rate != null && P.rate_ya != null && P.rate - P.rate_ya >= VAC_GAP) add('Has hiring got harder over the past year, and for which roles?', `The vacancy rate in ${S.label} rose from ${P.rate_ya.toFixed(1)}% to ${P.rate.toFixed(1)}% in a year (${q}).`);
+  if (S && P && P.pmet_ret != null && P.pmet_vac != null && P.pmet_ret > P.pmet_vac) add('Are any teams being restructured, and is the plan to redeploy people or hire from outside?', `${fmt.format(P.pmet_ret)} PMETs were retrenched in ${S.label} over four quarters against ${fmt.format(P.pmet_vac)} PMET roles open (${q}).`);
+  if (yrs != null && yrs < 3) add('Who are the first hires, and how are new joiners being brought up to speed?', `Registered ${yrs < 1 ? 'less than a year' : yrs + ' year' + (yrs === 1 ? '' : 's')} ago.`);
+  if (yrs != null && yrs > 20) add('Which parts of the business have changed most since the early years, and is succession on the agenda?', `Registered ${yrs} years ago.`);
+  if (isSole(rec.type)) add('Who covers the work when someone is away on training?', `Registered as a ${esc(rec.type).toLowerCase()}, where one person away is felt quickly.`);
+  if (sector.p && sector.p.holding) add('Which operating entities employ the staff, and who decides on training?', `Primary activity is ${esc(sector.p.title.toLowerCase())}, so the operating business may sit elsewhere.`);
+  if (sector.s && sector.s.title && !(sector.p && sector.p.holding)) add('Which of the two main activities carries most of the headcount?', `ACRA also lists a secondary activity: ${esc(sector.s.title)}.`);
+  if (rec.audit && rec.audit.length) add('Roughly how many people work in the business, and does it count as an SME for funding?', 'An audit firm is on record, which suggests a larger entity. Check SME status on TPGateway before quoting fees.');
+  if (rec.kind === 'acra' && !live) add('Which entity now carries on the business?', `ACRA lists the status as ${esc(rec.status)}.`);
+  if (rec.former && rec.former.length) add('What prompted the change of name?', `A former name is on record: ${esc(rec.former[0])}.`);
+  if (!S) add('What does the business do day to day, and which sector would its staff say they work in?', rec.kind === 'other' ? 'The entity is not in the ACRA register, so no industry code is held.' : (sector.p ? 'No Pulse sector matches the SSIC code on record.' : 'No SSIC code is on record.'));
+  const always = [
+    ['Which AI tools are people already using at work, and who has been trained to use them?', `${D.imda.sme_ai_adoption[1].pct}% of Singapore SMEs used AI in ${D.imda.sme_ai_adoption[1].year} (IMDA survey).`],
+    ['Which skills would the owner most like the team to have in twelve months?', 'Headcount, revenue and training history are not in the public record.'],
+  ];
+  const list = rules.slice(0, 8).concat(always);
+  $('qlist').innerHTML = list.map(([a, b]) => `<li>${esc(a)}<span>Because: ${b}</span></li>`).join('');
+}
+
+function renderFooter(){
+  const d = D.datasets, links = d.map(x => `<a href="https://data.gov.sg/datasets/${x.id}/view">${esc(x.title)}</a>`).join('; ');
+  const now = Date.now();
+  $('foot').innerHTML = `
+    <div class="foot-actions"><span>Generated on ${fmtStamp(now)} (Singapore time)</span><button class="btn noprint" type="button" id="printBtn">Print or save as PDF</button></div>
+    <p>Contains information from ${links}, accessed from data.gov.sg and made available under the terms of the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence version 1.0</a>. Company records: Accounting and Corporate Regulatory Authority (ACRA), looked up live. Vacancies and retrenchments: Labour Market Survey, Manpower Research &amp; Statistics Department, Ministry of Manpower (baked in on ${fmtDate(D.asof.built)}). Courses: MySkillsFuture Course Directory, Skills and Workforce Development Agency (SWDA/SSG). SME AI adoption: Infocomm Media Development Authority (IMDA) survey. Industry codes: Singapore Standard Industrial Classification 2025, Department of Statistics Singapore (SingStat).</p>
+    <p>This is an unofficial teaching example, not a product of ACRA, MOM, SWDA, IMDA or any government agency, and it is not advice. It shows entity-level public data only. Only the company lookup is live; sector and course figures are snapshots and may be out of date.</p>`;
+  $('printBtn').onclick = () => window.print();
+}
+
+/* ---------- lookup flow ---------- */
+function busy(on){ $('go').disabled = on; }
+async function lookupUen(uen){
+  const id = ++run; $('matches').innerHTML = ''; busy(true);
+  const c = cacheGet(uen);
+  if (c && c.rec && !c.rec.notFound && Date.now() - c.t < 600000) {
+    render(c.rec); setStatus(`From cache, fetched ${fmtTime(c.t)}. Press Look up again after ten minutes for a fresh copy.`); busy(false); return;
+  }
+  setStatus('Fetching the ACRA record…');
+  try {
+    const rec = await fetchRecord(uen, id);
+    if (id !== run) return;
+    if (rec.notFound) {
+      $('sheet').hidden = true; $('empty').hidden = false;
+      $('empty').textContent = 'Not in the ACRA register. Statutory boards, schools and ministries are not listed.';
+      setStatus(`No record found for ${uen}.`); busy(false); return;
+    }
+    cacheSet(uen, rec);
+    render(rec); setStatus(`Fetched ${fmtTime(rec.fetched)}.`);
+  } catch (e) {
+    if (id !== run) return;
+    if (e instanceof RateLimited) setStatus('data.gov.sg is rate-limiting; try again in a minute.', true);
+    else if (c && c.rec) { render(c.rec, {offline: true}); setStatus('Could not reach data.gov.sg; showing the saved copy.', true); }
+    else setStatus('Could not reach data.gov.sg. Check your connection and try again.', true);
+  }
+  if (id === run) busy(false);
+}
+function nameQuery(text){
+  const toks = text.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  if (!toks.length) return null;
+  toks[toks.length - 1] += ':*';
+  return {entity_name: toks.join(' ')};
+}
+async function searchName(text){
+  const id = ++run, nq = nameQuery(text);
+  if (!nq || text.replace(/[^a-z0-9]/gi, '').length < 2) { setStatus('Type at least two letters or digits of the name.', true); return; }
+  busy(true); $('matches').innerHTML = ''; setStatus('Searching ACRA names…');
+  try {
+    const recs = await ds(D.ids.slim, id, {q: nq, limit: 40});
+    if (id !== run) return;
+    const t = text.trim().toLowerCase();
+    recs.sort((a, b) => (b.uen_status_desc === 'Registered') - (a.uen_status_desc === 'Registered')
+      || (b.entity_name.toLowerCase().startsWith(t)) - (a.entity_name.toLowerCase().startsWith(t)) || a.entity_name.length - b.entity_name.length);
+    if (!recs.length) { setStatus('No names matched. Try fewer words, or the UEN.', true); busy(false); return; }
+    const shown = recs.slice(0, 10);
+    $('matches').innerHTML = shown.map(r => `<li><button class="match" type="button" data-u="${esc(r.uen)}"><b>${esc(r.entity_name)}</b><span>${esc(r.uen)}</span><span>${esc(r.reg_postal_code || '')}</span><span>${esc(r.uen_status_desc || '')}</span></button></li>`).join('');
+    setStatus(`${recs.length >= 40 ? 'Many matches; showing the first 10 of the closest 40' : 'Showing ' + shown.length + ' of ' + recs.length}. Pick the right company.`);
+  } catch (e) {
+    if (id !== run) return;
+    setStatus(e instanceof RateLimited ? 'data.gov.sg is rate-limiting; try again in a minute.' : 'Could not reach data.gov.sg. Check your connection and try again.', true);
+  }
+  if (id === run) busy(false);
+}
+function submit(raw){
+  const text = String(raw || '').trim();
+  if (!text) { setStatus('Enter a UEN or part of a company name.', true); return; }
+  const compact = text.replace(/\s+/g, '').toUpperCase();
+  if (UEN_RE.test(compact)) return lookupUen(compact);
+  if (/^\d+[A-Z]?$/.test(compact) || /^[TSR]\d{2}[A-Z0-9]{5,7}$/.test(compact))
+    { setStatus('That does not look like a UEN. A UEN has 9 or 10 characters, for example 201912480G or 53250767C.', true); return; }
+  return searchName(text);
+}
+$('form').addEventListener('submit', e => { e.preventDefault(); submit($('q').value); });
+$('eg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $('q').value = b.dataset.u || b.dataset.n; submit($('q').value); });
+$('matches').addEventListener('click', e => { const b = e.target.closest('.match'); if (!b) return; $('q').value = b.dataset.u; lookupUen(b.dataset.u); });
+$('fresh').textContent = `Sector data as of ${qLabel(D.asof.pulse_q)} · courses ${fmtDate(D.asof.courses)} · company lookup is live`;
+{ const sp = new URLSearchParams(location.search), u = sp.get('uen'), n = sp.get('q');
+  if (u) { $('q').value = u; submit(u); } else if (n) { $('q').value = n; submit(n); } }
+</script>
+</body>
+</html>
