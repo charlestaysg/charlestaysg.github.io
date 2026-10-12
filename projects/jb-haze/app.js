@@ -8,6 +8,16 @@ const LOCAL_BASE = 'data/';
 const IS_LOCAL = typeof location !== 'undefined' && /^(localhost|127\.0\.0\.1|\[::1\]|)$/.test(location.hostname);
 // Single switch: local seed files on localhost, the data branch in production.
 const DATA_BASE = IS_LOCAL ? LOCAL_BASE : RAW_BASE;
+// Live data is fetched on demand from a small Worker (APIMS and the news feeds send no CORS headers).
+// Order: Worker -> data branch (hourly backup copy) -> seed files on main. Only this constant needs changing to move it.
+const WORKER_BASE = 'https://jb-haze-api.charlestaysg.workers.dev/';
+const WORKER_TIMEOUT_MS = 6000;
+const WORKER_PATH = { 'latest.json': 'latest', 'history.json': 'history', 'news.json': 'news' };
+// ?noworker=1 skips the Worker (tests the fallback); ?local=1 on localhost uses only the seed files.
+const QS = typeof location !== 'undefined' ? new URLSearchParams(location.search) : new URLSearchParams();
+// On localhost only, ?worker=http://localhost:8788/ points at a local `wrangler dev` for testing.
+const WORKER_URL = (IS_LOCAL && /^http:\/\/localhost:\d+\/$/.test(QS.get('worker') || '')) ? QS.get('worker') : WORKER_BASE;
+const USE_WORKER = !QS.has('noworker') && !(IS_LOCAL && QS.has('local'));
 
 const TZ = 'Asia/Kuala_Lumpur';
 const POLL_MS = 5 * 60 * 1000;
@@ -85,7 +95,7 @@ function sgRegion(json, region) {
     return { psi, pm25: pm == null ? null : pm, ts: it.timestamp };
   } catch (_) { return null; }
 }
-/** US AQI from DOE's 24-hour average PM2.5 (same input as the API; only the scale differs). */
+/** US AQI from DOE's 24-hour average PM2.5. Used as the like-for-like comparison and as the fallback when NowCast cannot be worked out. */
 function usAqiFor(st) { return st ? pm25ToAqi(st.pm25_24h) : null; }
 /** NowCast PM2.5. `values` newest-first (null = missing). Needs two of the last three hours. */
 function nowcast(values) {
@@ -97,6 +107,35 @@ function nowcast(values) {
   let num = 0, den = 0;
   v.forEach((x, i) => { if (x != null) { const wi = Math.pow(w, i); num += wi * x; den += wi; } });
   return Math.round(num / den * 10) / 10;
+}
+/** US AQI by NowCast of the last 12 hourly PM2.5 values. `series` oldest-first (null = gap); `latest` is the current
+ * 1-hour reading, used when the series' last hour is missing it. Returns an AQI object or null. */
+function nowcastAqi(series, latest) {
+  const v = (series || []).slice(-NOWCAST_HOURS).reverse();
+  if (latest != null && v.length && v[0] == null) v[0] = latest;
+  if (!v.length && latest != null) v.push(latest);
+  const nc = nowcast(v);
+  return nc == null ? null : pm25ToAqi(nc);
+}
+/** Headline US AQI for a station: NowCast when computable, else the 24-hour figure tagged basis '24h'. Returns {aqi,key,color,basis} or null. */
+function usAqiBest(st, series) {
+  if (!st) return null;
+  const nc = nowcastAqi(series, st.pm25);
+  if (nc) return Object.assign({ basis: 'nowcast' }, nc);
+  const d = usAqiFor(st);
+  return d ? Object.assign({ basis: '24h' }, d) : null;
+}
+/** NowCast US AQI for one Singapore region from data.gov.sg pm25 items ({timestamp, readings.pm25_one_hourly}). */
+function sgNowcastAqi(items, region) {
+  const all = (items || []).slice().sort((a, b) => (a.timestamp < b.timestamp ? -1 : 1));
+  const vals = all.map(it => { const v = ((it.readings || {}).pm25_one_hourly || {})[region]; return v == null ? null : v; });
+  let last = -1;
+  for (let i = vals.length - 1; i >= 0; i--) if (vals[i] != null) { last = i; break; }
+  if (last < 0) return null;
+  const hist = [];
+  for (let j = last; j > last - NOWCAST_HOURS && j >= 0; j--) hist.push(vals[j]);
+  const nc = nowcast(hist);
+  return nc == null ? null : Object.assign({ basis: 'nowcast', ts: all[last].timestamp }, pm25ToAqi(nc));
 }
 /** DOE PM2.5 sub-index from the 24-hour average (explainer only; the page shows DOE's own API). */
 const API_PM25_BREAKS = [[0, 12.0, 0, 50], [12.1, 35.4, 51, 100], [35.5, 55.4, 101, 150], [55.5, 150.4, 151, 200],
@@ -235,7 +274,7 @@ function sortNews(items, lang) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { apiBand, API_BANDS, pm25ToAqi, usAqiFor, psiBand, sgRegion, aqiCategory, nowcast, pm25ToApi, haversine, nearest, compass,
+  module.exports = { apiBand, API_BANDS, pm25ToAqi, usAqiFor, nowcastAqi, usAqiBest, sgNowcastAqi, psiBand, sgRegion, aqiCategory, nowcast, pm25ToApi, haversine, nearest, compass,
     windTo, arrowRotation, fromSumatra, textOn, agoParts, fmtHM, lastN, hourStamps, sparkPath, headlineStation,
     hotspotMode, filterHotspots, hhmm, mdParts, safeUrl, sortNews, DATA_BASE, RAW_BASE, LOCAL_BASE, COMPASS_EN };
 }
@@ -248,7 +287,7 @@ if (typeof document !== 'undefined') {
     lang: 'en', meta: [], latest: null, history: null, news: null, hotspots: null,
     selectedId: null, myId: null, loc: null, conf: 'all', metric: 'api', compare: new Set(),
     layers: { wind: true, hs: false, others: false }, hotspotView: false, topic: 'impact',
-    windJB: null, windRegional: null, nextAt: 0, fetchedAt: 0, loadedOnce: false, fetchError: false,
+    latestSource: 'worker', windJB: null, windRegional: null, nextAt: 0, fetchedAt: 0, loadedOnce: false, fetchError: false,
     chartSeen: false, sheetOpen: false, lastFocus: null,
   };
   const desktopMQ = window.matchMedia('(min-width: 900px)');
@@ -302,6 +341,9 @@ if (typeof document !== 'undefined') {
   const bandWord = band => T('band.' + band.key);
   const stations = () => (state.latest ? state.latest.stations : []);
   const stationById = id => stations().find(s => s.id === id);
+  const usSeries = id => (state.history && state.history.stations[id] ? state.history.stations[id].pm25 : []);
+  const usOf = st => usAqiBest(st, st ? usSeries(st.id) : []);
+  const tag24 = aq => (aq && aq.basis === '24h' ? ' ' + T('tag.24h') : '');
   const compassNames = () => S.t('compass', null, state.lang);
 
   // ---------------------------------------------------------------- language
@@ -349,18 +391,22 @@ if (typeof document !== 'undefined') {
   // ---------------------------------------------------------------- data
   async function getJson(name) {
     const bust = Math.floor(Date.now() / POLL_MS);
-    const tryUrl = async url => {
-      const ctl = new AbortController(); const timer = setTimeout(() => ctl.abort(), 12000);
+    const tryUrl = async (url, ms) => {
+      const ctl = new AbortController(); const timer = setTimeout(() => ctl.abort(), ms);
       try {
-        const r = await fetch(url + '?t=' + bust, { signal: ctl.signal, cache: 'no-cache' });
+        const r = await fetch(url, { signal: ctl.signal, cache: 'no-cache' });
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return await r.json();
       } finally { clearTimeout(timer); }
     };
-    try { return await tryUrl(DATA_BASE + name); } catch (e) {
-      if (DATA_BASE === LOCAL_BASE) throw e;
-      return tryUrl(LOCAL_BASE + name); // seed copy on main
+    if (USE_WORKER && WORKER_PATH[name]) {
+      try { return { data: await tryUrl(WORKER_URL + WORKER_PATH[name], WORKER_TIMEOUT_MS), source: 'worker' }; } catch (_) { /* fall back */ }
     }
+    const q = '?t=' + bust;
+    if (DATA_BASE !== LOCAL_BASE) {
+      try { return { data: await tryUrl(DATA_BASE + name + q, 12000), source: 'backup' }; } catch (_) { /* seed copy on main */ }
+    }
+    return { data: await tryUrl(LOCAL_BASE + name + q, 12000), source: 'backup' };
   }
   async function loadSG() {
     const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 8000);
@@ -371,14 +417,43 @@ if (typeof document !== 'undefined') {
       return sgRegion(j, 'west') && sgRegion(j, 'north') ? j : null;
     } catch (_) { return null; } finally { clearTimeout(to); }
   }
+  async function sgPm25Day(dateStr) {
+    let items = [], token = null;
+    for (let page = 0; page < 3; page++) {
+      const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 8000);
+      let j;
+      try {
+        const r = await fetch('https://api-open.data.gov.sg/v2/real-time/api/pm25?date=' + dateStr + (token ? '&paginationToken=' + encodeURIComponent(token) : ''), { signal: ctl.signal });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        j = await r.json();
+      } finally { clearTimeout(to); }
+      if (!j || j.code !== 0) throw new Error('bad response');
+      items = items.concat(j.data.items || []);
+      token = j.data.paginationToken;
+      if (!token) break;
+    }
+    return items;
+  }
+  /** Today + yesterday (Singapore dates) of NEA 1-hour PM2.5, so NowCast has 12 hours to work with. Null on failure. */
+  async function loadSgPm25() {
+    try {
+      const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Singapore', year: 'numeric', month: '2-digit', day: '2-digit' });
+      const today = fmt.format(new Date()), yest = fmt.format(new Date(Date.now() - 86400000));
+      const todayItems = await sgPm25Day(today);
+      let yItems = [];
+      try { yItems = await sgPm25Day(yest); } catch (_) { /* NowCast copes with fewer hours */ }
+      const west = sgNowcastAqi(todayItems.concat(yItems), 'west'), north = sgNowcastAqi(todayItems.concat(yItems), 'north');
+      return west || north ? { west, north } : null;
+    } catch (_) { return null; }
+  }
   async function loadData(first) {
-    const sgP = loadSG();
+    const sgP = loadSG(), sgPmP = loadSgPm25();
     const [lat, his, nws, hot] = await Promise.allSettled([getJson('latest.json'), getJson('history.json'), getJson('news.json'), getJson('hotspots.json')]);
-    state.sg = await sgP;
-    if (lat.status === 'fulfilled') { state.latest = lat.value; state.fetchedAt = Date.now(); state.fetchError = false; } else state.fetchError = true;
-    if (his.status === 'fulfilled') state.history = his.value;
-    if (nws.status === 'fulfilled') state.news = nws.value;
-    state.hotspots = hot.status === 'fulfilled' ? hot.value : null;
+    state.sg = await sgP; state.sgNc = await sgPmP;
+    if (lat.status === 'fulfilled') { state.latest = lat.value.data; state.latestSource = lat.value.source; state.fetchedAt = Date.now(); state.fetchError = false; } else state.fetchError = true;
+    if (his.status === 'fulfilled') state.history = his.value.data;
+    if (nws.status === 'fulfilled') state.news = nws.value.data;
+    state.hotspots = hot.status === 'fulfilled' ? hot.value.data : null;
     state.nextAt = Date.now() + POLL_MS;
     if (!first || lat.status === 'fulfilled') state.loadedOnce = state.loadedOnce || lat.status === 'fulfilled';
     if (state.selectedId == null || !stationById(state.selectedId)) state.selectedId = (headline() || {}).id || null;
@@ -397,17 +472,17 @@ if (typeof document !== 'undefined') {
   function renderHero() {
     const st = headline(), ring = $('ring'), num = $('ring-num');
     if (!st) { $('hero-line').textContent = T('status.loading'); return; }
-    const b = apiBand(st.api), aq = usAqiFor(st);
+    const b = apiBand(st.api), aq = usOf(st);
     ring.style.borderColor = b.color;
     num.textContent = st.api == null ? '–' : String(st.api);
     const line = $('hero-line'); line.replaceChildren(h('b', {}, bandWord(b)), ' · ', stName(st));
-    const sub = $('hero-sub'); sub.replaceChildren(...(aq ? [h('span', { class: 'aqi-dot', style: 'background:' + aq.color }), h('b', {}, T('idx.us') + ' ' + aq.aqi), ' ' + T('aqi.' + aq.key)] : [T('idx.us') + ' –']), ` · ${fmtHM(st.ts)}` + (state.myId === st.id ? ' · ★' : ''));
+    const sub = $('hero-sub'); sub.replaceChildren(...(aq ? [h('span', { class: 'aqi-dot', style: 'background:' + aq.color }), h('b', {}, T('idx.us') + ' ' + aq.aqi), ' ' + T('aqi.' + aq.key) + tag24(aq)] : [T('idx.us') + ' –']), ` · ${fmtHM(st.ts)}` + (state.myId === st.id ? ' · ★' : ''));
     $('ring').setAttribute('title', `${T('idx.my')} ${st.api == null ? '' : st.api}`);
     const us = $('ring-us');
     us.style.borderColor = aq ? aq.color : NODATA_BAND.color;
     $('ring-us-num').textContent = aq ? String(aq.aqi) : '–';
     $('lbl-my').textContent = T('idx.my'); $('lbl-us').textContent = T('idx.us');
-    us.setAttribute('title', `${T('idx.us')} ${aq ? aq.aqi + ' ' + T('aqi.' + aq.key) : ''}`);
+    us.setAttribute('title', `${T('idx.us')} ${aq ? aq.aqi + ' ' + T('aqi.' + aq.key) + tag24(aq) : ''}`);
   }
   function renderStrip() {
     const sec = $('causeway'), body = $('cw-body');
@@ -419,9 +494,13 @@ if (typeof document !== 'undefined') {
       h('div', { class: 'cw-main' },
         h('span', { class: 'cw-n', style: `background:${band.color};color:${textOn(band.color)}` }, num == null ? '–' : num),
         h('span', { class: 'cw-w' }, h('span', { class: 'cw-i' }, idxName), h('b', {}, bandWord(band)))),
-      h('div', { class: 'cw-us' }, h('span', { class: 'aqi-dot', style: 'background:' + (aq ? aq.color : NODATA_BAND.color) }), `${T('idx.us')} `, h('b', {}, aq ? String(aq.aqi) : '–'), aq ? ' ' + T('aqi.' + aq.key) : ''));
-    const sgCell = (key, r) => cell(T('strip.' + key), T('strip.psi'), r.psi, psiBand(r.psi), pm25ToAqi(r.pm25));
-    body.replaceChildren(cell(T('strip.jb'), T('idx.my'), lark.api, apiBand(lark.api), usAqiFor(lark)), sgCell('west', west), sgCell('north', north));
+      h('div', { class: 'cw-us' }, h('span', { class: 'aqi-dot', style: 'background:' + (aq ? aq.color : NODATA_BAND.color) }), `${T('idx.us')} `, h('b', {}, aq ? String(aq.aqi) : '–'), aq ? ' ' + T('aqi.' + aq.key) + tag24(aq) : ''));
+    const sgCell = (key, r) => {
+      const nc = state.sgNc && state.sgNc[key];
+      const d = r.pm25 == null ? null : pm25ToAqi(r.pm25);
+      return cell(T('strip.' + key), T('strip.psi'), r.psi, psiBand(r.psi), nc || (d && Object.assign({ basis: '24h' }, d)));
+    };
+    body.replaceChildren(cell(T('strip.jb'), T('idx.my'), lark.api, apiBand(lark.api), usOf(lark)), sgCell('west', west), sgCell('north', north));
     $('cw-time').textContent = T('strip.time', { sg: String(west.ts || '').slice(11, 16), jb: fmtHM(lark.ts) });
   }
   function renderStatus() {
@@ -431,7 +510,7 @@ if (typeof document !== 'undefined') {
     el.textContent = T('status.line', {
       time: fmtHM(state.latest.readingTime), ago: agoText(Date.now() - Date.parse(state.latest.generated)),
       mmss: `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`,
-    });
+    }) + (state.latestSource === 'backup' ? T('status.backup') : '');
     const readingAgeH = (Date.now() - Date.parse(state.latest.readingTime)) / 3600000;
     if (readingAgeH > STALE_READING_H) setBanner(T('banner.stale', { ago: agoText(Date.now() - Date.parse(state.latest.readingTime)) }));
     else if (state.fetchError) setBanner(T('banner.error'));
@@ -491,9 +570,9 @@ if (typeof document !== 'undefined') {
     window.addEventListener('resize', () => map.invalidateSize());
   }
   function pinIcon(st) {
-    const b = apiBand(st.api), col = b.color, aq = usAqiFor(st);
+    const b = apiBand(st.api), col = b.color, aq = usOf(st);
     const cls = 'pin' + (st.id === state.selectedId ? ' sel' : '') + (st.id === state.myId ? ' mine' : '');
-    const html = `<span class="${cls}" style="background:${col};color:${textOn(col)}"><b>${st.api == null ? '–' : Number(st.api)}</b><i>${bandWord(b)}</i>${aq ? `<u>${T('idx.us.short')} ${aq.aqi}</u>` : ''}</span>`;
+    const html = `<span class="${cls}" style="background:${col};color:${textOn(col)}"><b>${st.api == null ? '–' : Number(st.api)}</b><i>${bandWord(b)}</i>${aq ? `<u>${T('idx.us.short')} ${aq.aqi}${tag24(aq)}</u>` : ''}</span>`;
     return L.divIcon({ className: 'pin-wrap', html, iconSize: [84, 56], iconAnchor: [42, 28] });
   }
   function renderMap() {
@@ -629,7 +708,7 @@ if (typeof document !== 'undefined') {
     const st = stationById(state.selectedId);
     if (!st) { body.append(h('p', { class: 'muted' }, T('detail.pick'))); return; }
     const b = apiBand(st.api), col = b.color;
-    const aq = usAqiFor(st), ac = aq ? aq.color : NODATA_BAND.color;
+    const aq = usOf(st), ac = aq ? aq.color : NODATA_BAND.color;
     body.append(h('div', { class: 'd-hero' },
       h('div', { class: 'nm' }, stName(st), state.myId === st.id ? ' ★' : ''),
       h('div', { class: 'sub' }, `${st.category || ''}${st.category ? ' · ' : ''}${T('detail.reading', { time: fmtHM(st.ts) })}`)));
@@ -637,17 +716,15 @@ if (typeof document !== 'undefined') {
       h('div', { class: 'tl' }, label), h('div', { class: 'tn' }, num), h('div', { class: 'tw' }, word), h('div', { class: 'tb' }, basis));
     body.append(h('div', { class: 'd-tiles' },
       tile(T('idx.my'), st.api == null ? '–' : st.api, bandWord(b), T('detail.basis.api'), col),
-      tile(T('idx.us'), aq ? aq.aqi : '–', aq ? T('aqi.' + aq.key) : bandWord(NODATA_BAND), T('detail.basis.us'), ac)));
+      tile(T('idx.us'), aq ? aq.aqi : '–', aq ? T('aqi.' + aq.key) : bandWord(NODATA_BAND), T(aq && aq.basis === '24h' ? 'detail.basis.us24' : 'detail.basis.us'), ac)));
+    const us24 = usAqiFor(st);
+    body.append(h('p', { class: 'note d-us24' }, T('detail.us24'), ' ', h('b', {}, us24 ? us24.aqi : '–')));
     body.append(h('p', { class: 'd-advice' }, T('advice.' + b.key)));
     const kv = h('dl', { class: 'kv' });
     const row = (k, v) => { if (v != null && v !== '') kv.append(h('dt', {}, k), h('dd', {}, v)); };
     const u = ' ' + T('unit.ugm3');
     row(T('detail.pm25_1h'), st.pm25 == null ? null : st.pm25 + u);
     row(T('detail.pm25_24h'), st.pm25_24h == null ? null : st.pm25_24h + u);
-    // NowCast (1-h based) is an extra line, only when enough hourly history exists
-    const ser = state.history && state.history.stations[st.id] ? state.history.stations[st.id].pm25 : [];
-    const nc = nowcast(ser.slice(-NOWCAST_HOURS).reverse()), ncAq = nc == null ? null : pm25ToAqi(nc);
-    if (ncAq) kv.append(h('dt', {}, T('detail.usaqi')), h('dd', {}, [h('span', { class: 'aqi-dot', style: 'background:' + ncAq.color }), `${ncAq.aqi} ${T('aqi.' + ncAq.key)}`]));
     kv.append(h('dt', {}, ''), h('dd', {}, h('a', { href: '#explainer' }, T('detail.why'))));
     row(T('detail.pm10_1h'), st.pm10 == null ? null : st.pm10 + u);
     row(T('detail.pm10_24h'), st.pm10_24h == null ? null : st.pm10_24h + u);
@@ -676,10 +753,10 @@ if (typeof document !== 'undefined') {
     const all = stations().slice().sort((a, b) => (b.jb - a.jb) || a.id.localeCompare(b.id));
     if (!all.length) { box.append(h('p', { class: 'muted' }, T('status.loading'))); return; }
     const mk = st => {
-      const b = apiBand(st.api), col = b.color, aq = usAqiFor(st), ac = aq ? aq.color : NODATA_BAND.color;
+      const b = apiBand(st.api), col = b.color, aq = usOf(st), ac = aq ? aq.color : NODATA_BAND.color;
       return h('button', { type: 'button', class: 'row', 'aria-pressed': String(st.id === state.selectedId), 'aria-label': T('list.open', { name: stName(st) }), onclick: () => openDetail(st.id) },
         h('span', { class: 'api-pill', style: `background:${col};color:${textOn(col)}`, title: T('idx.my') }, st.api == null ? '–' : st.api, h('small', {}, T('idx.my.short'))),
-        h('span', { class: 'api-pill', style: `background:${ac};color:${textOn(ac)}`, title: aq ? `${T('idx.us')} ${T('aqi.' + aq.key)}` : T('idx.us') }, aq ? aq.aqi : '–', h('small', {}, T('idx.us.short'))),
+        h('span', { class: 'api-pill', style: `background:${ac};color:${textOn(ac)}`, title: aq ? `${T('idx.us')} ${T('aqi.' + aq.key)}${tag24(aq)}` : T('idx.us') }, aq ? aq.aqi : '–', h('small', {}, T('idx.us.short') + tag24(aq))),
         h('span', {}, h('span', { class: 'nm', style: 'display:block' }, stName(st), state.myId === st.id ? ' ★' : ''),
           h('span', { class: 'sub', style: 'display:block' }, `${bandWord(b)}${st.pm25 == null ? '' : ' · PM2.5 ' + st.pm25} · ${fmtHM(st.ts)}`)),
         sparkSvg(apiSeries(st.id), 80, 24));
@@ -795,9 +872,8 @@ if (typeof document !== 'undefined') {
     const el = $('exp-1'); const st = headline();
     const ex = st && st.pm25_24h != null ? ' ' + T('exp.1.example', { name: stName(st), pm: st.pm25_24h, api: pm25ToApi(st.pm25_24h) }) : '';
     el.textContent = T('exp.1', { example: ex.trim() });
-    const pr = pm => { const a = pm25ToApi(pm), u = pm25ToAqi(pm); return [a, T('band.' + apiBand(a).key), u.aqi, T('aqi.' + u.key)]; };
-    const [a1, aw1, u1, uw1] = pr(81), [a2, aw2, u2, uw2] = pr(40);
-    $('exp-2').textContent = T('exp.2', { example: T('exp.2.example', { a1, aw1, u1, uw1, a2, aw2, u2, uw2 }) });
+    $('exp-2').textContent = T('exp.2');
+    const cna = $('exp-cna'); if (cna) { cna.replaceChildren(); appendMd(cna, T('exp.cna')); }
   }
 
   // ---- news

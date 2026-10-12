@@ -89,6 +89,37 @@ assert.strictEqual(A.usAqiFor({ pm25_24h: null }), null);
 assert.strictEqual(A.usAqiFor({}), null);
 assert.strictEqual(A.usAqiFor(null), null);
 
+// NowCast US AQI: steady series equals the plain conversion; a rising spike beats the 24-h based figure
+const steady = Array(12).fill(20);
+assert.strictEqual(A.nowcastAqi(steady, 20).aqi, A.pm25ToAqi(20).aqi);
+const spike = [20, 20, 20, 20, 20, 20, 20, 20, 25, 40, 70, 100]; // oldest first
+const spikeSt = { pm25: 100, pm25_24h: 35 };
+const best = A.usAqiBest(spikeSt, spike);
+assert.strictEqual(best.basis, 'nowcast');
+assert.ok(best.aqi > A.usAqiFor(spikeSt).aqi);
+assert.ok(best.aqi < A.pm25ToAqi(100).aqi); // weighted, below the raw latest hour
+// latest pm25 fills a missing last hour
+const gapLast = spike.slice(0, 11).concat([null]);
+assert.strictEqual(A.nowcastAqi(gapLast, 100).aqi, A.nowcastAqi(spike, 100).aqi);
+// fewer than 2 of the last 3 hours -> null -> flagged 24-h fallback
+const sparse = [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, null, null];
+assert.strictEqual(A.nowcastAqi(sparse, null), null);
+const fb = A.usAqiBest({ pm25: null, pm25_24h: 81.07 }, sparse);
+assert.strictEqual(fb.basis, '24h');
+assert.strictEqual(fb.aqi, 169);
+assert.strictEqual(A.usAqiBest({ pm25: null, pm25_24h: null }, sparse), null);
+assert.strictEqual(A.usAqiBest(null, []), null);
+assert.strictEqual(A.usAqiBest({ pm25: 30, pm25_24h: 30 }, []).basis, '24h'); // one hour alone is not enough
+// Singapore: data.gov.sg pm25 items -> NowCast
+const mk = (h, w) => ({ timestamp: '2026-10-12T' + String(h).padStart(2, '0') + ':00:00+08:00', readings: { pm25_one_hourly: { west: w, north: 10 } } });
+const sgItems = [mk(5, 20), mk(6, 20), mk(7, 20), mk(8, 60), mk(9, 90)];
+const sgW = A.sgNowcastAqi(sgItems, 'west');
+assert.strictEqual(sgW.basis, 'nowcast');
+assert.ok(sgW.aqi > A.pm25ToAqi(20).aqi && sgW.aqi < A.pm25ToAqi(90).aqi);
+assert.strictEqual(A.sgNowcastAqi(sgItems, 'north').aqi, A.pm25ToAqi(10).aqi);
+assert.strictEqual(A.sgNowcastAqi([], 'west'), null);
+assert.strictEqual(A.sgNowcastAqi([mk(5, 20), mk(6, null), mk(7, null)], 'west'), null);
+
 // Singapore PSI bands (NEA) and PSI response parsing
 assert.strictEqual(A.psiBand(50).key, 'good');
 assert.strictEqual(A.psiBand(51).key, 'mod');

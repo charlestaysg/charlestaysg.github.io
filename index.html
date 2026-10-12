@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261012b">
+<link rel="stylesheet" href="styles.css?v=20261013a">
 </head>
 <body>
 
@@ -89,7 +89,14 @@
           <div class="links">
             <a href="projects/sg-haze/">Open the haze page →</a>
             <a href="https://www.haze.gov.sg" rel="noopener">NEA haze.gov.sg ↗</a>
+            <a href="https://www.channelnewsasia.com/singapore/haze-psi-aqi-air-quality-pm25-6452896" rel="noopener">CNA explainer: PSI, AQI, PM2.5 ↗</a>
           </div>
+          <p class="hosts"><strong>Why three copies?</strong> The same page runs in three places, each for a reason.</p>
+          <ul class="hosts">
+            <li><a href="projects/sg-haze/">GitHub Pages</a>: the main copy. Free, static, and opens on almost any network.</li>
+            <li><a href="https://sg-haze.pages.dev/" rel="noopener">Cloudflare Pages ↗</a>: adds what a static page can't do: live A&amp;E waiting times and a wider news search, fetched by a small server. Some office networks block pages.dev, so use the GitHub copy there.</li>
+            <li><a href="https://sg-haze.manus.space/" rel="noopener">Manus ↗</a>: an experiment. I asked the Manus AI agent to rebuild the page from the public code, to see how close it gets on its own. It adds Manus's own visitor analytics, and it may go offline.</li>
+          </ul>
         </div>
       </article>
       <article class="project" style="grid-template-columns:1fr;margin-top:48px">

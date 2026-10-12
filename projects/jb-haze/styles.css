@@ -169,6 +169,7 @@ button.primary { min-height: 44px; padding: 8px 16px; border: 0; border-radius: 
 .d-hero .nm { font-weight: 700; font-size: 1.05rem; }
 .d-hero .sub { color: var(--muted); font-size: .82rem; }
 .d-advice { font-size: .92rem; margin: 6px 0 10px; }
+.d-us24 { margin: 6px 0 0; font-size: .8rem; color: var(--muted); }
 dl.kv { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; margin: 0 0 10px; font-size: .88rem; }
 dl.kv dt { color: var(--muted); }
 dl.kv dd { margin: 0; font-weight: 600; text-align: right; }
