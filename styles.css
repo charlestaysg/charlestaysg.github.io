@@ -136,3 +136,14 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   .rail li { grid-template-columns: 64px 1fr; gap: 12px; }
   .rail li::before { left: 75px; }
 }
+
+/* video players: 16:9 cards, YouTube click-to-load */
+.player { width: 100%; }
+.player.wide { max-width: 760px; }
+.player.wide video, .player.wide iframe, .player.wide .yt { aspect-ratio: 16 / 9; min-width: 0; }
+.player iframe { width: 100%; border: 1px solid var(--line); display: block; background: #0B1324; }
+.yt { position: relative; display: block; width: 100%; padding: 0; border: 1px solid var(--line); background: #0B1324; cursor: pointer; }
+.yt img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.yt-play { position: absolute; left: 50%; top: 50%; width: 68px; height: 48px; margin: -24px 0 0 -34px; border-radius: 12px; background: rgba(0,0,0,.72); transition: background .15s; }
+.yt-play::after { content: ""; position: absolute; left: 27px; top: 14px; border-style: solid; border-width: 10px 0 10px 17px; border-color: transparent transparent transparent #fff; }
+.yt:hover .yt-play, .yt:focus-visible .yt-play { background: #c00; }

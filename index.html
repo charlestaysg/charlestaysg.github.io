@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261012">
+<link rel="stylesheet" href="styles.css?v=20261012b">
 </head>
 <body>
 
@@ -137,10 +137,10 @@
         </div>
       </article>
       <article class="project" style="margin-top:48px">
-        <video controls preload="none" playsinline poster="projects/models-as-insider-risks/poster.jpg"
+        <div class="player"><video controls preload="none" playsinline poster="projects/models-as-insider-risks/poster.jpg"
                aria-label="Models as Insider Risks: an 82-second motion graphic with on-screen text and music, no narration">
           <source src="projects/models-as-insider-risks/video.mp4" type="video/mp4">
-        </video>
+        </video></div>
         <div class="project-body">
           <span class="spec">82.5 s · 1080×1080 · 14 frames · original score (GarageBand)</span>
           <h3>Models as Insider Risks</h3>
@@ -154,27 +154,21 @@
         </div>
       </article>
       <article class="project" id="sunny-side" data-switch style="grid-template-columns:1fr;margin-top:48px">
-        <video controls preload="none" playsinline poster="projects/sunny-side/poster.jpg" style="aspect-ratio:16/9;max-width:760px"
-               aria-label="Sunny Side: a music video with flat, bright shapes and sing-along lyrics">
-          <source src="projects/sunny-side/video.mp4" type="video/mp4">
-        </video>
+        <div class="player wide"><button type="button" class="yt" data-yt="hCY1CcRLJj0" aria-label="Play Sunny Side on YouTube"><img src="projects/sunny-side/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
         <div class="project-body">
           <span class="spec" data-spec>75 s · 1920×1080 · 5 sections · sing-along lyrics</span>
           <h3>Sunny Side</h3>
           <p>A happy little song with a music video to match. The sun, clouds and confetti move on the beat and the chord changes, and each lyric lights up as it's sung. The Chinese and Japanese versions are new songs with lyrics written to be sung, not translated line by line.</p>
           <div class="links" role="group" aria-label="Choose a language">
-            <a href="projects/sunny-side/video.mp4" data-src="projects/sunny-side/video.mp4" data-poster="projects/sunny-side/poster.jpg" data-spec="75 s · 1920×1080 · 5 sections · sing-along lyrics" data-credit="Music and video by Charles Tay. Made with Claude, MiniMax-Music3 and HyperFrames. The music and vocals are AI-generated." aria-current="true">English</a>
+            <a href="https://www.youtube.com/watch?v=hCY1CcRLJj0" data-yt="hCY1CcRLJj0" data-poster="projects/sunny-side/poster.jpg" data-spec="75 s · 1920×1080 · 5 sections · sing-along lyrics" data-credit="Music and video by Charles Tay. Made with Claude, MiniMax-Music3 and HyperFrames. The music and vocals are AI-generated." aria-current="true">English</a>
             <a href="projects/sunny-side/video-zh.mp4" data-src="projects/sunny-side/video-zh.mp4" data-poster="projects/sunny-side/poster-zh.jpg" data-spec="94 s · 1920×1080 · Mandarin · sing-along lyrics" data-credit="Music and video by Charles Tay. Made with Claude, MiniMax-Music3 and HyperFrames. The music and vocals are AI-generated." lang="zh-Hans">中文 · 阳光那一方</a>
-            <a href="projects/sunny-side/video-ja.mp4" data-src="projects/sunny-side/video-ja.mp4" data-poster="projects/sunny-side/poster-ja.jpg" data-spec="103 s · 1920×1080 · Japanese with English subtitles" data-credit="Music and video by Charles Tay. Made with Claude, ChatCut, Mureka and HyperFrames. The music and vocals are AI-generated." lang="ja">日本語 · ひなたの道へ</a>
+            <a href="https://www.youtube.com/watch?v=XPLMVs5KcXM" data-yt="XPLMVs5KcXM" data-poster="projects/sunny-side/poster-ja.jpg" data-spec="103 s · 1920×1080 · Japanese with English subtitles" data-credit="Music and video by Charles Tay. Made with Claude, ChatCut, Mureka and HyperFrames. The music and vocals are AI-generated." lang="ja">日本語 · ひなたの道へ</a>
           </div>
           <p class="credit" data-credit>Music and video by Charles Tay. Made with Claude, MiniMax-Music3 and HyperFrames. The music and vocals are AI-generated.</p>
         </div>
       </article>
       <article class="project" style="grid-template-columns:1fr;margin-top:48px">
-        <video controls preload="none" playsinline poster="projects/home-is-you/poster.jpg" style="aspect-ratio:16/9;max-width:760px"
-               aria-label="家就是你 Home Is You: a three-minute Mandarin music video about family, with sing-along lyrics">
-          <source src="projects/home-is-you/video.mp4" type="video/mp4">
-        </video>
+        <div class="player wide"><button type="button" class="yt" data-yt="4yYU3Wo48vU" aria-label="Play 家就是你 Home Is You on YouTube"><img src="projects/home-is-you/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
         <div class="project-body">
           <span class="spec">3 min · 1920×1080 · Mandarin duet · sing-along lyrics</span>
           <h3><span lang="zh-Hans">家就是你</span> Home Is You</h3>
@@ -183,10 +177,7 @@
         </div>
       </article>
       <article class="project" id="same-sky" style="grid-template-columns:1fr;margin-top:48px">
-        <video controls preload="none" playsinline poster="projects/same-sky/poster.jpg" style="aspect-ratio:16/9;max-width:760px"
-               aria-label="Same Sky, Different Name: a lyric video in English and Malay about the 2026 haze">
-          <source src="projects/same-sky/video.mp4" type="video/mp4">
-        </video>
+        <div class="player wide"><button type="button" class="yt" data-yt="lkkhDWUn-MY" aria-label="Play Same Sky, Different Name on YouTube"><img src="projects/same-sky/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
         <div class="project-body">
           <span class="spec">4 min 11 s · 1920×1080 · English and Malay · sing-along lyrics</span>
           <h3>Same Sky, Different Name</h3>
@@ -195,10 +186,7 @@
         </div>
       </article>
       <article class="project" id="carve-her-a-heart" style="grid-template-columns:1fr;margin-top:48px">
-        <video controls preload="none" playsinline poster="projects/carve-her-a-heart/poster.jpg" style="aspect-ratio:16/9;max-width:760px"
-               aria-label="Carve Her a Heart: a folk lyric music video with a 3D animated workshop scene">
-          <source src="projects/carve-her-a-heart/video.mp4" type="video/mp4">
-        </video>
+        <div class="player wide"><button type="button" class="yt" data-yt="TkkY8mPAoeQ" aria-label="Play Carve Her a Heart on YouTube"><img src="projects/carve-her-a-heart/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
         <div class="project-body">
           <span class="spec">3 min 51 s · 1920×1080 · 3D animation · sing-along lyrics</span>
           <h3>Carve Her a Heart</h3>
@@ -207,10 +195,10 @@
         </div>
       </article>
       <article class="project" id="ben-and-mei" data-switch style="grid-template-columns:1fr;margin-top:48px">
-        <video controls preload="none" playsinline poster="projects/job-hugging/poster.jpg" style="aspect-ratio:16/9;max-width:760px"
+        <div class="player wide"><video controls preload="none" playsinline poster="projects/job-hugging/poster.jpg"
                aria-label="Ben and Auntie Mei: narrated cartoons about work and learning, with on-screen captions">
           <source src="projects/job-hugging/video.mp4" type="video/mp4">
-        </video>
+        </video></div>
         <div class="project-body">
           <span class="spec" data-spec>4 min 51 s · narrated · captions on screen</span>
           <h3>Ben &amp; Auntie Mei</h3>
@@ -225,10 +213,10 @@
         </div>
       </article>
       <article class="project" id="genai-cartoon" style="grid-template-columns:1fr;margin-top:48px">
-        <video controls preload="none" playsinline poster="projects/genai-cartoon/poster.jpg" style="aspect-ratio:16/9;max-width:760px"
+        <div class="player wide"><video controls preload="none" playsinline poster="projects/genai-cartoon/poster.jpg"
                aria-label="How Generative AI Works: a narrated cartoon for small business owners, with on-screen captions">
           <source src="projects/genai-cartoon/video.mp4" type="video/mp4">
-        </video>
+        </video></div>
         <div class="project-body">
           <span class="spec">3 min 33 s · narrated · captions on screen</span>
           <h3>How Generative AI Works</h3>
@@ -237,19 +225,25 @@
         </div>
       </article>
       <script>
+        const ytFrame = id => `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+        document.addEventListener('click', e => {
+          const b = e.target.closest('button.yt');
+          if (b) b.parentElement.innerHTML = ytFrame(b.dataset.yt);
+        });
         document.querySelectorAll('[data-switch]').forEach(card => {
-          const v = card.querySelector('video');
-          const btns = card.querySelectorAll('[data-src]');
+          const player = card.querySelector('.player');
+          const btns = card.querySelectorAll('.links a[data-yt], .links a[data-src]');
+          const label = card.querySelector('h3').textContent;
           btns.forEach(a => a.addEventListener('click', e => {
             e.preventDefault();
-            v.poster = a.dataset.poster;
-            v.querySelector('source').src = a.dataset.src;
-            v.load();
+            player.innerHTML = a.dataset.yt
+              ? `<button type="button" class="yt" data-yt="${a.dataset.yt}" aria-label="Play ${label} on YouTube"><img src="${a.dataset.poster}" alt=""><span class="yt-play" aria-hidden="true"></span></button>`
+              : `<video controls preload="none" playsinline poster="${a.dataset.poster}" aria-label="${label}"><source src="${a.dataset.src}" type="video/mp4"></video>`;
             card.querySelector('span[data-spec]').textContent = a.dataset.spec;
             card.querySelector('p[data-credit]').textContent = a.dataset.credit;
             const bl = card.querySelector('span[data-blurb]');
             if (bl && a.dataset.blurb) bl.textContent = a.dataset.blurb;
-            btns.forEach(b => b.toggleAttribute('aria-current', b === a));
+            btns.forEach(x => x.toggleAttribute('aria-current', x === a));
           }));
         });
       </script>
@@ -267,7 +261,7 @@
 <footer>
   <div class="wrap">
     <span>Views are my own, not Republic Polytechnic's.</span>
-    <span>Built by hand. No analytics, no cookies.</span>
+    <span>Built by hand. No analytics; no cookies unless you play a YouTube video.</span>
   </div>
 </footer>
 
