@@ -873,7 +873,6 @@ if (typeof document !== 'undefined') {
     const ex = st && st.pm25_24h != null ? ' ' + T('exp.1.example', { name: stName(st), pm: st.pm25_24h, api: pm25ToApi(st.pm25_24h) }) : '';
     el.textContent = T('exp.1', { example: ex.trim() });
     $('exp-2').textContent = T('exp.2');
-    const cna = $('exp-cna'); if (cna) { cna.replaceChildren(); appendMd(cna, T('exp.cna')); }
   }
 
   // ---- news

@@ -181,7 +181,7 @@
     'exp.2b': 'Now and then DOE leaves out flagged hours, so a station’s API can sit below what its 24-hour PM2.5 suggests.',
     'exp.2c': 'aqicn.org also works from recent 1-hour readings, so its numbers should now be close to the US AQI here.',
     'exp.3': 'Use the DOE API and its bands for Malaysian advisories and school closures. Use the US AQI to compare with apps and with Singapore.',
-    'exp.cna': 'More on PSI, AQI and PM2.5: [CNA explainer](https://www.channelnewsasia.com/singapore/haze-psi-aqi-air-quality-pm25-6452896).',
+    'ref.label': 'Reference:',
 
     'news.title': 'Haze news',
     'news.tab.impact': 'Impact in Malaysia',
@@ -392,7 +392,7 @@
     'exp.2b': 'Kadangkala JAS mengecualikan jam yang ditanda, jadi IPU sesebuah stesen boleh lebih rendah daripada yang dijangka daripada PM2.5 24 jamnya.',
     'exp.2c': 'aqicn.org juga menggunakan bacaan 1 jam terkini, jadi nombornya kini sepatutnya hampir sama dengan AQI AS di sini.',
     'exp.3': 'Gunakan IPU JAS dan tahapnya untuk nasihat dan penutupan sekolah di Malaysia. Gunakan AQI AS untuk membandingkan dengan aplikasi dan dengan Singapura.',
-    'exp.cna': 'Penjelasan lanjut tentang PSI, AQI dan PM2.5: [penjelas CNA (Bahasa Inggeris)](https://www.channelnewsasia.com/singapore/haze-psi-aqi-air-quality-pm25-6452896).',
+    'ref.label': 'Rujukan:',
 
     'news.title': 'Berita jerebu',
     'news.tab.impact': 'Kesan di Malaysia',
