@@ -29,8 +29,8 @@ button.primary { min-height: 44px; padding: 8px 16px; border: 0; border-radius: 
 /* ---------- header ---------- */
 .topbar { position: sticky; top: 0; z-index: 1000; background: var(--card); border-bottom: 1px solid var(--border);
   padding: var(--safe-t) max(16px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
-.tb-row { display: flex; justify-content: space-between; align-items: center; height: 44px; }
-.back { font-size: .85rem; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+.tb-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; height: 44px; }
+.back { font-size: .85rem; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; white-space: nowrap; }
 .lang { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
 .lang button { min-width: 44px; min-height: 44px; border: 0; background: var(--card); color: var(--text); font-weight: 600; }
 .lang button[aria-pressed="true"] { background: var(--accent); color: #fff; }
@@ -229,4 +229,17 @@ details#abbreviations dd { margin: 0; }
 @media (max-width: 380px) {
   .row { grid-template-columns: 44px 44px minmax(0, 1fr) 44px; gap: 6px; }
   .row svg { width: 44px; }
+}
+
+/* Singapore | Johor Bahru page switch (same markup on both haze pages) */
+.sites { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: .8rem; font-weight: 600; }
+.sites > a, .sites > span { min-height: 36px; display: inline-flex; align-items: center; padding: 0 10px; text-decoration: none; color: var(--text); background: var(--card); white-space: nowrap; }
+.sites > a:hover { background: var(--bg); }
+.sites > [aria-current="page"] { background: var(--accent); color: #fff; }
+@media (prefers-color-scheme: dark) { .sites > [aria-current="page"] { color: #0b1220; } }
+/* Short labels on narrow phones; the full name stays for screen readers. */
+.sites .short { display: none; }
+@media (max-width: 420px) {
+  .sites .full { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .sites .short { display: inline; }
 }

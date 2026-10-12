@@ -12,6 +12,8 @@
     'app.description': 'Unofficial hourly haze readings for Johor Bahru and Johor: DOE Malaysia API by station, wind, satellite fire hotspots, a 24-hour trend and haze news. English and Bahasa Melayu.',
     'badge.unofficial': 'UNOFFICIAL',
     'back': '← Charles Tay',
+    'nav.sg': 'Singapore',
+    'nav.sites': 'Haze pages',
     'lang.label': 'Language',
     'i18n.unreviewed': 'This Malay translation has not been checked by a native speaker yet. English is the reference.',
     'noscript': 'This page needs JavaScript to show live readings. For official readings, see APIMS (eqms.doe.gov.my).',
@@ -224,6 +226,8 @@
 
     'status.line': 'Bacaan APIMS {time} MYT · data laman {ago} · semakan seterusnya {mmss}',
     'status.loading': 'Memuatkan bacaan…',
+    'nav.sg': 'Singapura',
+    'nav.sites': 'Laman jerebu',
     'status.refresh': 'Muat semula sekarang',
     'banner.stale': 'Bacaan APIMS terkini ialah dari {ago}. Laman ini mungkin lapuk. Semak APIMS untuk bacaan rasmi.',
     'banner.error': 'Data tidak dapat dikemas kini. Memaparkan data terakhir yang diterima.',

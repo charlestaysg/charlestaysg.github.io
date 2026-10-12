@@ -143,3 +143,18 @@ details#abbreviations dd { margin: 0; }
 .tel-text { user-select: all; }
 .clinic .tel { user-select: text; }
 .feedback-card[hidden] { display: none; }
+
+/* Singapore | Johor Bahru page switch (same markup on both haze pages) */
+.sites { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; font-size: .8rem; font-weight: 600; }
+.sites > a, .sites > span { min-height: 36px; display: inline-flex; align-items: center; padding: 0 10px; text-decoration: none; color: var(--text); background: var(--card); white-space: nowrap; }
+.sites > a:hover { background: var(--bg); }
+.sites > [aria-current="page"] { background: var(--accent); color: #fff; }
+@media (prefers-color-scheme: dark) { .sites > [aria-current="page"] { color: #0b1220; } }
+/* Let the title take its own line under the back link and switch on phones. */
+@media (max-width: 600px) { .topbar-row h1 { flex-basis: 100%; order: 3; } }
+/* Short labels on narrow phones; the full name stays for screen readers. */
+.sites .short { display: none; }
+@media (max-width: 420px) {
+  .sites .full { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .sites .short { display: inline; }
+}
