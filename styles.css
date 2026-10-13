@@ -156,6 +156,8 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 .yt img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .yt-play { position: absolute; left: 50%; top: 50%; width: 68px; height: 48px; margin: -24px 0 0 -34px; border-radius: 12px; background: rgba(0,0,0,.72); transition: background .15s; }
 .yt-play::after { content: ""; position: absolute; left: 27px; top: 14px; border-style: solid; border-width: 10px 0 10px 17px; border-color: transparent transparent transparent #fff; }
+.yt-text { aspect-ratio: 16 / 9; background: linear-gradient(135deg,#0B1324,#1d2c4d); }
+.yt-caption { position: absolute; left: 14px; right: 14px; bottom: 12px; color: #fff; font-size: 13px; line-height: 1.35; text-align: left; }
 .yt:hover .yt-play, .yt:focus-visible .yt-play { background: #c00; }
 
 /* "Why three copies?" note under the Singapore haze card */
