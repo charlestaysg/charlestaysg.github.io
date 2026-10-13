@@ -70,6 +70,7 @@ h1 {
 }
 .dek em { font-style: normal; color: var(--green); }
 .hero-links { display: flex; flex-wrap: wrap; gap: 12px 24px; font-family: var(--font-mono); font-size: 14px; }
+.dek-note { font-size: 17px; line-height: 1.5; color: var(--muted); max-width: 48ch; margin: -6px 0 0; }
 
 /* sections */
 main section { padding-block: 64px; border-bottom: 1px solid var(--line); }
@@ -116,6 +117,14 @@ p { margin: 0; }
 .links a[data-src][aria-current] { border-color: currentColor; font-weight: 500; }
 .credit { font-size: 14px; color: var(--muted); line-height: 1.5; }
 
+/* work: three groups with a heading, one-line intro and a jump nav */
+.group-nav { margin: -4px 0 40px; }
+.group { scroll-margin-top: 24px; }
+.group + .group { margin-top: 72px; }
+.group-head { display: flex; flex-direction: column; gap: 8px; padding-top: 20px; border-top: 1px solid var(--line); margin-bottom: 28px; }
+.group-head h3 { font-family: var(--font-display); font-weight: 900; font-size: 24px; letter-spacing: -.02em; line-height: 1.1; margin: 0; }
+.group-head p { color: var(--muted); font-size: 16px; line-height: 1.5; max-width: 64ch; }
+
 .list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
 .list li { border-bottom: 1px solid var(--line); padding: 16px 0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 18px; }
 .list a { font-weight: 700; font-size: 19px; text-decoration: none; color: var(--ink); }
@@ -126,6 +135,7 @@ footer { border-top: 1px solid var(--line); padding-block: 28px 48px; color: var
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
 
 @media (max-width: 640px) {
+  .group + .group { margin-top: 56px; }
   body { font-size: 17px; padding-inline: 16px; }
   .hero { margin-inline: -16px; padding: 72px 16px 56px; }
   .reg { display: none; }
