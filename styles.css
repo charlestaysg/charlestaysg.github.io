@@ -152,3 +152,16 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 .hosts { font-size: 15px; color: var(--muted); margin: 14px 0 0; }
 ul.hosts { padding-left: 20px; margin-top: 6px; display: grid; gap: 6px; }
 .hosts strong { color: var(--ink); }
+
+/* news: dated entries; vertical (9:16) video beside the text, stacked on phones */
+.news-item { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 28px; align-items: start; }
+.news-item + .news-item { margin-top: 40px; padding-top: 40px; border-top: 1px solid var(--line); }
+.news-item h3 { font-family: var(--font-display); font-weight: 900; font-size: 30px; letter-spacing: -.02em; line-height: 1.05; margin: 0; }
+.player.tall video { width: 100%; aspect-ratio: 9 / 16; background: #111111; border: 1px solid var(--line); display: block; }
+.spec-list { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; padding: 12px 0; border-block: 1px solid var(--line); }
+.spec-list dt { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--green); padding-top: 3px; }
+.spec-list dd { margin: 0; font-weight: 700; }
+@media (max-width: 640px) {
+  .news-item { grid-template-columns: 1fr; }
+  .news-item .player.tall { max-width: 320px; }
+}
