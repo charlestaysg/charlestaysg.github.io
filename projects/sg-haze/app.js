@@ -321,7 +321,8 @@ if (typeof document !== 'undefined') {
   }
 
   /* ---------- data.gov.sg ---------- */
-  async function dgsGet(url, budget = 4) {
+  // notFoundOk: data.gov.sg answers code 17 (no data) for today's date until the first reading after midnight is published.
+  async function dgsGet(url, budget = 4, notFoundOk = false) {
     for (let attempt = 0; attempt < 2; attempt++) {
       if (dgsCalls >= budget) throw new Error('data.gov.sg call budget reached');
       dgsCalls++;
@@ -335,6 +336,7 @@ if (typeof document !== 'undefined') {
       } finally { clearTimeout(timer); }
       const limited = status === 429 || (json && json.code === 24);
       if (limited && attempt === 0) { await sleep(10000); continue; }
+      if (notFoundOk && json && json.code === 17) return null;
       if (!json || json.code !== 0) throw new Error(`data.gov.sg error (${status || 'network'}${json && json.code != null ? ' code ' + json.code : ''})`);
       return json;
     }
@@ -345,7 +347,8 @@ if (typeof document !== 'undefined') {
     let items = [], meta = null, token = null;
     for (let page = 0; page < 3; page++) {
       const q = `?date=${dateStr}` + (token ? `&paginationToken=${encodeURIComponent(token)}` : '');
-      const json = await dgsGet(PM25_URL + q, budget);
+      const json = await dgsGet(PM25_URL + q, budget, true);
+      if (!json) break; // no readings for this date yet
       meta = meta || json.data.regionMetadata;
       items = items.concat(json.data.items || []);
       token = json.data.paginationToken;
@@ -386,6 +389,12 @@ if (typeof document !== 'undefined') {
     try {
       const today = sgDateStr(new Date());
       const day = await fetchPm25Day(today);
+      if (!day.items.length) {
+        // Just after midnight: today's list is empty, so take the latest reading (no date filter).
+        await sleep(1000);
+        const latest = await dgsGet(PM25_URL, 4, true);
+        if (latest) { day.items = latest.data.items || []; day.meta = day.meta || latest.data.regionMetadata; }
+      }
       state.items = day.items;
       if (day.meta) {
         for (const r of day.meta) state.regionMeta[r.name] = { lat: r.labelLocation.latitude, lng: r.labelLocation.longitude };
