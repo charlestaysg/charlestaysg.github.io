@@ -154,7 +154,8 @@
     <p class="dek">The tools behind an 82-second motion graphic that breaks down Satya Nadella's essay on treating AI like a new staff member, from the source text to the final MP4.</p>
   </header>
 
-  <video controls preload="none" playsinline poster="poster.jpg" style="width:100%;max-width:560px;aspect-ratio:1/1;background:#0B1324;border:1px solid var(--line);display:block" aria-label="Models as Insider Risks: an 82-second motion graphic with on-screen text and music, no narration"><source src="video.mp4" type="video/mp4"></video>
+  <div id="yt-models" style="width:100%;max-width:560px;aspect-ratio:1/1;background:#0B1324;border:1px solid var(--line)"><button type="button" data-yt="RgNBEOPPe4w" aria-label="Play Models as Insider Risks on YouTube" style="all:unset;cursor:pointer;display:block;position:relative;width:100%;height:100%"><img src="poster.jpg" alt="" style="width:100%;height:100%;object-fit:contain;display:block"><span aria-hidden="true" style="position:absolute;left:50%;top:50%;width:68px;height:48px;margin:-24px 0 0 -34px;border-radius:12px;background:rgba(0,0,0,.72)"><span style="position:absolute;left:27px;top:14px;border-style:solid;border-width:10px 0 10px 17px;border-color:transparent transparent transparent #fff"></span></span></button></div>
+  <script>document.querySelector('#yt-models button').addEventListener('click',function(){this.parentElement.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/RgNBEOPPe4w?autoplay=1&rel=0" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen style="width:100%;height:100%;border:0;display:block"></iframe>';});</script>
 
   <div class="spec" aria-label="Video specification">
     <div><span class="label">Length</span><b>82.5 s</b></div>
