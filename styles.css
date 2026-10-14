@@ -88,6 +88,12 @@ p { margin: 0; }
 .focus h3 { margin: 0; font-size: 19px; font-weight: 700; line-height: 1.25; }
 .focus p { color: var(--muted); font-size: 16px; line-height: 1.5; }
 
+.working { max-width: 64ch; margin-top: 28px; background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--green); padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; }
+.working h3 { margin: 0; font-size: 19px; font-weight: 700; line-height: 1.25; }
+.working p { color: var(--muted); font-size: 16px; line-height: 1.5; }
+.working ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.working li { line-height: 1.5; }
+
 .creds { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; }
 .creds li {
   font-family: var(--font-mono); font-size: 12.5px; line-height: 1.4;
