@@ -44,7 +44,9 @@ OUT_FIELDS = ("STATION_ID,DATETIME,API,CLASS,PARAM_SELECTED,PM25_CONC,PM25_24H_A
 
 FIRMS_SOURCES = ["VIIRS_SNPP_NRT", "VIIRS_NOAA20_NRT", "VIIRS_NOAA21_NRT"]
 FIRMS_BBOX = [95, -6, 120, 8]
-FIRMS_URL = "https://firms.modaps.eosdis.nasa.gov/api/area/csv/%s/%s/%s/1"
+# Day range 2: FIRMS dates are UTC and NRT passes can arrive hours late, so "today" alone is often empty.
+# build_hotspots() still keeps only the last 24 h.
+FIRMS_URL = "https://firms.modaps.eosdis.nasa.gov/api/area/csv/%s/%s/%s/2"
 SAT_CODE = {"N": "N", "N20": "1", "N21": "2"}
 SAT_NAME = {"N": "Suomi NPP", "1": "NOAA-20", "2": "NOAA-21"}
 MAX_POINTS = 3000
