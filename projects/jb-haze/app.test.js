@@ -16,9 +16,14 @@ assert.strictEqual(A.apiBand(null).key, 'nodata');
 // DOE PM2.5 sub-index: Larkin 24-h 81.07 ug/m3 -> API 164
 assert.strictEqual(A.pm25ToApi(81.07), 164);
 assert.strictEqual(A.pm25ToApi(12.0), 50);
-// US AQI (2024 breakpoints) and NowCast
-assert.strictEqual(A.pm25ToAqi(9.0).aqi, 50);
+// US AQI: pre-2024 EPA scale on the latest hour (aqicn's method). Checked against aqicn 14 Oct 2026:
+// Larkin 181.2 -> 231, Singapore West 269 -> 319.
+assert.strictEqual(A.pm25ToAqi(12.0).aqi, 50);
 assert.strictEqual(A.pm25ToAqi(35.4).aqi, 100);
+assert.strictEqual(A.pm25ToAqi(181.2).aqi, 231);
+assert.strictEqual(A.pm25ToAqi(269).aqi, 319);
+assert.strictEqual(A.nowcastAqi([100, null, 181.2], null).aqi, 231);
+assert.strictEqual(A.nowcastAqi([100, null], 181.2).aqi, 231);
 assert.strictEqual(A.nowcast([null, null, 10]), null);
 assert.strictEqual(A.nowcast([20, 20, 20]), 20);
 assert.ok(A.nowcast([100, 50, 20, null, 10]) > 50);
@@ -77,9 +82,9 @@ assert.strictEqual(A.hotspotMode({ mode: 'points', generated: '2026-10-12T11:00:
 assert.strictEqual(A.filterHotspots([[0, 0, 'h'], [0, 0, 'n']], 'high').length, 1);
 assert.strictEqual(A.hhmm('0645'), '06:45');
 
-// US AQI from DOE 24-h PM2.5 (EPA 2024 breakpoints)
-// 81.07 -> 81.0; (200-151)/(125.4-55.5)*(81.0-55.5)+151 = 168.88 -> 169, "unh"
-assert.strictEqual(A.usAqiFor({ pm25_24h: 81.07 }).aqi, 169);
+// US AQI from DOE 24-h PM2.5 (pre-2024 EPA scale, the same breakpoints DOE uses, so it equals DOE's PM2.5 sub-index)
+// 81.07 -> 81.0; (200-151)/(150.4-55.5)*(81.0-55.5)+151 = 164.2 -> 164, "unh"
+assert.strictEqual(A.usAqiFor({ pm25_24h: 81.07 }).aqi, 164);
 assert.strictEqual(A.usAqiFor({ pm25_24h: 81.07 }).key, 'unh');
 assert.strictEqual(A.usAqiFor({ pm25_24h: 40 }).aqi, 112);
 assert.strictEqual(A.usAqiFor({ pm25_24h: 40 }).key, 'usg');
@@ -89,36 +94,32 @@ assert.strictEqual(A.usAqiFor({ pm25_24h: null }), null);
 assert.strictEqual(A.usAqiFor({}), null);
 assert.strictEqual(A.usAqiFor(null), null);
 
-// NowCast US AQI: steady series equals the plain conversion; a rising spike beats the 24-h based figure
-const steady = Array(12).fill(20);
-assert.strictEqual(A.nowcastAqi(steady, 20).aqi, A.pm25ToAqi(20).aqi);
+// US AQI = latest 1-hour reading on the pre-2024 EPA scale (aqicn's method)
 const spike = [20, 20, 20, 20, 20, 20, 20, 20, 25, 40, 70, 100]; // oldest first
 const spikeSt = { pm25: 100, pm25_24h: 35 };
 const best = A.usAqiBest(spikeSt, spike);
-assert.strictEqual(best.basis, 'nowcast');
+assert.strictEqual(best.basis, '1h');
+assert.strictEqual(best.aqi, A.pm25ToAqi(100).aqi);
 assert.ok(best.aqi > A.usAqiFor(spikeSt).aqi);
-assert.ok(best.aqi < A.pm25ToAqi(100).aqi); // weighted, below the raw latest hour
 // latest pm25 fills a missing last hour
 const gapLast = spike.slice(0, 11).concat([null]);
-assert.strictEqual(A.nowcastAqi(gapLast, 100).aqi, A.nowcastAqi(spike, 100).aqi);
-// fewer than 2 of the last 3 hours -> null -> flagged 24-h fallback
-const sparse = [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, null, null];
-assert.strictEqual(A.nowcastAqi(sparse, null), null);
-const fb = A.usAqiBest({ pm25: null, pm25_24h: 81.07 }, sparse);
+assert.strictEqual(A.nowcastAqi(gapLast, 100).aqi, A.pm25ToAqi(100).aqi);
+// no reading for the latest hour at all -> flagged 24-h fallback
+const fb = A.usAqiBest({ pm25: null, pm25_24h: 81.07 }, [50, 50, null]);
 assert.strictEqual(fb.basis, '24h');
-assert.strictEqual(fb.aqi, 169);
-assert.strictEqual(A.usAqiBest({ pm25: null, pm25_24h: null }, sparse), null);
+assert.strictEqual(fb.aqi, 164);
+assert.strictEqual(A.usAqiBest({ pm25: null, pm25_24h: null }, [null]), null);
 assert.strictEqual(A.usAqiBest(null, []), null);
-assert.strictEqual(A.usAqiBest({ pm25: 30, pm25_24h: 30 }, []).basis, '24h'); // one hour alone is not enough
-// Singapore: data.gov.sg pm25 items -> NowCast
+assert.strictEqual(A.usAqiBest({ pm25: 30, pm25_24h: 30 }, []).basis, '1h'); // one hour is enough now
+// Singapore: data.gov.sg pm25 items -> latest hour
 const mk = (h, w) => ({ timestamp: '2026-10-12T' + String(h).padStart(2, '0') + ':00:00+08:00', readings: { pm25_one_hourly: { west: w, north: 10 } } });
-const sgItems = [mk(5, 20), mk(6, 20), mk(7, 20), mk(8, 60), mk(9, 90)];
+const sgItems = [mk(5, 20), mk(6, 20), mk(7, 20), mk(8, 60), mk(9, 269)];
 const sgW = A.sgNowcastAqi(sgItems, 'west');
-assert.strictEqual(sgW.basis, 'nowcast');
-assert.ok(sgW.aqi > A.pm25ToAqi(20).aqi && sgW.aqi < A.pm25ToAqi(90).aqi);
+assert.strictEqual(sgW.basis, '1h');
+assert.strictEqual(sgW.aqi, 319);
+assert.strictEqual(sgW.ts, '2026-10-12T09:00:00+08:00');
 assert.strictEqual(A.sgNowcastAqi(sgItems, 'north').aqi, A.pm25ToAqi(10).aqi);
 assert.strictEqual(A.sgNowcastAqi([], 'west'), null);
-assert.strictEqual(A.sgNowcastAqi([mk(5, 20), mk(6, null), mk(7, null)], 'west'), null);
 
 // Singapore PSI bands (NEA) and PSI response parsing
 assert.strictEqual(A.psiBand(50).key, 'good');
@@ -189,12 +190,12 @@ for (const lang of ['en', 'ms']) {
   assert.strictEqual(A.stationAtStep(hist, 'A', 15).api, 115);
   assert.strictEqual(A.stationAtStep(hist, 'A', 28).api, null);
   assert.strictEqual(A.stationAtStep(hist, 'nope', 15).api, null);
-  // NowCast at an hour: only hours up to the chosen one count; PM2.5 55 flat -> AQI 150 band
+  // US AQI at an hour uses that hour's own reading
   const flat = { start: '2026-10-10T01:00:00+08:00', hours: 20, stations: { F: { api: Array(20).fill(120), pm25: Array(20).fill(12.0).map((v, i) => (i < 10 ? 12.0 : 55.0)) } } };
   assert.strictEqual(A.stationAtStep(flat, 'F', 5).aq.aqi, A.pm25ToAqi(12.0).aqi);
-  assert.strictEqual(A.stationAtStep(flat, 'F', 5).aq.basis, 'nowcast');
+  assert.strictEqual(A.stationAtStep(flat, 'F', 5).aq.basis, '1h');
   assert.ok(A.stationAtStep(flat, 'F', 19).aq.aqi > A.stationAtStep(flat, 'F', 5).aq.aqi);
-  // NowCast needs two of the last three hours; with a 24-h mean over 12+ values it falls back to the '24h' tag
+  // no reading at that hour: with a 24-h mean over 12+ values it falls back to the '24h' tag
   const sparse = { start: '2026-10-10T01:00:00+08:00', hours: 20, stations: { S: { api: Array(20).fill(80), pm25: Array(20).fill(20).map((v, i) => (i >= 17 ? null : v)) } } };
   const fb = A.stationAtStep(sparse, 'S', 19);
   assert.strictEqual(fb.aq.basis, '24h');

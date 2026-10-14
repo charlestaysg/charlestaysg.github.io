@@ -66,9 +66,11 @@ function apiBand(api) {
   return API_BANDS.find(b => api <= b.max) || API_BANDS[4];
 }
 
-const AQI_BREAKPOINTS = [ // US EPA 2024 PM2.5: [cLo, cHi, iLo, iHi]
-  [0, 9.0, 0, 50], [9.1, 35.4, 51, 100], [35.5, 55.4, 101, 150],
-  [55.5, 125.4, 151, 200], [125.5, 225.4, 201, 300], [225.5, 325.4, 301, 500],
+// [cLo, cHi, iLo, iHi]. The pre-2024 US EPA PM2.5 scale on the latest 1-hour reading: what aqicn.org shows for
+// Johor and Singapore stations, so the US AQI here matches it (and the Singapore haze page).
+const AQI_BREAKPOINTS = [
+  [0, 12.0, 0, 50], [12.1, 35.4, 51, 100], [35.5, 55.4, 101, 150], [55.5, 150.4, 151, 200],
+  [150.5, 250.4, 201, 300], [250.5, 350.4, 301, 400], [350.5, 500.4, 401, 500],
 ];
 const AQI_CATS = [
   { key: 'good', max: 50, color: '#00e400' }, { key: 'mod', max: 100, color: '#ffff00' },
@@ -86,7 +88,7 @@ function pm25ToAqi(c) {
   if (c == null || isNaN(c)) return null;
   c = Math.floor(c * 10 + 1e-6) / 10;
   let aqi = 500;
-  if (c <= 325.4) {
+  if (c <= 500.4) {
     const bp = AQI_BREAKPOINTS.find(b => c <= b[1]);
     aqi = Math.round((bp[3] - bp[2]) / (bp[1] - bp[0]) * (c - bp[0]) + bp[2]);
   }
@@ -116,34 +118,31 @@ function nowcast(values) {
   v.forEach((x, i) => { if (x != null) { const wi = Math.pow(w, i); num += wi * x; den += wi; } });
   return Math.round(num / den * 10) / 10;
 }
-/** US AQI by NowCast of the last 12 hourly PM2.5 values. `series` oldest-first (null = gap); `latest` is the current
- * 1-hour reading, used when the series' last hour is missing it. Returns an AQI object or null. */
+/** US AQI from the latest 1-hour PM2.5 (aqicn's method). `series` oldest-first (null = gap); `latest` is the current
+ * 1-hour reading, used when the series' last hour is missing it. Returns an AQI object or null.
+ * (Name kept from the earlier NowCast version so callers don't change.) */
 function nowcastAqi(series, latest) {
-  const v = (series || []).slice(-NOWCAST_HOURS).reverse();
-  if (latest != null && v.length && v[0] == null) v[0] = latest;
-  if (!v.length && latest != null) v.push(latest);
-  const nc = nowcast(v);
-  return nc == null ? null : pm25ToAqi(nc);
+  const v = (series || []).slice();
+  let c = v.length ? v[v.length - 1] : null;
+  if (c == null) c = latest;
+  return c == null ? null : pm25ToAqi(c);
 }
-/** Headline US AQI for a station: NowCast when computable, else the 24-hour figure tagged basis '24h'. Returns {aqi,key,color,basis} or null. */
+/** Headline US AQI for a station: latest 1-hour reading when present, else the 24-hour figure tagged basis '24h'. Returns {aqi,key,color,basis} or null. */
 function usAqiBest(st, series) {
   if (!st) return null;
   const nc = nowcastAqi(series, st.pm25);
-  if (nc) return Object.assign({ basis: 'nowcast' }, nc);
+  if (nc) return Object.assign({ basis: '1h' }, nc);
   const d = usAqiFor(st);
   return d ? Object.assign({ basis: '24h' }, d) : null;
 }
-/** NowCast US AQI for one Singapore region from data.gov.sg pm25 items ({timestamp, readings.pm25_one_hourly}). */
+/** US AQI (latest hour, aqicn method) for one Singapore region from data.gov.sg pm25 items ({timestamp, readings.pm25_one_hourly}). */
 function sgNowcastAqi(items, region) {
   const all = (items || []).slice().sort((a, b) => (a.timestamp < b.timestamp ? -1 : 1));
   const vals = all.map(it => { const v = ((it.readings || {}).pm25_one_hourly || {})[region]; return v == null ? null : v; });
   let last = -1;
   for (let i = vals.length - 1; i >= 0; i--) if (vals[i] != null) { last = i; break; }
   if (last < 0) return null;
-  const hist = [];
-  for (let j = last; j > last - NOWCAST_HOURS && j >= 0; j--) hist.push(vals[j]);
-  const nc = nowcast(hist);
-  return nc == null ? null : Object.assign({ basis: 'nowcast', ts: all[last].timestamp }, pm25ToAqi(nc));
+  return Object.assign({ basis: '1h', ts: all[last].timestamp }, pm25ToAqi(vals[last]));
 }
 /** DOE PM2.5 sub-index from the 24-hour average (explainer only; the page shows DOE's own API). */
 const API_PM25_BREAKS = [[0, 12.0, 0, 50], [12.1, 35.4, 51, 100], [35.5, 55.4, 101, 150], [55.5, 150.4, 151, 200],
@@ -311,7 +310,7 @@ function stationAtStep(history, id, idx) {
   const a = (s.api || [])[idx];
   const pm = (s.pm25 || []).slice(0, idx + 1);
   let aq = nowcastAqi(pm, null);
-  if (aq) aq = Object.assign({ basis: 'nowcast' }, aq);
+  if (aq) aq = Object.assign({ basis: '1h' }, aq);
   else {
     const w = pm.slice(-24).filter(x => x != null);
     if (w.length >= 12) aq = Object.assign({ basis: '24h' }, pm25ToAqi(w.reduce((t, x) => t + x, 0) / w.length));
