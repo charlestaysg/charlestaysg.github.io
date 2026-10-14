@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261014f">
+<link rel="stylesheet" href="styles.css?v=20261014h">
 </head>
 <body>
 
@@ -31,6 +31,7 @@
     <p class="dek">Workplace learning designer since 2004, making AI adoption at work <em>practical, careful and easy to explain.</em></p>
     <p class="dek-note">On this page: live tools, explainer videos and AI experiments, most of them made without writing code.</p>
     <nav class="hero-links" aria-label="Quick links">
+      <a href="#live">Live haze ↓</a>
       <a href="#work">See the work ↓</a>
       <a href="#toolkit">Toolkit ↓</a>
       <a href="#news">News ↓</a>
@@ -40,7 +41,53 @@
   </div>
 </header>
 
+<aside class="haze-now" id="haze-now" aria-label="Haze now">
+  <div class="wrap">
+    <span class="hn-dot" aria-hidden="true"></span>
+    <span class="hn-label">Haze now</span>
+    <span class="hn-text" id="hn-text">Live hourly haze readings for Singapore and Johor Bahru.</span>
+    <span class="hn-links"><a href="projects/sg-haze/">Singapore →</a><a href="projects/jb-haze/">Johor Bahru →</a></span>
+  </div>
+</aside>
+
 <main>
+  <section id="live">
+    <div class="wrap">
+      <div class="sec-head"><h2>live</h2></div>
+      <p class="live-intro">Two unofficial haze pages that put the hourly readings, wind, news and help on one screen. Official sources: NEA for Singapore, DOE Malaysia for Johor.</p>
+      <article class="project" style="grid-template-columns:1fr">
+        <div class="project-body">
+          <span class="spec">live · NEA hourly PM2.5 · US AQI · 5 regions</span>
+          <h3>Singapore Haze, Hourly</h3>
+          <p>One page instead of two. NEA's 1-hour PM2.5 sits next to the US AQI for each region, with wind, the 2-hour rain forecast, haze news, A&amp;E links and a GP finder by postal code. Unofficial; NEA is the official source.</p>
+          <div class="links">
+            <a href="projects/sg-haze/">Open the haze page →</a>
+            <a href="https://www.haze.gov.sg" rel="noopener">NEA haze.gov.sg ↗</a>
+          </div>
+          <p class="share-row" data-share="sg"><span class="label">Share</span> <a class="share-wa" href="#" rel="noopener" target="_blank">WhatsApp ↗</a> <button type="button" class="share-native" hidden>Share…</button> <button type="button" class="share-copy">Copy link</button> <span class="share-msg" role="status"></span></p>
+          <p class="hosts"><strong>Why three copies?</strong> The same page runs in three places, each for a reason.</p>
+          <ul class="hosts">
+            <li><a href="projects/sg-haze/">GitHub Pages</a>: the main copy. Free, static, and opens on almost any network.</li>
+            <li><a href="https://sg-haze.pages.dev/" rel="noopener">Cloudflare Pages ↗</a>: adds what a static page can't do: live A&amp;E waiting times and a wider news search, fetched by a small server. Some office networks block pages.dev, so use the GitHub copy there.</li>
+            <li><a href="https://sg-haze.manus.space/" rel="noopener">Manus ↗</a>: an experiment. I asked the Manus AI agent to rebuild the page from the public code, to see how close it gets on its own. It adds Manus's own visitor analytics, and it may go offline.</li>
+          </ul>
+        </div>
+      </article>
+      <article class="project" style="grid-template-columns:1fr;margin-top:48px" id="jb-haze-card">
+        <div class="project-body">
+          <span class="spec">live · DOE Malaysia APIMS hourly · Johor stations · Singapore comparison · EN/BM</span>
+          <h3>Johor Bahru Haze, Hourly</h3>
+          <p>The Johor side of the haze. DOE Malaysia's hourly API for each Johor station on a map, with wind arrows, satellite fire hotspots, a 24-hour trend, health advice by band and haze news, in English and Bahasa Melayu. Unofficial; DOE's APIMS is the official source.</p>
+          <div class="links">
+            <a href="projects/jb-haze/">Open the JB haze page →</a>
+            <a href="https://eqms.doe.gov.my/APIMS/main" rel="noopener">APIMS (official) ↗</a>
+          </div>
+          <p class="share-row" data-share="jb"><span class="label">Share</span> <a class="share-wa" href="#" rel="noopener" target="_blank">WhatsApp ↗</a> <button type="button" class="share-native" hidden>Share…</button> <button type="button" class="share-copy">Copy link</button> <span class="share-msg" role="status"></span></p>
+        </div>
+      </article>
+    </div>
+  </section>
+
   <section id="about">
     <div class="wrap">
       <div class="sec-head"><h2>about</h2></div>
@@ -250,35 +297,7 @@
           <h3>Experiments</h3>
           <p>Live pages and music videos made to test what AI tools can do, most of them without writing code.</p>
         </div>
-      <article class="project" style="grid-template-columns:1fr">
-        <div class="project-body">
-          <span class="spec">live · NEA hourly PM2.5 · US AQI · 5 regions</span>
-          <h3>Singapore Haze, Hourly</h3>
-          <p>One page instead of two. NEA's 1-hour PM2.5 sits next to the US AQI for each region, with wind, the 2-hour rain forecast, haze news, A&amp;E links and a GP finder by postal code. Unofficial; NEA is the official source.</p>
-          <div class="links">
-            <a href="projects/sg-haze/">Open the haze page →</a>
-            <a href="https://www.haze.gov.sg" rel="noopener">NEA haze.gov.sg ↗</a>
-          </div>
-          <p class="hosts"><strong>Why three copies?</strong> The same page runs in three places, each for a reason.</p>
-          <ul class="hosts">
-            <li><a href="projects/sg-haze/">GitHub Pages</a>: the main copy. Free, static, and opens on almost any network.</li>
-            <li><a href="https://sg-haze.pages.dev/" rel="noopener">Cloudflare Pages ↗</a>: adds what a static page can't do: live A&amp;E waiting times and a wider news search, fetched by a small server. Some office networks block pages.dev, so use the GitHub copy there.</li>
-            <li><a href="https://sg-haze.manus.space/" rel="noopener">Manus ↗</a>: an experiment. I asked the Manus AI agent to rebuild the page from the public code, to see how close it gets on its own. It adds Manus's own visitor analytics, and it may go offline.</li>
-          </ul>
-        </div>
-      </article>
-      <article class="project" style="grid-template-columns:1fr;margin-top:48px">
-        <div class="project-body">
-          <span class="spec">live · DOE Malaysia APIMS hourly · Johor stations · Singapore comparison · EN/BM</span>
-          <h3>Johor Bahru Haze, Hourly</h3>
-          <p>The Johor side of the haze. DOE Malaysia's hourly API for each Johor station on a map, with wind arrows, satellite fire hotspots, a 24-hour trend, health advice by band and haze news, in English and Bahasa Melayu. Unofficial; DOE's APIMS is the official source.</p>
-          <div class="links">
-            <a href="projects/jb-haze/">Open the JB haze page →</a>
-            <a href="https://eqms.doe.gov.my/APIMS/main" rel="noopener">APIMS (official) ↗</a>
-          </div>
-        </div>
-      </article>
-      <article class="project" id="same-sky" style="grid-template-columns:1fr;margin-top:48px">
+      <article class="project" id="same-sky" style="grid-template-columns:1fr">
         <div class="player wide"><button type="button" class="yt" data-yt="lkkhDWUn-MY" aria-label="Play Same Sky, Different Name on YouTube"><img src="projects/same-sky/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
         <div class="project-body">
           <span class="spec">4 min 11 s · 1920×1080 · English and Malay · sing-along lyrics</span>
@@ -386,5 +405,47 @@
   </div>
 </footer>
 
+<script>
+// "Haze now" strip: worst NEA region from the latest 1-hour PM2.5. Keeps the plain text if anything fails.
+(function () {
+  var el = document.getElementById('haze-now'), txt = document.getElementById('hn-text');
+  if (!el || !window.fetch) return;
+  var bands = [[55, 'I', 'Normal'], [150, 'II', 'Elevated'], [250, 'III', 'High'], [Infinity, 'IV', 'Very High']];
+  fetch('https://api-open.data.gov.sg/v2/real-time/api/pm25').then(function (r) { return r.json(); }).then(function (j) {
+    var items = j && j.code === 0 && j.data.items; if (!items || !items.length) return;
+    var it = items[items.length - 1], r = it.readings.pm25_one_hourly, worst = null;
+    Object.keys(r).forEach(function (k) { if (worst === null || r[k] > r[worst]) worst = k; });
+    if (worst === null) return;
+    var v = r[worst], b = bands.find(function (x) { return v <= x[0]; });
+    var t = new Intl.DateTimeFormat('en-SG', { timeZone: 'Asia/Singapore', hour: 'numeric', hour12: true }).format(new Date(it.timestamp)).replace(' ', '').toLowerCase();
+    txt.textContent = 'Singapore worst now: ' + worst[0].toUpperCase() + worst.slice(1) + ' ' + v + ' \u00b5g/m\u00b3 \u00b7 Band ' + b[1] + ' ' + b[2] + ' \u00b7 NEA ' + t;
+    el.dataset.band = b[1];
+  }).catch(function () {});
+})();
+</script>
+<script>
+// Share buttons for the two haze pages: WhatsApp link, the phone's own share sheet when available, and copy link.
+(function () {
+  var msgs = {
+    sg: { url: 'https://charlestaysg.github.io/projects/sg-haze/', text: "Singapore haze, hourly: NEA's 1-hour PM2.5 for each region next to the US AQI, plus wind, rain, haze news and the nearest GP clinics by postal code. Unofficial; haze.gov.sg is the official source." },
+    jb: { url: 'https://charlestaysg.github.io/projects/jb-haze/', text: "Johor Bahru haze, hourly: DOE Malaysia readings for each Johor station on a map, with wind, fire hotspots and haze news, in English and Bahasa Melayu. Unofficial; APIMS is the official source." }
+  };
+  document.querySelectorAll('.share-row').forEach(function (row) {
+    var m = msgs[row.dataset.share]; if (!m) return;
+    var full = m.text + ' ' + m.url, note = row.querySelector('.share-msg');
+    row.querySelector('.share-wa').href = 'https://wa.me/?text=' + encodeURIComponent(full);
+    var nat = row.querySelector('.share-native');
+    if (navigator.share) {
+      nat.hidden = false;
+      nat.addEventListener('click', function () { navigator.share({ title: document.title, text: m.text, url: m.url }).catch(function () {}); });
+    }
+    row.querySelector('.share-copy').addEventListener('click', function () {
+      var done = function () { note.textContent = 'Link copied'; setTimeout(function () { note.textContent = ''; }, 2500); };
+      if (navigator.clipboard) navigator.clipboard.writeText(full).then(done, function () { note.textContent = m.url; });
+      else note.textContent = m.url;
+    });
+  });
+})();
+</script>
 </body>
 </html>
