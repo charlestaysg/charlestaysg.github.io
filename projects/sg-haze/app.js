@@ -77,9 +77,11 @@ function neaBand(pm) {
   return NEA_BANDS.find(b => pm <= b.max) || NEA_BANDS[3];
 }
 
-const AQI_BREAKPOINTS = [ // [cLo, cHi, iLo, iHi], US EPA 2024 PM2.5
-  [0, 9.0, 0, 50], [9.1, 35.4, 51, 100], [35.5, 55.4, 101, 150],
-  [55.5, 125.4, 151, 200], [125.5, 225.4, 201, 300], [225.5, 325.4, 301, 500],
+// [cLo, cHi, iLo, iHi]. The pre-2024 US EPA PM2.5 scale, applied to the single latest hour,
+// because that is what aqicn.org shows for Singapore; matching it is the point of this page.
+const AQI_BREAKPOINTS = [
+  [0, 12.0, 0, 50], [12.1, 35.4, 51, 100], [35.5, 55.4, 101, 150], [55.5, 150.4, 151, 200],
+  [150.5, 250.4, 201, 300], [250.5, 350.4, 301, 400], [350.5, 500.4, 401, 500],
 ];
 const AQI_CATS = [
   { max: 50, name: 'Good', color: '#00e400', health: 'Air quality is satisfactory.' },
@@ -96,7 +98,7 @@ function pm25ToAqi(c) {
   if (c == null || isNaN(c)) return null;
   c = Math.floor(c * 10 + 1e-6) / 10; // EPA truncates to 0.1
   let aqi = 500;
-  if (c <= 325.4) {
+  if (c <= 500.4) {
     const bp = AQI_BREAKPOINTS.find(b => c <= b[1]);
     aqi = Math.round((bp[3] - bp[2]) / (bp[1] - bp[0]) * (c - bp[0]) + bp[2]);
   }
@@ -371,10 +373,7 @@ if (typeof document !== 'undefined') {
     for (const key of REGIONS) {
       const vals = all.map(it => (it.readings.pm25_one_hourly || {})[key]).map(v => (v == null ? null : v));
       const series = vals.map((v, i) => {
-        const hist = [];
-        for (let j = i; j > i - NOWCAST_HOURS && j >= 0; j--) hist.push(vals[j]);
-        const nc = nowcast(hist);
-        return { ts: all[i].timestamp, pm: v, aqi: nc == null ? null : pm25ToAqi(nc) };
+        return { ts: all[i].timestamp, pm: v, aqi: v == null ? null : pm25ToAqi(v) };
       });
       let last = null;
       for (let i = series.length - 1; i >= 0; i--) if (series[i].pm != null) { last = series[i]; break; }
@@ -512,11 +511,11 @@ if (typeof document !== 'undefined') {
       bar('nea', c.pm, 300),
       h('p', { class: 'health' }, band.health, ' ', h('a', { href: HAZE_URL, target: '_blank', rel: 'noopener' }, 'NEA advisory →')));
     const aqiHalf = h('div', { class: 'half aqi' },
-      h('div', { class: 'label' }, 'US ', h('abbr', { title: 'Air Quality Index' }, 'AQI'), h('small', null, 'computed from NEA data, matches aqicn method')),
+      h('div', { class: 'label' }, 'US ', h('abbr', { title: 'Air Quality Index' }, 'AQI'), h('small', null, 'from NEA\u2019s 1-hour reading, same method as aqicn.org')),
       h('div', { class: 'value' }, aq ? String(aq.aqi) : '—'),
       h('div', { class: 'band', style: aq ? `border-left:4px solid ${aq.color};padding-left:6px` : '' }, aq ? aq.name : 'insufficient hours'),
       bar('aqi', aq ? aq.aqi : null, 500),
-      h('p', { class: 'health' }, aq ? aq.health : 'Not enough recent hourly readings to compute NowCast.'));
+      h('p', { class: 'health' }, aq ? aq.health : 'No reading for this hour.'));
     card.append(h('header', null, h('h3', null, key), h('span', { class: 'updated' }, sgHM(new Date(c.ts)))),
       h('div', { class: 'pair' }, nea, aqiHalf));
   }
