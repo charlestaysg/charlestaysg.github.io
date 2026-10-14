@@ -18,11 +18,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261014h">
+<link rel="stylesheet" href="styles.css?v=20261014-preview">
 </head>
 <body>
 
-<header class="hero">
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="#top">Charles Tay</a>
+    <a href="#work">Work</a><a href="#news">News</a><a href="#about">About</a><a href="#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
   <span class="reg tl" aria-hidden="true"></span><span class="reg tr" aria-hidden="true"></span>
   <span class="reg bl" aria-hidden="true"></span><span class="reg br" aria-hidden="true"></span>
   <div class="wrap">
@@ -30,11 +38,16 @@
     <h1>Charles Tay</h1>
     <p class="dek">Workplace learning designer since 2004, making AI adoption at work <em>practical, careful and easy to explain.</em></p>
     <p class="dek-note">On this page: live tools, explainer videos and AI experiments, most of them made without writing code.</p>
+    <ul class="featured" aria-label="Start here">
+      <li><a href="#uen-sheet"><img src="assets/thumbs/uen-sheet-tile.jpg" alt="" loading="lazy"><span class="f-tag">Live tool</span>Pre-visit Fact Sheet</a></li>
+      <li><a href="#sme-pulse"><img src="assets/thumbs/sme-pulse-tile.jpg" alt="" loading="lazy"><span class="f-tag">Dashboard</span>SME Workforce Pulse</a></li>
+      <li><a href="#ben-and-mei"><img src="projects/job-hugging/poster.jpg" alt="" loading="lazy"><span class="f-tag">Cartoon series</span>Ben &amp; Auntie Mei</a></li>
+      <li><a href="#same-sky"><img src="projects/same-sky/poster.jpg" alt="" loading="lazy"><span class="f-tag">Song</span>Same Sky, Different Name</a></li>
+    </ul>
     <nav class="hero-links" aria-label="Quick links">
-      <a href="#live">Live haze ↓</a>
-      <a href="#work">See the work ↓</a>
-      <a href="#toolkit">Toolkit ↓</a>
+      <a href="#work">All the work ↓</a>
       <a href="#news">News ↓</a>
+      <a href="#toolkit">Toolkit ↓</a>
       <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
       <a href="https://www.youtube.com/@CharlesTay" rel="noopener">YouTube ↗</a>
     </nav>
@@ -51,85 +64,207 @@
 </aside>
 
 <main>
-  <section id="live">
+  <section id="work">
     <div class="wrap">
-      <div class="sec-head"><h2>live</h2></div>
-      <p class="live-intro">Two unofficial haze pages that put the hourly readings, wind, news and help on one screen. Official sources: NEA for Singapore, DOE Malaysia for Johor.</p>
-      <article class="project" style="grid-template-columns:1fr">
-        <div class="project-body">
-          <span class="spec">live · NEA hourly PM2.5 · US AQI · 5 regions</span>
-          <h3>Singapore Haze, Hourly</h3>
-          <p>One page instead of two. NEA's 1-hour PM2.5 sits next to the US AQI for each region, with wind, the 2-hour rain forecast, haze news, A&amp;E links and a GP finder by postal code. Unofficial; NEA is the official source.</p>
-          <div class="links">
-            <a href="projects/sg-haze/">Open the haze page →</a>
-            <a href="https://www.haze.gov.sg" rel="noopener">NEA haze.gov.sg ↗</a>
+      <div class="sec-head"><h2>work</h2></div>
+      <p class="live-intro">Live pages built from public data, explainer cartoons, and songs made to test what AI tools can do. No login needed for any of them.</p>
+      <div class="chips" role="group" aria-label="Show only" hidden>
+        <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span>14</span></button>
+        <button type="button" class="chip" data-filter="sme" aria-pressed="false">For SME owners <span>4</span></button>
+        <button type="button" class="chip" data-filter="haze" aria-pressed="false">Live haze <span>2</span></button>
+        <button type="button" class="chip" data-filter="explainers" aria-pressed="false">Explainers <span>3</span></button>
+        <button type="button" class="chip" data-filter="experiments" aria-pressed="false">Experiments <span>5</span></button>
+      </div>
+      <div class="cards">
+        <article class="card" id="uen-sheet" data-group="sme">
+          <a class="thumb" href="projects/uen-sheet/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/uen-sheet.jpg" alt="" loading="lazy"></a>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">For SME owners</span> <span class="spec">live ACRA lookup · prints to one A4 page</span></span>
+            <h3>Pre-visit Fact Sheet</h3>
+            <p>A one-page brief on a company before you meet it: its public ACRA record, its sector&rsquo;s hiring and training figures, and questions worth asking.</p>
+          <div class="links"><a href="projects/uen-sheet/">Open the page →</a><a href="https://www.bizfile.gov.sg" rel="noopener">ACRA Bizfile ↗</a></div>
+            <details class="more-info"><summary>More about this</summary>
+              <p>Type its UEN or name to see its public ACRA record (status, age, what it says it does), the sector it sits in, that sector's hiring and training figures from the Pulse and the Landscape, what the public record can't tell you, and questions worth asking. The lookup runs in your browser against data.gov.sg; nothing is stored. Unofficial; ACRA is the official source.</p>
+            </details>
           </div>
+        </article>
+        <article class="card" id="sme-pulse" data-group="sme">
+          <a class="thumb" href="projects/sme-pulse/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/sme-pulse.jpg" alt="" loading="lazy"></a>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">For SME owners</span> <span class="spec">14 sectors · MOM data monthly · 81 SCTPs</span></span>
+            <h3>SME Workforce Pulse</h3>
+            <p>Where hiring is tight, and whether training matches it. Pick a sector to see vacancies, retrenchments and the career-switch courses for it.</p>
+          <div class="links"><a href="projects/sme-pulse/">Open the dashboard →</a><a href="https://stats.mom.gov.sg" rel="noopener">MOM statistics ↗</a></div>
+            <details class="more-info"><summary>More about this</summary>
+              <p>Pick a sector to see job vacancies and retrenchments, how many PMETs were let go against PMET roles still open, and the career-switch (SCTP) courses the polytechnics and ITE run for it, with links to the skills and courses to train for. Built from MOM open data and public course pages; no login needed. Unofficial; MOM is the official source.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="skills-landscape" data-group="sme">
+          <a class="thumb" href="projects/skills-landscape/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/skills-landscape.jpg" alt="" loading="lazy"></a>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">For SME owners</span> <span class="spec">26,099 courses · 515 providers</span></span>
+            <h3>Skills Training Landscape</h3>
+            <p>The supply side of the Pulse: SkillsFuture-listed courses for each sector, next to the PMET roles still open.</p>
+          <div class="links"><a href="projects/skills-landscape/">Open the dashboard →</a><a href="https://www.myskillsfuture.gov.sg" rel="noopener">MySkillsFuture ↗</a></div>
+            <details class="more-info"><summary>More about this</summary>
+              <p>For each sector, see how many SkillsFuture-listed courses exist next to the PMET roles still open, who runs them, how long and how costly they are, how many are about AI, and which classes start in the coming months. Built from MySkillsFuture open data; no login needed. Unofficial; MySkillsFuture is the official source.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="workplace-conditions" data-group="sme">
+          <a class="thumb" href="projects/workplace-conditions/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/workplace-conditions.jpg" alt="" loading="lazy"></a>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">For SME owners</span> <span class="spec">live · NEA WBGT, 30 stations</span></span>
+            <h3>Live Workplace Conditions</h3>
+            <p>For people who work outdoors: NEA&rsquo;s heat-stress reading for the nearest station, turned into MOM&rsquo;s rest and water guidance.</p>
+          <div class="links"><a href="projects/workplace-conditions/">Open the page →</a><a href="https://www.mom.gov.sg/heat-stress-measures-for-outdoor-work" rel="noopener">MOM heat stress ↗</a></div>
+            <details class="more-info"><summary>More about this</summary>
+              <p>For people who work outdoors, in construction, delivery, cleaning, landscaping or security. NEA's heat-stress reading for the station nearest where you work, turned into MOM's rest and water guidance, with a one-tap WhatsApp message to your supervisor, water and rest-break reminders, a heat-illness check and today's heat chart. Settings stay on your phone. Unofficial; MOM and NEA are the official sources.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="sg-haze" data-group="haze">
+          <a class="thumb" href="projects/sg-haze/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/sg-haze.jpg" alt="" loading="lazy"></a>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Live haze</span> <span class="spec">live · NEA hourly PM2.5 · US AQI</span></span>
+            <h3>Singapore Haze, Hourly</h3>
+            <p>One page instead of two: NEA&rsquo;s 1-hour PM2.5 next to the US AQI for each region, with wind, rain, haze news and a GP finder.</p>
+          <div class="links"><a href="projects/sg-haze/">Open the haze page →</a><a href="https://www.haze.gov.sg" rel="noopener">NEA haze.gov.sg ↗</a></div>
           <p class="share-row" data-share="sg"><span class="label">Share</span> <a class="share-wa" href="#" rel="noopener" target="_blank">WhatsApp ↗</a> <button type="button" class="share-native" hidden>Share…</button> <button type="button" class="share-copy">Copy link</button> <span class="share-msg" role="status"></span></p>
-          <p class="hosts"><strong>Why three copies?</strong> The same page runs in three places, each for a reason.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>NEA's 1-hour PM2.5 sits next to the US AQI for each region, with wind, the 2-hour rain forecast, haze news, A&amp;E links and a GP finder by postal code. Unofficial; NEA is the official source.</p>
+              <p class="hosts"><strong>Why three copies?</strong> The same page runs in three places, each for a reason.</p>
           <ul class="hosts">
             <li><a href="projects/sg-haze/">GitHub Pages</a>: the main copy. Free, static, and opens on almost any network.</li>
             <li><a href="https://sg-haze.pages.dev/" rel="noopener">Cloudflare Pages ↗</a>: adds what a static page can't do: live A&amp;E waiting times and a wider news search, fetched by a small server. Some office networks block pages.dev, so use the GitHub copy there.</li>
             <li><a href="https://sg-haze.manus.space/" rel="noopener">Manus ↗</a>: an experiment. I asked the Manus AI agent to rebuild the page from the public code, to see how close it gets on its own. It adds Manus's own visitor analytics, and it may go offline.</li>
           </ul>
-        </div>
-      </article>
-      <article class="project" style="grid-template-columns:1fr;margin-top:48px" id="jb-haze-card">
-        <div class="project-body">
-          <span class="spec">live · DOE Malaysia APIMS hourly · Johor stations · Singapore comparison · EN/BM</span>
-          <h3>Johor Bahru Haze, Hourly</h3>
-          <p>The Johor side of the haze. DOE Malaysia's hourly API for each Johor station on a map, with wind arrows, satellite fire hotspots, a 24-hour trend, health advice by band and haze news, in English and Bahasa Melayu. Unofficial; DOE's APIMS is the official source.</p>
-          <div class="links">
-            <a href="projects/jb-haze/">Open the JB haze page →</a>
-            <a href="https://eqms.doe.gov.my/APIMS/main" rel="noopener">APIMS (official) ↗</a>
+            </details>
           </div>
+        </article>
+        <article class="card" id="jb-haze" data-group="haze">
+          <a class="thumb" href="projects/jb-haze/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/jb-haze.jpg" alt="" loading="lazy"></a>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Live haze</span> <span class="spec">live · DOE APIMS hourly · EN/BM</span></span>
+            <h3>Johor Bahru Haze, Hourly</h3>
+            <p>The Johor side of the haze: DOE Malaysia&rsquo;s hourly reading for each station on a map, in English and Bahasa Melayu.</p>
+          <div class="links"><a href="projects/jb-haze/">Open the JB haze page →</a><a href="https://eqms.doe.gov.my/APIMS/main" rel="noopener">APIMS (official) ↗</a></div>
           <p class="share-row" data-share="jb"><span class="label">Share</span> <a class="share-wa" href="#" rel="noopener" target="_blank">WhatsApp ↗</a> <button type="button" class="share-native" hidden>Share…</button> <button type="button" class="share-copy">Copy link</button> <span class="share-msg" role="status"></span></p>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section id="about">
-    <div class="wrap">
-      <div class="sec-head"><h2>about</h2></div>
-      <div class="prose">
-        <p>The timeline below covers over two decades in learning and development. The subject kept changing: 3G phones for dealers, every iPhone launch for a call centre, 3D laser scanners for police and air-crash investigators, then learning design and academic quality on campuses. The job never did: take something new and make it work for people who didn&rsquo;t ask for it.</p>
-        <p>Today I&rsquo;m a Workplace Learning Manager, working with Singapore companies on how their people learn at work. Where I work, and who backs me, are on <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a>. In 2025 I took a year out to retrain in AI automation, and in photography and video with AI. I don&rsquo;t write code, but I build with AI: the live dashboards on this page, explainer videos, a few automations.</p>
-        <p>When I sit down with an SME owner, I start with one question: where does your team&rsquo;s time go? Then we pick one job, fix it with the simplest tool that works, sometimes AI and sometimes not, and train people on the real work until they can use it without help.</p>
-        <p>I don&rsquo;t do this alone. When a problem needs more than training, I can bring in specialists, from engineering and IT to business and design, plus applied-innovation teams who solve problems for industry.</p>
-        <p>If your team still needs me a month later, I haven&rsquo;t done my job. Run a team and not sure where to start? <a href="https://www.linkedin.com/in/charlestay" rel="noopener">Message me on LinkedIn</a>. There&rsquo;s more support for this kind of work than most owners realise.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>DOE Malaysia's hourly API for each Johor station on a map, with wind arrows, satellite fire hotspots, a 24-hour trend, health advice by band and haze news, in English and Bahasa Melayu. Unofficial; DOE's APIMS is the official source.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="genai-cartoon" data-group="explainers">
+          <div class="player"><video controls preload="none" playsinline poster="projects/genai-cartoon/poster.jpg" aria-label="How Generative AI Works: a narrated cartoon for small business owners, with on-screen captions"><source src="projects/genai-cartoon/video.mp4" type="video/mp4"></video></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Explainer</span> <span class="spec">3 min 33 s · narrated · captions</span></span>
+            <h3>How Generative AI Works</h3>
+            <p>Auntie Mei asks a chatbot for a cake promotion, and Tok the robot shows her what happens inside. The first of the cartoons.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>A short cartoon for small business owners. Auntie Mei runs a bakery, and Tok the robot shows her what happens when she asks a chatbot for a cake promotion: tokens, next-word guessing, training, attention, why it makes things up, and where a small business should start.</p>
+              <p class="credit">Made with Claude, Kokoro and Whisper, offline on a Mac, with no paid AI services. AI-generated voice and visuals.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="ben-and-mei" data-group="explainers" data-switch>
+          <div class="player"><video controls preload="none" playsinline poster="projects/job-hugging/poster.jpg" aria-label="Ben and Auntie Mei: narrated cartoons about work and learning, with on-screen captions"><source src="projects/job-hugging/video.mp4" type="video/mp4"></video></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Explainer</span> <span class="spec" data-spec>4 min 51 s · narrated · captions on screen</span></span>
+            <h3>Ben &amp; Auntie Mei</h3>
+            <p>Over kopi, Ben and Auntie Mei work through one question about work or learning per episode. <span data-blurb>Job Hugging: why Singapore workers are staying put, what it costs them, and when it's time to move.</span></p>
+          <div class="links" role="group" aria-label="Choose an episode">
+            <a href="projects/job-hugging/video.mp4" data-src="projects/job-hugging/video.mp4" data-blurb="Job Hugging: why Singapore workers are staying put, what it costs them, and when it&#x27;s time to move." data-poster="projects/job-hugging/poster.jpg" data-spec="4 min 51 s · narrated · captions on screen" data-credit="Sources: MOM Labour Market Reports 1Q and 2Q 2026; ManpowerGroup Global Talent Barometer 2026 (Singapore); Federal Reserve Bank of Atlanta Wage Growth Tracker; Wrzesniewski and Dutton (2001). Made with Claude, Kokoro and Whisper, offline on a Mac. AI-generated voice and visuals. Not career or financial advice." aria-current="true">Job Hugging</a>
+            <a href="projects/explainer-cartoons/lazy.mp4" data-src="projects/explainer-cartoons/lazy.mp4" data-blurb="AI Lazy Thinkers?: Ben lets a chatbot write his reports, then freezes when his boss asks why sales dropped. What studies of students, doctors and office workers found, and how to use AI as a coach, not a crutch." data-poster="projects/explainer-cartoons/poster-lazy.jpg" data-spec="4 min 41 s · narrated · captions on screen" data-credit="Sources: Bastani et al., PNAS (2025); Kestin et al., Scientific Reports (2025); Budzyń et al., Lancet Gastroenterology &amp; Hepatology (2025); Kosmyna et al., MIT Media Lab (2025). Made with Claude, Kokoro and Whisper, offline on a Mac. AI-generated voice and visuals. A simplified summary of published research.">AI Lazy Thinkers?</a>
+            <a href="projects/explainer-cartoons/better.mp4" data-src="projects/explainer-cartoons/better.mp4" data-blurb="Get Better at Anything?: Mei takes up cake decorating at 62, and Ben wants to stop freezing in presentations. What the research says about the brain changing, mindset, the 10,000-hour myth and practising well." data-poster="projects/explainer-cartoons/poster-better.jpg" data-spec="4 min 24 s · narrated · captions on screen" data-credit="Sources: Draganski et al., Nature (2004); Sisk et al., Psychological Science (2018); Yeager et al., Nature (2019); Macnamara, Hambrick and Oswald, Psychological Science (2014). Made with Claude, Kokoro and Whisper, offline on a Mac. AI-generated voice and visuals. Some findings are still debated.">Get Better at Anything?</a>
+            <a href="projects/explainer-cartoons/grit.mp4" data-src="projects/explainer-cartoons/grit.mp4" data-blurb="Grit: Myth or Fact?: a quiz episode. Five popular claims about grit, checked against the research, with a scorecard at the end." data-poster="projects/explainer-cartoons/poster-grit.jpg" data-spec="4 min 40 s · quiz with three voices · captions on screen" data-credit="Sources: Duckworth et al. (2007); Credé, Tynan and Harms (2017); Rimfeld et al. (2016), all in the Journal of Personality and Social Psychology. Voices by Kokoro, theme music by MiniMax-Music3, made with Claude, offline on a Mac. AI-generated voices, music and visuals.">Grit: Myth or Fact?</a>
+          </div>
+            <details class="more-info"><summary>More about this</summary>
+              <p>Five-minute cartoons for working adults. Ben is a mid-career executive and Auntie Mei is the friend who has seen it all. Every number on screen comes from a published source, and each source is shown when it's used.</p>
+              <p class="credit" data-credit>Sources: MOM Labour Market Reports 1Q and 2Q 2026; ManpowerGroup Global Talent Barometer 2026 (Singapore); Federal Reserve Bank of Atlanta Wage Growth Tracker; Wrzesniewski and Dutton (2001). Made with Claude, Kokoro and Whisper, offline on a Mac. AI-generated voice and visuals. Not career or financial advice.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="models-as-insider-risks" data-group="explainers">
+          <div class="player"><video controls preload="none" playsinline poster="projects/models-as-insider-risks/poster.jpg" aria-label="Models as Insider Risks: an 82-second motion graphic with on-screen text and music, no narration"><source src="projects/models-as-insider-risks/video.mp4" type="video/mp4"></video></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Explainer</span> <span class="spec">82.5 s · 1080×1080 · original score</span></span>
+            <h3>Models as Insider Risks</h3>
+            <p>Satya Nadella&rsquo;s essay in 82 seconds: treat AI models like new staff, given only the keys they need and always able to be switched off.</p>
+          <div class="links"><a href="projects/models-as-insider-risks/">How it was made →</a><a href="https://x.com/satyanadella/status/2108931348857827686" rel="noopener">Read the essay ↗</a></div>
+            <details class="more-info"><summary>More about this</summary>
+              <p class="credit">Made with Claude Code, HyperFrames and GarageBand.</p>
+              <p class="credit">Based on Satya Nadella, "Models as Insider Risks in the Super Intelligence Era", X Article, 10 Oct 2026. Independent summary; not affiliated with or endorsed by Microsoft.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="same-sky" data-group="experiments">
+          <div class="player"><button type="button" class="yt" data-yt="lkkhDWUn-MY" aria-label="Play Same Sky, Different Name on YouTube"><img src="projects/same-sky/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">4 min 11 s · English and Malay</span></span>
+            <h3>Same Sky, Different Name</h3>
+            <p>A folk-pop song about the Sep–Oct 2026 haze, sung in English and Malay. It sits well next to the haze pages.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>Singapore and its neighbours breathe the same smoke and wait for the same rain. The lyric video moves from a grey skyline and a climbing PSI reading to clear sky.</p>
+              <p class="credit">Lyrics by Charles Tay, with AI assistance. Music and vocals AI-generated with Mureka in ChatCut. Made with Claude and HyperFrames.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="nace-feelings" data-group="experiments">
+          <div class="player"><button type="button" class="yt" data-yt="XCR3jK8IGYQ" aria-label="Play NACE Feelings on YouTube"><img src="projects/nace-feelings/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">4 min 57 s · duet</span></span>
+            <h3>NACE Feelings</h3>
+            <p>A 70s-style duet about what it feels like when someone finally helps your team learn. It started as a colleague&rsquo;s joke.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>The boss sings first, the team answers, and by the last chorus everyone is singing together.</p>
+              <p class="credit">Lyrics by Charles Tay, from a colleague&rsquo;s idea. Music and vocals AI-generated with Mureka in ChatCut. The watercolour scenes are AI video, made in ChatCut; the rest was made with Claude and HyperFrames.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="sunny-side" data-group="experiments" data-switch>
+          <div class="player"><button type="button" class="yt" data-yt="hCY1CcRLJj0" aria-label="Play Sunny Side on YouTube"><img src="projects/sunny-side/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec" data-spec>75 s · 1920×1080 · 5 sections · sing-along lyrics</span></span>
+            <h3>Sunny Side</h3>
+            <p>A happy little song. The Chinese and Japanese versions are new songs, written to be sung, not translated line by line.</p>
+          <div class="links" role="group" aria-label="Choose a language">
+            <a href="https://www.youtube.com/watch?v=hCY1CcRLJj0" data-yt="hCY1CcRLJj0" data-poster="projects/sunny-side/poster.jpg" data-spec="75 s · 1920×1080 · 5 sections · sing-along lyrics" data-credit="Music and video by Charles Tay. Made with Claude, MiniMax-Music3 and HyperFrames. The music and vocals are AI-generated." aria-current="true">English</a>
+            <a href="projects/sunny-side/video-zh.mp4" data-src="projects/sunny-side/video-zh.mp4" data-poster="projects/sunny-side/poster-zh.jpg" data-spec="94 s · 1920×1080 · Mandarin · sing-along lyrics" data-credit="Music and video by Charles Tay. Made with Claude, MiniMax-Music3 and HyperFrames. The music and vocals are AI-generated." lang="zh-Hans">中文 · 阳光那一方</a>
+            <a href="https://www.youtube.com/watch?v=XPLMVs5KcXM" data-yt="XPLMVs5KcXM" data-poster="projects/sunny-side/poster-ja.jpg" data-spec="103 s · 1920×1080 · Japanese with English subtitles" data-credit="Music and video by Charles Tay. Made with Claude, ChatCut, Mureka and HyperFrames. The music and vocals are AI-generated." lang="ja">日本語 · ひなたの道へ</a>
+          </div>
+            <details class="more-info"><summary>More about this</summary>
+              <p>The sun, clouds and confetti move on the beat and the chord changes, and each lyric lights up as it's sung.</p>
+              <p class="credit" data-credit>Music and video by Charles Tay. Made with Claude, MiniMax-Music3 and HyperFrames. The music and vocals are AI-generated.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="home-is-you" data-group="experiments">
+          <div class="player"><button type="button" class="yt" data-yt="4yYU3Wo48vU" aria-label="Play 家就是你 Home Is You on YouTube"><img src="projects/home-is-you/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min · Mandarin duet</span></span>
+            <h3><span lang="zh-Hans">家就是你</span> Home Is You</h3>
+            <p>A duet about family that follows one day at home, from the kitchen at sunrise to the walk home under lanterns.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>He takes the first verse, she takes the second, and they sing the choruses together. Each lyric lights up as it's sung, tagged for who is singing.</p>
+              <p class="credit">Lyrics by Charles Tay. Music and vocals AI-generated with Mureka in ChatCut. The watercolour scenes are AI video (Seedance, in ChatCut); the rest was made with Claude and HyperFrames.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="carve-her-a-heart" data-group="experiments">
+          <div class="player"><button type="button" class="yt" data-yt="TkkY8mPAoeQ" aria-label="Play Carve Her a Heart on YouTube"><img src="projects/carve-her-a-heart/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 51 s · 3D animation</span></span>
+            <h3>Carve Her a Heart</h3>
+            <p>A folk song with a 3D story: his wife&rsquo;s last wish is to hold something he made, so he carves her a small wooden heart.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>He works at his bench day and night. At dawn it's finished, with “always” cut into it, and the bench is empty.</p>
+              <p class="credit">Story and direction by Charles Tay. Lyrics written with Claude. Music and vocals AI-generated with ChatCut. 3D animation in Blender; edit and lyrics in HyperFrames; made with Claude Code.</p>
+            </details>
+          </div>
+        </article>
       </div>
-
-      <div class="focus">
-        <div><span class="label">Focus</span><h3>Workplace learning design</h3><p>Programmes, on-the-job training and blended learning for working adults.</p></div>
-        <div><span class="label">Focus</span><h3>AI adoption at work</h3><p>Careful, tool by tool, starting from the work and not from the hype.</p></div>
-        <div><span class="label">Focus</span><h3>AI governance, explained plainly</h3><p>Helping non-technical leaders see why AI needs rules it can't change.</p></div>
-        <div><span class="label">Focus</span><h3>Visual explainers</h3><p>Short motion graphics that make one idea clear, with the process shown.</p></div>
-      </div>
-
-      <ol class="rail" aria-label="Career, newest first">
-        <li><span class="yr">2026–</span><span class="what"><b>Workplace Learning Manager.</b> <span>The current chapter. Where, and who&rsquo;s in my corner? That&rsquo;s on <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a>.</span></span></li>
-        <li><span class="yr">2025–26</span><span class="what"><b>Retrained.</b> <span>Took a year out and went back to class: AI automation, then photography and video with AI. Best homework I&rsquo;ve ever done.</span></span></li>
-        <li><span class="yr">2022–25</span><span class="what"><b>Senior Manager, Academic Quality.</b> <span>The person who checks everything before the auditors do.</span></span></li>
-        <li><span class="yr">2020–22</span><span class="what"><b>Senior Manager, Teaching &amp; Learning.</b> <span>Wrote course proposals SkillsFuture said yes to, and won training-partner status with PMI and IMDA.</span></span></li>
-        <li><span class="yr">2019–20</span><span class="what"><b>Manager, L&amp;D.</b> <span>Moved staff training online the year the whole world had to.</span></span></li>
-        <li><span class="yr">2017–19</span><span class="what"><b>Manager, Learning Design and Technology.</b> <span>Asked corporate clients what was really going wrong, then built the training to fix it.</span></span></li>
-        <li><span class="yr">2016–17</span><span class="what"><b>L&amp;D Officer.</b> <span>Mapped what staff needed to learn next, then tested it with small pilots first.</span></span></li>
-        <li><span class="yr">2014–16</span><span class="what"><b>Quality and Training Specialist.</b> <span>Call-centre training, where you find out fast if a lesson worked: the next call tells you.</span></span></li>
-        <li><span class="yr">2012–14</span><span class="what"><b>Regional Trainer.</b> <span>Taught police, forensic and air-crash investigators to capture a scene in 3D. Still my most unusual classroom.</span></span></li>
-        <li><span class="yr">2009–11</span><span class="what"><b>Learning and Development Trainer.</b> <span>Master trainer for every iPhone launch. The call centre had to know the phone before the queues formed.</span></span></li>
-        <li><span class="yr">2004–08</span><span class="what"><b>Trainer, telco.</b> <span>My first L&amp;D job, and I never moved out. Trained dealers for a nationwide 3G launch and call-centre teams on mobile tech, with a short detour into insurance sales.</span></span></li>
-        <li><span class="yr">2000–04</span><span class="what"><b>IT Support and Customer Service.</b> <span>Fixed computers and answered the questions people were too shy to ask. Explaining tech to people who don&rsquo;t love tech turned into a career.</span></span></li>
-        <li><span class="yr">1999</span><span class="what"><b>HR administration.</b> <span>Where it all started.</span></span></li>
-      </ol>
-      <p style="margin-top:8px;font-weight:700">The full story, including the parts I left out, is on <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>.</p>
-
-      <ul class="creds" aria-label="Credentials">
-        <li><b>ACTA</b> · IAL 2014</li>
-        <li><b>SCTP Automation with AI</b> · 2025</li>
-        <li><b>SCTP Photography &amp; Videography with AI</b> · 2025</li>
-        <li><b>Adv. Cert. Gen AI Apps Design &amp; Prompt Engineering</b> · SMU Academy 2026</li>
-        <li><b>BCom, HRM &amp; Industrial Relations</b> · Curtin</li>
-      </ul>
     </div>
   </section>
 
@@ -180,197 +315,49 @@
     </div>
   </section>
 
-  <section id="work">
+  <section id="about">
     <div class="wrap">
-      <div class="sec-head"><h2>work</h2></div>
-      <nav class="links group-nav" aria-label="Jump to a group">
-        <a href="#for-sme-owners">For SME owners ↓</a>
-        <a href="#explainers">Explainers for learners ↓</a>
-        <a href="#experiments">Experiments ↓</a>
-      </nav>
-      <div class="group" id="for-sme-owners">
-        <div class="group-head">
-          <h3>For SME owners</h3>
-          <p>Live pages built from public data: who you are about to meet, where hiring is tight, and what training exists for it. No login needed.</p>
-        </div>
-      <article class="project" style="grid-template-columns:1fr">
-        <div class="project-body">
-          <span class="spec">live ACRA lookup · 14 sectors · prints to one A4 page</span>
-          <h3>Pre-visit Fact Sheet</h3>
-          <p>A one-page brief on a company before you meet it. Type its UEN or name to see its public ACRA record (status, age, what it says it does), the sector it sits in, that sector's hiring and training figures from the Pulse and the Landscape, what the public record can't tell you, and questions worth asking. The lookup runs in your browser against data.gov.sg; nothing is stored. Unofficial; ACRA is the official source.</p>
-          <div class="links">
-            <a href="projects/uen-sheet/">Open the page →</a>
-            <a href="https://www.bizfile.gov.sg" rel="noopener">ACRA Bizfile ↗</a>
-          </div>
-        </div>
-      </article>
-      <article class="project" style="grid-template-columns:1fr;margin-top:48px">
-        <div class="project-body">
-          <span class="spec">14 sectors · MOM data refreshed monthly · 81 SCTPs from 6 institutions</span>
-          <h3>SME Workforce Pulse</h3>
-          <p>Where hiring is tight, and whether training matches it. Pick a sector to see job vacancies and retrenchments, how many PMETs were let go against PMET roles still open, and the career-switch (SCTP) courses the polytechnics and ITE run for it, with links to the skills and courses to train for. Built from MOM open data and public course pages; no login needed. Unofficial; MOM is the official source.</p>
-          <div class="links">
-            <a href="projects/sme-pulse/">Open the dashboard →</a>
-            <a href="https://stats.mom.gov.sg" rel="noopener">MOM labour market statistics ↗</a>
-            <a href="projects/uen-sheet/">Pre-visit Fact Sheet →</a>
-          </div>
-        </div>
-      </article>
-      <article class="project" style="grid-template-columns:1fr;margin-top:48px">
-        <div class="project-body">
-          <span class="spec">26,099 courses · 515 providers · SWDA data checked monthly</span>
-          <h3>Skills Training Landscape</h3>
-          <p>The supply side of the Pulse. For each sector, see how many SkillsFuture-listed courses exist next to the PMET roles still open, who runs them, how long and how costly they are, how many are about AI, and which classes start in the coming months. Built from MySkillsFuture open data; no login needed. Unofficial; MySkillsFuture is the official source.</p>
-          <div class="links">
-            <a href="projects/skills-landscape/">Open the dashboard →</a>
-            <a href="https://www.myskillsfuture.gov.sg" rel="noopener">MySkillsFuture ↗</a>
-          </div>
-        </div>
-      </article>
-      <article class="project" style="grid-template-columns:1fr;margin-top:48px">
-        <div class="project-body">
-          <span class="spec">live · NEA WBGT heat stress, 30 stations · PM2.5, PSI, UV</span>
-          <h3>Live Workplace Conditions</h3>
-          <p>For people who work outdoors, in construction, delivery, cleaning, landscaping or security. NEA's heat-stress reading for the station nearest where you work, turned into MOM's rest and water guidance, with a one-tap WhatsApp message to your supervisor, water and rest-break reminders, a heat-illness check and today's heat chart. Settings stay on your phone. Unofficial; MOM and NEA are the official sources.</p>
-          <div class="links">
-            <a href="projects/workplace-conditions/">Open the page →</a>
-            <a href="https://www.mom.gov.sg/heat-stress-measures-for-outdoor-work" rel="noopener">MOM heat stress measures ↗</a>
-          </div>
-        </div>
-      </article>
+      <div class="sec-head"><h2>about</h2></div>
+      <div class="prose">
+        <p>The timeline below covers over two decades in learning and development. The subject kept changing: 3G phones for dealers, every iPhone launch for a call centre, 3D laser scanners for police and air-crash investigators, then learning design and academic quality on campuses. The job never did: take something new and make it work for people who didn&rsquo;t ask for it.</p>
+        <p>Today I&rsquo;m a Workplace Learning Manager, working with Singapore companies on how their people learn at work. Where I work, and who backs me, are on <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a>. In 2025 I took a year out to retrain in AI automation, and in photography and video with AI. I don&rsquo;t write code, but I build with AI: the live dashboards on this page, explainer videos, a few automations.</p>
+        <p>When I sit down with an SME owner, I start with one question: where does your team&rsquo;s time go? Then we pick one job, fix it with the simplest tool that works, sometimes AI and sometimes not, and train people on the real work until they can use it without help.</p>
+        <p>I don&rsquo;t do this alone. When a problem needs more than training, I can bring in specialists, from engineering and IT to business and design, plus applied-innovation teams who solve problems for industry.</p>
+        <p>If your team still needs me a month later, I haven&rsquo;t done my job. Run a team and not sure where to start? <a href="https://www.linkedin.com/in/charlestay" rel="noopener">Message me on LinkedIn</a>. There&rsquo;s more support for this kind of work than most owners realise.</p>
       </div>
-      <div class="group" id="explainers">
-        <div class="group-head">
-          <h3>Explainers for learners</h3>
-          <p>Short narrated cartoons and motion graphics that make one idea about AI or work clear in under five minutes.</p>
-        </div>
-      <article class="project" id="genai-cartoon" style="grid-template-columns:1fr">
-        <div class="player wide"><video controls preload="none" playsinline poster="projects/genai-cartoon/poster.jpg"
-               aria-label="How Generative AI Works: a narrated cartoon for small business owners, with on-screen captions">
-          <source src="projects/genai-cartoon/video.mp4" type="video/mp4">
-        </video></div>
-        <div class="project-body">
-          <span class="spec">3 min 33 s · narrated · captions on screen</span>
-          <h3>How Generative AI Works</h3>
-          <p>A short cartoon for small business owners. Auntie Mei runs a bakery, and Tok the robot shows her what happens when she asks a chatbot for a cake promotion: tokens, next-word guessing, training, attention, why it makes things up, and where a small business should start. This was the first of the cartoons.</p>
-          <p class="credit">Made with Claude, Kokoro and Whisper, offline on a Mac, with no paid AI services. AI-generated voice and visuals.</p>
-        </div>
-      </article>
-      <article class="project" id="ben-and-mei" data-switch style="grid-template-columns:1fr;margin-top:48px">
-        <div class="player wide"><video controls preload="none" playsinline poster="projects/job-hugging/poster.jpg"
-               aria-label="Ben and Auntie Mei: narrated cartoons about work and learning, with on-screen captions">
-          <source src="projects/job-hugging/video.mp4" type="video/mp4">
-        </video></div>
-        <div class="project-body">
-          <span class="spec" data-spec>4 min 51 s · narrated · captions on screen</span>
-          <h3>Ben &amp; Auntie Mei</h3>
-          <p>Five-minute cartoons for working adults. Ben is a mid-career executive and Auntie Mei is the friend who has seen it all; over kopi they work through one question about work or learning per episode. Every number on screen comes from a published source, and each source is shown when it's used. <span data-blurb>Job Hugging: why Singapore workers are staying put, what it costs them, and when it's time to move.</span></p>
-          <div class="links" role="group" aria-label="Choose an episode">
-            <a href="projects/job-hugging/video.mp4" data-src="projects/job-hugging/video.mp4" data-blurb="Job Hugging: why Singapore workers are staying put, what it costs them, and when it&#x27;s time to move." data-poster="projects/job-hugging/poster.jpg" data-spec="4 min 51 s · narrated · captions on screen" data-credit="Sources: MOM Labour Market Reports 1Q and 2Q 2026; ManpowerGroup Global Talent Barometer 2026 (Singapore); Federal Reserve Bank of Atlanta Wage Growth Tracker; Wrzesniewski and Dutton (2001). Made with Claude, Kokoro and Whisper, offline on a Mac. AI-generated voice and visuals. Not career or financial advice." aria-current="true">Job Hugging</a>
-            <a href="projects/explainer-cartoons/lazy.mp4" data-src="projects/explainer-cartoons/lazy.mp4" data-blurb="AI Lazy Thinkers?: Ben lets a chatbot write his reports, then freezes when his boss asks why sales dropped. What studies of students, doctors and office workers found, and how to use AI as a coach, not a crutch." data-poster="projects/explainer-cartoons/poster-lazy.jpg" data-spec="4 min 41 s · narrated · captions on screen" data-credit="Sources: Bastani et al., PNAS (2025); Kestin et al., Scientific Reports (2025); Budzyń et al., Lancet Gastroenterology &amp; Hepatology (2025); Kosmyna et al., MIT Media Lab (2025). Made with Claude, Kokoro and Whisper, offline on a Mac. AI-generated voice and visuals. A simplified summary of published research.">AI Lazy Thinkers?</a>
-            <a href="projects/explainer-cartoons/better.mp4" data-src="projects/explainer-cartoons/better.mp4" data-blurb="Get Better at Anything?: Mei takes up cake decorating at 62, and Ben wants to stop freezing in presentations. What the research says about the brain changing, mindset, the 10,000-hour myth and practising well." data-poster="projects/explainer-cartoons/poster-better.jpg" data-spec="4 min 24 s · narrated · captions on screen" data-credit="Sources: Draganski et al., Nature (2004); Sisk et al., Psychological Science (2018); Yeager et al., Nature (2019); Macnamara, Hambrick and Oswald, Psychological Science (2014). Made with Claude, Kokoro and Whisper, offline on a Mac. AI-generated voice and visuals. Some findings are still debated.">Get Better at Anything?</a>
-            <a href="projects/explainer-cartoons/grit.mp4" data-src="projects/explainer-cartoons/grit.mp4" data-blurb="Grit: Myth or Fact?: a quiz episode. Five popular claims about grit, checked against the research, with a scorecard at the end." data-poster="projects/explainer-cartoons/poster-grit.jpg" data-spec="4 min 40 s · quiz with three voices · captions on screen" data-credit="Sources: Duckworth et al. (2007); Credé, Tynan and Harms (2017); Rimfeld et al. (2016), all in the Journal of Personality and Social Psychology. Voices by Kokoro, theme music by MiniMax-Music3, made with Claude, offline on a Mac. AI-generated voices, music and visuals.">Grit: Myth or Fact?</a>
-          </div>
-          <p class="credit" data-credit>Sources: MOM Labour Market Reports 1Q and 2Q 2026; ManpowerGroup Global Talent Barometer 2026 (Singapore); Federal Reserve Bank of Atlanta Wage Growth Tracker; Wrzesniewski and Dutton (2001). Made with Claude, Kokoro and Whisper, offline on a Mac. AI-generated voice and visuals. Not career or financial advice.</p>
-        </div>
-      </article>
-      <article class="project" style="margin-top:48px">
-        <div class="player"><video controls preload="none" playsinline poster="projects/models-as-insider-risks/poster.jpg"
-               aria-label="Models as Insider Risks: an 82-second motion graphic with on-screen text and music, no narration">
-          <source src="projects/models-as-insider-risks/video.mp4" type="video/mp4">
-        </video></div>
-        <div class="project-body">
-          <span class="spec">82.5 s · 1080×1080 · 14 frames · original score (GarageBand)</span>
-          <h3>Models as Insider Risks</h3>
-          <p>An 82-second breakdown of Satya Nadella's essay on treating AI models like new staff: given only the keys they need, checked by someone else, and always able to be switched off.</p>
-          <p class="credit">Made with Claude Code, HyperFrames and GarageBand.</p>
-          <div class="links">
-            <a href="projects/models-as-insider-risks/">How it was made →</a>
-            <a href="https://x.com/satyanadella/status/2108931348857827686" rel="noopener">Read the essay ↗</a>
-          </div>
-          <p class="credit">Based on Satya Nadella, "Models as Insider Risks in the Super Intelligence Era", X Article, 10 Oct 2026. Independent summary; not affiliated with or endorsed by Microsoft.</p>
-        </div>
-      </article>
+
+      <div class="focus">
+        <div><span class="label">Focus</span><h3>Workplace learning design</h3><p>Programmes, on-the-job training and blended learning for working adults.</p></div>
+        <div><span class="label">Focus</span><h3>AI adoption at work</h3><p>Careful, tool by tool, starting from the work and not from the hype.</p></div>
+        <div><span class="label">Focus</span><h3>AI governance, explained plainly</h3><p>Helping non-technical leaders see why AI needs rules it can't change.</p></div>
+        <div><span class="label">Focus</span><h3>Visual explainers</h3><p>Short motion graphics that make one idea clear, with the process shown.</p></div>
       </div>
-      <div class="group" id="experiments">
-        <div class="group-head">
-          <h3>Experiments</h3>
-          <p>Live pages and music videos made to test what AI tools can do, most of them without writing code.</p>
-        </div>
-      <article class="project" id="same-sky" style="grid-template-columns:1fr">
-        <div class="player wide"><button type="button" class="yt" data-yt="lkkhDWUn-MY" aria-label="Play Same Sky, Different Name on YouTube"><img src="projects/same-sky/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-        <div class="project-body">
-          <span class="spec">4 min 11 s · 1920×1080 · English and Malay · sing-along lyrics</span>
-          <h3>Same Sky, Different Name</h3>
-          <p>A folk-pop song about the Sep–Oct 2026 haze, sung in English and Malay. Singapore and its neighbours breathe the same smoke and wait for the same rain. The lyric video moves from a grey skyline and a climbing PSI reading to clear sky. It sits well next to the haze page above.</p>
-          <p class="credit">Lyrics by Charles Tay, with AI assistance. Music and vocals AI-generated with Mureka in ChatCut. Made with Claude and HyperFrames.</p>
-        </div>
-      </article>
-      <article class="project" id="nace-feelings" style="grid-template-columns:1fr;margin-top:48px">
-        <div class="player wide"><button type="button" class="yt" data-yt="XCR3jK8IGYQ" aria-label="Play NACE Feelings on YouTube"><img src="projects/nace-feelings/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-        <div class="project-body">
-          <span class="spec">4 min 57 s · 1920×1080 · duet · sing-along lyrics</span>
-          <h3>NACE Feelings</h3>
-          <p>A 70s-style duet about what it feels like when someone finally helps your team learn. The boss sings first, the team answers, and by the last chorus everyone is singing together. It started as a colleague&rsquo;s joke.</p>
-          <p class="credit">Lyrics by Charles Tay, from a colleague&rsquo;s idea. Music and vocals AI-generated with Mureka in ChatCut. The watercolour scenes are AI video, made in ChatCut; the rest was made with Claude and HyperFrames.</p>
-        </div>
-      </article>
-      <article class="project" id="sunny-side" data-switch style="grid-template-columns:1fr;margin-top:48px">
-        <div class="player wide"><button type="button" class="yt" data-yt="hCY1CcRLJj0" aria-label="Play Sunny Side on YouTube"><img src="projects/sunny-side/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-        <div class="project-body">
-          <span class="spec" data-spec>75 s · 1920×1080 · 5 sections · sing-along lyrics</span>
-          <h3>Sunny Side</h3>
-          <p>A happy little song with a music video to match. The sun, clouds and confetti move on the beat and the chord changes, and each lyric lights up as it's sung. The Chinese and Japanese versions are new songs with lyrics written to be sung, not translated line by line.</p>
-          <div class="links" role="group" aria-label="Choose a language">
-            <a href="https://www.youtube.com/watch?v=hCY1CcRLJj0" data-yt="hCY1CcRLJj0" data-poster="projects/sunny-side/poster.jpg" data-spec="75 s · 1920×1080 · 5 sections · sing-along lyrics" data-credit="Music and video by Charles Tay. Made with Claude, MiniMax-Music3 and HyperFrames. The music and vocals are AI-generated." aria-current="true">English</a>
-            <a href="projects/sunny-side/video-zh.mp4" data-src="projects/sunny-side/video-zh.mp4" data-poster="projects/sunny-side/poster-zh.jpg" data-spec="94 s · 1920×1080 · Mandarin · sing-along lyrics" data-credit="Music and video by Charles Tay. Made with Claude, MiniMax-Music3 and HyperFrames. The music and vocals are AI-generated." lang="zh-Hans">中文 · 阳光那一方</a>
-            <a href="https://www.youtube.com/watch?v=XPLMVs5KcXM" data-yt="XPLMVs5KcXM" data-poster="projects/sunny-side/poster-ja.jpg" data-spec="103 s · 1920×1080 · Japanese with English subtitles" data-credit="Music and video by Charles Tay. Made with Claude, ChatCut, Mureka and HyperFrames. The music and vocals are AI-generated." lang="ja">日本語 · ひなたの道へ</a>
-          </div>
-          <p class="credit" data-credit>Music and video by Charles Tay. Made with Claude, MiniMax-Music3 and HyperFrames. The music and vocals are AI-generated.</p>
-        </div>
-      </article>
-      <article class="project" id="home-is-you" style="grid-template-columns:1fr;margin-top:48px">
-        <div class="player wide"><button type="button" class="yt" data-yt="4yYU3Wo48vU" aria-label="Play 家就是你 Home Is You on YouTube"><img src="projects/home-is-you/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-        <div class="project-body">
-          <span class="spec">3 min · 1920×1080 · Mandarin duet · sing-along lyrics</span>
-          <h3><span lang="zh-Hans">家就是你</span> Home Is You</h3>
-          <p>A song about family, sung as a duet: he takes the first verse, she takes the second, and they sing the choruses together. The video follows one day at home, from the kitchen at sunrise to dinner and the walk home under lanterns. Each lyric lights up as it's sung, tagged for who is singing.</p>
-          <p class="credit">Lyrics by Charles Tay. Music and vocals AI-generated with Mureka in ChatCut. The watercolour scenes are AI video (Seedance, in ChatCut); the rest was made with Claude and HyperFrames.</p>
-        </div>
-      </article>
-      <article class="project" id="carve-her-a-heart" style="grid-template-columns:1fr;margin-top:48px">
-        <div class="player wide"><button type="button" class="yt" data-yt="TkkY8mPAoeQ" aria-label="Play Carve Her a Heart on YouTube"><img src="projects/carve-her-a-heart/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-        <div class="project-body">
-          <span class="spec">3 min 51 s · 1920×1080 · 3D animation · sing-along lyrics</span>
-          <h3>Carve Her a Heart</h3>
-          <p>A folk song with a 3D story. His wife's last wish is to hold something he made, so he works at his bench day and night carving a small wooden heart. At dawn it's finished, with “always” cut into it, and the bench is empty.</p>
-          <p class="credit">Story and direction by Charles Tay. Lyrics written with Claude. Music and vocals AI-generated with ChatCut. 3D animation in Blender; edit and lyrics in HyperFrames; made with Claude Code.</p>
-        </div>
-      </article>
-      </div>
-      <script>
-        const ytFrame = id => `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
-        document.addEventListener('click', e => {
-          const b = e.target.closest('button.yt');
-          if (b) b.parentElement.innerHTML = ytFrame(b.dataset.yt);
-        });
-        document.querySelectorAll('[data-switch]').forEach(card => {
-          const player = card.querySelector('.player');
-          const btns = card.querySelectorAll('.links a[data-yt], .links a[data-src]');
-          const label = card.querySelector('h3').textContent;
-          btns.forEach(a => a.addEventListener('click', e => {
-            e.preventDefault();
-            player.innerHTML = a.dataset.yt
-              ? `<button type="button" class="yt" data-yt="${a.dataset.yt}" aria-label="Play ${label} on YouTube"><img src="${a.dataset.poster}" alt=""><span class="yt-play" aria-hidden="true"></span></button>`
-              : `<video controls preload="none" playsinline poster="${a.dataset.poster}" aria-label="${label}"><source src="${a.dataset.src}" type="video/mp4"></video>`;
-            card.querySelector('span[data-spec]').textContent = a.dataset.spec;
-            card.querySelector('p[data-credit]').textContent = a.dataset.credit;
-            const bl = card.querySelector('span[data-blurb]');
-            if (bl && a.dataset.blurb) bl.textContent = a.dataset.blurb;
-            btns.forEach(x => x.toggleAttribute('aria-current', x === a));
-          }));
-        });
-      </script>
+
+      <ol class="rail" id="rail" aria-label="Career, newest first">
+        <li><span class="yr">2026–</span><span class="what"><b>Workplace Learning Manager.</b> <span>The current chapter. Where, and who&rsquo;s in my corner? That&rsquo;s on <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a>.</span></span></li>
+        <li><span class="yr">2025–26</span><span class="what"><b>Retrained.</b> <span>Took a year out and went back to class: AI automation, then photography and video with AI. Best homework I&rsquo;ve ever done.</span></span></li>
+        <li><span class="yr">2022–25</span><span class="what"><b>Senior Manager, Academic Quality.</b> <span>The person who checks everything before the auditors do.</span></span></li>
+        <li><span class="yr">2020–22</span><span class="what"><b>Senior Manager, Teaching &amp; Learning.</b> <span>Wrote course proposals SkillsFuture said yes to, and won training-partner status with PMI and IMDA.</span></span></li>
+        <li><span class="yr">2019–20</span><span class="what"><b>Manager, L&amp;D.</b> <span>Moved staff training online the year the whole world had to.</span></span></li>
+        <li><span class="yr">2017–19</span><span class="what"><b>Manager, Learning Design and Technology.</b> <span>Asked corporate clients what was really going wrong, then built the training to fix it.</span></span></li>
+        <li><span class="yr">2016–17</span><span class="what"><b>L&amp;D Officer.</b> <span>Mapped what staff needed to learn next, then tested it with small pilots first.</span></span></li>
+        <li><span class="yr">2014–16</span><span class="what"><b>Quality and Training Specialist.</b> <span>Call-centre training, where you find out fast if a lesson worked: the next call tells you.</span></span></li>
+        <li><span class="yr">2012–14</span><span class="what"><b>Regional Trainer.</b> <span>Taught police, forensic and air-crash investigators to capture a scene in 3D. Still my most unusual classroom.</span></span></li>
+        <li><span class="yr">2009–11</span><span class="what"><b>Learning and Development Trainer.</b> <span>Master trainer for every iPhone launch. The call centre had to know the phone before the queues formed.</span></span></li>
+        <li><span class="yr">2004–08</span><span class="what"><b>Trainer, telco.</b> <span>My first L&amp;D job, and I never moved out. Trained dealers for a nationwide 3G launch and call-centre teams on mobile tech, with a short detour into insurance sales.</span></span></li>
+        <li><span class="yr">2000–04</span><span class="what"><b>IT Support and Customer Service.</b> <span>Fixed computers and answered the questions people were too shy to ask. Explaining tech to people who don&rsquo;t love tech turned into a career.</span></span></li>
+        <li><span class="yr">1999</span><span class="what"><b>HR administration.</b> <span>Where it all started.</span></span></li>
+      </ol>
+      <button type="button" class="rail-toggle" id="rail-toggle" hidden aria-controls="rail" aria-expanded="false">Show all 13 roles ↓</button>
+      <p style="margin-top:16px;font-weight:700">The full story, including the parts I left out, is on <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>.</p>
+
+      <ul class="creds" aria-label="Credentials">
+        <li><b>ACTA</b> · IAL 2014</li>
+        <li><b>SCTP Automation with AI</b> · 2025</li>
+        <li><b>SCTP Photography &amp; Videography with AI</b> · 2025</li>
+        <li><b>Adv. Cert. Gen AI Apps Design &amp; Prompt Engineering</b> · SMU Academy 2026</li>
+        <li><b>BCom, HRM &amp; Industrial Relations</b> · Curtin</li>
+      </ul>
     </div>
   </section>
 
@@ -397,6 +384,62 @@
     </div>
   </section>
 </main>
+
+<script>
+// Video cards: YouTube click-to-load, and the episode/language switchers.
+const ytFrame = id => `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+document.addEventListener('click', e => {
+  const b = e.target.closest('button.yt');
+  if (b) b.parentElement.innerHTML = ytFrame(b.dataset.yt);
+});
+document.querySelectorAll('[data-switch]').forEach(card => {
+  const player = card.querySelector('.player');
+  const btns = card.querySelectorAll('.links a[data-yt], .links a[data-src]');
+  const label = card.querySelector('h3').textContent;
+  btns.forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    player.innerHTML = a.dataset.yt
+      ? `<button type="button" class="yt" data-yt="${a.dataset.yt}" aria-label="Play ${label} on YouTube"><img src="${a.dataset.poster}" alt=""><span class="yt-play" aria-hidden="true"></span></button>`
+      : `<video controls preload="none" playsinline poster="${a.dataset.poster}" aria-label="${label}"><source src="${a.dataset.src}" type="video/mp4"></video>`;
+    card.querySelector('span[data-spec]').textContent = a.dataset.spec;
+    card.querySelector('p[data-credit]').textContent = a.dataset.credit;
+    const bl = card.querySelector('span[data-blurb]');
+    if (bl && a.dataset.blurb) bl.textContent = a.dataset.blurb;
+    btns.forEach(x => x.toggleAttribute('aria-current', x === a));
+  }));
+});
+// Work filter chips (shown only when JS runs; without JS every card stays visible).
+(function () {
+  var bar = document.querySelector('.chips'); if (!bar) return;
+  var chips = bar.querySelectorAll('.chip'), cards = document.querySelectorAll('.card');
+  function show(f) {
+    chips.forEach(function (c) { c.setAttribute('aria-pressed', c.dataset.filter === f); });
+    cards.forEach(function (c) { c.hidden = f !== 'all' && c.dataset.group !== f; });
+  }
+  bar.hidden = false;
+  bar.addEventListener('click', function (e) { var c = e.target.closest('.chip'); if (c) show(c.dataset.filter); });
+  // a link straight to a card (hero tiles, old #ids) always lands on a visible card
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]'); if (!a) return;
+    var t = document.getElementById(a.getAttribute('href').slice(1));
+    if (t && t.classList.contains('card') && t.hidden) show('all');
+  });
+  var h = location.hash && document.getElementById(location.hash.slice(1));
+  if (h && h.classList.contains('card')) show('all');
+})();
+// Career timeline: first 4 rows, the rest behind a button.
+(function () {
+  var rail = document.getElementById('rail'), btn = document.getElementById('rail-toggle');
+  if (!rail || !btn) return;
+  rail.dataset.collapsed = ''; btn.hidden = false;
+  btn.addEventListener('click', function () {
+    var open = rail.hasAttribute('data-collapsed');
+    rail.toggleAttribute('data-collapsed', !open);
+    btn.setAttribute('aria-expanded', open);
+    btn.textContent = open ? 'Show fewer ↑' : 'Show all 13 roles ↓';
+  });
+})();
+</script>
 
 <footer>
   <div class="wrap">
