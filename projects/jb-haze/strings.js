@@ -43,7 +43,7 @@
     'strip.north': 'Singapore North',
     'strip.psi': 'Singapore PSI',
     'strip.time': 'Singapore reading {sg} SGT. Johor Bahru reading {jb} MYT.',
-    'strip.basis': 'The local index is each country\'s own, from 24-hour PM2.5 (Malaysian API, Singapore PSI). The US AQI is the same on all three: the latest 1-hour PM2.5 on the older US EPA scale, the method aqicn.org uses, so the numbers match aqicn and the Singapore page. "24-h" marks a figure that fell back to the 24-hour average because there was no reading for the latest hour.',
+    'strip.basis': 'The local index is each country\'s own (Malaysian API, Singapore PSI). Each takes the highest of several pollutants; in haze that is almost always 24-hour PM2.5. The US AQI is the same on all three: the latest 1-hour PM2.5 on the older US EPA scale, the method aqicn.org uses, so the numbers match aqicn and the Singapore page. "24-h" marks a figure that fell back to the 24-hour average because there was no reading for the latest hour.',
     'strip.sglink': 'Singapore haze page →',
     'strip.nea': 'NEA (official)',
     'idx.my': 'Malaysia API',
@@ -233,10 +233,10 @@
     'news.lang.ms': 'BM',
     'news.lang.id': 'ID',
 
-    'foot.main': 'Not affiliated with DOE Malaysia. Air quality data from the Department of Environment Malaysia APIMS (eqms.doe.gov.my), fetched when you open the page (backup copy updated hourly) and reproduced without endorsement; unofficial and may be delayed. See [APIMS](https://eqms.doe.gov.my/APIMS/main) for official readings.',
+    'foot.main': 'Not affiliated with DOE Malaysia. Air quality data from the Department of Environment Malaysia APIMS (eqms.doe.gov.my), fetched when you open the page (backup copy refreshed up to hourly, so it can be a few hours old) and reproduced without endorsement; unofficial and may be delayed. See [APIMS](https://eqms.doe.gov.my/APIMS/main) for official readings.',
     'foot.fire': 'Fire data: NASA FIRMS (LANCE/ESDIS), VIIRS. The map overlay may be drawn by NASA GIBS.',
     'foot.sg': 'Singapore readings: NEA via data.gov.sg (Singapore Open Data Licence).',
-    'foot.other': 'Wind from Open-Meteo. Map tiles © Esri, HERE, Garmin, © OpenStreetMap contributors. Headlines link to the original publishers.',
+    'foot.other': 'Wind: Open-Meteo model estimates, not station readings. Map tiles © Esri, HERE, Garmin, © OpenStreetMap contributors. Headlines link to the original publishers.',
     'foot.private': 'Your chosen language and station stay in this browser only. Your location is used only when you tap the locate button and is never stored or sent.',
     'foot.abbrTitle': 'Abbreviations',
     'foot.abbr': [
@@ -292,7 +292,7 @@
     'strip.north': 'Singapura Utara',
     'strip.psi': 'PSI Singapura',
     'strip.time': 'Bacaan Singapura {sg} SGT. Bacaan Johor Bahru {jb} MYT.',
-    'strip.basis': 'Indeks tempatan ialah indeks setiap negara, daripada PM2.5 24 jam (IPU Malaysia, PSI Singapura). AQI AS sama bagi ketiga-tiganya: PM2.5 1 jam terkini pada skala US EPA yang lama, kaedah yang digunakan oleh aqicn.org, jadi angkanya sepadan dengan aqicn dan laman Singapura. "24 j" menandakan angka yang kembali kepada purata 24 jam kerana tiada bacaan bagi jam terkini.',
+    'strip.basis': 'Indeks tempatan ialah indeks setiap negara (IPU Malaysia, PSI Singapura). Setiap satu mengambil bacaan tertinggi antara beberapa bahan pencemar; ketika jerebu, biasanya PM2.5 24 jam. AQI AS sama bagi ketiga-tiganya: PM2.5 1 jam terkini pada skala US EPA yang lama, kaedah yang digunakan oleh aqicn.org, jadi angkanya sepadan dengan aqicn dan laman Singapura. "24 j" menandakan angka yang kembali kepada purata 24 jam kerana tiada bacaan bagi jam terkini.',
     'strip.sglink': 'Laman jerebu Singapura →',
     'strip.nea': 'NEA (rasmi)',
     'idx.my': 'IPU Malaysia',
@@ -482,10 +482,10 @@
     'news.lang.ms': 'BM',
     'news.lang.id': 'ID',
 
-    'foot.main': 'Tidak berkaitan dengan JAS Malaysia. Data kualiti udara daripada APIMS Jabatan Alam Sekitar Malaysia (eqms.doe.gov.my), diambil apabila anda membuka laman ini (salinan sandaran dikemas kini setiap jam) dan diterbitkan semula tanpa pengesahan; tidak rasmi dan mungkin tertangguh. Lihat [APIMS](https://eqms.doe.gov.my/APIMS/main) untuk bacaan rasmi.',
+    'foot.main': 'Tidak berkaitan dengan JAS Malaysia. Data kualiti udara daripada APIMS Jabatan Alam Sekitar Malaysia (eqms.doe.gov.my), diambil apabila anda membuka laman ini (salinan sandaran dikemas kini sehingga setiap jam, jadi mungkin lewat beberapa jam) dan diterbitkan semula tanpa pengesahan; tidak rasmi dan mungkin tertangguh. Lihat [APIMS](https://eqms.doe.gov.my/APIMS/main) untuk bacaan rasmi.',
     'foot.fire': 'Data kebakaran: NASA FIRMS (LANCE/ESDIS), VIIRS. Tindihan peta mungkin dilukis oleh NASA GIBS.',
     'foot.sg': 'Bacaan Singapura: NEA melalui data.gov.sg (Singapore Open Data Licence).',
-    'foot.other': 'Angin daripada Open-Meteo. Jubin peta © Esri, HERE, Garmin, © penyumbang OpenStreetMap. Tajuk berita memaut ke penerbit asal.',
+    'foot.other': 'Angin: anggaran model Open-Meteo, bukan bacaan stesen. Jubin peta © Esri, HERE, Garmin, © penyumbang OpenStreetMap. Tajuk berita memaut ke penerbit asal.',
     'foot.private': 'Bahasa dan stesen pilihan anda disimpan dalam pelayar ini sahaja. Lokasi anda hanya digunakan apabila anda mengetik butang lokasi dan tidak disimpan atau dihantar.',
     'foot.abbrTitle': 'Singkatan',
     'foot.abbr': [
