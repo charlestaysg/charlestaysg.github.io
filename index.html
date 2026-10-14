@@ -418,7 +418,7 @@
     if (worst === null) return;
     var v = r[worst], b = bands.find(function (x) { return v <= x[0]; });
     var t = new Intl.DateTimeFormat('en-SG', { timeZone: 'Asia/Singapore', hour: 'numeric', hour12: true }).format(new Date(it.timestamp)).replace(' ', '').toLowerCase();
-    txt.textContent = 'Singapore worst now: ' + worst[0].toUpperCase() + worst.slice(1) + ' ' + v + ' \u00b5g/m\u00b3 \u00b7 Band ' + b[1] + ' ' + b[2] + ' \u00b7 NEA ' + t;
+    txt.textContent = 'Singapore, 1-hr PM2.5: worst now ' + worst[0].toUpperCase() + worst.slice(1) + ' ' + v + ' \u00b5g/m\u00b3 \u00b7 Band ' + b[1] + ' ' + b[2] + ' \u00b7 NEA ' + t;
     el.dataset.band = b[1];
   }).catch(function () {});
 })();
