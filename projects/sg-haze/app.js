@@ -324,7 +324,7 @@ if (typeof document !== 'undefined') {
 
   /* ---------- data.gov.sg ---------- */
   // notFoundOk: data.gov.sg answers code 17 (no data) for today's date until the first reading after midnight is published.
-  async function dgsGet(url, budget = 4, notFoundOk = false) {
+  async function dgsGet(url, budget = 8, notFoundOk = false) {
     for (let attempt = 0; attempt < 2; attempt++) {
       if (dgsCalls >= budget) throw new Error('data.gov.sg call budget reached');
       dgsCalls++;
@@ -336,7 +336,8 @@ if (typeof document !== 'undefined') {
         status = res.status;
         try { json = await res.json(); } catch (_) { json = null; }
       } finally { clearTimeout(timer); }
-      const limited = status === 429 || (json && json.code === 24);
+      // data.gov.sg's rate-limit reply has no CORS header, so the browser sees a network error (status 0): retry it too.
+      const limited = status === 0 || status === 429 || (json && json.code === 24);
       if (limited && attempt === 0) { await sleep(10000); continue; }
       if (notFoundOk && json && json.code === 17) return null;
       if (!json || json.code !== 0) throw new Error(`data.gov.sg error (${status || 'network'}${json && json.code != null ? ' code ' + json.code : ''})`);
@@ -391,7 +392,7 @@ if (typeof document !== 'undefined') {
       if (!day.items.length) {
         // Just after midnight: today's list is empty, so take the latest reading (no date filter).
         await sleep(1000);
-        const latest = await dgsGet(PM25_URL, 4, true);
+        const latest = await dgsGet(PM25_URL, 8, true);
         if (latest) { day.items = latest.data.items || []; day.meta = day.meta || latest.data.regionMetadata; }
       }
       state.items = day.items;
@@ -420,17 +421,16 @@ if (typeof document !== 'undefined') {
   }
 
   async function loadWind() {
-    const dir = await dgsGet(WIND_DIR_URL, 4);
+    const dir = await dgsGet(WIND_DIR_URL);
     await sleep(1000);
-    const spd = await dgsGet(WIND_SPEED_URL, 4);
+    const spd = await dgsGet(WIND_SPEED_URL);
     state.wind = parseWind(dir, spd);
     renderWind();
   }
 
   async function loadForecast() {
-    dgsCalls = 0; // separate cycle; counted on its own
     try {
-      const j = await dgsGet(FORECAST_URL, 2);
+      const j = await dgsGet(FORECAST_URL, dgsCalls + 2);
       const item = (j.data.items || [])[0];
       if (!item) throw new Error('no forecast');
       const meta = {};
@@ -440,8 +440,10 @@ if (typeof document !== 'undefined') {
       }));
       state.forecast = { areas, validText: (item.valid_period || {}).text || '' };
       renderForecast();
+      return true;
     } catch (e) {
-      $('rain-chip').hidden = true;
+      if (!state.forecast) $('rain-chip').hidden = true;
+      return false;
     }
   }
 
@@ -845,9 +847,19 @@ if (typeof document !== 'undefined') {
     document.querySelectorAll('input[name="trend-metric"]').forEach(r => r.addEventListener('change', () => {
       state.metric = r.value; if (state.computed.north) renderTrend();
     }));
-    $('weather-toggle').addEventListener('change', e => {
+    $('weather-toggle').addEventListener('change', async e => {
+      const note = $('weather-note');
       if (!map) return;
-      if (e.target.checked) { renderWeatherLayer(); weatherLayer.addTo(map); } else map.removeLayer(weatherLayer);
+      if (!e.target.checked) { map.removeLayer(weatherLayer); note.textContent = ''; return; }
+      weatherLayer.addTo(map);
+      if (!state.forecast) { // not loaded yet, or NEA turned the request away: fetch it now instead of waiting 10 min
+        note.textContent = 'Loading weather…';
+        const ok = await loadForecast();
+        if (!e.target.checked) return;
+        if (!ok) { note.textContent = 'Weather forecast not available right now. Untick and tick again to retry.'; return; }
+      }
+      note.textContent = '';
+      renderWeatherLayer();
     });
     $('myarea-form').addEventListener('submit', e => { e.preventDefault(); applyPostal($('myarea-postal').value.trim()); });
     $('gp-form').addEventListener('submit', e => { e.preventDefault(); applyPostal($('gp-postal').value.trim()); });
