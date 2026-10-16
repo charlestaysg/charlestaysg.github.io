@@ -74,11 +74,11 @@
         <p style="margin:8px 0 0">AI makes the voice. The story is mine. <a href="projects/one-question-at-a-time/">See one song, line by line →</a></p>
       </div>
       <div class="chips" role="group" aria-label="Show only" hidden>
-        <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span>16</span></button>
+        <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span>18</span></button>
         <button type="button" class="chip" data-filter="sme" aria-pressed="false">For SME owners <span>4</span></button>
         <button type="button" class="chip" data-filter="haze" aria-pressed="false">Live haze <span>2</span></button>
         <button type="button" class="chip" data-filter="explainers" aria-pressed="false">Explainers <span>3</span></button>
-        <button type="button" class="chip" data-filter="experiments" aria-pressed="false">Experiments <span>7</span></button>
+        <button type="button" class="chip" data-filter="experiments" aria-pressed="false">Experiments <span>9</span></button>
       </div>
       <div class="cards">
         <article class="card" id="uen-sheet" data-group="sme">
@@ -204,6 +204,19 @@
             </details>
           </div>
         </article>
+        <article class="card" id="one-question-at-a-time" data-group="experiments">
+          <div class="player"><button type="button" class="yt" data-yt="GHEfsfCIgeQ" aria-label="Play One Question at a Time on YouTube"><img src="projects/one-question-at-a-time/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 48 s · duet · lyric video</span></span>
+            <h3>One Question at a Time</h3>
+            <p>My 2025 told through the 5,301 questions I asked an AI search engine that year. AI sang it. I lived it. Every line happened.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>A new home, a retrenchment, classes again, solo trips up north, a camera, and a pair of headphones that brought music back into my days. This year I read every one of those questions again and turned the year into a song.</p>
+              <p><a href="projects/one-question-at-a-time/">See every line, and the question behind it →</a></p>
+              <p class="credit">A song by Charles Tay. Words from my own 2025, shaped with Claude. Music and vocals AI-generated (ChatCut). Video made with HyperFrames.</p>
+            </details>
+          </div>
+        </article>
         <article class="card" id="pull-up-a-chair" data-group="experiments">
           <div class="player"><button type="button" class="yt" data-yt="haHE7PoE5OM" aria-label="Play Pull Up a Chair on YouTube"><img src="projects/pull-up-a-chair/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
@@ -312,17 +325,6 @@
   <section id="news">
     <div class="wrap">
       <div class="sec-head"><h2>news</h2></div>
-      <article class="news-item" id="one-question-at-a-time">
-        <div class="player wide"><button type="button" class="yt" data-yt="GHEfsfCIgeQ" aria-label="Play One Question at a Time on YouTube"><img src="projects/one-question-at-a-time/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-        <div class="project-body">
-          <span class="spec"><time datetime="2026-10-15">15 Oct 2026</time> · song · duet · lyric video · 3:48</span>
-          <h3>One Question at a Time</h3>
-          <p>In 2025 I asked an AI search engine 5,301 questions. A new home, a retrenchment, classes again, solo trips up north, a camera, and a pair of headphones that brought music back into my days. This year I read every one of those questions again and turned the year into a song.</p>
-          <p>AI sang it. I lived it. Every line happened.</p>
-          <p><a href="projects/one-question-at-a-time/">See every line, and the question behind it →</a> · <a href="https://www.youtube.com/watch?v=GHEfsfCIgeQ" rel="noopener">Watch on YouTube ↗</a></p>
-          <p class="credit">A song by Charles Tay. Words from my own 2025, shaped with Claude. Music and vocals AI-generated (ChatCut). Video made with HyperFrames.</p>
-        </div>
-      </article>
       <article class="news-item" id="imda-sme-ai">
         <div class="player wide"><button type="button" class="yt yt-text" data-yt="c8uT0AJnuzE" aria-label="Play CNA interview with Johnson Poh of IMDA on YouTube"><span class="yt-caption">CNA · Johnson Poh, IMDA<br>on AI adoption among SMEs</span><span class="yt-play" aria-hidden="true"></span></button></div>
         <div class="project-body">
@@ -465,6 +467,11 @@ document.querySelectorAll('[data-switch]').forEach(card => {
     chips.forEach(function (c) { c.setAttribute('aria-pressed', c.dataset.filter === f); });
     cards.forEach(function (c) { c.hidden = f !== 'all' && c.dataset.group !== f; });
   }
+  // counts come from the cards themselves, so they never go stale when a card is added
+  chips.forEach(function (c) {
+    var n = c.dataset.filter === 'all' ? cards.length : document.querySelectorAll('.card[data-group="' + c.dataset.filter + '"]').length;
+    var sp = c.querySelector('span'); if (sp) sp.textContent = n;
+  });
   bar.hidden = false;
   bar.addEventListener('click', function (e) { var c = e.target.closest('.chip'); if (c) show(c.dataset.filter); });
   // a link straight to a card (hero tiles, old #ids) always lands on a visible card
