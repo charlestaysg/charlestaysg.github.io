@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Six Months of Teaching Myself AI · Charles Tay</title>
+<meta name="description" content="What Charles Tay tried with AI on his own laptop from April to October 2026: the questions, what worked, what didn't, and what each step means for a small business.">
+<link rel="canonical" href="https://charlestaysg.github.io/notes/teaching-myself-ai/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Six Months of Teaching Myself AI · Charles Tay">
+<meta property="og:description" content="Questions I chased, what worked, what didn't, and what it means for a small business.">
+<meta property="og:url" content="https://charlestaysg.github.io/notes/teaching-myself-ai/">
+<meta property="og:image" content="https://charlestaysg.github.io/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261014e">
+<style>
+  /* question rows: tried / learned / for a business (same grid as the other notes) */
+  .steps { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px 16px; margin: 12px 0 0; }
+  .steps dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .steps dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .steps dd.out { font-weight: 700; }
+  .steps dt.biz, .biz-tag { color: #B7791F; }
+  .steps dd.biz { color: var(--muted); }
+  .biz-tag { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .steps dt.biz, :root:not([data-theme="light"]) .biz-tag { color: #F5C451; } }
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; gap: 2px; } .steps dd { margin-bottom: 8px; } }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#contact">← Charles Tay</a>
+    <span class="label">Learning in public · <time datetime="2026-10-18">18 Oct 2026</time></span>
+    <h1>Six months of teaching myself AI</h1>
+    <p class="dek">The questions I chased on my own laptop, what worked, what didn&rsquo;t, and what each one means for a small business.</p>
+  </div>
+</header>
+
+<main>
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <ul class="short">
+        <li>I don&rsquo;t write code. Since April 2026 I have learned AI by picking a real question each month and trying it myself, mostly with free tools.</li>
+        <li>I check claims before I repeat them, including claims from AI.</li>
+        <li>Some things didn&rsquo;t work, and two are still unfinished. They are on this page too.</li>
+      </ul>
+      <p style="max-width:64ch;margin-top:20px;color:var(--muted)">Run a small business? The <span class="biz-tag">for a business</span> lines are for you.</p>
+    </div>
+  </section>
+
+  <section id="questions">
+    <div class="wrap">
+      <div class="sec-head"><h2>question by question</h2></div>
+      <ul class="tools">
+        <li>
+          <span class="job">Apr 2026<br>the starting point</span>
+          <div>
+            <h3>Which laptop do I need to learn this?</h3>
+            <dl class="steps">
+              <dt>tried</dt><dd>Bought one, tested it with my real work for three days, and returned it for a bigger one.</dd>
+              <dt>learned</dt><dd class="out">Measure with your own work before you trust any estimate, AI&rsquo;s included.</dd>
+              <dt class="biz">for a business</dt><dd class="biz">Buy inside the return window and test before you commit. The full story: <a href="../laptop-for-ai/">the test that overruled AI</a>.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">May<br>private answers</span>
+          <div>
+            <h3>Can my own notes answer questions with no internet?</h3>
+            <dl class="steps">
+              <dt>tried</dt><dd>Loaded my notes into a free app that runs a small AI model on the laptop, with nothing sent online.</dd>
+              <dt>learned</dt><dd class="out">Simple lookups worked. Questions that joined two facts got confident, wrong answers.</dd>
+              <dt class="biz">for a business</dt><dd class="biz">A cheap chatbot over your company files can sound right and be wrong. Test it on questions you already know the answer to.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Jun<br>build it smaller</span>
+          <div>
+            <h3>Can I make a simpler version myself?</h3>
+            <dl class="steps">
+              <dt>tried</dt><dd>With AI&rsquo;s help, built a small offline tool: it finds the five most relevant notes, then asks a mid-size model to answer from them only.</dd>
+              <dt>learned</dt><dd class="out">Good enough for &ldquo;what did we agree?&rdquo; questions. The answer is only as good as the notes it finds.</dd>
+              <dt class="biz">for a business</dt><dd class="biz">Tidy, well-named documents matter more than the AI on top of them.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Jun<br>check the claim</span>
+          <div>
+            <h3>Can a laptop really run a 200-billion-parameter model?</h3>
+            <dl class="steps">
+              <dt>tried</dt><dd>A post going round said yes, and listed even bigger models. I checked each claim against real download sizes.</dd>
+              <dt>learned</dt><dd class="out">Half true. One model of that size fits, squeezed hard. The bigger ones in the post don&rsquo;t fit at all.</dd>
+              <dt class="biz">for a business</dt><dd class="biz">Viral AI claims are often partly right. Ask which part, before you spend money on it.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Jul<br>what stays private</span>
+          <div>
+            <h3>Which work should never leave my laptop?</h3>
+            <dl class="steps">
+              <dt>tried</dt><dd>Set up one app that can switch between online AI models and models running on my own machine.</dd>
+              <dt>learned</dt><dd class="out">My rule now: general thinking goes to online models, which are better at it. Anything with names, figures or confidential details goes to the model on my laptop.</dd>
+              <dt class="biz">for a business</dt><dd class="biz">You don&rsquo;t have to choose between useful AI and data protection. Split the work by how sensitive it is.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Aug<br>free alternatives</span>
+          <div>
+            <h3>Is there a free, private version of the tools I pay for?</h3>
+            <dl class="steps">
+              <dt>tried</dt><dd>Installed an open-source alternative to Google&rsquo;s NotebookLM and pointed it at models on my laptop. Also a free tool that turns web pages and documents into clean text for AI.</dd>
+              <dt>learned</dt><dd class="out">It works, with more setup than the paid version.</dd>
+              <dt class="biz">for a business</dt><dd class="biz">Free and private is possible. Budget time for setup, or someone who can do it.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Oct<br>new skills</span>
+          <div>
+            <h3>Can I make music, pictures and 3D?</h3>
+            <dl class="steps">
+              <dt>tried</dt><dd>Had AI write music as a score that free instrument sounds play. Drafted songs with a singing model on the laptop. Made painted stills for <a href="../../#light-left-on">Light Left On</a> with an image model, about half a minute each. Installed Blender and connected it to Claude, to start learning 3D.</dd>
+              <dt>learned</dt><dd class="out">Local tools are good for drafts. For the finished song I still use an online tool, because it sings with more feeling.</dd>
+              <dt class="biz">for a business</dt><dd class="biz">Draft in-house for free, and pay only for the final version you put in front of customers.</dd>
+            </dl>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="unfinished">
+    <div class="wrap">
+      <div class="sec-head"><h2>still unfinished</h2></div>
+      <ul class="tools">
+        <li><span class="job">since May</span><div><h3>An AI assistant I message from my phone</h3><p>I wrote a step-by-step plan to run one safely in a sealed box on the laptop. I haven&rsquo;t finished the build.</p></div></li>
+        <li><span class="job">since Jun</span><div><h3>Actually running the 200-billion-parameter model</h3><p>I worked out that it should fit. I haven&rsquo;t run it yet, so I don&rsquo;t claim it works.</p></div></li>
+        <li><span class="job">next</span><div><h3>Same question, three ways</h3><p>One question put to a model on my laptop, an online model and a small model on an ordinary laptop, with the answers side by side. Most learners and small businesses use ordinary laptops, so that is the comparison that matters.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head"><h2>how the learning works</h2></div>
+      <ul class="tools">
+        <li><span class="job">start from a real question</span><div><p>Not &ldquo;learn AI&rdquo;, but &ldquo;can my notes answer this without the internet?&rdquo;</p></div></li>
+        <li><span class="job">try the free version first</span><div><p>Most of the tools here are free. I pay when a free tool falls short.</p></div></li>
+        <li><span class="job">check, don&rsquo;t trust</span><div><p>Posts, sales pitches and AI answers get the same question: does it hold up when I try it?</p></div></li>
+        <li><span class="job">write it down</span><div><p>Every attempt gets a short note: what I tried, what happened, what I would do next. That is where this page came from.</p></div></li>
+        <li><span class="job">say what didn&rsquo;t work</span><div><p>The wrong answers and unfinished builds taught me as much as the ones that worked.</p></div></li>
+      </ul>
+      <p style="max-width:64ch;margin-top:24px;color:var(--muted)">More learning in public: <a href="../laptop-for-ai/">choosing the laptop</a> and <a href="../portable-audio/">a year of hi-fi decisions</a>. The tools I use and am trying: <a href="../../toolkit/">toolkit</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No analytics, no cookies.</span>
+  </div>
+</footer>
+
+</body>
+</html>
