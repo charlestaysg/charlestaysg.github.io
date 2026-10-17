@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Learning Hi-Fi · Charles Tay</title>
-<meta name="description" content="A year of learning portable hi-fi, told through the questions Charles Tay asked along the way and how they changed.">
+<title>How I Decide with AI · Charles Tay</title>
+<meta name="description" content="A year of hi-fi decisions by Charles Tay: what he asked AI, what he did himself, what he decided, and what AI spotted when it looked back over his reasoning.">
 <link rel="canonical" href="https://charlestaysg.github.io/notes/portable-audio/">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Learning Hi-Fi · Charles Tay">
-<meta property="og:description" content="A year of learning portable hi-fi, told through the questions I asked and how they changed.">
+<meta property="og:title" content="How I Decide with AI · Charles Tay">
+<meta property="og:description" content="A year of hi-fi decisions: what I asked AI, what I did myself, and what AI spotted looking back.">
 <meta property="og:url" content="https://charlestaysg.github.io/notes/portable-audio/">
 <meta property="og:image" content="https://charlestaysg.github.io/assets/og.jpg">
 <meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
@@ -18,69 +18,153 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="../../styles.css?v=20261014e">
+<style>
+  /* decision rows: asked AI / did myself / decided */
+  .steps { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px 16px; margin: 12px 0 0; }
+  .steps dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .steps dt.ai { color: var(--green); }
+  .steps dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .steps dd.out { font-weight: 700; }
+  .steps dt.lb, .lb-tag { color: #B7791F; }
+  .steps dd.lb { font-style: italic; color: var(--muted); }
+  .lb-tag { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .steps dt.lb, :root:not([data-theme="light"]) .lb-tag { color: #F5C451; } }
+  details.more + details.more { margin-top: 12px; }
+  details.more .tools { border-top: 0; }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; gap: 2px; } .steps dd { margin-bottom: 8px; } }
+</style>
 </head>
 <body>
 
 <header class="page-head">
   <div class="wrap">
     <a class="back" href="../../#contact">← Charles Tay</a>
-    <span class="label">Learning in public · <time datetime="2026-10-14">14 Oct 2026</time></span>
-    <h1>Learning hi-fi</h1>
-    <p class="dek">For a year I asked an AI search engine everything I didn&rsquo;t know about portable audio. Read in order, the questions show how I learn.</p>
+    <span class="label">Learning in public · <time datetime="2026-10-17">17 Oct 2026</time></span>
+    <h1>How I decide with AI</h1>
+    <p class="dek">A year of hi-fi decisions, and what AI spotted when I asked it to look back.</p>
   </div>
 </header>
 
 <main>
-  <section id="questions">
+  <section id="why">
     <div class="wrap">
-      <div class="sec-head"><h2>how my questions changed</h2></div>
-      <p style="max-width:64ch;margin-bottom:24px">These are my questions as I typed them, typos and all. Months are approximate.</p>
+      <div class="sec-head"><h2>how to read this</h2></div>
+      <div class="prose">
+        <p>Hi-fi was new to me in late 2025. It was personal, so I can share every step, and it cost real money, so I had to think each step through.</p>
+        <p>Each decision shows what I asked AI, what I did myself and what I decided. AI came in where I needed something explained or checked. Some steps didn&rsquo;t need it.</p>
+        <p>In October 2026 I gave an AI assistant a year of my past chats and asked it to rebuild my decisions. My prompt, roughly: <strong>&ldquo;Rebuild the search pattern and decision points of my hi-fi journey, starting from the setup I used before the SP3000T.&rdquo;</strong></p>
+        <p>What it found is in the <span class="lb-tag">looking back</span> lines. Some choices held up. Others only looked sound one at a time.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="decisions">
+    <div class="wrap">
+      <div class="sec-head"><h2>decision by decision</h2></div>
+      <p style="max-width:64ch;margin-bottom:24px">My questions to AI are quoted as I typed them, typos and all. Months are approximate.</p>
       <ul class="tools">
         <li>
-          <span class="job">Nov 2025<br>what is this?</span>
+          <span class="job">late 2025<br>start from the need</span>
           <div>
-            <h3>&ldquo;is this a gold cable ? How to tell layman in one sentence&rdquo;</h3>
-            <p>Also: &ldquo;64 audio IEM u18s is what type of IEM and drivers&rdquo;. I started by asking for plain English, one word at a time.</p>
+            <h3>Better sound for editing video</h3>
+            <dl class="steps">
+              <dt>did myself</dt><dd>Bought closed studio headphones. On my first shop visit, added a small USB-C DAC/amp so my iPhone could play lossless music properly.</dd>
+              <dt>decided</dt><dd class="out">A practical fix for work. Not a hobby yet.</dd>
+              <dt class="lb">looking back</dt><dd class="lb">My memory was wrong. In an April chat I said I got into hi-fi in 2023 or late 2024. The chat records put this step in October to November 2025, so the whole run took about six months, not two years.</dd>
+            </dl>
           </div>
         </li>
         <li>
-          <span class="job">Nov 2025<br>will it work?</span>
+          <span class="job">Nov 2025<br>which player?</span>
           <div>
-            <h3>&ldquo;Does toxic cable medusa2 drive u18s 64 audio Iem&rdquo;</h3>
-            <p>Before buying a cable, I checked it suited the earphones I already had. Then I asked how it would change the sound.</p>
+            <h3>Which portable player?</h3>
+            <dl class="steps">
+              <dt class="ai">asked AI</dt><dd>To explain in plain English how the players I was considering differed in sound.</dd>
+              <dt>did myself</dt><dd>Took my own phone, DAC and headphones to the shop as a fixed reference, so only the player changed. Listened to several players in one afternoon.</dd>
+              <dt>decided</dt><dd class="out">The SP3000T with its tube stage on, over the SP4000, which is the better player on paper. My ears decided.</dd>
+              <dt class="lb">looking back</dt><dd class="lb">The fixed reference and the side-by-side listening held up. But most of my information came from one shop I trust, so its stock shaped my shortlist.</dd>
+            </dl>
           </div>
         </li>
         <li>
-          <span class="job">Dec 2025<br>how do the parts fit?</span>
+          <span class="job">Nov 2025<br>one setup or several?</span>
           <div>
-            <h3>&ldquo;If i use M21 to WA7 3rd Gen vs SP3000T to WA7 3rd Gen vs SP4000 to WA7 3rd Gen. Sound signature ? In Layman&rdquo;</h3>
-            <p>Still asking for plain English, but now about a whole chain. The answer changed how I saw it: over USB, the player only sends data, and the amp at the end decides the sound.</p>
+            <h3>One setup for everything?</h3>
+            <dl class="steps">
+              <dt>did myself</dt><dd>Listened to open-back headphones at the shop and compared them with my closed pair.</dd>
+              <dt>decided</dt><dd class="out">One setup per place: closed headphones outdoors, open-backs at my desk, in-ear monitors on the go. Later, speakers at home for listening with family.</dd>
+              <dt class="lb">looking back</dt><dd class="lb">Held up.</dd>
+            </dl>
           </div>
         </li>
         <li>
-          <span class="job">Jan 2026<br>use what I have</span>
+          <span class="job">Nov 2025<br>which earphones?</span>
           <div>
-            <h3>&ldquo;u18s 64 audio what modules provided&rdquo;</h3>
-            <p>Before shopping for something new, I learned to change what I owned. Swapping one small module trims the bass.</p>
+            <h3>Which in-ear monitors?</h3>
+            <dl class="steps">
+              <dt class="ai">asked AI</dt><dd>&ldquo;64 audio IEM u18s is what type of IEM and drivers&rdquo;. Plain English before spending.</dd>
+              <dt>did myself</dt><dd>Left one shop visit without buying because the choices were too complex. Came back, listened again, and tried another brand that I found so-so.</dd>
+              <dt>decided</dt><dd class="out">64 Audio U18s. I noted a custom-fit pair as the upper limit, not the next step.</dd>
+              <dt class="lb">looking back</dt><dd class="lb">I paid in instalments, and judged it by the monthly amount, not the total.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Nov 2025 to Jan 2026<br>will it fit?</span>
+          <div>
+            <h3>Upgrade, or use what I have?</h3>
+            <dl class="steps">
+              <dt class="ai">asked AI</dt><dd>&ldquo;Does toxic cable medusa2 drive u18s 64 audio Iem&rdquo;, and later &ldquo;u18s 64 audio what modules provided&rdquo;.</dd>
+              <dt>did myself</dt><dd>Narrowed a shortlist of six cables to one after checking the pairing. Swapped a bass module on the U18s before shopping for anything new.</dd>
+              <dt>decided</dt><dd class="out">The Medusa 2 cable. After that: change what I own before buying more.</dd>
+              <dt class="lb">looking back</dt><dd class="lb">Each purchase raised the next question: player, then earphones, then cable.</dd>
+            </dl>
           </div>
         </li>
         <li>
           <span class="job">Feb 2026<br>check the claim</span>
           <div>
-            <h3>&ldquo;I was told my sales person that FitEar IEM are very desirable by all audiophiles?&rdquo;</h3>
-            <p>A salesperson&rsquo;s line, checked before I acted on it. I didn&rsquo;t buy.</p>
+            <h3>Is the salesperson right?</h3>
+            <dl class="steps">
+              <dt class="ai">asked AI</dt><dd>&ldquo;I was told my sales person that FitEar IEM are very desirable by all audiophiles?&rdquo;</dd>
+              <dt>did myself</dt><dd>Treated the line as a claim to test, not a fact.</dd>
+              <dt>decided</dt><dd class="out">Didn&rsquo;t buy.</dd>
+            </dl>
           </div>
         </li>
         <li>
-          <span class="job">Jun 2026<br>set the research</span>
+          <span class="job">Feb 2026<br>set a limit</span>
           <div>
-            <h3>&ldquo;Research and compile a &lsquo;Real-World Ownership Report&rsquo; for the Astell&amp;Kern SP4000&hellip;&rdquo;</h3>
-            <p>Eight months in, I no longer asked what things were. I set the brief: owner reports on heat, battery life, build and software, compared with the player I already had.</p>
+            <h3>Am I done?</h3>
+            <dl class="steps">
+              <dt>did myself</dt><dd>Decided I had reached the end of portable hi-fi. Kept a short watchlist instead of buying.</dd>
+              <dt>decided</dt><dd class="out">Watch, don&rsquo;t buy.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Jun 2026<br>then break it</span>
+          <div>
+            <h3>The limit didn&rsquo;t hold</h3>
+            <dl class="steps">
+              <dt class="ai">asked AI</dt><dd>&ldquo;Research and compile a &lsquo;Real-World Ownership Report&rsquo; for the Astell&amp;Kern SP4000&hellip;&rdquo;. By now I set the brief: owner reports on heat, battery life, build and software, against the player I already had.</dd>
+              <dt>did myself</dt><dd>Lived with the SP3000T for six months first.</dd>
+              <dt>decided</dt><dd class="out">Bought the SP4000, a few months after I said I was done.</dd>
+              <dt class="lb">looking back</dt><dd class="lb">The research was thorough. The limit I set in February didn&rsquo;t survive it.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Oct 2026<br>what changes</span>
+          <div>
+            <h3>What I do differently now</h3>
+            <p style="margin-top:12px">Two rules from now on. I look at the full price, not the monthly instalment. And before I buy anything, I ask what it will make me want next.</p>
           </div>
         </li>
       </ul>
     </div>
   </section>
+
 
   <section id="how">
     <div class="wrap">
@@ -91,33 +175,44 @@
         <li><span class="job">check, don&rsquo;t trust</span><div><p>Reviews, owner forums, known faults and sales pitches all get the same question: who says so, and do other owners agree?</p></div></li>
         <li><span class="job">try it in person</span><div><p>Listen in a shop. Same song, change one thing at a time. My ears decide, not the forums.</p></div></li>
         <li><span class="job">live with it</span><div><p>Six months with one player taught me more than any review. The second player made sense only after that.</p></div></li>
-        <li><span class="job">know when to stop</span><div><p>Most of what I learned about ended in &ldquo;I don&rsquo;t need this.&rdquo; That still counts as learning.</p></div></li>
+        <li><span class="job">ask AI to check me</span><div><p>After a run of decisions, I ask AI to go back over my reasoning, not only to explain things beforehand. It remembers what I said better than I do.</p></div></li>
+        <li><span class="job">know when to stop</span><div><p>Most of what I looked at ended in &ldquo;I don&rsquo;t need this.&rdquo; Not all of it, as the last two decisions show.</p></div></li>
       </ul>
     </div>
   </section>
 
-  <section id="numbers">
+  <section id="details">
     <div class="wrap">
-      <div class="sec-head"><h2>the year in numbers</h2></div>
-      <dl class="spec-list">
-        <dt>looked into</dt><dd>23 players, amps, earphones and cables I didn&rsquo;t buy</dd>
-        <dt>bought</dt><dd>6 items, each after auditioning or checking the pairing</dd>
-        <dt>waited</dt><dd>6 months before adding a second flagship player</dd>
-      </dl>
-    </div>
-  </section>
+      <div class="sec-head"><h2>the details</h2></div>
 
-  <section id="gear">
-    <div class="wrap">
-      <div class="sec-head"><h2>what I ended up with</h2></div>
-      <ul class="tools">
-        <li><span class="job">Nov 2025</span><div><h3>Astell&amp;Kern SP3000T</h3><p>My main player. It has a real vacuum-tube stage you can switch on or off. I compared it with the SP4000, PD10 and iBasso DX340 first.</p></div></li>
-        <li><span class="job">late 2025</span><div><h3>64 Audio U18s</h3><p>In-ear monitors with swappable modules that change the bass and how sealed they feel.</p></div></li>
-        <li><span class="job">Nov 2025</span><div><h3>Toxic Cables Medusa 2</h3><p>Chosen from a shortlist of six cables, after I checked it suited the U18s.</p></div></li>
-        <li><span class="job">Dec 2025</span><div><h3>FiiO M21 and MUSE HiFi M6 Double</h3><p>A lighter player for days I don&rsquo;t carry the SP3000T, auditioned at AV One, plus a portable tube amp I tried at Jaben on a friend&rsquo;s advice.</p></div></li>
-        <li><span class="job">Jun 2026</span><div><h3>Astell&amp;Kern SP4000</h3><p>Added after six months with the SP3000T. One is for relaxed listening, the other for hearing every layer.</p></div></li>
-      </ul>
-      <p class="credit" style="max-width:64ch;margin-top:18px">One thing I didn&rsquo;t expect: I felt a faint tingle in my ear while the player was charging from the wall. It never happened on battery or a power bank. If you feel it, unplug and get the charger checked.</p>
+      <details class="more">
+        <summary>All my questions, in order</summary>
+        <ul class="tools">
+          <li><span class="job">Nov 2025<br>what is this?</span><div><h3>&ldquo;is this a gold cable ? How to tell layman in one sentence&rdquo;</h3><p>Also: &ldquo;64 audio IEM u18s is what type of IEM and drivers&rdquo;. I started by asking for plain English, one word at a time.</p></div></li>
+          <li><span class="job">Nov 2025<br>will it work?</span><div><h3>&ldquo;Does toxic cable medusa2 drive u18s 64 audio Iem&rdquo;</h3><p>Before buying a cable, I checked it suited the earphones I already had. Then I asked how it would change the sound.</p></div></li>
+          <li><span class="job">Dec 2025<br>how do the parts fit?</span><div><h3>&ldquo;If i use M21 to WA7 3rd Gen vs SP3000T to WA7 3rd Gen vs SP4000 to WA7 3rd Gen. Sound signature ? In Layman&rdquo;</h3><p>Still asking for plain English, but now about a whole chain. The answer changed how I saw it: over USB, the player only sends data, and the amp at the end decides the sound.</p></div></li>
+          <li><span class="job">Jan 2026<br>use what I have</span><div><h3>&ldquo;u18s 64 audio what modules provided&rdquo;</h3><p>Before shopping for something new, I learned to change what I owned. Swapping one small module trims the bass.</p></div></li>
+          <li><span class="job">Feb 2026<br>check the claim</span><div><h3>&ldquo;I was told my sales person that FitEar IEM are very desirable by all audiophiles?&rdquo;</h3><p>A salesperson&rsquo;s line, checked before I acted on it. I didn&rsquo;t buy.</p></div></li>
+          <li><span class="job">Jun 2026<br>set the research</span><div><h3>&ldquo;Research and compile a &lsquo;Real-World Ownership Report&rsquo; for the Astell&amp;Kern SP4000&hellip;&rdquo;</h3><p>Eight months in, I no longer asked what things were. I set the brief: owner reports on heat, battery life, build and software, compared with the player I already had.</p></div></li>
+        </ul>
+      </details>
+
+      <details class="more">
+        <summary>What I ended up with, and the year in numbers</summary>
+        <dl class="spec-list" style="margin-top:16px">
+          <dt>looked into</dt><dd>23 players, amps, earphones and cables I didn&rsquo;t buy</dd>
+          <dt>bought</dt><dd>6 items, each after auditioning or checking the pairing</dd>
+          <dt>waited</dt><dd>6 months before adding a second flagship player</dd>
+        </dl>
+        <ul class="tools">
+          <li><span class="job">Nov 2025</span><div><h3>Astell&amp;Kern SP3000T</h3><p>My main player. It has a real vacuum-tube stage you can switch on or off. I compared it with the SP4000, PD10 and iBasso DX340 first.</p></div></li>
+          <li><span class="job">late 2025</span><div><h3>64 Audio U18s</h3><p>In-ear monitors with swappable modules that change the bass and how sealed they feel.</p></div></li>
+          <li><span class="job">Nov 2025</span><div><h3>Toxic Cables Medusa 2</h3><p>Chosen from a shortlist of six cables, after I checked it suited the U18s.</p></div></li>
+          <li><span class="job">Dec 2025</span><div><h3>FiiO M21 and MUSE HiFi M6 Double</h3><p>A lighter player for days I don&rsquo;t carry the SP3000T, auditioned at AV One, plus a portable tube amp I tried at Jaben on a friend&rsquo;s advice.</p></div></li>
+          <li><span class="job">Jun 2026</span><div><h3>Astell&amp;Kern SP4000</h3><p>Added after six months with the SP3000T. One is for relaxed listening, the other for hearing every layer.</p></div></li>
+        </ul>
+        <p class="credit" style="max-width:64ch;margin:14px 0 18px">One thing I didn&rsquo;t expect: I felt a faint tingle in my ear while the player was charging from the wall. It never happened on battery or a power bank. If you feel it, unplug and get the charger checked.</p>
+      </details>
     </div>
   </section>
 </main>
