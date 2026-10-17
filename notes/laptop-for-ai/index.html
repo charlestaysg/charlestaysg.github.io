@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Test That Overruled AI · Charles Tay</title>
+<meta name="description" content="How Charles Tay chose a laptop for running AI models at home: five weeks, two machines, AI's advice wrong twice, and the overnight test that settled it.">
+<link rel="canonical" href="https://charlestaysg.github.io/notes/laptop-for-ai/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Test That Overruled AI · Charles Tay">
+<meta property="og:description" content="Choosing a laptop for local AI: what I asked AI, what I measured myself, and why the measurement won.">
+<meta property="og:url" content="https://charlestaysg.github.io/notes/laptop-for-ai/">
+<meta property="og:image" content="https://charlestaysg.github.io/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261014e">
+<style>
+  /* decision rows: asked AI / did myself / decided (same as the hi-fi page) */
+  .steps { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px 16px; margin: 12px 0 0; }
+  .steps dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .steps dt.ai { color: var(--green); }
+  .steps dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .steps dd.out { font-weight: 700; }
+  .steps dt.lb, .lb-tag { color: #B7791F; }
+  .steps dd.lb { font-style: italic; color: var(--muted); }
+  .lb-tag { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .steps dt.lb, :root:not([data-theme="light"]) .lb-tag { color: #F5C451; } }
+  details.more + details.more { margin-top: 12px; }
+  details.more .tools { border-top: 0; }
+  /* memory test table */
+  .mem { width: 100%; border-collapse: collapse; margin: 16px 0 18px; font-size: 15px; }
+  .mem th, .mem td { text-align: left; padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line); }
+  .mem th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .mem td.n { font-family: var(--font-mono); }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; gap: 2px; } .steps dd { margin-bottom: 8px; } .mem { font-size: 14px; } }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#contact">← Charles Tay</a>
+    <span class="label">Learning in public · <time datetime="2026-10-17">17 Oct 2026</time></span>
+    <h1>The test that overruled AI</h1>
+    <p class="dek">How my question kept changing while I chose a laptop, and what finally settled it.</p>
+  </div>
+</header>
+
+<main>
+  <section id="why">
+    <div class="wrap">
+      <div class="sec-head"><h2>how to read this</h2></div>
+      <div class="prose">
+        <p>The laptop matters less here than the thinking. Over five weeks in March and April 2026 my question changed three times, from &ldquo;which laptop is light enough?&rdquo; to &ldquo;how much memory does AI need?&rdquo; to &ldquo;what does my real work use?&rdquo;. I bought one machine, tested it and returned it before I settled.</p>
+        <p>AI&rsquo;s advice was wrong twice along the way. Neither time was it a bad answer to the question I asked. The first time my question changed. The second time my own test numbers showed its estimate was too low.</p>
+        <p>Each step shows what I asked AI, what I did myself and what I decided. The <span class="lb-tag">looking back</span> lines come from going over the chats afterwards with AI, including where the final choice is weakest.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="decisions">
+    <div class="wrap">
+      <div class="sec-head"><h2>decision by decision</h2></div>
+      <ul class="tools">
+        <li>
+          <span class="job">8 Mar 2026<br>start from the need</span>
+          <div>
+            <h3>Do I need a Pro at all?</h3>
+            <dl class="steps">
+              <dt class="ai">asked AI</dt><dd>To compare the MacBook Air and Pro for writing, everyday work and carrying around. Heavy work already ran on my desktop PC at home.</dd>
+              <dt>decided</dt><dd class="out">No Pro. A light laptop next to the home PC.</dd>
+              <dt class="lb">looking back</dt><dd class="lb">A good answer to that question. The question was about to change.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">mid-Mar<br>the question changes</span>
+          <div>
+            <h3>What if the laptop runs AI itself?</h3>
+            <dl class="steps">
+              <dt>did myself</dt><dd>Wrote a plan to learn to run AI models on my own machine as well as in the cloud. A laptop question became a memory question.</dd>
+              <dt class="ai">asked AI</dt><dd>Which matters more for running models locally: more memory or more graphics cores?</dd>
+              <dt>decided</dt><dd class="out">Memory first. The M5 Pro with 64GB over the M5 Max with 48GB.</dd>
+              <dt class="lb">looking back</dt><dd class="lb">Held up. Memory decides which models fit at all. The Max with 48GB couldn&rsquo;t hold the larger models I had in mind.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">mid-Mar<br>how much is enough?</span>
+          <div>
+            <h3>Is 64GB enough?</h3>
+            <dl class="steps">
+              <dt class="ai">asked AI</dt><dd>Whether my plan needed 128GB. Three phases: tidy my documents with AI, then photo and video editing, then train small and mid-size models on my own material.</dd>
+              <dt>decided</dt><dd class="out">AI said none of the three needed 128GB. I ordered the 64GB Pro.</dd>
+              <dt class="lb">looking back</dt><dd class="lb">That was an estimate, not a measurement. I didn&rsquo;t see the difference then. One thing I did right without planning it: I bought inside the return window.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">23&ndash;26 Mar<br>test with real work</span>
+          <div>
+            <h3>What does my real day use?</h3>
+            <dl class="steps">
+              <dt>did myself</dt><dd>Stopped guessing and measured. Ran my normal work all at once over three days: an AI model running locally in LM Studio, plus Claude, Chrome, Word and PowerPoint. Screenshotted Activity Monitor as memory climbed.</dd>
+              <dt>decided</dt><dd class="out">58GB of 64GB used, and the Mac had started swapping to disk. For a machine I wanted to keep five years, that was too little room.</dd>
+              <dt class="lb">looking back</dt><dd class="lb">The Mac wasn&rsquo;t struggling. Memory pressure stayed green the whole time. The call was about where models are heading over five years, not about that week.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">26 Mar, 5am<br>change course</span>
+          <div>
+            <h3>Upgrade, or live with it?</h3>
+            <dl class="steps">
+              <dt class="ai">asked AI</dt><dd>Took the test numbers back to AI. With real data in front of it, the advice changed to 128GB.</dd>
+              <dt>decided</dt><dd class="out">Changed to the 128GB model and returned the 64GB one inside the window.</dd>
+              <dt class="lb">looking back</dt><dd class="lb">The weak spot: 128GB is more than my written plan needs. The case rests on room to grow, not on work that needs it today. I may have over-bought, and I would rather say so here than pretend otherwise.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">13 Apr<br>check what arrived</span>
+          <div>
+            <h3>Is this one a good unit?</h3>
+            <dl class="steps">
+              <dt>did myself</dt><dd>Ran the same benchmark five times on collection day to check the results were consistent, before the return window closed.</dd>
+              <dt>decided</dt><dd class="out">Kept it, with a plan to use it about five years.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Oct 2026<br>what changes</span>
+          <div>
+            <h3>What I do differently now</h3>
+            <p style="margin-top:12px">For the next big purchase I buy inside the return window and test with my own work before I commit. A few days of measuring taught me more than weeks of comparing spec sheets, AI&rsquo;s estimates included. And when AI&rsquo;s advice changes, I first check whether my question changed.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head"><h2>what carries over</h2></div>
+      <p style="max-width:64ch;margin-bottom:24px">This was a laptop, but the same habits work for new AI tools, new topics and decisions at work.</p>
+      <ul class="tools">
+        <li><span class="job">say what it&rsquo;s for</span><div><p>AI answers the question you ask. When my use changed from writing to running models, the right answer changed with it.</p></div></li>
+        <li><span class="job">estimate, then measure</span><div><p>An estimate is a starting point. My own numbers from a few nights of real work settled it.</p></div></li>
+        <li><span class="job">keep a way back</span><div><p>Buying inside the return window turned an expensive guess into a cheap test.</p></div></li>
+        <li><span class="job">name the weak spot</span><div><p>The case for 128GB rests on the future, not on today. Writing that down keeps me honest about it.</p></div></li>
+      </ul>
+      <p style="max-width:64ch;margin-top:24px;color:var(--muted)">Another case: <a href="../portable-audio/">a year of hi-fi decisions</a>, where I asked AI to check my reasoning after the fact.</p>
+    </div>
+  </section>
+
+  <section id="details">
+    <div class="wrap">
+      <div class="sec-head"><h2>the details</h2></div>
+
+      <details class="more">
+        <summary>The memory test, in numbers</summary>
+        <table class="mem">
+          <thead><tr><th>Load</th><th>Memory used</th><th>Swap</th><th>Pressure</th></tr></thead>
+          <tbody>
+            <tr><td>Light</td><td class="n">29GB</td><td class="n">0</td><td>Green</td></tr>
+            <tr><td>Heavy</td><td class="n">47GB</td><td class="n">0</td><td>Green</td></tr>
+            <tr><td>32B model + full work stack</td><td class="n">58GB</td><td class="n">245MB</td><td>Green</td></tr>
+          </tbody>
+        </table>
+        <p class="credit" style="max-width:64ch;margin:0 0 18px">From three Activity Monitor screenshots on the 64GB M5 Pro. At the peak, another 10GB was compressed in memory.</p>
+      </details>
+
+      <details class="more">
+        <summary>The options I weighed, and why</summary>
+        <ul class="tools">
+          <li><span class="job">kept</span><div><h3>M5 Max, 128GB</h3><p>Room to grow. More than my plan needs today, as noted above.</p></div></li>
+          <li><span class="job">bought, tested, returned</span><div><h3>M5 Pro, 64GB</h3><p>Cooler and longer on battery. Fine for my work that week, too tight for five years once I measured it.</p></div></li>
+          <li><span class="job">ruled out</span><div><h3>M5 Max, 48GB</h3><p>Not enough memory for the larger models. Memory mattered more than speed.</p></div></li>
+          <li><span class="job">first idea</span><div><h3>A light laptop</h3><p>Right for writing and carrying around. Overtaken once the plan included running AI locally.</p></div></li>
+        </ul>
+        <p class="credit" style="max-width:64ch;margin:14px 0 18px">One figure to check yourself: my chats quoted two different memory speeds for the M5 Max. Apple&rsquo;s spec page is the one to trust.</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Views are my own. No sponsorships or affiliate links. No prices, because they change.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No analytics, no cookies.</span>
+  </div>
+</footer>
+
+</body>
+</html>
