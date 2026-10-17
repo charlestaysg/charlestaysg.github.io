@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MoMo the Sausage Dog · Charles Tay</title>
+<meta name="description" content="A 3D version of the stretching-dachshund password field, modelled on MoMo, a much-loved red dachshund. In loving memory.">
+<link rel="canonical" href="https://charlestaysg.github.io/projects/sausage-dog-password/momo/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MoMo the Sausage Dog">
+<meta property="og:description" content="Every character stretches MoMo. In loving memory of the original long boy.">
+<meta property="og:url" content="https://charlestaysg.github.io/projects/sausage-dog-password/momo/">
+<meta property="og:image" content="https://charlestaysg.github.io/projects/sausage-dog-password/momo/poster.jpg">
+<link rel="icon" href="../../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Figtree:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<style>
+/* Layout: one hot-dog-stand card on a mustard ground; a 3D MoMo on a wooden ruler is the strength meter. */
+:root {
+  --bg: #F2C230;
+  --bg-dot: #E7B21C;
+  --card: #FFFDF7;
+  --stage: #FFF6E6;
+  --ink: #231A14;
+  --muted: #6E6257;
+  --line: #E6DCCF;
+  --ketchup: #D2382A;
+  --ketchup-ink: #FFFFFF;
+  --awning-b: #FFF3E2;
+  --edge: #140D0A;
+  --weak: #C7332A;
+  --mid: #A86A06;
+  --good: #2F7D45;
+  --chip-on: #231A14;
+  --chip-on-ink: #FFFDF7;
+  --shadow: rgba(35, 26, 20, 0.14);
+  --display: "Shrikhand", "Cooper Black", Georgia, serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1E1A12; --bg-dot: #29231A; --card: #2A2621; --stage: #332D26; --ink: #F3E9DC; --muted: #B5A898; --line: #3E3830;
+    --ketchup: #E0533F; --awning-b: #3A332B; --edge: #D9B88C; --weak: #FF7A6B; --mid: #F0B44A; --good: #6FCF8A;
+    --chip-on: #F3E9DC; --chip-on-ink: #2A2621; --shadow: rgba(0, 0, 0, 0.35); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1E1A12; --bg-dot: #29231A; --card: #2A2621; --stage: #332D26; --ink: #F3E9DC; --muted: #B5A898; --line: #3E3830;
+  --ketchup: #E0533F; --awning-b: #3A332B; --edge: #D9B88C; --weak: #FF7A6B; --mid: #F0B44A; --good: #6FCF8A;
+  --chip-on: #F3E9DC; --chip-on-ink: #2A2621; --shadow: rgba(0, 0, 0, 0.35); color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--bg-dot) 1.5px, transparent 1.6px);
+  background-size: 22px 22px;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.45;
+  padding-block: 40px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.card {
+  max-width: 560px; margin: 0 auto; background: var(--card); border-radius: 22px; overflow: hidden;
+  box-shadow: 0 2px 0 var(--edge), 0 24px 48px -20px var(--shadow);
+}
+.awning { position: relative; height: 26px; background: repeating-linear-gradient(90deg, var(--ketchup) 0 28px, var(--awning-b) 28px 56px); }
+.awning::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 26px; height: 12px;
+  background:
+    radial-gradient(circle at 14px 0, var(--ketchup) 13.5px, transparent 14px) 0 0 / 56px 12px repeat-x,
+    radial-gradient(circle at 42px 0, var(--awning-b) 13.5px, transparent 14px) 0 0 / 56px 12px repeat-x;
+}
+.inner { display: grid; gap: 18px; padding: 34px 28px 26px; }
+@media (max-width: 440px) { .inner { padding: 30px 18px 22px; } }
+header { display: grid; gap: 6px; }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(30px, 7vw, 40px); line-height: 1.05; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 40ch; }
+
+.stage {
+  position: relative; border-radius: 16px; overflow: hidden;
+  background: radial-gradient(ellipse at 40% 35%, var(--card) 0%, var(--stage) 75%);
+  border: 1px solid var(--line);
+}
+.stage canvas { display: block; width: 100%; aspect-ratio: 2.1 / 1; height: auto; }
+.no3d { padding: 40px 16px; text-align: center; color: var(--muted); }
+.bubble-anchor { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; }
+.bubble {
+  position: absolute; left: -24px; bottom: 6px;
+  background: var(--card); color: var(--ink);
+  border: 2px solid var(--edge); border-radius: 14px;
+  padding: 4px 12px; font-weight: 700; font-size: 14px; white-space: nowrap;
+  transform-origin: 20% 100%; opacity: 0; transform: scale(0.6) translateY(6px);
+  transition: opacity 0.15s, transform 0.2s cubic-bezier(.3,1.6,.5,1);
+}
+.bubble::after {
+  content: ""; position: absolute; left: 18px; bottom: -8px; width: 12px; height: 12px;
+  background: var(--card); border-right: 2px solid var(--edge); border-bottom: 2px solid var(--edge); transform: rotate(45deg);
+}
+.bubble.on { opacity: 1; transform: none; }
+.readout { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: -8px; }
+.readout b { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+form { display: grid; gap: 14px; }
+label.field-label { font-weight: 700; font-size: 14px; }
+.field { display: flex; align-items: center; gap: 6px; border: 2px solid var(--edge); border-radius: 14px; background: var(--card); padding: 4px 4px 4px 14px; transition: box-shadow 0.15s; }
+.field:focus-within { box-shadow: 0 0 0 4px color-mix(in srgb, var(--ketchup) 30%, transparent); }
+.field input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink); font: 500 18px/1.2 var(--mono); padding: 10px 0; outline: none; letter-spacing: 0.04em; }
+.peek { border: 0; background: transparent; color: var(--muted); font: 700 13px var(--body); padding: 10px 12px; border-radius: 10px; cursor: pointer; }
+.peek:hover { color: var(--ink); background: var(--line); }
+.peek:focus-visible, .btn:focus-visible { outline: 3px solid var(--ketchup); outline-offset: 2px; }
+.grade { display: grid; gap: 2px; min-height: 48px; }
+.grade-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.grade-key { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.grade-val { font-weight: 700; font-size: 17px; }
+.grade-hint { color: var(--muted); font-size: 14px; }
+.grade[data-level="weak"] .grade-val { color: var(--weak); }
+.grade[data-level="mid"] .grade-val { color: var(--mid); }
+.grade[data-level="good"] .grade-val { color: var(--good); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border: 1.5px dashed var(--muted); border-radius: 999px; padding: 4px 11px 4px 8px; font-size: 13px; color: var(--muted); transition: all 0.2s; }
+.chip code { font-family: var(--mono); font-size: 12px; }
+.chip.on { background: var(--chip-on); color: var(--chip-on-ink); border-style: solid; border-color: var(--chip-on); }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { font: 700 16px var(--body); border-radius: 14px; padding: 14px 20px; cursor: pointer; border: 2px solid var(--edge); }
+.btn-primary { flex: 1; background: var(--ketchup); color: var(--ketchup-ink); box-shadow: 0 3px 0 var(--edge); }
+.btn-primary:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--edge); }
+.btn-ghost { background: transparent; color: var(--ink); }
+.btn-ghost:hover { background: var(--line); }
+.card.shake { animation: shake 0.4s; }
+@keyframes shake { 20%, 60% { transform: translateX(-7px); } 40%, 80% { transform: translateX(7px); } }
+.back { display: block; max-width: 560px; margin: 0 auto 14px; font: 700 14px var(--body); color: var(--ink); text-decoration: none; }
+.back:hover { text-decoration: underline; }
+.fine { font-size: 12px; color: var(--muted); text-align: center; margin: 0; text-wrap: balance; }
+.dedication { font-family: var(--display); font-size: 17px; color: var(--ink); }
+.fine a { color: var(--ink); font-weight: 700; text-underline-offset: 2px; }
+.fine a:focus-visible { outline: 3px solid var(--ketchup); outline-offset: 2px; border-radius: 2px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<a class="back" href="../">&larr; Sausage Dog Password</a>
+
+<main class="card" id="card">
+  <div class="awning" aria-hidden="true"></div>
+  <div class="inner">
+    <header>
+      <span class="eyebrow">Account · Security</span>
+      <h1>Make MoMo longer</h1>
+      <p class="lede">Every character you type stretches the dog. Long passwords are the hardest to guess, so keep going until MoMo's grinning.</p>
+    </header>
+
+    <div class="stage" id="stage" aria-hidden="true">
+      <canvas id="scene"></canvas>
+      <div class="bubble-anchor" id="anchor"><div class="bubble" id="bubble"></div></div>
+    </div>
+    <div class="readout"><span>Dog length <b id="lenCm">31.7 cm</b></span><span>Characters <b id="lenChars">0</b></span></div>
+
+    <form id="form" autocomplete="off" novalidate>
+      <label class="field-label" for="pw">New password</label>
+      <div class="field">
+        <input id="pw" name="pw" type="password" autocomplete="new-password" maxlength="64" spellcheck="false" placeholder="Type to stretch">
+        <button type="button" class="peek" id="peek" aria-pressed="false">Show</button>
+      </div>
+      <div class="grade" id="grade" data-level="none" aria-live="polite">
+        <div class="grade-row"><span class="grade-key">Sausage grade</span><span class="grade-val" id="gradeVal">Empty bun</span></div>
+        <span class="grade-hint" id="gradeHint">Start typing. He's waiting.</span>
+      </div>
+      <div class="chips" aria-label="Bonus characters">
+        <span class="chip" id="chipUpper"><code>ABC</code> ears up</span>
+        <span class="chip" id="chipDigit"><code>123</code> collar</span>
+        <span class="chip" id="chipSymbol"><code>#?!</code> sunglasses</span>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" id="save" type="submit">Save password</button>
+        <button class="btn btn-ghost" id="clear" type="button">Clear</button>
+      </div>
+    </form>
+    <p class="fine dedication">In loving memory of MoMo, the original long boy.</p>
+    <p class="fine">Demo only. Nothing you type leaves this page.</p>
+    <p class="fine credit">Concept inspired by designer <a href="https://x.com/RaminNasibov/status/2111194691303596460" target="_blank" rel="noopener">Ramin Nasibov</a>'s stretching-dachshund password animation. This is an independent take with original artwork and copy.</p>
+    <p class="fine">Built with Claude Code (Claude Opus 5.5): MoMo is modelled from simple 3D shapes in three.js, lit and shaded in real time, and stretched by a spring animation.</p>
+  </div>
+</main>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const input = $('pw'), card = $('card'), bubble = $('bubble'), anchor = $('anchor'), stage = $('stage');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MAXC = 20, BASE_L = 1.3, STEP_L = 0.135, CM_PER_UNIT = 9;
+
+  // ---------- 3D scene ----------
+  let three = null;
+  try { if (window.THREE) three = buildScene(); } catch (e) { three = null; }
+  if (!three) {
+    $('scene').hidden = true;
+    const p = document.createElement('p'); p.className = 'no3d';
+    p.textContent = 'MoMo needs WebGL to appear here. The password checker below still works.';
+    stage.appendChild(p);
+  }
+
+  function buildScene() {
+    const T = THREE;
+    if (T.ColorManagement) T.ColorManagement.legacyMode = false;
+    const canvas = $('scene');
+    const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = T.PCFSoftShadowMap;
+    renderer.outputEncoding = T.sRGBEncoding;
+    renderer.toneMapping = T.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.95;
+
+    const scene = new T.Scene();
+    const camera = new T.PerspectiveCamera(22, 2.1, 0.1, 60);
+    const LOOK = new T.Vector3(1.7, 0.75, 0.2);
+    camera.position.set(1.7, 3.6, 8.0);
+    camera.lookAt(LOOK);
+
+    scene.add(new T.HemisphereLight(0xfff3e2, 0x9a7a5a, 0.85));
+    const key = new T.DirectionalLight(0xfff8f0, 1.7);
+    key.position.set(-2.5, 6, 5);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
+    Object.assign(key.shadow.camera, { left: -4, right: 7, top: 4, bottom: -3, near: 0.5, far: 20 });
+    key.shadow.bias = -0.0008;
+    key.shadow.radius = 4;
+    scene.add(key);
+    const rim = new T.DirectionalLight(0xffd7a8, 0.9); rim.position.set(5, 3, -4); scene.add(rim);
+    const fill = new T.DirectionalLight(0xffffff, 0.3); fill.position.set(2, 1, 7); scene.add(fill);
+
+    // materials
+    const fur = new T.MeshPhysicalMaterial({ color: 0x9A471A, roughness: 0.58, sheen: 1, sheenColor: new T.Color(0xE8955A), sheenRoughness: 0.45 });
+    const furDark = new T.MeshPhysicalMaterial({ color: 0x6E3210, roughness: 0.62, sheen: 1, sheenColor: new T.Color(0xC07040), sheenRoughness: 0.5 });
+    const white = new T.MeshPhysicalMaterial({ color: 0xF6EFE4, roughness: 0.7, sheen: 0.8, sheenColor: new T.Color(0xffffff), sheenRoughness: 0.5 });
+    const noseMat = new T.MeshPhysicalMaterial({ color: 0x1a1210, roughness: 0.25, clearcoat: 1, clearcoatRoughness: 0.15 });
+    const eyeWhite = new T.MeshPhysicalMaterial({ color: 0xfbfaf6, roughness: 0.12, clearcoat: 1 });
+    const iris = new T.MeshPhysicalMaterial({ color: 0x24130a, roughness: 0.08, clearcoat: 1 });
+    const glint = new T.MeshBasicMaterial({ color: 0xffffff });
+    const tongueMat = new T.MeshPhysicalMaterial({ color: 0xE5677C, roughness: 0.35, clearcoat: 0.6 });
+    const mouthMat = new T.MeshStandardMaterial({ color: 0x3a1610, roughness: 0.8 });
+    const collarMat = new T.MeshPhysicalMaterial({ color: 0x2F7FA8, roughness: 0.35, clearcoat: 0.6 });
+    const goldMat = new T.MeshStandardMaterial({ color: 0xE0B12E, metalness: 0.85, roughness: 0.28 });
+    const lensMat = new T.MeshPhysicalMaterial({ color: 0x0b0b0e, roughness: 0.04, metalness: 0.3, clearcoat: 1 });
+    const redMat = new T.MeshStandardMaterial({ color: 0xD2382A, roughness: 0.4 });
+
+    const mk = (geo, mat, parent, pos, scl) => {
+      const m = new T.Mesh(geo, mat);
+      m.castShadow = true; m.receiveShadow = true;
+      if (pos) m.position.set(...pos);
+      if (scl) m.scale.set(...scl);
+      if (parent) parent.add(m);
+      return m;
+    };
+    const sphere = (r, s = 40) => new T.SphereGeometry(r, s, Math.round(s * 0.7));
+    const capsuleX = (r, len) => { const g = new T.CapsuleGeometry(r, len, 10, 28); g.rotateZ(Math.PI / 2); return g; };
+
+    // ground
+    const ground = new T.Mesh(new T.PlaneGeometry(30, 12), new T.ShadowMaterial({ opacity: 0.2 }));
+    ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+
+    const dog = new T.Group(); scene.add(dog);
+    const R = 0.46, YB = 0.95;
+
+    // body: open cylinder + two caps, so it can stretch without distorting the ends
+    const bodyCyl = mk(new T.CylinderGeometry(R, R, 1, 48, 1, true), fur, dog);
+    bodyCyl.rotation.z = Math.PI / 2;
+    const frontCap = mk(sphere(R, 48), fur, dog, [0, YB, 0]);
+    const backCap = mk(sphere(R, 48), fur, dog);
+    mk(sphere(1), white, dog, [-0.07, 0.84, 0], [0.43, 0.5, 0.41]);           // chest bib
+    const neck = mk(sphere(0.33), fur, dog, [-0.22, 1.2, 0]);
+    mk(sphere(1), white, dog, [-0.38, 1.08, 0], [0.24, 0.3, 0.25]);          // throat
+
+    // legs
+    const legs = [];
+    function makeLeg(z, isRear) {
+      const g = new T.Group(); g.position.set(0, 0.64, z); dog.add(g);
+      mk(capsuleX(0.105, 0.3), fur, g, [0, -0.25, 0]).rotation.z = Math.PI / 2;
+      mk(sphere(0.12), white, g, [-0.05, -0.55, 0], [1.35, 0.62, 1.05]);
+      legs.push({ g, isRear, phase: (z > 0 ? 0 : Math.PI) + (isRear ? Math.PI : 0) });
+      return g;
+    }
+    makeLeg(0.24, false); makeLeg(-0.24, false); makeLeg(0.24, true); makeLeg(-0.24, true);
+
+    // tail
+    const tail = new T.Group(); dog.add(tail);
+    const tailCurve = new T.CatmullRomCurve3([new T.Vector3(0, 0, 0), new T.Vector3(0.26, 0.1, 0), new T.Vector3(0.46, 0.34, 0), new T.Vector3(0.56, 0.62, 0)]);
+    mk(new T.TubeGeometry(tailCurve, 24, 0.075, 14, false), fur, tail);
+    mk(sphere(0.075, 16), fur, tail, [0.56, 0.62, 0]);
+
+    // collar
+    const collar = new T.Group(); collar.position.set(-0.27, 1.17, 0); collar.rotation.z = 0.6; dog.add(collar);
+    mk(new T.TorusGeometry(0.35, 0.045, 16, 56), collarMat, collar).rotation.y = Math.PI / 2;
+    const tag = mk(new T.CylinderGeometry(0.07, 0.07, 0.025, 28), goldMat, collar, [0, -0.41, 0.06]);
+    tag.rotation.x = Math.PI / 2;
+
+    // head
+    const head = new T.Group(); head.position.set(-0.36, 1.33, 0); dog.add(head);
+    mk(sphere(0.4, 48), fur, head, [-0.16, 0.18, 0], [1.05, 0.95, 0.95]);   // skull
+    const snout = mk(capsuleX(0.2, 0.24), fur, head, [-0.54, 0.04, 0]);
+    snout.rotation.z = 0.1;
+    mk(sphere(0.085, 28), noseMat, head, [-0.84, 0.11, 0], [1, 0.82, 1.2]);
+    mk(sphere(0.16), mouthMat, head, [-0.52, -0.08, 0], [1.2, 0.45, 0.75]);   // inside of mouth
+    const jaw = new T.Group(); jaw.position.set(-0.38, -0.07, 0); head.add(jaw);
+    mk(capsuleX(0.125, 0.2), white, jaw, [-0.16, -0.01, 0]);
+    const tongue = new T.Group(); tongue.position.set(-0.2, 0.0, 0); jaw.add(tongue);
+    const tongueMesh = mk(capsuleX(0.075, 0.12), tongueMat, tongue, [-0.05, -0.11, 0.05], [1.15, 0.55, 1.5]);
+    tongueMesh.rotation.z = -0.9;
+
+    // eyes, lids, brows
+    const eyes = [];
+    const skullC = new T.Vector3(-0.16, 0.18, 0);
+    [1, -1].forEach((side) => {
+      const pos = new T.Vector3(-0.45, 0.28, 0.28 * side);
+      const g = new T.Group(); g.position.copy(pos); head.add(g);
+      const dir = pos.clone().sub(skullC).add(new T.Vector3(-0.1, 0.22, 0.05 * side)).normalize();
+      g.lookAt(pos.clone().add(dir));
+      mk(sphere(0.108, 32), eyeWhite, g);
+      const ir = mk(sphere(0.075, 28), iris, g, [0, 0, 0.05]);
+      const gl = mk(sphere(0.02, 10), glint, g, [0.025, 0.035, 0.118]); gl.castShadow = false;
+      const lidU = mk(new T.SphereGeometry(0.112, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), fur, g);
+      const lidL = mk(new T.SphereGeometry(0.111, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), fur, g);
+      const lens = mk(sphere(1, 32), lensMat, head, [pos.x - 0.1, pos.y + 0.01, pos.z + 0.03 * side], [0.03, 0.12, 0.15]);
+      const browG = new T.Group();
+      eyes.push({ side, g, ir, lidU, lidL, lens, browG });
+    });
+    const shadesBridge = mk(new T.CylinderGeometry(0.016, 0.016, 0.6, 10), lensMat, head, [-0.56, 0.33, 0]);
+    shadesBridge.rotation.x = Math.PI / 2;
+
+    // ears
+    const ears = [1, -1].map((side) => {
+      const g = new T.Group(); g.position.set(-0.06, 0.44, 0.27 * side); head.add(g);
+      mk(sphere(1, 36), furDark, g, [0.06, -0.32, 0.07 * side], [0.21, 0.4, 0.06]);
+      return { g, side };
+    });
+
+    // ruler
+    const RULER_START = -1.33, RULER_W = 6.45;
+    const rc = document.createElement('canvas'); rc.width = 2048; rc.height = 190;
+    const cx = rc.getContext('2d');
+    const grad = cx.createLinearGradient(0, 0, 0, 190); grad.addColorStop(0, '#F4E1B8'); grad.addColorStop(1, '#E9CF98');
+    cx.fillStyle = grad; cx.fillRect(0, 0, 2048, 190);
+    const totalCm = RULER_W * CM_PER_UNIT, pxPerCm = 2048 / totalCm;
+    cx.strokeStyle = '#6B4F2A'; cx.fillStyle = '#6B4F2A'; cx.lineWidth = 3;
+    cx.font = '600 44px "IBM Plex Mono", Menlo, monospace'; cx.textAlign = 'center';
+    for (let cm = 0; cm <= Math.floor(totalCm); cm++) {
+      const x = cm * pxPerCm, big = cm % 5 === 0;
+      cx.beginPath(); cx.moveTo(x, 0); cx.lineTo(x, big ? 70 : 38); cx.stroke();
+      if (big && cm > 0 && cm < totalCm - 1) cx.fillText(String(cm), x, 140);
+    }
+    const fx = 30.48 * pxPerCm;
+    cx.strokeStyle = '#D2382A'; cx.lineWidth = 6; cx.beginPath(); cx.moveTo(fx, 0); cx.lineTo(fx, 190); cx.stroke();
+    cx.fillStyle = '#D2382A'; cx.font = '700 32px "IBM Plex Mono", Menlo, monospace'; cx.textAlign = 'left';
+    cx.fillText('FOOTLONG', fx + 12, 64);
+    const rtex = new T.CanvasTexture(rc);
+    rtex.encoding = T.sRGBEncoding; rtex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    const wood = new T.MeshStandardMaterial({ color: 0xD9B77E, roughness: 0.75 });
+    const ruler = mk(new T.BoxGeometry(RULER_W, 0.05, 0.6), [wood, wood, new T.MeshStandardMaterial({ map: rtex, roughness: 0.7 }), wood, wood, wood], scene, [RULER_START + RULER_W / 2, 0.026, 0.95]);
+    ruler.castShadow = false;
+    const pointer = mk(new T.ConeGeometry(0.08, 0.18, 24), redMat, scene, [0, 0.2, 0.95]);
+    pointer.rotation.x = Math.PI;
+
+    // state
+    const s = {
+      L: BASE_L, v: 0, target: BASE_L, k: 0.16, damp: 0.74,
+      lidU: 0.3, lidL: 0, jaw: 0.05, tongue: 0, browZ: 0, browY: 0, headZ: 0, headX: 0, headY: 0, pupil: 1,
+      ear: 0, collar: 0, shades: 0,
+      want: {}, wag: 0, wagAmt: 0, scurryUntil: 0, hopStart: -1, maxed: false, blinkAt: 0, blink: 0,
+    };
+    const MOODS = {
+      idle:      { lidU: 0.08,  lidL: 0,    jaw: 0.05, tongue: 0,   browZ: 0,    browY: 0,     headZ: 0,     headX: 0,    headY: 0,    pupil: 1,   wag: 0 },
+      grumpy:    { lidU: 0.55, lidL: 0.2,  jaw: 0,    tongue: 0,   browZ: 0.5,  browY: -0.02, headZ: -0.06, headX: 0,    headY: 0,    pupil: 1,   wag: 0 },
+      skeptical: { lidU: 0.3,  lidL: 0.15, jaw: 0,    tongue: 0,   browZ: -0.3, browY: 0.035, headZ: 0,     headX: 0.16, headY: 0,    pupil: 1,   wag: 0 },
+      surprised: { lidU: 0,    lidL: 0,    jaw: 0.5,  tongue: 0,   browZ: -0.1, browY: 0.07,  headZ: -0.12, headX: 0,    headY: 0,    pupil: 0.72, wag: 0 },
+      pleased:   { lidU: 0.1,  lidL: 0.4,  jaw: 0.55, tongue: 0.65, browZ: 0,   browY: 0.025, headZ: -0.04, headX: 0.06, headY: 0,    pupil: 1,   wag: 0.5 },
+      delighted: { lidU: 0.35, lidL: 0.6,  jaw: 1,    tongue: 1,   browZ: -0.05, browY: 0.035, headZ: -0.1, headX: 0.2,  headY: 0,    pupil: 1,   wag: 1 },
+      asleep:    { lidU: 1,    lidL: 0.2,  jaw: 0,    tongue: 0,   browZ: 0.1,  browY: -0.02, headZ: 0.32,  headX: 0,    headY: 0,    pupil: 1,   wag: 0 },
+      away:      { lidU: 1,    lidL: 0.4,  jaw: 0,    tongue: 0,   browZ: 0.2,  browY: 0,     headZ: 0,     headX: 0,    headY: -1.05, pupil: 1,  wag: 0 },
+    };
+    s.want = { ...MOODS.idle };
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const tmp = new T.Vector3();
+
+    function resize() {
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      const dist = camera.position.distanceTo(LOOK);
+      camera.fov = 2 * Math.atan(7.0 / (2 * dist * camera.aspect)) * 180 / Math.PI;
+      camera.updateProjectionMatrix();
+    }
+    new ResizeObserver(resize).observe(canvas);
+    resize();
+
+    let last = performance.now();
+    function frame(now) {
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      const t = now / 1000;
+      const f = Math.min(1, dt * 9);
+
+      // spring on body length
+      if (reduce) { s.L = s.target; s.v = 0; }
+      else { s.v = (s.v + (s.target - s.L) * s.k) * s.damp; s.L += s.v; }
+      const L = Math.max(0.55, s.L);
+      const thick = 1 - Math.max(0, L - BASE_L) * 0.035 + Math.max(0, BASE_L - L) * 0.35;
+      const breathe = reduce ? 1 : 1 + Math.sin(t * 2.4) * 0.012;
+      bodyCyl.scale.set(thick * breathe, L, thick * breathe);
+      bodyCyl.position.set(L / 2, YB, 0);
+      frontCap.scale.set(1, thick * breathe, thick * breathe);
+      backCap.position.set(L, YB, 0);
+      backCap.scale.set(1, thick * breathe, thick * breathe);
+      legs.forEach((lg) => { lg.g.position.x = lg.isRear ? L - 0.02 : 0.06; });
+      tail.position.set(L + 0.33, YB + 0.16, 0);
+
+      // mood easing
+      for (const key in s.want) if (key !== 'wag') s[key] = lerp(s[key], s.want[key], f);
+      s.wagAmt = lerp(s.wagAmt, reduce ? 0 : s.want.wag, f);
+      s.ear = lerp(s.ear, s.earWant || 0, f);
+      s.collar = lerp(s.collar, s.collarWant || 0, Math.min(1, dt * 12));
+      s.shades = lerp(s.shades, s.shadesWant || 0, Math.min(1, dt * 12));
+
+      // blink
+      if (!reduce && now > s.blinkAt) { s.blink = 1; s.blinkAt = now + 3200 + Math.random() * 2600; }
+      s.blink = Math.max(0, s.blink - dt * 7);
+      const lidUAmt = Math.max(s.lidU, s.blink > 0.01 ? 1 - Math.abs(s.blink - 0.5) * 2 : 0);
+
+      eyes.forEach((e) => {
+        e.lidU.rotation.x = lerp(-1.7, 1.5, lidUAmt);
+        e.lidL.rotation.x = lerp(-1.5, -3.7, s.lidL);
+        e.ir.scale.setScalar(s.pupil);
+        e.lens.visible = s.shades > 0.02;
+        e.lens.scale.set(0.03, 0.12 * s.shades, 0.15 * s.shades);
+      });
+      shadesBridge.visible = s.shades > 0.02;
+      shadesBridge.scale.set(1, s.shades, 1);
+
+      jaw.rotation.z = s.jaw * 0.72;
+      tongue.scale.setScalar(Math.max(0.001, s.tongue));
+      tongue.visible = s.tongue > 0.02;
+      if (s.tongue > 0.5 && !reduce) tongue.rotation.z = Math.sin(t * 9) * 0.06;
+
+      head.rotation.set(s.headX, 0.55 + s.headY, -0.1 + s.headZ + (reduce ? 0 : Math.sin(t * 1.3) * 0.015));
+      ears.forEach((e) => {
+        e.g.rotation.set(0.22 * e.side + s.ear * 0.35 * e.side, 0, 0.12 + s.ear * 1.05 + (s.wagAmt > 0.5 ? Math.sin(t * 14) * 0.05 : 0));
+      });
+
+      collar.visible = s.collar > 0.02;
+      collar.scale.setScalar(Math.max(0.001, s.collar));
+
+      // tail wag
+      tail.rotation.set(Math.sin(t * (6 + 10 * s.wagAmt)) * (0.12 + 0.5 * s.wagAmt), 0, Math.sin(t * 2) * 0.05);
+
+      // legs scurry while typing
+      const scurry = !reduce && now < s.scurryUntil;
+      legs.forEach((lg) => { lg.g.rotation.z = lerp(lg.g.rotation.z, scurry ? Math.sin(t * 34 + lg.phase) * 0.4 : 0, 0.5); });
+
+      // hop and strain
+      let y = 0;
+      if (s.hopStart >= 0) {
+        const ht = (now - s.hopStart) / 1000;
+        if (ht < 1) y = Math.abs(Math.sin(ht * Math.PI * 2)) * 0.32; else s.hopStart = -1;
+      }
+      dog.position.set(s.maxed && !reduce ? Math.sin(t * 90) * 0.006 : 0, y, 0);
+
+      // ruler pointer + readout
+      const tip = L + 0.33 + 0.56;
+      pointer.position.x = tip;
+      pointer.position.y = 0.22 + (reduce ? 0 : Math.sin(t * 4) * 0.02);
+      $('lenCm').textContent = ((tip - RULER_START) * CM_PER_UNIT).toFixed(1) + ' cm';
+
+      // speech bubble follows the head
+      head.getWorldPosition(tmp); tmp.y += 0.75; tmp.x -= 0.2;
+      tmp.project(camera);
+      anchor.style.left = ((tmp.x + 1) / 2 * canvas.clientWidth) + 'px';
+      anchor.style.top = ((1 - tmp.y) / 2 * canvas.clientHeight) + 'px';
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    return {
+      setLength(len, boing) {
+        s.target = BASE_L + Math.min(len, MAXC) * STEP_L;
+        if (boing) { s.k = 0.2; s.damp = 0.85; } else { s.k = 0.16; s.damp = 0.74; }
+      },
+      setMood(m) { s.want = { ...MOODS[m] }; },
+      setAccessories(upper, digit, symbol) { s.earWant = upper ? 1 : 0; s.collarWant = digit ? 1 : 0; s.shadesWant = symbol ? 1 : 0; },
+      scurry() { s.scurryUntil = performance.now() + 260; },
+      hop() { s.hopStart = performance.now(); },
+      setMaxed(v) { s.maxed = v; },
+    };
+  }
+
+  // ---------- bubble ----------
+  let bubbleTimer = null, stickyBubble = '';
+  function say(text, ms = 1800) {
+    clearTimeout(bubbleTimer);
+    bubble.textContent = text;
+    bubble.classList.add('on');
+    if (ms) bubbleTimer = setTimeout(() => {
+      if (stickyBubble) bubble.textContent = stickyBubble; else bubble.classList.remove('on');
+    }, ms);
+  }
+  function setSticky(text) {
+    if (text === stickyBubble) return;
+    stickyBubble = text;
+    if (text) say(text, 0); else { clearTimeout(bubbleTimer); bubble.classList.remove('on'); }
+  }
+
+  // ---------- grading ----------
+  const GRADES = [
+    { name: 'Empty bun', hint: "Start typing. He's waiting.", level: 'none', mood: 'idle' },
+    { name: 'Cocktail sausage', hint: 'Bite-sized. Not a password yet.', level: 'weak', mood: 'grumpy' },
+    { name: 'Breakfast link', hint: 'Getting there. Keep going.', level: 'weak', mood: 'skeptical' },
+    { name: 'Frankfurter', hint: 'Respectable. A few more and he relaxes.', level: 'mid', mood: 'surprised' },
+    { name: 'Footlong', hint: 'Now we are talking.', level: 'good', mood: 'pleased' },
+    { name: 'The full bratwurst', hint: 'Long, strong, and very pleased with himself.', level: 'good', mood: 'delighted' },
+  ];
+  const COMMON = new Set(['password','password1','password123','123456','1234567','12345678','123456789','1234567890','qwerty','qwerty123','abc123','111111','000000','letmein','iloveyou','admin','welcome','monkey','dragon','sunshine','football','baseball','master','princess','passw0rd']);
+  const VANITY = new Set(['hotdog','sausage','dachshund','wienerdog','sausagedog','frankfurter','bratwurst','momo']);
+
+  let shown = false, lastLen = 0, maxedSaid = false;
+
+  function evaluate(pw) {
+    const len = [...pw].length;
+    const upper = /[A-Z]/.test(pw), digit = /\d/.test(pw), symbol = /[^A-Za-z0-9]/.test(pw);
+    let tier = len === 0 ? 0 : len <= 5 ? 1 : len <= 8 ? 2 : len <= 11 ? 3 : len <= 15 ? 4 : 5;
+    const kinds = /[a-z]/.test(pw) + upper + digit + symbol;
+    if (kinds >= 3 && tier >= 2 && tier < 5) tier++;
+    let grade = { ...GRADES[tier] }, special = '';
+    const lower = pw.toLowerCase();
+    if (COMMON.has(lower)) {
+      grade = { name: 'Day-old bun', hint: 'Everyone uses this one. He fell asleep.', level: 'weak', mood: 'asleep' };
+      special = 'common';
+    } else if (VANITY.has(lower.replace(/\s+/g, ''))) {
+      grade = { name: 'Flattering', hint: "He's touched. Still too guessable.", level: 'weak', mood: 'skeptical' };
+      special = 'vanity';
+    } else if (len >= 6 && new Set(pw).size <= 3) {
+      grade = { name: 'Same bite, again', hint: 'The same few keys on repeat. Mix it up.', level: 'weak', mood: 'skeptical' };
+      special = 'repeat';
+    }
+    return { len, upper, digit, symbol, tier, grade, special };
+  }
+
+  function update() {
+    const r = evaluate(input.value);
+    if (three) {
+      three.setLength(r.len, r.len === 0 && lastLen > 0);
+      if (r.len > lastLen) three.scurry();
+      three.setMood(shown && r.len > 0 ? 'away' : r.grade.mood);
+      three.setAccessories(r.upper, r.digit, r.symbol);
+      three.setMaxed(r.len > MAXC);
+    }
+    $('chipUpper').classList.toggle('on', r.upper);
+    $('chipDigit').classList.toggle('on', r.digit);
+    $('chipSymbol').classList.toggle('on', r.symbol);
+    $('grade').dataset.level = r.grade.level;
+    $('gradeVal').textContent = r.grade.name;
+    $('gradeHint').textContent = r.grade.hint;
+    $('lenChars').textContent = r.len;
+
+    if (r.special === 'common') setSticky('zzz…');
+    else if (shown && r.len > 0) setSticky("I'm not looking.");
+    else setSticky('');
+    if (r.len > MAXC && !maxedSaid) { say("That's all of me."); maxedSaid = true; }
+    if (r.len <= MAXC) maxedSaid = false;
+    if (r.special === 'vanity' && lastLen !== r.len) say('Aw. No.');
+    lastLen = r.len;
+    return r;
+  }
+
+  input.addEventListener('input', update);
+  $('peek').addEventListener('click', () => {
+    shown = !shown;
+    input.type = shown ? 'text' : 'password';
+    $('peek').textContent = shown ? 'Hide' : 'Show';
+    $('peek').setAttribute('aria-pressed', String(shown));
+    update(); input.focus();
+  });
+  function clearAll() { input.value = ''; update(); }
+  $('clear').addEventListener('click', () => { clearAll(); input.focus(); });
+  function shake() { card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake'); }
+  $('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const r = evaluate(input.value);
+    if (r.len === 0) { shake(); say('Type something first.'); input.focus(); return; }
+    if (r.special || r.tier < 3) { shake(); say(r.special === 'common' ? '…huh? No.' : 'Longer.'); input.focus(); return; }
+    if (three) three.hop();
+    say('Saved. Good boy, MoMo.', 1600);
+    $('gradeHint').textContent = 'Saved. Resetting in a moment.';
+    setTimeout(clearAll, 1500);
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>
