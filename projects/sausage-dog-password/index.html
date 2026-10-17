@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sausage Dog Password · Charles Tay</title>
+<meta name="description" content="A password field where a black-and-tan dachshund stretches with every character you type, graded on a sausage scale. A small UI experiment.">
+<link rel="canonical" href="https://charlestaysg.github.io/projects/sausage-dog-password/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Sausage Dog Password">
+<meta property="og:description" content="Every character stretches the dog. Long passwords are the hardest to guess.">
+<meta property="og:url" content="https://charlestaysg.github.io/projects/sausage-dog-password/">
+<meta property="og:image" content="https://charlestaysg.github.io/assets/thumbs/sausage-dog-password.jpg">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Figtree:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one hot-dog-stand card on a mustard ground; the dog and his ruler are the meter. */
+:root {
+  --bg: #F2C230;
+  --bg-dot: #E7B21C;
+  --card: #FFFDF7;
+  --ink: #231A14;
+  --muted: #6E6257;
+  --line: #E6DCCF;
+  --ketchup: #D2382A;
+  --ketchup-ink: #FFFFFF;
+  --awning-b: #FFF3E2;
+  --dog: #2E211C;
+  --dog-far: #1F1612;
+  --ear: #1A120E;
+  --dog-line: #140D0A;
+  --tan: #C9884B;
+  --tan-far: #A96D36;
+  --eye-line: #F2E2C6;
+  --mouth: #3A1F14;
+  --tongue: #E9677A;
+  --shadow: rgba(35, 26, 20, 0.14);
+  --ruler: #F4E3BF;
+  --ruler-ink: #6B4F2A;
+  --weak: #C7332A;
+  --mid: #A86A06;
+  --good: #2F7D45;
+  --chip-on: #231A14;
+  --chip-on-ink: #FFFDF7;
+  --display: "Shrikhand", "Cooper Black", Georgia, serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1E1A12; --bg-dot: #29231A; --card: #2A2621; --ink: #F3E9DC; --muted: #B5A898; --line: #3E3830;
+    --ketchup: #E0533F; --awning-b: #3A332B; --dog: #3A2B24; --dog-far: #2A1F1A; --ear: #251B16;
+    --dog-line: #D9B88C; --tan: #C9884B; --tan-far: #9E6634; --shadow: rgba(0, 0, 0, 0.35);
+    --ruler: #3A3226; --ruler-ink: #D9C29A; --weak: #FF7A6B; --mid: #F0B44A; --good: #6FCF8A;
+    --chip-on: #F3E9DC; --chip-on-ink: #2A2621; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1E1A12; --bg-dot: #29231A; --card: #2A2621; --ink: #F3E9DC; --muted: #B5A898; --line: #3E3830;
+  --ketchup: #E0533F; --awning-b: #3A332B; --dog: #3A2B24; --dog-far: #2A1F1A; --ear: #251B16;
+  --dog-line: #D9B88C; --tan: #C9884B; --tan-far: #9E6634; --shadow: rgba(0, 0, 0, 0.35);
+  --ruler: #3A3226; --ruler-ink: #D9C29A; --weak: #FF7A6B; --mid: #F0B44A; --good: #6FCF8A;
+  --chip-on: #F3E9DC; --chip-on-ink: #2A2621; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--bg-dot) 1.5px, transparent 1.6px);
+  background-size: 22px 22px;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.45;
+  padding-block: 40px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+.card {
+  max-width: 520px;
+  margin: 0 auto;
+  background: var(--card);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 2px 0 var(--dog-line), 0 24px 48px -20px var(--shadow);
+}
+.awning {
+  position: relative;
+  height: 26px;
+  background: repeating-linear-gradient(90deg, var(--ketchup) 0 28px, var(--awning-b) 28px 56px);
+}
+.awning::after {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 26px; height: 12px;
+  background:
+    radial-gradient(circle at 14px 0, var(--ketchup) 13.5px, transparent 14px) 0 0 / 56px 12px repeat-x,
+    radial-gradient(circle at 42px 0, var(--awning-b) 13.5px, transparent 14px) 0 0 / 56px 12px repeat-x;
+}
+.inner { display: grid; gap: 18px; padding: 34px 28px 26px; }
+@media (max-width: 440px) { .inner { padding: 30px 18px 22px; } }
+
+header { display: grid; gap: 6px; }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(30px, 7vw, 40px); line-height: 1.05; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 40ch; }
+
+/* stage */
+.stage { position: relative; padding-top: 34px; }
+.stage svg { display: block; width: 100%; height: auto; overflow: visible; }
+.bubble {
+  position: absolute; left: 0; top: 0;
+  background: var(--card); color: var(--ink);
+  border: 2px solid var(--dog-line); border-radius: 14px;
+  padding: 4px 12px; font-weight: 700; font-size: 14px; white-space: nowrap;
+  transform-origin: 20% 100%;
+  opacity: 0; transform: scale(0.6) translateY(6px);
+  transition: opacity 0.15s, transform 0.2s cubic-bezier(.3,1.6,.5,1);
+  pointer-events: none;
+}
+.bubble::after {
+  content: ""; position: absolute; left: 22px; bottom: -8px; width: 12px; height: 12px;
+  background: var(--card); border-right: 2px solid var(--dog-line); border-bottom: 2px solid var(--dog-line);
+  transform: rotate(45deg);
+}
+.bubble.on { opacity: 1; transform: none; }
+
+.readout { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 4px; }
+.readout b { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* dog parts */
+.dog * { stroke-linejoin: round; stroke-linecap: round; }
+.fur { fill: var(--dog); stroke: var(--dog-line); stroke-width: 3; }
+.fur-far { fill: var(--dog-far); stroke: var(--dog-line); stroke-width: 3; }
+.tan { fill: var(--tan); stroke: var(--dog-line); stroke-width: 3; }
+.tan-far { fill: var(--tan-far); stroke: var(--dog-line); stroke-width: 3; }
+.patch { fill: var(--tan); }
+.ear { fill: var(--ear); stroke: var(--dog-line); stroke-width: 3; transform-box: fill-box; transform-origin: 30% 6%; transition: transform 0.35s cubic-bezier(.3,1.6,.5,1); }
+.nose { fill: #120C0A; }
+.eye-white { fill: #FFFFFF; }
+.pupil { fill: #120C0A; transform-box: fill-box; transform-origin: center; transition: transform 0.2s; }
+.eye-open { transform-box: fill-box; transform-origin: center; animation: blink 4.6s infinite; }
+.eye-line { fill: none; stroke: var(--eye-line); stroke-width: 3.5; }
+.brow { fill: var(--tan); transform-box: fill-box; transform-origin: center; transition: transform 0.25s; }
+.mouth { fill: none; stroke: var(--mouth); stroke-width: 3; }
+.tongue { fill: var(--tongue); stroke: var(--mouth); stroke-width: 2.5; }
+.shadow { fill: var(--shadow); }
+.head { transform-box: fill-box; transform-origin: 85% 85%; transition: transform 0.3s cubic-bezier(.3,1.5,.5,1); }
+.tail { transform-box: fill-box; transform-origin: 0% 100%; }
+.leg { transform-box: fill-box; transform-origin: 50% 0%; }
+.collar, .shades { opacity: 0; transform: translateY(-6px); transition: opacity 0.2s, transform 0.3s cubic-bezier(.3,1.6,.5,1); }
+.collar-band { fill: var(--ketchup); stroke: var(--dog-line); stroke-width: 3; }
+.tag { fill: #E7B21C; stroke: var(--dog-line); stroke-width: 2.5; }
+.lens { fill: #0E0A09; stroke: var(--dog-line); stroke-width: 2; }
+.shine { fill: none; stroke: #FFFFFF; stroke-opacity: 0.55; stroke-width: 2.5; }
+.zzz { font-family: var(--display); fill: var(--ink); opacity: 0; }
+
+.m, .eye-happy, .eye-shut { display: none; }
+.dog[data-mood="idle"] .m-flat,
+.dog[data-mood="grumpy"] .m-frown,
+.dog[data-mood="skeptical"] .m-side,
+.dog[data-mood="surprised"] .m-o,
+.dog[data-mood="pleased"] .m-smile,
+.dog[data-mood="delighted"] .m-grin,
+.dog[data-mood="asleep"] .m-flat,
+.dog[data-mood="away"] .m-frown { display: inline; }
+.dog[data-mood="delighted"] .eye-open,
+.dog[data-mood="asleep"] .eye-open,
+.dog[data-mood="away"] .eye-open { display: none; }
+.dog[data-mood="delighted"] .eye-happy { display: inline; }
+.dog[data-mood="asleep"] .eye-shut,
+.dog[data-mood="away"] .eye-shut { display: inline; }
+
+.dog[data-mood="grumpy"] .brow { transform: translate(-1px, 5px) rotate(28deg); }
+.dog[data-mood="skeptical"] .brow { transform: translateY(-5px) rotate(-14deg); }
+.dog[data-mood="surprised"] .brow { transform: translateY(-9px); }
+.dog[data-mood="surprised"] .pupil { transform: scale(0.7); }
+.dog[data-mood="pleased"] .brow { transform: translateY(-3px); }
+.dog[data-mood="delighted"] .brow { transform: translateY(-5px); }
+.dog[data-mood="delighted"] .head { transform: rotate(-5deg); }
+.dog[data-mood="asleep"] .head { transform: rotate(7deg) translateY(6px); }
+.dog[data-mood="away"] .head { transform: rotate(-9deg); }
+.dog[data-mood="asleep"] .zzz { animation: zzz 2.4s infinite; }
+.dog[data-mood="asleep"] .zzz.z2 { animation-delay: 0.8s; }
+
+.dog.has-upper .ear { transform: rotate(-38deg) translate(4px, -4px); }
+.dog.has-digit .collar, .dog.has-symbol .shades { opacity: 1; transform: none; }
+.dog.wag .tail { animation: wag 0.32s ease-in-out infinite alternate; }
+.dog.wag-slow .tail { animation: wag 0.8s ease-in-out infinite alternate; }
+.dog.scurry .leg { animation: scurry 0.12s linear infinite alternate; }
+.dog.scurry .leg.alt { animation-direction: alternate-reverse; }
+.dog.bob .head { animation: bob 0.18s ease-out; }
+.dog.maxed .body-group { animation: strain 0.09s linear infinite alternate; }
+.dog.hop { animation: hop 0.5s cubic-bezier(.3,1.4,.5,1) 2; }
+
+@keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(0.1); } }
+@keyframes wag { from { transform: rotate(-10deg); } to { transform: rotate(14deg); } }
+@keyframes scurry { from { transform: rotate(-16deg); } to { transform: rotate(16deg); } }
+@keyframes bob { 50% { transform: translateY(-4px); } }
+@keyframes strain { from { transform: translateY(0); } to { transform: translateY(1px); } }
+@keyframes hop { 50% { transform: translateY(-14px); } }
+@keyframes zzz { 0% { opacity: 0; transform: translate(0, 0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(14px, -26px); } }
+
+.ruler-body { fill: var(--ruler); stroke: var(--dog-line); stroke-width: 2; }
+.tick { stroke: var(--ruler-ink); stroke-width: 1.5; }
+.tick-label { font-family: var(--mono); font-size: 10px; fill: var(--ruler-ink); }
+.foot-mark { stroke: var(--ketchup); stroke-width: 2.5; }
+.foot-label { font-family: var(--mono); font-size: 9px; fill: var(--ketchup); letter-spacing: 0.08em; }
+.pointer { fill: var(--ketchup); }
+
+/* form */
+form { display: grid; gap: 14px; }
+label.field-label { font-weight: 700; font-size: 14px; }
+.field {
+  display: flex; align-items: center; gap: 6px;
+  border: 2px solid var(--dog-line); border-radius: 14px; background: var(--card);
+  padding: 4px 4px 4px 14px; transition: box-shadow 0.15s;
+}
+.field:focus-within { box-shadow: 0 0 0 4px color-mix(in srgb, var(--ketchup) 30%, transparent); }
+.field input {
+  flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink);
+  font: 500 18px/1.2 var(--mono); padding: 10px 0; outline: none; letter-spacing: 0.04em;
+}
+.peek {
+  border: 0; background: transparent; color: var(--muted); font: 700 13px var(--body);
+  padding: 10px 12px; border-radius: 10px; cursor: pointer;
+}
+.peek:hover { color: var(--ink); background: var(--line); }
+.peek:focus-visible, .btn:focus-visible, .chip:focus-visible { outline: 3px solid var(--ketchup); outline-offset: 2px; }
+
+.grade { display: grid; gap: 2px; min-height: 48px; }
+.grade-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.grade-key { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.grade-val { font-weight: 700; font-size: 17px; }
+.grade-hint { color: var(--muted); font-size: 14px; }
+.grade[data-level="weak"] .grade-val { color: var(--weak); }
+.grade[data-level="mid"] .grade-val { color: var(--mid); }
+.grade[data-level="good"] .grade-val { color: var(--good); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1.5px dashed var(--muted); border-radius: 999px; padding: 4px 11px 4px 8px;
+  font-size: 13px; color: var(--muted); transition: all 0.2s;
+}
+.chip code { font-family: var(--mono); font-size: 12px; }
+.chip.on { background: var(--chip-on); color: var(--chip-on-ink); border-style: solid; border-color: var(--chip-on); }
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { font: 700 16px var(--body); border-radius: 14px; padding: 14px 20px; cursor: pointer; border: 2px solid var(--dog-line); }
+.btn-primary { flex: 1; background: var(--ketchup); color: var(--ketchup-ink); box-shadow: 0 3px 0 var(--dog-line); }
+.btn-primary:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--dog-line); }
+.btn-ghost { background: transparent; color: var(--ink); }
+.btn-ghost:hover { background: var(--line); }
+.card.shake { animation: shake 0.4s; }
+@keyframes shake { 20%, 60% { transform: translateX(-7px); } 40%, 80% { transform: translateX(7px); } }
+
+.back { display: block; max-width: 520px; margin: 0 auto 14px; font: 700 14px var(--body); color: var(--ink); text-decoration: none; }
+.back:hover { text-decoration: underline; }
+.fine { font-size: 12px; color: var(--muted); text-align: center; margin: 0; text-wrap: balance; }
+.fine a { color: var(--ink); font-weight: 700; text-underline-offset: 2px; }
+.fine a:focus-visible { outline: 3px solid var(--ketchup); outline-offset: 2px; border-radius: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<a class="back" href="../../#sausage-dog-password">&larr; Charles Tay</a>
+
+<main class="card" id="card">
+  <div class="awning" aria-hidden="true"></div>
+  <div class="inner">
+    <header>
+      <span class="eyebrow">Account · Security</span>
+      <h1>Make him longer</h1>
+      <p class="lede">Every character you type stretches the dog. Long passwords are the hardest to guess, so keep going until he's proud of you.</p>
+    </header>
+
+    <div class="stage" aria-hidden="true">
+      <div class="bubble" id="bubble"></div>
+      <svg viewBox="0 0 640 252" class="dog" id="dog" data-mood="idle">
+        <ellipse class="shadow" id="shadow" cx="180" cy="206" rx="160" ry="6"/>
+
+        <!-- rear section (slides right as he stretches) -->
+        <g id="rear">
+          <rect class="tan-far leg alt" x="236" y="150" width="20" height="52" rx="9"/>
+          <ellipse class="tan-far" cx="244" cy="203" rx="14" ry="5.5"/>
+          <g class="tail">
+            <path d="M270 124 C300 118 318 102 330 76" fill="none" stroke="var(--dog-line)" stroke-width="19"/>
+            <path d="M270 124 C300 118 318 102 330 76" fill="none" stroke="var(--dog)" stroke-width="13"/>
+          </g>
+        </g>
+        <g id="front-far">
+          <rect class="tan-far leg" x="160" y="150" width="20" height="52" rx="9"/>
+          <ellipse class="tan-far" cx="166" cy="203" rx="14" ry="5.5"/>
+        </g>
+
+        <g class="body-group">
+          <rect class="fur" id="body" x="130" y="101" width="150" height="78" rx="39"/>
+          <ellipse class="patch" cx="168" cy="166" rx="26" ry="11"/>
+          <g id="rear-near">
+            <ellipse class="patch" cx="266" cy="150" rx="11" ry="9"/>
+            <rect class="tan leg" x="252" y="152" width="20" height="50" rx="9"/>
+            <ellipse class="tan" cx="262" cy="203" rx="14" ry="5.5"/>
+          </g>
+          <rect class="tan leg alt" x="180" y="152" width="20" height="50" rx="9"/>
+          <ellipse class="tan" cx="186" cy="203" rx="14" ry="5.5"/>
+
+          <g class="collar">
+            <rect class="collar-band" x="152" y="96" width="15" height="74" rx="7" transform="rotate(16 160 133)"/>
+            <circle class="tag" cx="153" cy="174" r="7.5"/>
+          </g>
+
+          <g class="head">
+            <ellipse class="tan" cx="66" cy="110" rx="46" ry="22"/>
+            <ellipse class="fur" cx="118" cy="90" rx="48" ry="42"/>
+            <ellipse class="nose" cx="24" cy="104" rx="11.5" ry="9"/>
+            <ellipse cx="20" cy="100" rx="3.5" ry="2" fill="#FFFFFF" opacity="0.5"/>
+
+            <path class="mouth m m-flat" d="M44 124 L70 124"/>
+            <path class="mouth m m-frown" d="M44 127 Q58 117 72 127"/>
+            <path class="mouth m m-side" d="M44 124 L62 124 Q70 124 74 119"/>
+            <ellipse class="mouth m m-o" cx="58" cy="124" rx="5" ry="6"/>
+            <path class="mouth m m-smile" d="M42 119 Q58 134 76 119"/>
+            <g class="m m-grin">
+              <path class="tongue" d="M54 126 Q52 146 62 147 Q72 146 68 126 Z"/>
+              <path class="mouth" d="M40 118 Q58 136 78 118"/>
+            </g>
+
+            <g class="eye-open">
+              <ellipse class="eye-white" cx="104" cy="85" rx="10" ry="11"/>
+              <circle class="pupil" cx="101" cy="86" r="5.5"/>
+              <circle cx="99" cy="83.5" r="1.8" fill="#FFFFFF"/>
+            </g>
+            <path class="eye-line eye-happy" d="M94 88 Q104 76 114 88"/>
+            <path class="eye-line eye-shut" d="M94 85 Q104 92 114 85"/>
+            <ellipse class="brow" cx="106" cy="67" rx="8" ry="4.5"/>
+
+            <g class="shades">
+              <path class="lens" d="M88 76 H122 Q124 92 112 97 H98 Q88 95 88 76 Z"/>
+              <path class="shine" d="M95 81 L101 81"/>
+              <path d="M122 79 L148 74" stroke="#0E0A09" stroke-width="4"/>
+            </g>
+
+            <ellipse class="ear" cx="142" cy="100" rx="17" ry="36" transform="rotate(-10 142 100)"/>
+            <text class="zzz" x="150" y="40" font-size="20">z</text>
+            <text class="zzz z2" x="164" y="28" font-size="15">z</text>
+          </g>
+        </g>
+
+        <!-- ruler -->
+        <g id="ruler">
+          <rect class="ruler-body" x="12" y="218" width="620" height="30" rx="4"/>
+          <g id="ticks"></g>
+          <line class="foot-mark" id="footMark" x1="0" y1="218" x2="0" y2="248"/>
+          <text class="foot-label" id="footLabel" x="0" y="229">FOOTLONG</text>
+          <path class="pointer" id="pointer" d="M0 216 L-7 206 L7 206 Z"/>
+        </g>
+      </svg>
+      <div class="readout"><span>Dog length <b id="lenCm">26.2 cm</b></span><span>Characters <b id="lenChars">0</b></span></div>
+    </div>
+
+    <form id="form" autocomplete="off" novalidate>
+      <label class="field-label" for="pw">New password</label>
+      <div class="field">
+        <input id="pw" name="pw" type="password" autocomplete="new-password" maxlength="64" spellcheck="false" placeholder="Type to stretch">
+        <button type="button" class="peek" id="peek" aria-pressed="false">Show</button>
+      </div>
+
+      <div class="grade" id="grade" data-level="none" aria-live="polite">
+        <div class="grade-row"><span class="grade-key">Sausage grade</span><span class="grade-val" id="gradeVal">Empty bun</span></div>
+        <span class="grade-hint" id="gradeHint">Start typing. He's waiting.</span>
+      </div>
+
+      <div class="chips" aria-label="Bonus characters">
+        <span class="chip" id="chipUpper"><code>ABC</code> ears up</span>
+        <span class="chip" id="chipDigit"><code>123</code> collar</span>
+        <span class="chip" id="chipSymbol"><code>#?!</code> sunglasses</span>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="save" type="submit">Save password</button>
+        <button class="btn btn-ghost" id="clear" type="button">Clear</button>
+      </div>
+    </form>
+    <p class="fine">Demo only. Nothing you type leaves this page.</p>
+    <p class="fine credit">Concept inspired by designer <a href="https://x.com/RaminNasibov" target="_blank" rel="noopener">Ramin Nasibov</a>'s stretching-dachshund password animation. This is an independent take with original artwork and copy.</p>
+    <p class="fine">Built with Claude Code (Claude Opus 5.5) as one HTML file: the dog is hand-drawn SVG, stretched by a small spring animation in plain JavaScript. No images, no libraries.</p>
+  </div>
+</main>
+
+<script>
+(() => {
+  const BASE = 150, STEP = 14, MAXC = 20, PX_PER_CM = 12, NOSE_X = 16, TAIL_TIP = 330;
+  const $ = (id) => document.getElementById(id);
+  const dog = $('dog'), body = $('body'), rear = $('rear'), rearNear = $('rear-near');
+  const shadow = $('shadow'), pointer = $('pointer'), input = $('pw'), card = $('card');
+  const bubble = $('bubble');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ruler ticks
+  const ticks = $('ticks'), NS = 'http://www.w3.org/2000/svg';
+  for (let cm = 0; NOSE_X + cm * PX_PER_CM <= 626; cm++) {
+    const x = NOSE_X + cm * PX_PER_CM, big = cm % 5 === 0;
+    const l = document.createElementNS(NS, 'line');
+    l.setAttribute('class', 'tick');
+    l.setAttribute('x1', x); l.setAttribute('x2', x);
+    l.setAttribute('y1', 218); l.setAttribute('y2', big ? 232 : 225);
+    ticks.appendChild(l);
+    if (big && cm > 0) {
+      const t = document.createElementNS(NS, 'text');
+      t.setAttribute('class', 'tick-label');
+      t.setAttribute('x', x); t.setAttribute('y', 244); t.setAttribute('text-anchor', 'middle');
+      t.textContent = cm;
+      ticks.appendChild(t);
+    }
+  }
+  const footX = NOSE_X + 30.48 * PX_PER_CM;
+  $('footMark').setAttribute('x1', footX); $('footMark').setAttribute('x2', footX);
+  $('footLabel').setAttribute('x', footX + 4);
+
+  // spring
+  let x = 0, v = 0, target = 0, k = 0.16, damp = 0.74, raf = null;
+  function render() {
+    const W = Math.max(96, BASE + x);
+    const H = 78 - Math.max(0, x) * 0.04 + Math.max(0, -x) * 0.18;
+    body.setAttribute('width', W);
+    body.setAttribute('height', H);
+    body.setAttribute('y', 140 - H / 2);
+    body.setAttribute('rx', H / 2);
+    rear.setAttribute('transform', `translate(${x} 0)`);
+    rearNear.setAttribute('transform', `translate(${x} 0)`);
+    const tip = TAIL_TIP + x;
+    shadow.setAttribute('cx', (NOSE_X + tip) / 2);
+    shadow.setAttribute('rx', (tip - NOSE_X) / 2 * 0.86);
+    pointer.setAttribute('transform', `translate(${tip} 0)`);
+    $('lenCm').textContent = ((tip - NOSE_X) / PX_PER_CM).toFixed(1) + ' cm';
+  }
+  function tick() {
+    v = (v + (target - x) * k) * damp;
+    x += v;
+    render();
+    if (Math.abs(v) > 0.02 || Math.abs(target - x) > 0.05) raf = requestAnimationFrame(tick);
+    else { x = target; render(); raf = null; }
+  }
+  function moveTo(t, boing) {
+    target = t;
+    if (boing) { k = 0.22; damp = 0.84; } else { k = 0.16; damp = 0.74; }
+    if (reduce) { x = target; render(); return; }
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+
+  // speech bubble
+  let bubbleTimer = null, stickyBubble = '';
+  function say(text, ms = 1800) {
+    clearTimeout(bubbleTimer);
+    bubble.textContent = text;
+    bubble.classList.add('on');
+    if (ms) bubbleTimer = setTimeout(() => {
+      if (stickyBubble) bubble.textContent = stickyBubble;
+      else bubble.classList.remove('on');
+    }, ms);
+  }
+  function setSticky(text) {
+    if (text === stickyBubble) return;
+    stickyBubble = text;
+    if (text) say(text, 0);
+    else { clearTimeout(bubbleTimer); bubble.classList.remove('on'); }
+  }
+
+  const GRADES = [
+    { name: 'Empty bun', hint: "Start typing. He's waiting.", level: 'none', mood: 'idle' },
+    { name: 'Cocktail sausage', hint: 'Bite-sized. Not a password yet.', level: 'weak', mood: 'grumpy' },
+    { name: 'Breakfast link', hint: 'Getting there. Keep going.', level: 'weak', mood: 'skeptical' },
+    { name: 'Frankfurter', hint: 'Respectable. A few more and he relaxes.', level: 'mid', mood: 'surprised' },
+    { name: 'Footlong', hint: 'Now we are talking.', level: 'good', mood: 'pleased' },
+    { name: 'The full bratwurst', hint: 'Long, strong, and very pleased with himself.', level: 'good', mood: 'delighted' },
+  ];
+  const COMMON = new Set(['password','password1','password123','123456','1234567','12345678','123456789','1234567890','qwerty','qwerty123','abc123','111111','000000','letmein','iloveyou','admin','welcome','monkey','dragon','sunshine','football','baseball','master','princess','passw0rd']);
+  const VANITY = new Set(['hotdog','sausage','dachshund','wienerdog','sausagedog','frankfurter','bratwurst']);
+
+  let shown = false, lastLen = 0, maxedSaid = false, scurryT = null;
+
+  function evaluate(pw) {
+    const len = [...pw].length;
+    const upper = /[A-Z]/.test(pw), digit = /\d/.test(pw), symbol = /[^A-Za-z0-9]/.test(pw);
+    let tier = len === 0 ? 0 : len <= 5 ? 1 : len <= 8 ? 2 : len <= 11 ? 3 : len <= 15 ? 4 : 5;
+    const kinds = /[a-z]/.test(pw) + upper + digit + symbol;
+    if (kinds >= 3 && tier >= 2 && tier < 5) tier++;
+    let grade = { ...GRADES[tier] }, special = '';
+    const lower = pw.toLowerCase();
+    if (COMMON.has(lower)) {
+      grade = { name: 'Day-old bun', hint: 'Everyone uses this one. He fell asleep.', level: 'weak', mood: 'asleep' };
+      special = 'common';
+    } else if (VANITY.has(lower.replace(/\s+/g, ''))) {
+      grade = { name: 'Flattering', hint: "He's touched. Still too guessable.", level: 'weak', mood: 'skeptical' };
+      special = 'vanity';
+    } else if (len >= 6 && new Set(pw).size <= 3) {
+      grade = { name: 'Same bite, again', hint: 'The same few keys on repeat. Mix it up.', level: 'weak', mood: 'skeptical' };
+      special = 'repeat';
+    }
+    return { len, upper, digit, symbol, tier, grade, special };
+  }
+
+  function update() {
+    const pw = input.value;
+    const r = evaluate(pw);
+    const capped = Math.min(r.len, MAXC);
+    moveTo(capped * STEP, r.len === 0 && lastLen > 0);
+
+    if (r.len > lastLen && !reduce) {
+      dog.classList.remove('bob'); void dog.getBBox(); dog.classList.add('bob');
+      dog.classList.add('scurry');
+      clearTimeout(scurryT);
+      scurryT = setTimeout(() => dog.classList.remove('scurry'), 260);
+    }
+
+    dog.dataset.mood = shown && r.len > 0 ? 'away' : r.grade.mood;
+    dog.classList.toggle('has-upper', r.upper);
+    dog.classList.toggle('has-digit', r.digit);
+    dog.classList.toggle('has-symbol', r.symbol);
+    dog.classList.toggle('wag', r.grade.mood === 'delighted');
+    dog.classList.toggle('wag-slow', r.grade.mood === 'pleased');
+    dog.classList.toggle('maxed', r.len > MAXC);
+
+    $('chipUpper').classList.toggle('on', r.upper);
+    $('chipDigit').classList.toggle('on', r.digit);
+    $('chipSymbol').classList.toggle('on', r.symbol);
+
+    $('grade').dataset.level = r.grade.level;
+    $('gradeVal').textContent = r.grade.name;
+    $('gradeHint').textContent = r.grade.hint;
+    $('lenChars').textContent = r.len;
+
+    if (r.special === 'common') setSticky('zzz…');
+    else if (shown && r.len > 0) setSticky("I'm not looking.");
+    else setSticky('');
+
+    if (r.len > MAXC && !maxedSaid) { say("That's all of me."); maxedSaid = true; }
+    if (r.len <= MAXC) maxedSaid = false;
+    if (r.special === 'vanity' && lastLen !== r.len) say('Aw. No.');
+
+    lastLen = r.len;
+    return r;
+  }
+
+  input.addEventListener('input', update);
+
+  $('peek').addEventListener('click', () => {
+    shown = !shown;
+    input.type = shown ? 'text' : 'password';
+    $('peek').textContent = shown ? 'Hide' : 'Show';
+    $('peek').setAttribute('aria-pressed', String(shown));
+    update();
+    input.focus();
+  });
+
+  function clearAll() {
+    input.value = '';
+    update();
+  }
+  $('clear').addEventListener('click', () => { clearAll(); input.focus(); });
+
+  function shake() {
+    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+  }
+
+  $('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const r = evaluate(input.value);
+    if (r.len === 0) { shake(); say('Type something first.'); input.focus(); return; }
+    if (r.special || r.tier < 3) { shake(); say(r.special === 'common' ? '…huh? No.' : 'Longer.'); input.focus(); return; }
+    dog.classList.remove('hop'); void dog.getBBox(); dog.classList.add('hop');
+    say('Saved. Good boy.', 1600);
+    $('gradeHint').textContent = 'Saved. Resetting in a moment.';
+    setTimeout(() => { dog.classList.remove('hop'); clearAll(); }, 1500);
+  });
+
+  render();
+  update();
+})();
+</script>
+</body>
+</html>
