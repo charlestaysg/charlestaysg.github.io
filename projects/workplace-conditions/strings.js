@@ -469,7 +469,7 @@
     'wa.ask.low': 'Heat is in the Low band, so the normal water and rest routine applies.',
     'wa.air': 'Air now: {detail}. Can we cut back long periods of heavy outdoor work and keep vulnerable workers indoors? See haze.gov.sg.',
     'wa.source': 'Source: https://www.mom.gov.sg/heat-stress-measures-for-outdoor-work',
-    'wa.sent': 'Sent from Live Workplace Conditions (unofficial): https://charlestaysg.github.io/projects/workplace-conditions/',
+    'wa.sent': 'Sent from Live Workplace Conditions (unofficial): https://charlestaysg.com/projects/workplace-conditions/',
 
     // ---- footer
     'foot.unofficial': 'Unofficial. Not affiliated with NEA or MOM. Check the myENV app and haze.gov.sg for official readings.',
