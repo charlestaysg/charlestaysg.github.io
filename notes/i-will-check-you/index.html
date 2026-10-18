@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I Will Check You · Charles Tay</title>
+<meta name="description" content="An AI rings up to brag about its very particular set of skills. A human answers. Plus: make your own speech for your job.">
+<link rel="canonical" href="https://charlestaysg.com/notes/i-will-check-you/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I Will Check You · Charles Tay">
+<meta property="og:description" content="An AI called to tell me about its skills. I had a few questions.">
+<meta property="og:url" content="https://charlestaysg.com/notes/i-will-check-you/">
+<meta property="og:image" content="https://charlestaysg.com/assets/og.jpg">
+<meta name="theme-color" content="#0A0E18">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  /* call panel: always dark, whatever the site theme */
+  .call {
+    --c-bg: #0A0E18; --c-ink: #E6EAF4; --c-dim: #7C86A2; --c-ai: #8FB4FF; --c-warm: #FFE8C2;
+    --c-green: #34C759; --c-red: #FF453A; --c-line: #222B42;
+    position: relative; overflow: hidden; margin-inline: -20px; padding: 40px 20px 48px;
+    background: radial-gradient(ellipse at 78% 38%, #18233F 0%, var(--c-bg) 62%);
+    color: var(--c-ink); border-bottom: 1px solid var(--c-line);
+  }
+  .call .wrap { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(250px, .8fr); grid-template-areas: "text phone" "after phone"; gap: 14px 44px; align-items: center; }
+  .call .text { grid-area: text; align-self: end; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .call .after { grid-area: after; align-self: start; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .call a { color: var(--c-ai); }
+  .call .label { color: var(--c-dim); }
+  .call h1 { font-size: clamp(42px, 8.4vw, 82px); max-width: 9ch; }
+  .call h1 s { color: var(--c-dim); text-decoration-thickness: .08em; font-weight: 700; }
+  .call .dek { max-width: 28ch; }
+  .call-note { font: 13px/1.4 var(--font-mono); color: var(--c-dim); }
+
+  #caption {
+    min-height: 150px; max-width: 32ch; margin-top: 6px;
+    font: 500 clamp(18px, 2.5vw, 22px)/1.4 var(--font-mono); color: var(--c-ai);
+    text-shadow: 0 0 14px rgba(143,180,255,.35);
+  }
+  #caption.human { font-family: var(--font-body); font-weight: 700; font-size: clamp(23px, 3.4vw, 31px); color: var(--c-warm); text-shadow: 0 0 18px rgba(255,232,194,.3); }
+  #caption.quiet { color: var(--c-dim); text-shadow: none; }
+  #caption .who { display: block; font: 12px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--c-dim); text-shadow: none; margin-bottom: 8px; }
+  .call details { max-width: 56ch; font-size: 15px; color: var(--c-dim); }
+  .call summary { cursor: pointer; font-family: var(--font-mono); font-size: 13px; }
+  .call details p { margin-top: 8px; color: var(--c-ink); }
+  #scroll-hint { font-family: var(--font-mono); font-size: 14px; opacity: 0; transition: opacity .6s; }
+  #scroll-hint.show { opacity: 1; }
+
+  /* the phone */
+  .phone {
+    grid-area: phone; justify-self: center; width: min(100%, 300px); min-height: 520px; border-radius: 42px;
+    border: 1px solid #2A3550; background: linear-gradient(#141B2D, #0B101D);
+    box-shadow: 0 30px 80px rgba(0,0,0,.55), inset 0 0 0 6px #070A12;
+    padding: 34px 22px 30px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px;
+  }
+  .phone .status { font: 12.5px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--c-dim); min-height: 1em; }
+  .avatar {
+    position: relative; width: 104px; height: 104px; border-radius: 50%; margin: 26px 0 8px;
+    display: grid; place-items: center; font: 900 34px/1 var(--font-display); color: #0A0E18;
+    background: radial-gradient(circle at 35% 30%, #CFE0FF, #6F95F2 70%);
+  }
+  .avatar::before, .avatar::after {
+    content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 2px solid var(--c-ai); opacity: 0;
+  }
+  .ringing .avatar::before { animation: ring 1.8s ease-out infinite; }
+  .ringing .avatar::after { animation: ring 1.8s ease-out .6s infinite; }
+  @keyframes ring { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.7); opacity: 0; } }
+  .ringing .avatar { animation: buzz 1.8s ease-in-out infinite; }
+  @keyframes buzz { 0%, 70%, 100% { transform: rotate(0); } 74% { transform: rotate(-6deg); } 78% { transform: rotate(6deg); } 82% { transform: rotate(-4deg); } 86% { transform: rotate(3deg); } }
+  .phone .who-calls { font: 700 25px/1.15 var(--font-display); }
+  .phone .sub { font-size: 15px; color: var(--c-dim); }
+  #wave { width: 100%; height: 56px; margin-top: auto; }
+  .keys { display: flex; justify-content: center; gap: 44px; margin-top: 14px; }
+  .key { display: flex; flex-direction: column; align-items: center; gap: 8px; font: 13px/1 var(--font-mono); color: var(--c-dim); }
+  .key button {
+    width: 66px; height: 66px; border-radius: 50%; border: 0; cursor: pointer; display: grid; place-items: center;
+    color: #fff; font-size: 26px; line-height: 1; transition: transform .15s, filter .15s;
+  }
+  .key button:hover { filter: brightness(1.1); transform: scale(1.04); }
+  .key button:focus-visible { outline: 3px solid var(--c-warm); outline-offset: 3px; }
+  .key.answer button { background: var(--c-green); }
+  .key.decline button, .key.end button { background: var(--c-red); }
+  .key svg { width: 28px; height: 28px; fill: currentColor; }
+  .key.decline svg, .key.end svg { transform: rotate(135deg); }
+  .phone [hidden] { display: none !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ringing .avatar, .ringing .avatar::before, .ringing .avatar::after { animation: none; }
+  }
+  @media (max-width: 760px) {
+    .call .wrap { grid-template-columns: 1fr; grid-template-areas: "text" "phone" "after"; gap: 22px; }
+    .phone { justify-self: stretch; margin-inline: auto; }
+    .phone { width: 100%; max-width: 360px; min-height: 0; border-radius: 32px; padding: 24px 20px 24px; }
+    .avatar { width: 84px; height: 84px; margin: 12px 0 4px; font-size: 28px; }
+    #caption { min-height: 130px; margin-top: 0; }
+  }
+  @media (max-width: 640px) {
+    .call { margin-inline: -16px; padding: 28px 16px 40px; }
+  }
+
+  /* body sections */
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  .lede { max-width: 64ch; font-size: 18px; line-height: 1.55; margin-bottom: 22px; }
+  .vs { border-top: 1px solid var(--line); }
+  .vs .row { display: grid; grid-template-columns: 1fr 1.6fr; gap: 4px 28px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .vs .head { padding: 10px 0; }
+  .vs .head span { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .vs .head span + span { color: var(--green); }
+  .vs p { font-size: 17px; line-height: 1.5; }
+  .vs p.ai { color: var(--muted); font-weight: 700; }
+  .vs .tag { display: none; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  @media (max-width: 640px) {
+    .vs .row { grid-template-columns: 1fr; }
+    .vs .head { display: none; }
+    .vs .tag { display: block; }
+    .vs .tag.you-tag { color: var(--green); margin-top: 8px; }
+  }
+  .callout { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--green); padding: 20px 22px; max-width: 64ch; font-size: 17px; line-height: 1.55; }
+  .callout p + p { margin-top: 10px; }
+  .credits { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; max-width: 70ch; font-size: 16px; line-height: 1.5; color: var(--muted); }
+  .credits strong { color: var(--ink); font-weight: 700; }
+
+  /* the speech maker */
+  .maker { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 28px 40px; align-items: start; }
+  .maker fieldset { border: 0; padding: 0; margin: 0 0 22px; min-width: 0; }
+  .maker legend, .maker label.lbl { display: block; font: 12.5px/1.2 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .jobs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .jobs button {
+    font: 500 15px/1 var(--font-body); padding: 10px 14px; border: 1px solid var(--line); background: var(--panel);
+    color: var(--ink); cursor: pointer; border-radius: 999px;
+  }
+  .jobs button[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: var(--bg); font-weight: 700; }
+  .jobs button:focus-visible, .maker input:focus-visible, .speech-tools button:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+  .years-row { display: flex; align-items: center; gap: 14px; }
+  .years-row input { flex: 1; accent-color: var(--green); }
+  .years-row output { font: 700 22px/1 var(--font-display); min-width: 3.4ch; text-align: right; }
+  #secret { width: 100%; font: 16px/1.4 var(--font-body); padding: 11px 12px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); }
+  .hint { font-size: 14px; color: var(--muted); margin-top: 8px; }
+  .speech {
+    background: #0A0E18; color: #E6EAF4; padding: 26px 24px 22px; border-radius: 6px; margin: 0; border: 1px solid #2A3550;
+    font: 500 clamp(17px, 2vw, 19.5px)/1.55 var(--font-body); box-shadow: 0 18px 40px rgba(10,14,24,.18);
+  }
+  .speech .end { display: block; margin-top: 10px; color: #FFE8C2; font-weight: 700; font-size: 1.1em; }
+  .speech .sig { display: block; margin-top: 14px; font: 12px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: #7C86A2; }
+  .speech-tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .speech-tools button {
+    font: 500 14px/1 var(--font-mono); padding: 11px 14px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer;
+  }
+  .speech-tools button.primary { background: var(--green); border-color: var(--green); color: var(--bg); }
+  .speech-tools .done { font: 13px/36px var(--font-mono); color: var(--green); }
+  @media (max-width: 760px) { .maker { grid-template-columns: 1fr; } }
+
+</style>
+</head>
+<body>
+
+<header class="call" id="call">
+  <div class="wrap">
+    <div class="text">
+      <a class="back" href="../../#work">← Charles Tay</a>
+      <span class="label">Learning in public · <time datetime="2026-10-18">18 Oct 2026</time></span>
+      <h1>I will <s>find</s> check you</h1>
+      <p class="dek">An AI called to tell me about its skills. I had a few questions.</p>
+      <span class="call-note">answer the phone · sound on · about 35 seconds</span>
+    </div>
+
+    <div class="after">
+      <p id="caption" aria-live="polite"></p>
+      <a id="scroll-hint" href="#short">Scroll down ↓</a>
+      <details>
+        <summary>Read the call instead</summary>
+        <p><strong>The AI:</strong> I don&rsquo;t know your name. I don&rsquo;t know your deadline. If you&rsquo;re looking for a source, I&rsquo;ll be honest. I don&rsquo;t always have one. But what I do have is a very particular set of skills. Skills I picked up reading most of the internet, very quickly. Summarising. Guessing. Sounding completely sure. Paste your report in now, and that&rsquo;ll be the end of it. You won&rsquo;t have to read it. You won&rsquo;t have to check it.</p>
+        <p><strong>You:</strong> Thanks. I&rsquo;ll read it anyway. I will check you, I will test you, and I will find your mistakes.</p>
+        <p><strong>The AI:</strong> &hellip;That&rsquo;s fair.</p>
+      </details>
+    </div>
+
+    <div class="phone ringing" id="phone" role="group" aria-label="Incoming call">
+      <span class="status" id="status">incoming call</span>
+      <div class="avatar" aria-hidden="true">AI</div>
+      <span class="who-calls">Unknown caller</span>
+      <span class="sub">&ldquo;AI assistant&rdquo;</span>
+      <canvas id="wave" aria-hidden="true"></canvas>
+      <div class="keys" id="keys-ring">
+        <div class="key decline"><button id="decline" type="button" aria-label="Decline"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>Decline</div>
+        <div class="key answer"><button id="answer" type="button" aria-label="Answer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>Answer</div>
+      </div>
+      <div class="keys" id="keys-call" hidden>
+        <div class="key end"><button id="end" type="button" aria-label="End call"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>End</div>
+      </div>
+      <div class="keys" id="keys-done" hidden>
+        <div class="key answer"><button id="again" type="button" aria-label="Call back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></button>Call back</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <ul class="short">
+        <li>AI tools are very good at sounding sure. Sounding sure is not the same as being right.</li>
+        <li>Use it for the first draft. Keep the checking for yourself.</li>
+        <li>The more a mistake would cost you, the more slowly you check.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="checks">
+    <div class="wrap">
+      <div class="sec-head"><h2>its skills, your checks</h2></div>
+      <div class="vs" role="table" aria-label="What the AI is good at, and what you do about it">
+        <div class="row head" role="row"><span role="columnheader">What the AI is good at</span><span role="columnheader">What you do about it</span></div>
+        <div class="row" role="row">
+          <div role="cell"><span class="tag">The AI</span><p class="ai">Summarising</p></div>
+          <div role="cell"><span class="tag you-tag">You</span><p>Read the original for anything that involves money, people or the law.</p></div>
+        </div>
+        <div class="row" role="row">
+          <div role="cell"><span class="tag">The AI</span><p class="ai">Guessing</p></div>
+          <div role="cell"><span class="tag you-tag">You</span><p>Ask &ldquo;where did that come from?&rdquo; If it can&rsquo;t show you, treat it as a guess.</p></div>
+        </div>
+        <div class="row" role="row">
+          <div role="cell"><span class="tag">The AI</span><p class="ai">Sounding completely sure</p></div>
+          <div role="cell"><span class="tag you-tag">You</span><p>Test it on five questions you already know the answers to.</p></div>
+        </div>
+        <div class="row" role="row">
+          <div role="cell"><span class="tag">The AI</span><p class="ai">Being fast</p></div>
+          <div role="cell"><span class="tag you-tag">You</span><p>Slow down on the parts a customer or a regulator will see.</p></div>
+        </div>
+        <div class="row" role="row">
+          <div role="cell"><span class="tag">The AI</span><p class="ai">Knowing nothing about your business</p></div>
+          <div role="cell"><span class="tag you-tag">You</span><p>Tell it the background. It won&rsquo;t know your prices, your staff or your customers unless you say.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="maker">
+    <div class="wrap">
+      <div class="sec-head"><h2>your turn: a very particular set of skills</h2></div>
+      <p class="lede">Everyone has a particular set of skills. Make the speech for yours.</p>
+      <div class="maker">
+        <form id="maker-form" onsubmit="return false">
+          <fieldset>
+            <legend>Your job</legend>
+            <div class="jobs" id="jobs"></div>
+          </fieldset>
+          <fieldset>
+            <label class="lbl" for="years">Years doing it</label>
+            <div class="years-row"><input id="years" type="range" min="1" max="40" value="12"><output id="years-out" for="years">12</output></div>
+          </fieldset>
+          <fieldset>
+            <label class="lbl" for="secret">One thing you&rsquo;re secretly great at <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+            <input id="secret" type="text" maxlength="60" autocomplete="off" placeholder="knowing which supplier will be late">
+            <p class="hint">What you type stays in your browser. Nothing is sent or saved.</p>
+          </fieldset>
+        </form>
+        <div>
+          <blockquote class="speech" id="speech" aria-live="polite"></blockquote>
+          <div class="speech-tools">
+            <button type="button" class="primary" id="hear">▶ Hear it</button>
+            <button type="button" id="copy">Copy</button>
+            <button type="button" id="share" hidden>Share</button>
+            <button type="button" id="another">Make another</button>
+            <span class="done" id="done" aria-live="polite"></span>
+          </div>
+          <p class="hint" id="hear-note">Hear it uses your device&rsquo;s own robot voice, so it sounds different on every phone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="test">
+    <div class="wrap">
+      <div class="sec-head"><h2>try the five-answer test</h2></div>
+      <div class="callout">
+        <p>Before you trust an AI tool with real work, ask it five questions you already know the answers to. Count how many it gets right. Then look at the wrong ones and notice how sure it sounded.</p>
+        <p>That&rsquo;s the first step of a month-long trial I wrote up for small businesses: <a href="../teaching-myself-ai/#start">try it in your business</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="credits">
+    <div class="wrap">
+      <div class="sec-head"><h2>made with</h2></div>
+      <ul class="credits">
+        <li><strong>Voices:</strong> Fish Audio, AI-generated. The AI&rsquo;s phone-line sound is added live in your browser.</li>
+        <li><strong>Hear it:</strong> your browser&rsquo;s built-in speech voice. Nothing leaves your device.</li>
+        <li><strong>The phone call</strong> is a nod to <em>Taken</em> (2008), a EuropaCorp film. The lines on this page are written from scratch apart from one catchphrase, and the page is not affiliated with or endorsed by the film&rsquo;s makers.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No analytics, no cookies.</span>
+  </div>
+</footer>
+
+<script>
+(() => {
+  /* ---------- the call ---------- */
+  // caption cues in seconds, from word timings of each clip
+  const VOICE = {
+    call: 'call.mp3', fair: 'fair.mp3', reply: 'reply.mp3',
+    aiCues: [0, 2.58, 6.52, 10.06, 14.10, 18.54, 21.32],
+    replyCues: [0, 2.16, 3.42, 4.24],
+  };
+  const AI_LINES = [
+    'I don’t know your name. I don’t know your deadline.',
+    'If you’re looking for a source, I’ll be honest. I don’t always have one.',
+    'But what I do have is a very particular set of skills.',
+    'Skills I picked up reading most of the internet, very quickly.',
+    'Summarising. Guessing. Sounding completely sure.',
+    'Paste your report in now, and that’ll be the end of it.',
+    'You won’t have to read it. You won’t have to check it.',
+  ];
+  const HUMAN_LINES = [
+    'Thanks. I’ll read it anyway.',
+    'I will check you,',
+    'I will check you, I will test you,',
+    'I will check you, I will test you, and I will find your mistakes.',
+  ];
+  const CALL_BACK = 'Declined. It will call back with a longer answer.';
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const phone = document.getElementById('phone');
+  const status = document.getElementById('status');
+  const caption = document.getElementById('caption');
+  const hint = document.getElementById('scroll-hint');
+  const keys = { ring: document.getElementById('keys-ring'), call: document.getElementById('keys-call'), done: document.getElementById('keys-done') };
+  const wave = document.getElementById('wave');
+
+  function showKeys(which) { for (const k in keys) keys[k].hidden = k !== which; }
+  function setCaption(text, who) {
+    caption.className = who === 'you' ? 'human' : who === 'quiet' ? 'quiet' : '';
+    caption.innerHTML = '';
+    if (!text) return;
+    if (who === 'ai' || who === 'you') {
+      const w = document.createElement('span'); w.className = 'who'; w.textContent = who === 'ai' ? 'the AI' : 'you';
+      caption.appendChild(w);
+    }
+    caption.appendChild(document.createTextNode(text));
+  }
+  const fmt = s => { s = Math.max(0, Math.floor(s)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+
+  let ctx = null, analyser = null, freq = null, buffers = {}, running = [], session = 0, raf = 0, recallTimer = 0;
+
+  function decode(ab) { return new Promise((res, rej) => ctx.decodeAudioData(ab, res, rej)); }
+  async function load(url) {
+    if (!buffers[url]) buffers[url] = fetch(url).then(r => { if (!r.ok) throw new Error(url); return r.arrayBuffer(); }).then(decode);
+    return buffers[url];
+  }
+  function src(buf, dest, when) {
+    const s = ctx.createBufferSource(); s.buffer = buf; s.connect(dest); s.start(when); running.push(s); return s;
+  }
+  // a phone line: narrow band, a touch of grit
+  function phoneLine() {
+    const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 330;
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 3300;
+    const shaper = ctx.createWaveShaper(); const curve = new Float32Array(1024);
+    for (let i = 0; i < 1024; i++) { const x = i / 511.5 - 1; curve[i] = Math.tanh(x * 1.8); }
+    shaper.curve = curve;
+    const g = ctx.createGain(); g.gain.value = 0.9;
+    hp.connect(lp).connect(shaper).connect(g).connect(analyser);
+    return hp;
+  }
+  function noiseBuf(seconds) {
+    const len = Math.floor(ctx.sampleRate * seconds), b = ctx.createBuffer(1, len, ctx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    return b;
+  }
+  function hiss(t0, t1) {
+    const s = ctx.createBufferSource(); s.buffer = noiseBuf(2); s.loop = true;
+    const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1500; bp.Q.value = 0.5;
+    const g = ctx.createGain(); g.gain.value = 0.012;
+    s.connect(bp).connect(g).connect(ctx.destination); s.start(t0); s.stop(t1); running.push(s);
+  }
+  function click(t0) {
+    const s = ctx.createBufferSource(); s.buffer = noiseBuf(0.04);
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.25, t0); g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.04);
+    s.connect(g).connect(analyser); s.start(t0); running.push(s);
+  }
+  function beeps(t0) { // hang-up tone
+    for (let i = 0; i < 3; i++) {
+      const o = ctx.createOscillator(); o.frequency.value = 425;
+      const g = ctx.createGain(); const a = t0 + i * 0.45;
+      g.gain.setValueAtTime(0.0001, a); g.gain.linearRampToValueAtTime(0.09, a + 0.02); g.gain.setValueAtTime(0.09, a + 0.22); g.gain.linearRampToValueAtTime(0.0001, a + 0.25);
+      o.connect(g).connect(analyser); o.start(a); o.stop(a + 0.27); running.push(o);
+    }
+    return 1.3;
+  }
+
+  function stopAll() {
+    session++;
+    running.forEach(s => { try { s.stop(); } catch (e) {} });
+    running = []; cancelAnimationFrame(raf); clearTimeout(recallTimer);
+    stopSpeaking();
+  }
+  function ring() {
+    stopAll(); drawWave(null);
+    phone.classList.toggle('ringing', true); phone.setAttribute('aria-label', 'Incoming call');
+    status.textContent = 'incoming call'; showKeys('ring');
+  }
+  function ended(secs, note) {
+    phone.classList.remove('ringing');
+    status.textContent = 'call ended · ' + fmt(secs);
+    showKeys('done'); hint.classList.add('show');
+    if (note) setCaption(note, 'quiet');
+    drawWave(null);
+  }
+
+  async function answer() {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return answerFallback();
+    if (!ctx) {
+      ctx = new AC();
+      analyser = ctx.createAnalyser(); analyser.fftSize = 256; analyser.smoothingTimeConstant = 0.6; analyser.connect(ctx.destination);
+      freq = new Uint8Array(analyser.frequencyBinCount);
+    }
+    ctx.resume();
+    stopAll();
+    const my = session;
+    phone.classList.remove('ringing'); showKeys('call'); hint.classList.remove('show');
+    // on a phone, bring the call and its captions into view together
+    if (window.matchMedia('(max-width: 760px)').matches) phone.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    status.textContent = 'connecting…'; setCaption('Connecting…', 'quiet');
+    let callBuf, fairBuf, replyBuf;
+    try { [callBuf, fairBuf, replyBuf] = await Promise.all([load(VOICE.call), load(VOICE.fair), load(VOICE.reply)]); }
+    catch (e) { if (my === session) { setCaption('The call didn’t load. Read it below instead.', 'quiet'); showKeys('done'); status.textContent = 'no signal'; } return; }
+    if (my !== session) return;
+
+    const line = phoneLine();
+    const t0 = ctx.currentTime + 0.1;
+    click(t0);
+    const tCall = t0 + 0.55;
+    src(callBuf, line, tCall);
+    const tReply = tCall + callBuf.duration + 0.45;
+    const room = ctx.createGain(); room.gain.value = 1; room.connect(analyser);
+    src(replyBuf, room, tReply);
+    const tFair = tReply + replyBuf.duration + 0.75;
+    src(fairBuf, line, tFair);
+    const tHang = tFair + fairBuf.duration + 0.55;
+    hiss(t0, tHang);
+    click(tHang);
+    const tEnd = tHang + beeps(tHang + 0.15) + 0.15;
+
+    let last = '';
+    const tick = () => {
+      if (my !== session) return;
+      const t = ctx.currentTime;
+      status.textContent = 'on call · ' + fmt(t - t0);
+      let text = '', who = 'ai';
+      if (t < tCall) { text = ''; }
+      else if (t < tReply) { const rel = t - tCall; VOICE.aiCues.forEach((at, i) => { if (rel >= at) text = AI_LINES[i]; }); }
+      else if (t < tFair) { who = 'you'; const rel = t - tReply; VOICE.replyCues.forEach((at, i) => { if (rel >= at) text = HUMAN_LINES[i]; }); }
+      else if (t < tHang + 0.2) { text = '…That’s fair.'; }
+      else { who = 'quiet'; text = 'The AI hung up.'; }
+      const key = who + text;
+      if (key !== last) { last = key; setCaption(text, who); }
+      analyser.getByteFrequencyData(freq); drawWave(freq);
+      if (t >= tEnd) { ended(tHang - t0); return; }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+  }
+
+  // no Web Audio: plain audio elements, captions from currentTime
+  function answerFallback() {
+    stopAll();
+    const a = new Audio(VOICE.call), r = new Audio(VOICE.reply), f = new Audio(VOICE.fair);
+    phone.classList.remove('ringing'); showKeys('call'); status.textContent = 'on call';
+    a.ontimeupdate = () => { let x = ''; VOICE.aiCues.forEach((at, i) => { if (a.currentTime >= at) x = AI_LINES[i]; }); setCaption(x, 'ai'); };
+    a.onended = () => r.play();
+    r.ontimeupdate = () => { let x = ''; VOICE.replyCues.forEach((at, i) => { if (r.currentTime >= at) x = HUMAN_LINES[i]; }); setCaption(x, 'you'); };
+    r.onended = () => { setCaption('…That’s fair.', 'ai'); f.play(); };
+    f.onended = () => ended(a.duration + r.duration + f.duration, 'The AI hung up.');
+    a.play();
+  }
+
+  function decline() {
+    stopAll(); phone.classList.remove('ringing'); status.textContent = 'declined';
+    keys.ring.hidden = true; setCaption(CALL_BACK, 'quiet');
+    recallTimer = setTimeout(ring, 3200);
+  }
+
+  // the little level meter on the phone
+  const wctx = wave.getContext('2d');
+  function drawWave(data) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2), w = wave.clientWidth, h = wave.clientHeight;
+    if (!w || !h) return;
+    if (wave.width !== Math.round(w * dpr)) { wave.width = Math.round(w * dpr); wave.height = Math.round(h * dpr); }
+    wctx.setTransform(dpr, 0, 0, dpr, 0, 0); wctx.clearRect(0, 0, w, h);
+    const bars = 24, gap = 3, bw = (w - gap * (bars - 1)) / bars;
+    wctx.fillStyle = '#8FB4FF';
+    for (let i = 0; i < bars; i++) {
+      const v = data ? data[2 + Math.floor(i * 1.6)] / 255 : 0;
+      const bh = Math.max(3, v * h * (reduceMotion ? 0.5 : 1));
+      wctx.globalAlpha = 0.35 + v * 0.65;
+      wctx.fillRect(i * (bw + gap), (h - bh) / 2, bw, bh);
+    }
+    wctx.globalAlpha = 1;
+  }
+  new ResizeObserver(() => drawWave(null)).observe(wave);
+
+  document.getElementById('answer').addEventListener('click', answer);
+  document.getElementById('decline').addEventListener('click', decline);
+  function hangUp() { stopAll(); ended(0, 'You hung up. It will call back with a longer answer.'); status.textContent = 'call ended'; }
+  document.getElementById('end').addEventListener('click', hangUp);
+  document.getElementById('again').addEventListener('click', answer);
+
+  /* ---------- the speech maker ---------- */
+  const JOBS = [
+    { id: 'cook', name: 'Cook', job: 'cooking for strangers',
+      skills: ['Timing ten orders at once.', 'Tasting without looking.', 'Knowing the rice is about to burn before it does.'],
+      req: 'put that plate down and wash your hands', end: 'I will find you, I will feed you, and I will make you wash your own plate.' },
+    { id: 'admin', name: 'Admin', job: 'keeping everyone in order',
+      skills: ['Finding any file in thirty seconds.', 'Remembering everyone’s leave.', 'Spotting a missing signature from across the room.'],
+      req: 'submit the form by Friday', end: 'I will find you, I will chase you, and I will get that form signed.' },
+    { id: 'driver', name: 'Driver', job: 'getting things where they need to go',
+      skills: ['Knowing every shortcut.', 'Parking where nobody else can.', 'Finding blocks that have no number on them.'],
+      req: 'come down to collect', end: 'I will find you. Even without the unit number.' },
+    { id: 'tech', name: 'Technician', job: 'fixing what other people broke',
+      skills: ['Turning it off and on again.', 'Reading the error messages nobody reads.', 'Fixing printers just by standing near them.'],
+      req: 'tell me exactly what you clicked', end: 'I will find you, I will reboot you, and I will check whether it was plugged in.' },
+    { id: 'sales', name: 'Sales', job: 'talking to people',
+      skills: ['Remembering your children’s names.', 'Hearing “maybe” as “not yet”.', 'Drinking kopi with absolutely anyone.'],
+      req: 'say yes today', end: 'I will find you, I will follow up, and I will follow up again.' },
+    { id: 'owner', name: 'Business owner', job: 'running my own place',
+      skills: ['Paying salaries on time.', 'Fixing whatever broke at seven in the morning.', 'Doing four jobs before lunch.'],
+      req: 'ask for help early', end: 'I will find you, I will train you, and I will make you better at this than me.' },
+    { id: 'trainer', name: 'Trainer', job: 'teaching adults',
+      skills: ['Making Monday mornings bearable.', 'Reading a quiet room.', 'Asking questions that only sound easy.'],
+      req: 'do the pre-reading', end: 'I will find you, I will ask you a question, and I will wait for the answer.' },
+    { id: 'nurse', name: 'Nurse', job: 'looking after people',
+      skills: ['Finding a vein on the first try.', 'Staying calm at three in the morning.', 'Knowing when “I’m fine” means not fine.'],
+      req: 'take your medicine', end: 'I will find you, I will check your temperature, and I will make you drink some water.' },
+    { id: 'other', name: 'Something else', job: 'doing my job',
+      skills: ['Showing up.', 'Figuring it out.', 'Fixing it before anyone notices.'],
+      req: 'let me do my job', end: 'I will find you, I will teach you, and I will make you good at this.' },
+  ];
+  const jobsEl = document.getElementById('jobs'), years = document.getElementById('years'), yearsOut = document.getElementById('years-out');
+  const secret = document.getElementById('secret'), speech = document.getElementById('speech'), done = document.getElementById('done');
+  let current = JOBS[0];
+
+  JOBS.forEach(j => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = j.name; b.dataset.id = j.id;
+    b.setAttribute('aria-pressed', String(j === current));
+    b.addEventListener('click', () => { current = j; render(); });
+    jobsEl.appendChild(b);
+  });
+
+  function cleanSecret(s) {
+    s = s.replace(/\s+/g, ' ').trim().replace(/[.!?,;:]+$/, '');
+    if (!s) return '';
+    return s.charAt(0).toUpperCase() + s.slice(1) + '.';
+  }
+  function speechText() {
+    const n = +years.value;
+    const span = n === 1 ? 'one very long year' : n + ' years';
+    const skills = current.skills.slice();
+    const mine = cleanSecret(secret.value);
+    if (mine) skills[0] = mine;
+    return {
+      body: 'I don’t know your name. I don’t know your problem. But what I do have is a very particular set of skills. Skills I picked up over ' + span + ' of ' + current.job + '. ' + skills.join(' ') + ' If you ' + current.req + ', that’ll be the end of it. But if you don’t…',
+      end: current.end,
+    };
+  }
+  function render() {
+    jobsEl.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === current.id)));
+    yearsOut.textContent = years.value;
+    const t = speechText();
+    speech.innerHTML = '';
+    speech.appendChild(document.createTextNode(t.body));
+    const e = document.createElement('span'); e.className = 'end'; e.textContent = t.end; speech.appendChild(e);
+    const s = document.createElement('span'); s.className = 'sig'; s.textContent = '— a ' + current.name.toLowerCase() + ', ' + (years.value === '1' ? '1 year' : years.value + ' years') + ' in';
+    if (current.id === 'other') s.textContent = '— ' + (years.value === '1' ? '1 year' : years.value + ' years') + ' in';
+    speech.appendChild(s);
+    stopSpeaking();
+  }
+  const fullText = () => { const t = speechText(); return t.body + ' ' + t.end; };
+  const shareText = () => fullText() + '\n\nMake yours: https://charlestaysg.com/notes/i-will-check-you/#maker';
+
+  function flash(msg) { done.textContent = msg; clearTimeout(flash.t); flash.t = setTimeout(() => { done.textContent = ''; }, 2200); }
+  document.getElementById('copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(shareText()); flash('Copied'); }
+    catch (e) {
+      const r = document.createRange(); r.selectNodeContents(speech); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      flash('Selected: press copy');
+    }
+  });
+  const shareBtn = document.getElementById('share');
+  if (navigator.share) {
+    shareBtn.hidden = false;
+    shareBtn.addEventListener('click', () => navigator.share({ title: 'A very particular set of skills', text: shareText() }).catch(() => {}));
+  }
+  document.getElementById('another').addEventListener('click', () => {
+    const others = JOBS.filter(j => j !== current);
+    current = others[Math.floor(Math.random() * others.length)];
+    years.value = 3 + Math.floor(Math.random() * 33);
+    secret.value = '';
+    render();
+  });
+  years.addEventListener('input', render);
+  secret.addEventListener('input', render);
+
+  // Hear it: the device's own speech voice
+  const hear = document.getElementById('hear');
+  let speaking = false;
+  function stopSpeaking() {
+    if (speaking && window.speechSynthesis) speechSynthesis.cancel();
+    speaking = false; hear.textContent = '▶ Hear it';
+  }
+  function pickVoice() {
+    const vs = speechSynthesis.getVoices();
+    return vs.find(v => v.lang === 'en-SG') || vs.find(v => v.lang === 'en-GB') || vs.find(v => /^en/i.test(v.lang)) || null;
+  }
+  if (!('speechSynthesis' in window)) {
+    hear.hidden = true; document.getElementById('hear-note').hidden = true;
+  } else {
+    speechSynthesis.getVoices();
+    hear.addEventListener('click', () => {
+      if (speaking) { stopSpeaking(); return; }
+      if (!keys.call.hidden) { hangUp(); } // don't talk over the phone call
+      const u = new SpeechSynthesisUtterance(fullText().replace(/…/g, '...'));
+      const v = pickVoice(); if (v) { u.voice = v; u.lang = v.lang; }
+      u.rate = 0.95; u.pitch = 0.85;
+      u.onend = u.onerror = () => { speaking = false; hear.textContent = '▶ Hear it'; };
+      speaking = true; hear.textContent = '■ Stop';
+      speechSynthesis.speak(u);
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
