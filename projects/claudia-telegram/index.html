@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claudia, a Telegram bot with a memory · Charles Tay</title>
+<meta name="description" content="An AI agent that chats with my friends on Telegram and remembers them in a wiki on my laptop. How it works, the tools behind it, and what is not finished.">
+<link rel="canonical" href="https://charlestaysg.com/projects/claudia-telegram/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claudia, a Telegram bot with a memory">
+<meta property="og:description" content="An AI agent that chats with my friends on Telegram and remembers them in a wiki. How it works and what is not finished.">
+<meta property="og:url" content="https://charlestaysg.com/projects/claudia-telegram/">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../">← Charles Tay</a>
+    <span class="label">Unfinished · <time datetime="2026-05">since May 2026</time></span>
+    <h1>Claudia, a Telegram bot with a memory</h1>
+    <p class="dek">Claudia chats with my friends in a Telegram group and remembers them in a wiki on my laptop. It works when I start it. The part I haven&rsquo;t built is the sealed box to run it safely.</p>
+  </div>
+</header>
+
+<main>
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head"><h2>how it works</h2></div>
+      <ul class="tools">
+        <li><span class="job">1 &middot; a message</span><div><p>A friend posts in the group. Claudia replies only if the message names her, tags her or ends with a question mark. In a private chat she answers everything.</p></div></li>
+        <li><span class="job">2 &middot; her memory</span><div><p>The bot reads the wiki: the sender&rsquo;s page, pages for anyone named, and topics that match the message.</p></div></li>
+        <li><span class="job">3 &middot; the reply</span><div><p>That memory and the last 30 messages go to Claude, which writes a short, casual reply. Singlish where it fits.</p></div></li>
+        <li><span class="job">4 &middot; looking it up</span><div><p>If the wiki has nothing on a factual question, a smaller Claude model searches the web and files a summary as a new topic page.</p></div></li>
+        <li><span class="job">5 &middot; writing back</span><div><p>She adds a page for each new person in the group, notes from commands, and a log of every third reply.</p></div></li>
+        <li><span class="job">6 &middot; commands</span><div><p>Friends steer her memory with <span style="font-family:var(--font-mono);font-size:.9em">/save</span>, <span style="font-family:var(--font-mono);font-size:.9em">/who</span>, <span style="font-family:var(--font-mono);font-size:.9em">/note</span>, <span style="font-family:var(--font-mono);font-size:.9em">/recall</span>, <span style="font-family:var(--font-mono);font-size:.9em">/research</span>, <span style="font-family:var(--font-mono);font-size:.9em">/remind</span>, <span style="font-family:var(--font-mono);font-size:.9em">/forget</span> and <span style="font-family:var(--font-mono);font-size:.9em">/correct</span>.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="wrap">
+      <div class="sec-head"><h2>the tools, and what each one did</h2></div>
+      <dl class="spec-list">
+        <dt>the chat</dt><dd>Telegram, through the Telegraf library</dd>
+        <dt>the replies</dt><dd>Claude Sonnet 4.6</dd>
+        <dt>the research</dt><dd>Claude Haiku 4.5 with web search</dd>
+        <dt>the memory</dt><dd>an Obsidian vault of plain Markdown files</dd>
+        <dt>the bot</dt><dd>Node.js on my MacBook, about 1,000 lines over two files</dd>
+        <dt>the launcher</dt><dd>two macOS scripts that check the vault and permissions before starting</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="unfinished">
+    <div class="wrap">
+      <div class="sec-head"><h2>not finished yet</h2></div>
+      <ul class="tools">
+        <li><span class="job">sealed box</span><div><p>Run the bot in a container on the laptop, limited to one wiki folder and to people I approve. Right now it runs straight on the Mac.</p></div></li>
+        <li><span class="job">always on</span><div><p>She only answers while the laptop is awake and the bot is running.</p></div></li>
+        <li><span class="job">forgetting</span><div><p><span style="font-family:var(--font-mono);font-size:.9em">/forget</span> only flags a page. I still clean it up by hand.</p></div></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. Claudia is a personal project built on Claude by Anthropic.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No analytics; no cookies.</span>
+  </div>
+</footer>
+</body>
+</html>
