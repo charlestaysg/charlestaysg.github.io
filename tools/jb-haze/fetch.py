@@ -177,6 +177,10 @@ def stage_latest(out_dir, stations_meta):
     payload = json.loads(http_get(APIMS_QUERY + "?" + params).decode("utf-8"))
     latest = parse_latest(payload, stations_meta)
     del payload  # raw response is never written anywhere
+    if not latest.get("readingTime"):
+        # APIMS sometimes answers with stations but no reading times (seen 18 Oct 22:00 SGT). Treat it as a failed
+        # stage so the previous latest.json is kept and news/hotspots still publish, instead of failing check.py.
+        raise RuntimeError("APIMS returned no reading times")
     carry_forward(latest, load_json(os.path.join(out_dir, "latest.json")))
     save_json(os.path.join(out_dir, "latest.json"), latest)
     return latest
