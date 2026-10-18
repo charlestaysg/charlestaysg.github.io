@@ -409,10 +409,12 @@ if (typeof document !== 'undefined') {
         } catch (e) { /* keep older yesterday data; NowCast copes with gaps */ }
       }
       state.lastSuccess = Date.now();
+      state.fetchFailed = false;
       computeAll();
       renderAll();
       banner('');
     } catch (e) {
+      state.fetchFailed = true;
       banner(`Could not refresh NEA data (${e.message}). Showing the last data received. Check haze.gov.sg for official readings.`);
     }
     try { await sleep(1000); await loadWind(); } catch (_) { /* wind is optional */ }
@@ -475,8 +477,22 @@ if (typeof document !== 'undefined') {
     for (const k of REGIONS) { const c = state.computed[k]; if (c && c.ts && (!t || c.ts > t)) t = c.ts; }
     return t;
   }
+  // Connection pill: Live = NEA answered on the last refresh and its newest reading is recent;
+  // Delayed = NEA answered but has not published for a while; Offline = the last refresh failed.
+  function renderSourcePill(t) {
+    const pill = $('src-pill'); if (!pill) return;
+    const stale = t && Date.now() - new Date(t).getTime() > STALE_MIN * 60000;
+    const [cls, label, title] = !state.lastSuccess
+      ? ['is-wait', 'Connecting', 'Fetching the latest readings from NEA (data.gov.sg)…']
+      : state.fetchFailed ? ['is-off', 'Offline', 'The last refresh could not reach NEA (data.gov.sg). Showing the last readings received.']
+      : stale ? ['is-late', 'Delayed', 'Connected to NEA (data.gov.sg), but NEA has not published a new reading for over 90 minutes.']
+      : ['is-live', 'Live', 'Connected to NEA (data.gov.sg). Readings refresh every 5 minutes.'];
+    pill.className = 'src-pill ' + cls; pill.title = title;
+    pill.lastChild.textContent = label;
+  }
   function renderStatus() {
     const t = latestTs();
+    renderSourcePill(t);
     $('nea-time').textContent = t ? sgHM(new Date(t)) : '—';
     $('nea-ago').textContent = state.lastSuccess ? ago(Date.now() - state.lastSuccess) : '—';
     const left = Math.max(0, Math.round((state.nextDataAt - Date.now()) / 1000));

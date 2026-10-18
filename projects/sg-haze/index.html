@@ -11,7 +11,7 @@
   <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
   <meta name="color-scheme" content="light dark">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-  <link rel="stylesheet" href="styles.css?v=20261013b">
+  <link rel="stylesheet" href="styles.css?v=20261018a">
 </head>
 <body>
   <header class="topbar">
@@ -21,7 +21,7 @@
       <h1>Singapore Haze — Hourly <span class="badge">UNOFFICIAL</span></h1>
     </div>
     <div class="topbar-row">
-      <div id="status"><abbr title="National Environment Agency">NEA</abbr> data as of <time id="nea-time">—</time> · updated <span id="nea-ago">—</span> · refresh in <span id="countdown">—</span></div>
+      <div id="status"><span id="src-pill" class="src-pill is-wait" role="status" title="Fetching the latest readings from NEA (data.gov.sg)…"><span class="src-dot" aria-hidden="true"></span>Connecting</span> <abbr title="National Environment Agency">NEA</abbr> data as of <time id="nea-time">—</time> · updated <span id="nea-ago">—</span> · refresh in <span id="countdown">—</span></div>
       <span class="chips"><span id="wind-chip" class="chip" hidden></span><span id="rain-chip" class="chip" hidden></span></span>
     </div>
     <nav class="official-links" aria-label="Official sources">
@@ -143,6 +143,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-  <script src="app.js?v=20261015a"></script>
+  <script src="app.js?v=20261018a"></script>
 </body>
 </html>
