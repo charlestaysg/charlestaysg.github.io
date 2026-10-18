@@ -323,3 +323,11 @@ main section, .card, #top { scroll-margin-top: 60px; }
   .reach .go { grid-column: 2; grid-row: 1; }
   .notes-list a { grid-template-columns: 1fr; gap: 2px; }
 }
+
+/* about: lead line, labelled blocks, numbered method */
+.about-lead { font-size: clamp(26px, 3.6vw, 38px); font-weight: 800; line-height: 1.15; letter-spacing: -.01em; max-width: 24ch; margin: 0 0 20px; }
+.sub-label.about-sub { margin: 36px 0 10px; }
+.method { list-style: none; counter-reset: step; padding: 0; margin: 0; max-width: 64ch; border-top: 1px solid var(--line); }
+.method li { counter-increment: step; display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 17px; line-height: 1.45; }
+.method li::before { content: counter(step, decimal-leading-zero); font-family: var(--font-mono); font-size: 13px; color: var(--green); }
+.about-cta { font-weight: 500; }
