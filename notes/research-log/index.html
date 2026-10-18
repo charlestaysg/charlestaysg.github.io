@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Log · Charles Tay</title>
+<meta name="description" content="Things Charles Tay looks into on and off, written down with the date each one was checked. First entry: open models on Ollama's cloud matched to Claude by job and price.">
+<link rel="canonical" href="https://charlestaysg.com/notes/research-log/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Research Log · Charles Tay">
+<meta property="og:description" content="Things I look into on and off, with the date I last checked each one.">
+<meta property="og:url" content="https://charlestaysg.com/notes/research-log/">
+<meta property="og:image" content="https://charlestaysg.com/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  .toc { margin: 0 0 4px; padding-left: 1.1em; max-width: 64ch; }
+  .toc li { margin: 4px 0; }
+  .asof { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin: 0 0 10px; }
+  .cmp { width: 100%; border-collapse: collapse; margin: 14px 0 6px; font-size: 15px; }
+  .cmp th, .cmp td { text-align: left; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .cmp th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .cmp tr.grp th { padding-top: 22px; color: var(--green); border-bottom: 2px solid var(--line); }
+  .cmp td.p { font-family: var(--font-mono); font-size: 14px; white-space: nowrap; }
+  .cmp td small { display: block; color: var(--muted); font-size: 14px; line-height: 1.45; margin-top: 2px; }
+  .src { max-width: 64ch; padding-left: 1.1em; }
+  .src li { margin: 4px 0; }
+  @media (max-width: 640px) { .cmp { font-size: 14px; } .cmp td.p { white-space: normal; } }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#contact">← Charles Tay</a>
+    <span class="label">Reference · Last updated <time datetime="2026-10-18">18 Oct 2026</time></span>
+    <h1>Research log</h1>
+    <p class="dek">Things I look into on and off, written down so I can find them again. Each entry shows the date I last checked it.</p>
+  </div>
+</header>
+
+<main>
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head"><h2>how to read this</h2></div>
+      <div class="prose">
+        <p>I add to this page as I go, newest entry first. Many entries are a snapshot of prices or model names, and those go out of date. The date on each entry matters more than the date at the top.</p>
+        <p>I match things by job and price. I haven&rsquo;t run benchmarks of my own unless an entry says so. Nothing here is advice, so check the sources before you rely on a number.</p>
+      </div>
+      <ul class="toc">
+        <li><a href="#open-models-vs-claude">Open models on Ollama&rsquo;s cloud, matched to Claude</a> &middot; checked 18 Oct 2026</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="open-models-vs-claude">
+    <div class="wrap">
+      <div class="sec-head"><h2>open models matched to claude</h2></div>
+      <p class="asof">Checked <time datetime="2026-10-18">18 Oct 2026</time></p>
+      <div class="prose">
+        <p>When Claude is down I want a backup that doesn&rsquo;t depend on Anthropic. Ollama&rsquo;s cloud lists 20 open models. I sorted them by the job they do and what they cost, and put the Claude model of the same tier next to each group.</p>
+        <p>This is a match on role and price. It is not proof that any of them is as good as Claude.</p>
+      </div>
+
+      <table class="cmp">
+        <thead><tr><th>Model on Ollama&rsquo;s cloud</th><th>Per million tokens, in / out</th></tr></thead>
+        <tbody>
+          <tr class="grp"><th colspan="2">Hard work &middot; Claude Opus 5.5 is $4 / $20</th></tr>
+          <tr><td><b>Kimi K3</b><small>Ollama calls it its most capable listing. Built for agent work and takes images.</small></td><td class="p">$3.00 / $15.00</td></tr>
+          <tr><td><b>DeepSeek V4 Pro</b><small>A large general model with three reasoning modes.</small></td><td class="p">$1.32 / $3.96</td></tr>
+          <tr><td><b>GLM-5.3</b><small>Z.ai&rsquo;s flagship, aimed at coding and long multi-step tasks.</small></td><td class="p">$1.40 / $4.40</td></tr>
+          <tr><td><b>Muse Spark Open</b><small>A very large model that takes up to a million tokens at once. Built for long tasks.</small></td><td class="p">$1.25 / $4.25</td></tr>
+
+          <tr class="grp"><th colspan="2">Everyday work &middot; Claude Sonnet 5.5 is $2 / $10</th></tr>
+          <tr><td><b>GLM-5.3-flash</b><small>The smaller GLM. Its maker says it comes close to an older Claude Opus on coding tests.</small></td><td class="p">$0.15 / $0.50</td></tr>
+          <tr><td><b>MiniMax M3</b><small>Coding and agent work, with a million-token input.</small></td><td class="p">$0.60 / $2.40</td></tr>
+          <tr><td><b>Mistral Large 4</b><small>A general-purpose model that also reads images.</small></td><td class="p">$0.68 / $2.09</td></tr>
+          <tr><td><b>DeepSeek V4.1 Flash</b><small>A faster, cheaper DeepSeek.</small></td><td class="p">$0.30 / $1.20</td></tr>
+
+          <tr class="grp"><th colspan="2">Quick jobs &middot; Claude Haiku 5.5 is $0.10 / $0.50</th></tr>
+          <tr><td><b>Gemma 4</b><small>Google&rsquo;s open model. The same one can run on a laptop.</small></td><td class="p">$0.14 / $0.40</td></tr>
+          <tr><td><b>gpt-oss</b><small>OpenAI&rsquo;s open model.</small></td><td class="p">from $0.07 / $0.30</td></tr>
+          <tr><td><b>Nemotron 3 Nano</b><small>NVIDIA&rsquo;s small model.</small></td><td class="p">$0.06 / $0.24</td></tr>
+        </tbody>
+      </table>
+      <p class="credit" style="max-width:64ch;margin:6px 0 22px">Ollama prices are from its cloud list. Claude prices are OpenRouter&rsquo;s list prices. Both as of 18 Oct 2026, and both change.</p>
+
+      <h3 style="margin:0 0 6px">What this does not tell you</h3>
+      <ul class="src">
+        <li><b>Price is not quality.</b> A cheaper model can be weaker on your work.</li>
+        <li><b>&ldquo;Close to Claude&rdquo; is the maker&rsquo;s claim.</b> It compares with an older Claude. I haven&rsquo;t checked it.</li>
+        <li><b>Most of these need a paid plan.</b> When I tried the free Ollama plan, only the cloud Gemma 4 ran. The others asked for the Pro plan or bought credits.</li>
+        <li><b>Cloud means your text goes to servers.</b> Ollama says it hosts the models mostly in the United States, uses partner data centres run by NVIDIA cloud providers, and does not log or train on prompts. That is Ollama&rsquo;s own statement. I keep private or work material on a model that runs on my own computer.</li>
+        <li><b>You may not need Ollama&rsquo;s cloud at all.</b> Kimi K3, DeepSeek V4 Pro and GLM-5.3 are also sold through other services such as OpenRouter.</li>
+      </ul>
+
+      <h3 style="margin:22px 0 6px">A fair test</h3>
+      <div class="prose">
+        <p>Give three of them the same real task you would give Claude and read the answers side by side. Judge on your own work, not on a leaderboard. I&rsquo;ll add my results here when I run it.</p>
+        <p class="about-cta">Wondering how you&rsquo;d set up a backup for your team? <a href="https://www.linkedin.com/in/charlestay" rel="noopener">Message me on LinkedIn</a>.</p>
+      </div>
+
+      <h3 style="margin:22px 0 6px">Sources</h3>
+      <ul class="src">
+        <li><a href="https://ollama.com/search?c=cloud" rel="noopener">Ollama: cloud model list</a></li>
+        <li><a href="https://ollama.com/pricing" rel="noopener">Ollama: pricing, hosting and privacy FAQ</a></li>
+        <li><a href="https://ollama.com/privacy" rel="noopener">Ollama: privacy policy</a></li>
+        <li><a href="https://openrouter.ai/models" rel="noopener">OpenRouter: model list and prices</a> (Claude prices)</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links. Prices are as each source listed them on the date shown.</span>
+    <span><a href="../../">Home</a> &middot; <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> &middot; No analytics, no cookies.</span>
+  </div>
+</footer>
+
+</body>
+</html>
