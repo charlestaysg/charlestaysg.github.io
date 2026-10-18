@@ -232,7 +232,7 @@
     <div class="wrap">
       <div class="sec-head"><h2>made with</h2></div>
       <ul class="credits">
-        <li><strong>Voices:</strong> Fish Audio, AI-generated. The Wiki&rsquo;s voice is one clip played three times, slightly out of step, mixed live in your browser.</li>
+        <li><strong>Voices:</strong> Fish Audio, AI-generated. The Wiki&rsquo;s voice is one clip, pitched down, played three times, slightly out of step, mixed live in your browser.</li>
         <li><strong>Cube:</strong> three.js.</li>
         <li><strong>The notes system idea:</strong> Andrej Karpathy&rsquo;s <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" rel="noopener">LLM Wiki</a>.</li>
         <li><strong>The research:</strong> Sparrow, Liu and Wegner (2011), &ldquo;Google effects on memory&rdquo;, <em>Science</em>; Robert and Elizabeth Bjork on desirable difficulties; Slamecka and Graf (1978) on the generation effect.</li>
@@ -314,15 +314,18 @@
     const lfo = ctx.createOscillator(); lfo.frequency.value = 36;
     const depth = ctx.createGain(); depth.gain.value = 0.28;
     lfo.connect(depth).connect(ring.gain); lfo.start(t0); running.push(lfo);
-    const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 170;
-    const peak = ctx.createBiquadFilter(); peak.type = 'peaking'; peak.frequency.value = 2300; peak.Q.value = 0.9; peak.gain.value = 5;
+    const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 120;
+    const peak = ctx.createBiquadFilter(); peak.type = 'peaking'; peak.frequency.value = 2300; peak.Q.value = 0.9; peak.gain.value = 4;
     const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -22; comp.ratio.value = 4; comp.knee.value = 6; comp.attack.value = 0.003; comp.release.value = 0.25;
+    const makeup = ctx.createGain(); makeup.gain.value = 1.85; // back up to the plain voice's level, plus a little
     const verb = ctx.createConvolver(); verb.buffer = impulse(1.6);
     const wet = ctx.createGain(); wet.gain.value = 0.24;
-    const out = ctx.createGain(); out.gain.value = 0.95;
-    sum.connect(ring).connect(hp).connect(peak).connect(comp);
-    comp.connect(out); comp.connect(verb).connect(wet).connect(out);
-    out.connect(analyser);
+    const limit = ctx.createDynamicsCompressor(); // keeps peaks under 0 dB
+    limit.threshold.value = -2; limit.ratio.value = 20; limit.knee.value = 0; limit.attack.value = 0.001; limit.release.value = 0.1;
+    sum.connect(ring).connect(hp).connect(peak).connect(comp).connect(makeup);
+    makeup.connect(limit); makeup.connect(verb).connect(wet).connect(limit);
+    limit.connect(analyser);
     const voices = [[1, 0, 0, 0.55], [0.992, 0.021, -0.55, 0.36], [1.009, 0.034, 0.55, 0.36]];
     let last = null;
     voices.forEach(([rate, delay, pan, g]) => {
@@ -391,7 +394,7 @@
       const t = ctx.currentTime;
       analyser.getByteTimeDomainData(levelData);
       let sum = 0; for (let i = 0; i < levelData.length; i++) { const v = (levelData[i] - 128) / 128; sum += v * v; }
-      fx.level = Math.min(1, Math.sqrt(sum / levelData.length) * 4);
+      fx.level = Math.min(1, Math.sqrt(sum / levelData.length) * 1.6);
       if (t < tGlitch) {
         const rel = (t - t0) * 0.992;
         let cue = ''; for (const [at, text] of CUES) if (rel >= at) cue = text;
