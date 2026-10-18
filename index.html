@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261016a">
+<link rel="stylesheet" href="styles.css?v=20261018a">
 </head>
 <body>
 
@@ -58,6 +58,7 @@
   <div class="wrap">
     <span class="hn-dot" aria-hidden="true"></span>
     <span class="hn-label">Haze now</span>
+    <span id="hn-pill" class="src-pill is-wait" role="status" title="Fetching the latest readings from NEA (data.gov.sg)…"><span class="src-dot" aria-hidden="true"></span><span class="src-label">Connecting</span></span>
     <span class="hn-text" id="hn-text">Live hourly haze readings for Singapore and Johor Bahru.</span>
     <span class="hn-links"><a href="projects/sg-haze/">Singapore →</a><a href="projects/jb-haze/">Johor Bahru →</a></span>
   </div>
@@ -593,21 +594,38 @@ document.querySelectorAll('[data-switch]').forEach(card => {
 </footer>
 
 <script>
-// "Haze now" strip: worst NEA region from the latest 1-hour PM2.5. Keeps the plain text if anything fails.
+// "Haze now" strip: worst NEA region from the latest 1-hour PM2.5, with a Live / Delayed / Offline badge
+// like the haze pages. Keeps the plain text if anything fails; refreshes every 5 minutes while the tab is open.
 (function () {
-  var el = document.getElementById('haze-now'), txt = document.getElementById('hn-text');
+  var el = document.getElementById('haze-now'), txt = document.getElementById('hn-text'), pill = document.getElementById('hn-pill');
   if (!el || !window.fetch) return;
   var bands = [[55, 'I', 'Normal'], [150, 'II', 'Elevated'], [250, 'III', 'High'], [Infinity, 'IV', 'Very High']];
-  fetch('https://api-open.data.gov.sg/v2/real-time/api/pm25').then(function (r) { return r.json(); }).then(function (j) {
-    var items = j && j.code === 0 && j.data.items; if (!items || !items.length) return;
-    var it = items[items.length - 1], r = it.readings.pm25_one_hourly, worst = null;
-    Object.keys(r).forEach(function (k) { if (worst === null || r[k] > r[worst]) worst = k; });
-    if (worst === null) return;
-    var v = r[worst], b = bands.find(function (x) { return v <= x[0]; });
-    var t = new Intl.DateTimeFormat('en-SG', { timeZone: 'Asia/Singapore', hour: 'numeric', hour12: true }).format(new Date(it.timestamp)).replace(' ', '').toLowerCase();
-    txt.textContent = 'Singapore, 1-hr PM2.5: worst now ' + worst[0].toUpperCase() + worst.slice(1) + ' ' + v + ' \u00b5g/m\u00b3 \u00b7 Band ' + b[1] + ' ' + b[2] + ' \u00b7 NEA ' + t;
-    el.dataset.band = b[1];
-  }).catch(function () {});
+  var STALE_MS = 90 * 60000, ok = false;
+  function setPill(cls, label, title) {
+    if (!pill) return;
+    pill.className = 'src-pill ' + cls; pill.title = title;
+    pill.querySelector('.src-label').textContent = label;
+  }
+  function load(retry) {
+    fetch('https://api-open.data.gov.sg/v2/real-time/api/pm25').then(function (r) { return r.json(); }).then(function (j) {
+      var items = j && j.code === 0 && j.data.items; if (!items || !items.length) throw new Error('no data');
+      var it = items[items.length - 1], r = it.readings.pm25_one_hourly, worst = null;
+      Object.keys(r).forEach(function (k) { if (worst === null || r[k] > r[worst]) worst = k; });
+      if (worst === null) throw new Error('no data');
+      var v = r[worst], b = bands.find(function (x) { return v <= x[0]; });
+      var t = new Intl.DateTimeFormat('en-SG', { timeZone: 'Asia/Singapore', hour: 'numeric', hour12: true }).format(new Date(it.timestamp)).replace(' ', '').toLowerCase();
+      txt.textContent = 'Singapore, 1-hr PM2.5: worst now ' + worst[0].toUpperCase() + worst.slice(1) + ' ' + v + ' \u00b5g/m\u00b3 \u00b7 Band ' + b[1] + ' ' + b[2] + ' \u00b7 NEA ' + t;
+      el.dataset.band = b[1]; ok = true;
+      if (Date.now() - new Date(it.timestamp).getTime() > STALE_MS) setPill('is-late', 'Delayed', 'Connected to NEA (data.gov.sg), but NEA has not published a new reading for over 90 minutes.');
+      else setPill('is-live', 'Live', 'Connected to NEA (data.gov.sg). Refreshes every 5 minutes.');
+    }).catch(function () {
+      // data.gov.sg's rate-limit reply looks like a network error in the browser: try once more after 10 s
+      if (retry) { setTimeout(function () { load(false); }, 10000); return; }
+      setPill('is-off', 'Offline', ok ? 'The last refresh could not reach NEA (data.gov.sg). Showing the last reading received.' : 'Could not reach NEA (data.gov.sg) right now.');
+    });
+  }
+  load(true);
+  setInterval(function () { if (!document.hidden) load(true); }, 5 * 60000);
 })();
 </script>
 <script>
