@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning on the Job · Charles Tay</title>
+<meta name="description" content="How a new hire goes from watching to working alone, in six stages. Step through a kitchen, a service counter or a factory floor and watch the work move from coach to learner.">
+<link rel="canonical" href="https://charlestaysg.com/projects/learning-on-the-job/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning on the Job · Charles Tay">
+<meta property="og:description" content="Six stages from watching to working alone. Pick a workplace and step through them.">
+<meta property="og:url" content="https://charlestaysg.com/projects/learning-on-the-job/">
+<meta property="og:image" content="https://charlestaysg.com/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+
+  .lab { background: var(--panel); border: 1px solid var(--line); padding: 20px; display: flex; flex-direction: column; gap: 18px; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+  .row label { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .row select { flex: 1 1 260px; font: 500 16px/1.3 var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--line); padding: 10px 12px; }
+  .row select:focus { border-color: var(--green); outline: none; }
+
+  .stages { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+  .stages button { font: 500 14px/1.2 var(--font-body); padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); color: var(--muted); cursor: pointer; }
+  .stages button:hover { border-color: var(--green); color: var(--ink); }
+  .stages button[aria-current="step"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .stages .n { font-family: var(--font-mono); font-size: 11.5px; margin-right: 6px; }
+
+  .who { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .bar { display: flex; height: 40px; border: 1px solid var(--line); background: var(--bg); overflow: hidden; }
+  .bar span { display: flex; align-items: center; font: 500 14px/1 var(--font-mono); color: var(--bg); white-space: nowrap; overflow: hidden; transition: flex-basis .5s ease; }
+  .bar .c { background: var(--ink); padding-left: 12px; }
+  .bar .l { background: var(--green); justify-content: flex-end; padding-right: 12px; }
+  .figs { display: block; margin-top: 10px; max-width: 100%; }
+  .fig { transition: transform .5s ease; }
+  .fig.c circle, .fig.c rect { fill: var(--ink); }
+  .fig.l circle, .fig.l rect { fill: var(--green); }
+  .fig text { fill: var(--muted); font: 500 13px var(--font-mono); text-anchor: middle; }
+  @media (prefers-reduced-motion: reduce) { .bar span, .fig { transition: none; } }
+
+  .boxes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .boxes div { border: 1px solid var(--line); border-top: 3px solid var(--green); padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; background: var(--bg); }
+  .boxes .k { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--green); }
+  .boxes p { font-size: 16px; line-height: 1.5; margin: 0; }
+  .say { margin: 0; padding-left: 14px; border-left: 3px solid var(--line); font-size: 19px; line-height: 1.45; font-style: italic; color: var(--muted); }
+
+  .nav { display: flex; gap: 10px; align-items: center; }
+  .nav button { font: 500 14px/1 var(--font-mono); color: var(--ink); background: none; border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; cursor: pointer; }
+  .nav button:hover { border-color: var(--green); color: var(--green); }
+  .nav .pos { margin-left: auto; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+
+  .tips { width: 100%; border-collapse: collapse; font-size: 16px; }
+  .tips th, .tips td { text-align: left; vertical-align: top; padding: 12px 10px 12px 0; border-bottom: 1px solid var(--line); line-height: 1.45; }
+  .tips th { font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .tips td:first-child { font-weight: 700; white-space: nowrap; }
+
+  @media (max-width: 640px) {
+    .boxes { grid-template-columns: 1fr; }
+    .tips thead { display: none; }
+    .tips tr { display: block; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .tips td { display: block; border: 0; padding: 2px 0; white-space: normal !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#work">← Charles Tay</a>
+    <span class="label">Explainer · <time datetime="2026-10-19">19 Oct 2026</time></span>
+    <h1>Learning on the job</h1>
+    <p class="dek">Most of what people know about their work, they picked up at work. Here is how a new hire goes from watching to working alone, in six stages. Pick a workplace and step through it.</p>
+  </div>
+</header>
+
+<main>
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <ul class="short">
+        <li>An expert&rsquo;s skill is mostly invisible. They make dozens of small calls without saying why, so a new hire copies the moves and misses the reasons.</li>
+        <li>Cognitive apprenticeship is a way to make that thinking visible, then hand the work over step by step.</li>
+        <li>At the start the coach carries most of the work. By the end the learner carries almost all of it. The handover is the whole point.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="try">
+    <div class="wrap">
+      <div class="sec-head"><h2>step through it</h2></div>
+      <div class="lab">
+        <div class="row">
+          <label for="scn">Workplace</label>
+          <select id="scn">
+            <option value="0">Kitchen: plating a signature dish</option>
+            <option value="1">Service counter: handling a refund complaint</option>
+            <option value="2">Factory floor: setting up a CNC machine</option>
+            <option value="3">Bike shop: folding and unfolding a Brompton</option>
+          </select>
+        </div>
+
+        <ol class="stages" id="stages" aria-label="Stages"></ol>
+
+        <div>
+          <div class="who"><span>Coach carries</span><span>Learner carries</span></div>
+          <div class="bar" role="img" id="bar" aria-label="">
+            <span class="c" id="barC"></span><span class="l" id="barL"></span>
+          </div>
+          <svg class="figs" viewBox="0 0 680 92" width="100%" aria-hidden="true">
+            <g id="figC" class="fig c"><circle cx="0" cy="18" r="11"/><rect x="-14" y="33" width="28" height="32" rx="9"/><text x="0" y="86">Coach</text></g>
+            <g id="figL" class="fig l"><circle cx="0" cy="18" r="11"/><rect x="-14" y="33" width="28" height="32" rx="9"/><text x="0" y="86">Learner</text></g>
+          </svg>
+        </div>
+
+        <div class="boxes" aria-live="polite">
+          <div><span class="k">What the coach does</span><p id="coach"></p></div>
+          <div><span class="k">On the job</span><p id="ex"></p></div>
+          <div><span class="k">Move on when</span><p id="next-when"></p></div>
+        </div>
+
+        <p class="say" id="say"></p>
+
+        <div class="nav">
+          <button type="button" id="prev">← Back</button>
+          <button type="button" id="next">Next →</button>
+          <span class="pos" id="pos"></span>
+        </div>
+      </div>
+      <p style="max-width:64ch;margin-top:14px;color:var(--muted);font-size:15px">The coach/learner split shows the direction of the handover. It is not a measured figure.</p>
+    </div>
+  </section>
+
+  <section id="use">
+    <div class="wrap">
+      <div class="sec-head"><h2>if you train people at work</h2></div>
+      <table class="tips">
+        <thead><tr><th>Tip</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Think out loud</td><td>The new hire can see your hands, not your head. Say what you check and why, even when it feels obvious.</td></tr>
+          <tr><td>Take supports away on purpose</td><td>A checklist that never goes away becomes the job. Set a date to drop it.</td></tr>
+          <tr><td>Ask why, not only what</td><td>If they can explain their choice, they can handle the next case that looks a bit different.</td></tr>
+          <tr><td>Skip what they already know</td><td>Someone with experience doesn&rsquo;t need to watch you from the start. Ask them to do the task first, then decide where to begin.</td></tr>
+          <tr><td>End with something new</td><td>Working alone on the case you showed them is not the finish line. Handling one you never showed them is.</td></tr>
+        </tbody>
+      </table>
+      <p class="credit" style="max-width:64ch;margin-top:24px;color:var(--muted);font-size:15px">Based on the six methods in Collins, Brown and Newman, <em>Cognitive Apprenticeship: Teaching the Craft of Reading, Writing, and Mathematics</em> (1987). The workplace examples are made up for illustration. Built with Claude Code.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var st = [
+    { n: 'Modelling', c: 85, d: 'Does the task in front of the learner and says their thinking out loud.', w: 'The learner can name the steps in order.' },
+    { n: 'Coaching', c: 70, d: 'Watches the learner try and gives hints and feedback in the moment.', w: 'Your hints are about details, not about which step comes next.' },
+    { n: 'Scaffolding', c: 50, d: 'Gives supports such as checklists or part of the task, then removes them one by one.', w: 'They finish without the support twice in a row.' },
+    { n: 'Articulation', c: 35, d: 'Asks the learner to explain why they did it that way.', w: 'Their reasons match yours, in their own words.' },
+    { n: 'Reflection', c: 20, d: 'Has the learner compare their work with the expert standard.', w: 'They spot their own gaps before you point them out.' },
+    { n: 'Exploration', c: 5, d: 'Steps back. The learner takes on new variations alone.', w: 'They handle a case you never showed them, and could show the next person.' }
+  ];
+  var ex = [
+    [['Chef plates the dish slowly: "I wipe the rim first because guests notice smudges."', 'Watch where my eyes go before I touch the plate.'],
+     ['New cook plates; chef nudges: "Sauce first, then protein."', 'Good. Now tilt the spoon, not the plate.'],
+     ['Cook uses a photo card of the finished plate. Next week, no card.', 'Try it without the photo today. I’ll check at the pass.'],
+     ['Cook explains why garnish goes last during the dinner rush.', 'Tell me why you changed the order.'],
+     ['Cook puts their plate next to the chef’s and spots the gaps.', 'What’s different between yours and mine?'],
+     ['Cook adapts plating for a new seasonal dish on their own.', 'Your call on the new menu item. Show me when ready.']],
+    [['Supervisor handles a live complaint while the new staff listens.', 'I let them finish before I say anything. Then I repeat it back.'],
+     ['New staff takes the next complaint; supervisor stands nearby.', 'Pause there. Acknowledge first, then the policy.'],
+     ['Staff follows a four-step script card; later only the first line.', 'Use the card for today. Tomorrow, just the opening line.'],
+     ['Staff explains why they offered an exchange, not a refund.', 'Walk me through your decision.'],
+     ['Staff replays the call against the service standard.', 'Which step did the customer react to most?'],
+     ['Staff handles an unusual case with no script.', 'This one’s not in the guide. What would you do?']],
+    [['Technician sets up the machine, naming each check aloud.', 'I zero the tool here because a small drift scraps the whole batch.'],
+     ['Trainee sets up; technician watches and corrects.', 'Check the clamp torque before you run it.'],
+     ['Trainee uses a step-by-step setup sheet, then a short checklist.', 'Setup sheet today. Checklist only from Thursday.'],
+     ['Trainee explains why the first-piece check matters.', 'If you skip it, what goes wrong?'],
+     ['Trainee measures their first piece against the drawing.', 'Where are you off, and why?'],
+     ['Trainee sets up a new part number on their own.', 'New job came in. Set it up and call me for sign-off.']],
+    [['Senior sales folds a Brompton slowly at the counter, naming each move: rear wheel, front wheel, handlebar, seat. Then unfolds it the same way.', 'I check every clamp is tight before a customer rides off. That’s the one step I never skip.'],
+     ['Junior folds the demo bike; senior stands beside and corrects.', 'Lift from the saddle, not the handlebar. Now swing the front wheel round until it hooks.'],
+     ['Junior follows a four-step fold card taped behind the counter. The card comes down next week.', 'Use the card today. From Monday you do it without.'],
+     ['Junior explains why the clamps get a final check after unfolding.', 'Tell me what happens if that hinge clamp is loose.'],
+     ['Junior watches a phone video of their own fold next to the senior’s and spots where they fumbled.', 'Where did you stop to think?'],
+     ['Junior shows a walk-in customer how to fold and unfold, and works out a model with different handlebars.', 'Customer wants to see it fold. Your turn. I’ll just watch.']]
+  ];
+  var i = 0, $ = function (id) { return document.getElementById(id); };
+  var list = $('stages');
+  st.forEach(function (s, k) {
+    var li = document.createElement('li'), b = document.createElement('button');
+    b.type = 'button'; b.innerHTML = '<span class="n">' + (k + 1) + '</span>' + s.n;
+    b.addEventListener('click', function () { i = k; draw(); });
+    li.appendChild(b); list.appendChild(li);
+  });
+  function draw() {
+    var s = st[i], e = ex[+$('scn').value][i];
+    $('barC').style.flexBasis = s.c + '%';
+    $('barL').style.flexBasis = (100 - s.c) + '%';
+    $('barC').textContent = s.c >= 12 ? s.c + '%' : '';
+    $('barL').textContent = (100 - s.c) + '%';
+    var gap = 60 + (1 - s.c / 100) * 380;
+    $('figC').style.transform = 'translate(' + (340 - gap / 2) + 'px, 0)';
+    $('figL').style.transform = 'translate(' + (340 + gap / 2) + 'px, 0)';
+    $('bar').setAttribute('aria-label', 'Coach carries about ' + s.c + ' percent, learner ' + (100 - s.c) + ' percent');
+    $('coach').textContent = s.d;
+    $('ex').textContent = e[0];
+    $('next-when').textContent = s.w;
+    $('say').textContent = '“' + e[1] + '”';
+    list.querySelectorAll('button').forEach(function (b, k) {
+      if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+    });
+    $('prev').style.visibility = i === 0 ? 'hidden' : 'visible';
+    $('next').textContent = i === st.length - 1 ? 'Start over ↺' : 'Next →';
+    $('pos').textContent = (i + 1) + ' of ' + st.length;
+  }
+  $('next').addEventListener('click', function () { i = i === st.length - 1 ? 0 : i + 1; draw(); });
+  $('prev').addEventListener('click', function () { if (i > 0) { i--; draw(); } });
+  $('scn').addEventListener('change', draw);
+  draw();
+})();
+</script>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No analytics, no cookies.</span>
+  </div>
+</footer>
+
+</body>
+</html>
