@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Show What You Can Do · Charles Tay</title>
+<meta name="description" content="Singapore employers are being asked to look at what people can do, not only the papers they hold. A short guide for SME owners, mid-career workers and fresh graduates on making skills easy to see and check.">
+<link rel="canonical" href="https://charlestaysg.com/notes/show-what-you-can-do/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Show What You Can Do · Charles Tay">
+<meta property="og:description" content="Making skills easy to see and check: one page, three doors, for SME owners, mid-career workers and fresh graduates.">
+<meta property="og:url" content="https://charlestaysg.com/notes/show-what-you-can-do/">
+<meta property="og:image" content="https://charlestaysg.com/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+
+  /* claim / proof / witness */
+  .cpw { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .cpw div { background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--green); padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .cpw .n { font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--green); }
+  .cpw h3 { margin: 0; font-size: 21px; font-weight: 700; line-height: 1.25; }
+  .cpw p { color: var(--muted); font-size: 16px; line-height: 1.5; }
+
+  /* doors */
+  .doors { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 32px; }
+  .door { font: 700 16px/1.2 var(--font-body); padding: 12px 18px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--ink); cursor: pointer; }
+  .door:hover { border-color: var(--green); }
+  .door[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .panel[hidden] { display: none; }
+  .panel > p.lead { max-width: 64ch; margin-bottom: 24px; font-size: 18px; }
+  .eg { margin-top: 10px; padding: 12px 14px; background: var(--panel); border: 1px solid var(--line); font-size: 15px; line-height: 1.5; }
+  .eg b { font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin-right: 6px; }
+  .eg .no { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+
+  /* printable sheets */
+  .sheet { margin-top: 36px; padding: 20px; background: var(--panel); border: 1px solid var(--line); }
+  .sheet-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; margin-bottom: 14px; }
+  .sheet h3 { margin: 0; font-size: 21px; font-weight: 700; }
+  .sheet-wrap { overflow-x: auto; }
+  .sheet table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 14px; }
+  .sheet th { text-align: left; font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--ink); padding: 6px 8px; }
+  .sheet td { border-bottom: 1px solid var(--line); padding: 6px 8px; height: 40px; vertical-align: top; }
+  .sheet td.ex { color: var(--muted); font-style: italic; }
+  .btn { font: 500 13px/1 var(--font-mono); color: var(--green); background: none; border: 1px solid var(--line); border-radius: 6px; padding: 7px 12px; cursor: pointer; }
+  .btn:hover { border-color: var(--green); }
+
+  /* card builder */
+  .builder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+  .builder form { display: flex; flex-direction: column; gap: 14px; }
+  .builder label { display: flex; flex-direction: column; gap: 6px; font-weight: 700; font-size: 16px; }
+  .builder label span { font-weight: 400; color: var(--muted); font-size: 14px; }
+  .builder input, .builder textarea { font: 400 16px/1.4 var(--font-body); color: var(--ink); background: var(--panel); border: 1px solid var(--line); padding: 10px 12px; width: 100%; }
+  .builder input:focus, .builder textarea:focus { border-color: var(--green); outline: none; }
+  .builder textarea { min-height: 76px; resize: vertical; }
+  .out { background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--green); padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .out .label { display: block; margin-bottom: 4px; }
+  .out p { font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }
+  .out .empty { color: var(--muted); }
+  .copy-msg { font-family: var(--font-mono); font-size: 13px; color: var(--muted); min-height: 1.2em; }
+
+  .where { width: 100%; border-collapse: collapse; font-size: 16px; }
+  .where th, .where td { text-align: left; vertical-align: top; padding: 12px 10px 12px 0; border-bottom: 1px solid var(--line); line-height: 1.45; }
+  .where th { font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .where td:first-child { font-weight: 700; white-space: nowrap; }
+  .where td:last-child { color: var(--muted); }
+
+  @media (max-width: 640px) {
+    .cpw, .builder { grid-template-columns: 1fr; }
+    .where thead { display: none; }
+    .where tr { display: block; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .where td { display: block; border: 0; padding: 2px 0; white-space: normal !important; }
+    .door { flex: 1 1 100%; text-align: left; }
+  }
+
+  @media print {
+    body { background: #fff; color: #000; padding: 0; }
+    header.page-head, footer, main > section, .doors, .panel > *:not(.sheet), .sheet .btn { display: none !important; }
+    main > section#doors { display: block !important; padding: 0; border: 0; }
+    #doors .wrap > *:not(.panel) { display: none !important; }
+    .panel[hidden] { display: none !important; }
+    .sheet { border: 0; padding: 0; margin: 0; background: #fff; }
+    .sheet table { min-width: 0; font-size: 12px; }
+    .sheet td { height: 34px; border-bottom: 1px solid #999; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#work">← Charles Tay</a>
+    <span class="label">Guide · <time datetime="2026-10-19">19 Oct 2026</time></span>
+    <h1>Show what you can do</h1>
+    <p class="dek">Singapore employers are being asked to look at what people can do, not only the papers they hold. Here is how to make skills easy to see and check, whether you hire, switch jobs or are just starting.</p>
+  </div>
+</header>
+
+<main>
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <ul class="short">
+        <li>In October 2026 the heads of the Singapore Business Federation, SNEF, NTUC and SUSS, with the chief executive of the Skills and Workforce Development Agency (SWDA), put out a paper on <strong>Skills-First</strong>: looking at what a person can do when you hire, design jobs, move people around, train them and promote them.</li>
+        <li>Qualifications still count. They stop being the only thing that counts.</li>
+        <li>It is a discussion paper with pilot ideas, not a rule or a grant. Nobody has to do it yet.</li>
+        <li>Most of the change has to come from employers. But a skill nobody can see doesn&rsquo;t get used, so it pays to make yours easy to check.</li>
+      </ul>
+      <p style="max-width:64ch;margin-top:20px;color:var(--muted)">Jump to your part: <a href="#sme">I run a small business</a> · <a href="#mid">I&rsquo;m mid-career</a> · <a href="#grad">I&rsquo;ve just graduated</a></p>
+    </div>
+  </section>
+
+  <section id="idea">
+    <div class="wrap">
+      <div class="sec-head"><h2>three things per skill</h2></div>
+      <p style="max-width:64ch;margin-bottom:24px">The paper asks people to describe their experience as skills, keep a record of evidence, and get recommendations from people who saw the work. That comes down to three things for every skill you want noticed.</p>
+      <div class="cpw">
+        <div><span class="n">1 · claim</span><h3>Say the skill in the employer&rsquo;s words</h3><p>Use the names in your sector&rsquo;s Skills Framework, the national list other employers and the Careers &amp; Skills Passport use. &ldquo;Data analysis and visualisation&rdquo;, not &ldquo;Excel guru&rdquo;.</p></div>
+        <div><span class="n">2 · proof</span><h3>Show something that happened</h3><p>A work sample, a before-and-after number, an assessment, a test result. Something a stranger can look at.</p></div>
+        <div><span class="n">3 · witness</span><h3>Name someone who saw it</h3><p>A supervisor, client or lecturer who can say &ldquo;I saw them do this task&rdquo;, and names the task.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="doors">
+    <div class="wrap">
+      <div class="sec-head"><h2>pick your door</h2></div>
+      <div class="doors" role="tablist" aria-label="Who are you?">
+        <button type="button" class="door" role="tab" id="tab-sme" aria-controls="sme" aria-selected="true">I run a small business</button>
+        <button type="button" class="door" role="tab" id="tab-mid" aria-controls="mid" aria-selected="false">I&rsquo;m mid-career</button>
+        <button type="button" class="door" role="tab" id="tab-grad" aria-controls="grad" aria-selected="false">I&rsquo;ve just graduated</button>
+      </div>
+
+      <!-- SME owner -->
+      <div class="panel" id="sme" role="tabpanel" aria-labelledby="tab-sme">
+        <p class="lead">Four of the five decisions happen inside your company: designing jobs, moving people, training them, promoting them. LinkedIn doesn&rsquo;t help with any of those. What helps is a written record of what each person has been seen doing.</p>
+        <ul class="tools">
+          <li><span class="job">1 · write the job as tasks</span><div><h3>Rewrite one job ad</h3><p>List the five tasks the person will do in the first three months, with the standard you expect. Keep the qualification line if you want; just stop letting it decide on its own.</p>
+            <p class="eg"><b>was</b><span class="no">Hardworking, diploma preferred, good communication.</span><br><b>now</b>Pick and pack 150 orders a day with fewer than two wrong items a week. Call back customers about late orders the same day.</p></div></li>
+          <li><span class="job">2 · test the task</span><div><h3>A 30-minute work sample at interview</h3><p>Give every candidate a small, made-up version of the real task. Score everyone on the same three or four points, written down before the first interview, so the result doesn&rsquo;t depend on who happens to be interviewing.</p></div></li>
+          <li><span class="job">3 · sign off what staff can do</span><div><h3>One sheet per person</h3><p>Task, date seen, who saw it, standard met. Fill it in when a supervisor watches someone do the task properly. Look at it before you move anyone, send them on a course or promote them. The sheet is below; print it.</p></div></li>
+          <li><span class="job">4 · borrow the official words</span><div><h3>Use the Skills Framework for your sector</h3><p>Write tasks in your own words first. Then add the matching skill name from the <a href="https://www.skillsfuture.gov.sg/skills-framework" rel="noopener">Skills Framework ↗</a>, so a record means the same thing to the next employer or a training provider. My <a href="../../projects/skills-landscape/">Skills Training Landscape</a> page shows the courses listed against the roles still open in each sector.</p></div></li>
+          <li><span class="job">why bother</span><div><h3>Someone you have seen do the job is a safer bet</h3><p>Hiring a stranger with the right certificate costs money and carries risk. One estimate in the series puts an SME&rsquo;s cost of screening a hire at about 14% of a year&rsquo;s salary. A person you have already watched doing the task is cheaper to move or promote, and less likely to surprise you.</p></div></li>
+        </ul>
+        <div class="sheet" id="sheet-sme">
+          <div class="sheet-head"><h3>Task sign-off sheet</h3><button type="button" class="btn" data-print>Print this sheet</button></div>
+          <p class="credit" style="margin-bottom:12px">Name: ____________________ &nbsp; Role: ____________________</p>
+          <div class="sheet-wrap"><table>
+            <thead><tr><th>Task (with the standard)</th><th>Seen on</th><th>Seen by</th><th>Standard met?</th><th>Next step</th></tr></thead>
+            <tbody>
+              <tr><td class="ex">Pack 150 orders a day, &lt;2 wrong items a week</td><td class="ex">3 Nov</td><td class="ex">Supervisor</td><td class="ex">Yes, 3 weeks running</td><td class="ex">Train on returns</td></tr>
+              <tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- Mid-career -->
+      <div class="panel" id="mid" role="tabpanel" aria-labelledby="tab-mid" hidden>
+        <p class="lead">You have years of skill, but your CV probably describes it as job titles, and your best work belongs to your employer. The job is translation: titles into tasks, tasks into words employers search for.</p>
+        <ul class="tools">
+          <li><span class="job">1 · titles into tasks</span><div><h3>Three to five tasks per job, each with a result</h3><p>A job title says where you sat. A task with a result says what you can do.</p>
+            <p class="eg"><b>was</b><span class="no">Senior Executive, Operations, 2016&ndash;2025.</span><br><b>now</b>Cut the weekly stock count from six hours to two by redoing the bin layout and labels.</p></div></li>
+          <li><span class="job">2 · borrow the official words</span><div><h3>Match your tasks to the Skills Framework</h3><p>Find your sector in the <a href="https://www.skillsfuture.gov.sg/skills-framework" rel="noopener">Skills Framework ↗</a> and put its skill name next to each task. Recruiters&rsquo; systems and the Careers &amp; Skills Passport use those names. Switching sectors? Check which skills appear in both.</p></div></li>
+          <li><span class="job">3 · prove it quietly</span><div><h3>Write up confidential work without names</h3><p>Half a page per piece of work: the problem, what you did, what changed. Leave out client names, prices and anything that identifies the company. That is enough for an interviewer to ask good questions.</p></div></li>
+          <li><span class="job">4 · line up witnesses</span><div><h3>Ask for recommendations before you leave</h3><p>Ask a supervisor or client to name the task they saw you do, while they still remember it. The paper notes that automated CV screening drops good candidates. A direct recommendation goes around it.</p></div></li>
+          <li><span class="job">5 · once a year</span><div><h3>A skills stock-take</h3><p>List what you added this year and what has gone stale. One paper in the series describes a reliable worker passed over because they hadn&rsquo;t added new skills. It also cites a Singapore study where only a quarter of workers made planned job moves that paid off.</p></div></li>
+        </ul>
+        <div class="sheet" id="sheet-mid">
+          <div class="sheet-head"><h3>Role-to-tasks worksheet</h3><button type="button" class="btn" data-print>Print this sheet</button></div>
+          <div class="sheet-wrap"><table>
+            <thead><tr><th>Role and years</th><th>Task</th><th>Result</th><th>Skill name (Skills Framework)</th><th>Proof</th><th>Witness</th></tr></thead>
+            <tbody>
+              <tr><td class="ex">Ops exec, 2016&ndash;25</td><td class="ex">Redid bin layout</td><td class="ex">Count 6h → 2h</td><td class="ex">Inventory control</td><td class="ex">Write-up, before/after photos</td><td class="ex">Ex-manager</td></tr>
+              <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <!-- Fresh grad -->
+      <div class="panel" id="grad" role="tabpanel" aria-labelledby="tab-grad" hidden>
+        <p class="lead">You don&rsquo;t have years of work to point to, so your proof comes from what you did while studying. Most graduates have more of it than they think. It just isn&rsquo;t written down.</p>
+        <ul class="tools">
+          <li><span class="job">1 · every project is a sample</span><div><h3>Half a page for each one</h3><p>Internship, work-study, final-year project, a CCA you ran. Write the brief, what you did yourself, the result, and what you would do differently next time.</p>
+            <p class="eg"><b>was</b><span class="no">Completed a 6-month internship at a logistics company.</span><br><b>now</b>Built the weekly late-delivery report in Excel; the team used it to cut late orders from 9% to 5% over my last two months.</p></div></li>
+          <li><span class="job">2 · ask your school</span><div><h3>Does it issue a skills record?</h3><p>Some schools now issue a skills-based or co-curricular transcript alongside grades. SMU has had one since 2025. If yours does, attach it. If it doesn&rsquo;t, your half-page write-ups do the same job.</p></div></li>
+          <li><span class="job">3 · one witness per project</span><div><h3>Someone who saw you do it</h3><p>An internship supervisor or lecturer who will let you name them. Ask them now, while they remember the work.</p></div></li>
+          <li><span class="job">4 · make one thing in public</span><div><h3>Small and finished beats big and unfinished</h3><p>GitHub for code or data, a portfolio page for design, a two-minute video for hands-on work. One finished piece in your field gives an interviewer something real to ask about.</p></div></li>
+          <li><span class="job">5 · check the words</span><div><h3>Use the words the job ads use</h3><p>Read ten job ads for the role you want and look up the role in the <a href="https://www.skillsfuture.gov.sg/skills-framework" rel="noopener">Skills Framework ↗</a>. Use the same skill names on your CV and LinkedIn.</p></div></li>
+        </ul>
+        <div class="sheet" id="sheet-grad">
+          <div class="sheet-head"><h3>Work-sample write-up</h3><button type="button" class="btn" data-print>Print this sheet</button></div>
+          <div class="sheet-wrap"><table>
+            <thead><tr><th style="width:28%">Heading</th><th>Your notes (half a page in total)</th></tr></thead>
+            <tbody>
+              <tr><td>Project and dates</td><td></td></tr>
+              <tr><td>The brief: what was asked</td><td></td></tr>
+              <tr><td>What I did myself</td><td></td></tr>
+              <tr><td>Result, with a number if there is one</td><td></td></tr>
+              <tr><td>Skill name (Skills Framework)</td><td></td></tr>
+              <tr><td>What I would do differently</td><td></td></tr>
+              <tr><td>Witness (name, role, OK to contact?)</td><td></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="builder">
+    <div class="wrap">
+      <div class="sec-head"><h2>build one skill line</h2></div>
+      <p style="max-width:64ch;margin-bottom:24px">Type one skill and get two lines back: one for your CV, one for LinkedIn. Nothing you type leaves this page or gets saved.</p>
+      <div class="builder">
+        <form id="cpw-form" autocomplete="off" onsubmit="return false">
+          <label>Skill <span>Use the Skills Framework name if you can</span><input id="f-skill" maxlength="80" placeholder="Inventory control"></label>
+          <label>What you did, and what changed <span>One task, one result</span><textarea id="f-did" maxlength="240" placeholder="Redid the bin layout and labels; the weekly stock count went from six hours to two"></textarea></label>
+          <label>Proof <span>A link or where it can be seen (optional)</span><input id="f-proof" maxlength="120" placeholder="Write-up with before-and-after photos"></label>
+          <label>Witness <span>A role is enough here; add the name when you send it</span><input id="f-who" maxlength="80" placeholder="My operations manager at the time"></label>
+        </form>
+        <div class="out" aria-live="polite">
+          <div><span class="label">For your CV</span><p id="o-cv" class="empty">Your line appears here as you type.</p></div>
+          <div><span class="label">For LinkedIn</span><p id="o-li" class="empty">&nbsp;</p></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><button type="button" class="btn" id="copy-cv">Copy CV line</button><button type="button" class="btn" id="copy-li">Copy LinkedIn line</button><span class="copy-msg" id="copy-msg"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="where">
+    <div class="wrap">
+      <div class="sec-head"><h2>where to put it</h2></div>
+      <p style="max-width:64ch;margin-bottom:20px">No single place covers everything. Pick the ones that fit your work.</p>
+      <table class="where">
+        <thead><tr><th>Place</th><th>Good for</th><th>Watch out</th></tr></thead>
+        <tbody>
+          <tr><td>Careers &amp; Skills Passport</td><td>The national record, kept in MySkillsFuture. Records can now be shared straight to <a href="https://www.mycareersfuture.gov.sg/" rel="noopener">MyCareersFuture ↗</a>.</td><td>Mostly holds course certificates so far. Keep it up to date anyway.</td></tr>
+          <tr><td>LinkedIn</td><td>Where recruiters search. The Featured section takes work samples; recommendations can name a task.</td><td>Anyone can list any skill, so the samples and recommendations carry the weight.</td></tr>
+          <tr><td>GitHub</td><td>Code, data or documents built in public. Every change is dated, so others can check.</td><td>Little use for hands-on, care or people work.</td></tr>
+          <tr><td>Portfolio page or YouTube</td><td>Visual or hands-on work: before-and-after photos, short &ldquo;how I did it&rdquo; videos.</td><td>Ask before showing anything from an employer or client.</td></tr>
+          <tr><td>Inside the company</td><td>Sign-off sheets, assessment records, project write-ups. This is what moves and promotions are decided on.</td><td>Ask for a copy before you leave.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="limits">
+    <div class="wrap">
+      <div class="sec-head"><h2>what this won&rsquo;t fix</h2></div>
+      <div class="prose">
+        <p>Making skills visible only helps if employers look. The first paper in the series cites a US finding: for every 100 jobs that dropped a degree requirement, fewer than four more people without degrees were hired. Changing the job ad wasn&rsquo;t enough on its own.</p>
+        <p>So the SME door matters most. A worker can build a perfect record, but a company that writes jobs as tasks and signs off what staff can do is the part that changes who gets hired and promoted.</p>
+        <p>This site is my own attempt at the worker&rsquo;s side. Each live page says when its data was last checked, and the code is public on <a href="https://github.com/charlestaysg" rel="noopener">GitHub ↗</a>, so you can check rather than take my word for it.</p>
+      </div>
+      <p class="credit" style="margin-top:28px;max-width:64ch">Based on <a href="https://www.ial.edu.sg/resources/publications/skills-first-publications/skills-first-papers/paper-6-skills-first-framework-for-action/" rel="noopener">Skills-First: Framework for Action</a> (Working Paper 6, October 2026) and <a href="https://www.ial.edu.sg/resources/publications/skills-first-publications/skills-first-papers/paper-1-skills-first-are-we-there-yet/" rel="noopener">earlier papers in the series</a> from the Centre for Skills-First Practices at the Institute for Adult Learning, read on 19 Oct 2026. The worked examples are made up. The steps are my reading of the papers, not their wording. Not affiliated with or endorsed by IAL, SUSS, SkillsFuture or any of the paper&rsquo;s partners.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.door'));
+  function show(id, focus) {
+    tabs.forEach(function (t) {
+      var on = t.getAttribute('aria-controls') === id;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      if (on && focus) t.focus();
+    });
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { show(t.getAttribute('aria-controls')); history.replaceState(null, '', '#' + t.getAttribute('aria-controls')); });
+    t.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (d) { var n = tabs[(i + d + tabs.length) % tabs.length]; show(n.getAttribute('aria-controls'), true); }
+    });
+  });
+  function fromHash() {
+    var h = location.hash.slice(1);
+    if (['sme', 'mid', 'grad'].indexOf(h) > -1) {
+      show(h);
+      document.getElementById('doors').scrollIntoView();
+    }
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+  // fonts load after the first scroll and push the doors down, so land again once everything has loaded
+  window.addEventListener('load', function () { setTimeout(fromHash, 0); });
+
+  document.querySelectorAll('[data-print]').forEach(function (b) {
+    b.addEventListener('click', function () { window.print(); });
+  });
+
+  var f = { skill: 'f-skill', did: 'f-did', proof: 'f-proof', who: 'f-who' };
+  function v(k) { return document.getElementById(f[k]).value.trim().replace(/\s+/g, ' ').replace(/[.;,\s]+$/, ''); }
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  function render() {
+    var s = v('skill'), d = v('did'), p = v('proof'), w = v('who');
+    var cv = document.getElementById('o-cv'), li = document.getElementById('o-li');
+    if (!s && !d) { cv.textContent = 'Your line appears here as you type.'; cv.className = 'empty'; li.innerHTML = '&nbsp;'; return; }
+    var a = (s ? cap(s) + ': ' : '') + (d ? cap(d) + '.' : '');
+    if (p) a += ' Evidence: ' + p + '.';
+    if (w) a += ' Reference: ' + w + '.';
+    var b = (d ? cap(d) + '.' : '') + (w ? ' ' + cap(w) + ' saw this first-hand.' : '') + (p ? ' (' + p + ')' : '') + (s ? ' Skill: ' + s + '.' : '');
+    cv.textContent = a.trim(); cv.className = '';
+    li.textContent = b.trim();
+  }
+  Object.keys(f).forEach(function (k) { document.getElementById(f[k]).addEventListener('input', render); });
+  function copy(id) {
+    var el = document.getElementById(id), msg = document.getElementById('copy-msg');
+    if (el.className === 'empty') { msg.textContent = 'Type something first.'; return; }
+    var text = el.textContent;
+    function done() { msg.textContent = 'Copied.'; setTimeout(function () { msg.textContent = ''; }, 2000); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { msg.textContent = 'Copy blocked: select the line and copy it.'; });
+    } else { msg.textContent = 'Select the line and copy it.'; }
+  }
+  document.getElementById('copy-cv').addEventListener('click', function () { copy('o-cv'); });
+  document.getElementById('copy-li').addEventListener('click', function () { copy('o-li'); });
+})();
+</script>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No analytics, no cookies.</span>
+  </div>
+</footer>
+
+</body>
+</html>
