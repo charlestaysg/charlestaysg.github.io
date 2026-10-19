@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>北京的冬天 (Beijing, Winter): how it was made · Charles Tay</title>
+<meta name="description" content="A bilingual song and music video about a first winter trip to Beijing while between jobs. The tools used, and what each one did.">
+<link rel="canonical" href="https://charlestaysg.com/projects/beijing-winter/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="北京的冬天 (Beijing, Winter): how it was made">
+<meta property="og:description" content="A song about my first winter in Beijing. The tools used, and what each one did.">
+<meta property="og:url" content="https://charlestaysg.com/projects/beijing-winter/">
+<meta property="og:image" content="https://charlestaysg.com/projects/beijing-winter/poster.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#beijing-winter">← Charles Tay</a>
+    <span class="label">How it was made · <time datetime="2026-10-20">Oct 2026</time></span>
+    <h1>北京的冬天 (Beijing, Winter)</h1>
+    <p class="dek">Two weeks in Beijing in late November 2025, while I was between jobs. A music player stopped at a checkpoint, a cold queue, and a record found in an old shop.</p>
+  </div>
+</header>
+
+<main>
+  <section id="watch">
+    <div class="wrap">
+      <div class="sec-head"><h2>the song</h2></div>
+      <div class="player"><button type="button" class="yt" data-yt="Xd_tTjTiXrU" aria-label="Play 北京的冬天 (Beijing, Winter) on YouTube"><img src="poster.jpg" alt=""><span class="yt-play" aria-hidden="true"></span></button></div>
+      <p style="margin-top:10px"><a href="https://www.youtube.com/watch?v=Xd_tTjTiXrU" rel="noopener">Watch on YouTube ↗</a></p>
+      <dl class="spec-list" style="margin-top:20px">
+        <dt>length</dt><dd>3:35</dd>
+        <dt>voices</dt><dd>a duet in English and Mandarin</dd>
+        <dt>covers</dt><dd>late November 2025, Beijing</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="wrap">
+      <div class="sec-head"><h2>the tools, and what each one did</h2></div>
+      <dl class="spec-list">
+        <dt>the words</dt><dd>Claude: asked me questions about the trip, then drafted the lyrics from my answers</dd>
+        <dt>the song</dt><dd>ChatCut (Mureka model): music and both voices, AI-generated</dd>
+        <dt>the timing</dt><dd>Whisper, through HyperFrames: found when each line is sung</dd>
+        <dt>the pictures</dt><dd>Google Flow (Nano Banana Pro): all 43 stills, AI-generated</dd>
+        <dt>the video</dt><dd>HyperFrames: slow pans and zooms, the lyrics on screen, the contact sheet at the end</dd>
+        <dt>the checks</dt><dd>Claude agents: one checked every frame, one checked lyric timing against the song</dd>
+        <dt>the render</dt><dd>HyperFrames and FFmpeg: the final 1080p file</dd>
+      </dl>
+      <p style="max-width:64ch;margin-top:20px">The person in the video is only ever seen from behind. No real faces, no brands, and no record covers.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. The music, vocals and pictures are AI-generated. The story isn&rsquo;t.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No analytics; no cookies unless you play the YouTube video.</span>
+  </div>
+</footer>
+<script>
+document.addEventListener('click', e => {
+  const b = e.target.closest('button.yt');
+  if (b) b.parentElement.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1&rel=0" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+});
+</script>
+</body>
+</html>
