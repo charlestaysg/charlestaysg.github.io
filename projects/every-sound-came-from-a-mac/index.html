@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Every Sound Came From a Mac: how it was made · Charles Tay</title>
+<meta name="description" content="A beat made only from the alert sounds on a Mac and iPhone, and a music video timed to every note. The sounds, the steps and the tools.">
+<link rel="canonical" href="https://charlestaysg.com/projects/every-sound-came-from-a-mac/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Every Sound Came From a Mac: how it was made">
+<meta property="og:description" content="A beat made only from built-in Mac and iPhone alert sounds. The sounds, the steps and the tools.">
+<meta property="og:url" content="https://charlestaysg.com/projects/every-sound-came-from-a-mac/">
+<meta property="og:image" content="https://charlestaysg.com/projects/every-sound-came-from-a-mac/poster.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  .prose { max-width: 64ch; }
+  .daw { margin-top: 20px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px; overflow-x: auto; }
+  .daw-head { display: flex; justify-content: space-between; gap: 12px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .lane { display: grid; grid-template-columns: 64px repeat(16, minmax(9px, 1fr)); gap: 3px; align-items: center; margin-top: 3px; }
+  @media (max-width: 480px) { .daw { padding: 10px; } .lane { grid-template-columns: 50px repeat(16, minmax(9px, 1fr)); gap: 2px; } .lane span:first-child { font-size: 10px; letter-spacing: .04em; } .daw-head span:last-child { display: none; } }
+  .lane span:first-child { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .cell { height: 16px; border-radius: 2px; background: var(--bg); }
+  .cell.on { background: var(--green); }
+  .cell.beat { box-shadow: inset 1px 0 0 var(--line); }
+  .daw-cap { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+  .steps { list-style: none; padding: 0; margin: 0; }
+  .steps li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .steps li:last-child { border-bottom: 1px solid var(--line); }
+  .steps b.n { font-family: var(--font-mono); color: var(--green); font-weight: 500; padding-top: 2px; }
+  .steps p { margin: 0; max-width: 64ch; }
+  .cmp-wrap { overflow-x: auto; }
+  .cmp { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 16px; }
+  .cmp th, .cmp td { text-align: left; padding: 8px 14px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .cmp th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .cmp td:first-child { font-weight: 700; }
+  .num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  code { font-family: var(--font-mono); font-size: .9em; background: var(--panel); border: 1px solid var(--line); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#every-sound-came-from-a-mac">← Charles Tay</a>
+    <span class="label">How it was made · <time datetime="2026-10-20">Oct 2026</time></span>
+    <h1>Every Sound Came From a Mac</h1>
+    <p class="dek">A beat made only from the alert sounds already on my Mac and iPhone, then a music video where every flash lands on the note that caused it. No instruments, no sample packs.</p>
+  </div>
+</header>
+
+<main>
+  <section id="watch">
+    <div class="wrap">
+      <div class="sec-head"><h2>the video</h2></div>
+      <div class="player"><button type="button" class="yt" data-yt="pnZVzHIEs_Q" aria-label="Play Every Sound Came From a Mac on YouTube"><img src="poster.jpg" alt=""><span class="yt-play" aria-hidden="true"></span></button></div>
+      <p style="margin-top:10px"><a href="https://www.youtube.com/watch?v=pnZVzHIEs_Q" rel="noopener">Watch on YouTube ↗</a></p>
+      <dl class="spec-list" style="margin-top:20px">
+        <dt>length</dt><dd>1:29</dd>
+        <dt>tempo</dt><dd>100 BPM, A minor</dd>
+        <dt>tracks</dt><dd>12, in one GarageBand project</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="idea">
+    <div class="wrap">
+      <div class="sec-head"><h2>where the idea came from</h2></div>
+      <p class="prose">I watched a film where a producer builds a whole track from the sounds Apple devices make: a startup chime, an AirPods case snapping shut, an iPod click wheel. I wanted to see how close I could get with what is already on my laptop, and asked Claude to help me build it.</p>
+      <div class="daw" aria-label="One bar of the main groove, drawn as a drum-machine grid">
+        <div class="daw-head"><span>one bar of the groove</span><span>16 steps · 2.4 s</span></div>
+        <div id="grid"></div>
+        <p class="daw-cap">Each row is one Mac sound. Filled cells are the notes it plays in a bar of the main section.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="sounds">
+    <div class="wrap">
+      <div class="sec-head"><h2>the sounds, and what each one plays</h2></div>
+      <dl class="spec-list">
+        <dt>chords</dt><dd>Glass, pitched into Am, F, C and G</dd>
+        <dt>arpeggio</dt><dd>Ping, running up and down each chord</dd>
+        <dt>click wheel</dt><dd>the media key click, on the off-beats</dd>
+        <dt>kick</dt><dd>Bottle, two octaves down, with Submarine under it for weight</dd>
+        <dt>snare</dt><dd>the screenshot shutter, layered with the screen-capture sound</dd>
+        <dt>hi-hats</dt><dd>Tink, pitched up and cut very short</dd>
+        <dt>bass</dt><dd>Submarine, two octaves down, plus a sub-octave</dd>
+        <dt>plucks</dt><dd>Pop, on the off-beats</dd>
+        <dt>melody</dt><dd>Hero, in the busiest section</dd>
+        <dt>effects</dt><dd>Siri, Apple Pay, iMessage, FaceTime and the Dock poof, between sections</dd>
+        <dt>ending</dt><dd>Glass, Hero and Blow held as one long C major chord, a nod to the Mac startup chime</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="steps">
+    <div class="wrap">
+      <div class="sec-head"><h2>how it came together</h2></div>
+      <ol class="steps">
+        <li><b class="n">1</b><p><strong>Find the sounds.</strong> macOS keeps its alert sounds as plain audio files, and the iPhone ringtones ship with it too. Claude converted 28 of them and measured the note each one sits on, so they could be pitched accurately.</p></li>
+        <li><b class="n">2</b><p><strong>Write the beat as a script.</strong> Instead of playing it in by hand, Claude wrote a short Python script that places every note: which sound, which pitch, which beat. It renders each instrument as its own audio track and mixes them.</p></li>
+        <li><b class="n">3</b><p><strong>Compare with the film.</strong> The first version worked, but next to the film's music it sounded dry and flat. Claude measured both and listed what was different, then made a second version.</p></li>
+        <li><b class="n">4</b><p><strong>Build it in GarageBand.</strong> The 12 tracks went into GarageBand, lined up at bar 1, 100 BPM, A minor. GarageBand's export matched the script's own mix to the millisecond.</p></li>
+        <li><b class="n">5</b><p><strong>Plan the video.</strong> The track has seven sections, so the video does too: each sound is named as it enters, then the screen becomes a drum-machine grid, then the words land on the melody. I approved the storyboard before anything was built.</p></li>
+        <li><b class="n">6</b><p><strong>Build it with a small AI crew.</strong> One Claude model (Opus) planned and checked. Seven copies of a smaller model (Sonnet) each built one section at the same time. Two more Sonnet reviewers checked the stills and the timing, and caught real problems.</p></li>
+        <li><b class="n">7</b><p><strong>Render and publish.</strong> Rendered at 1080p, uploaded to YouTube, and added here.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="wrap">
+      <div class="sec-head"><h2>version 1 against the film</h2></div>
+      <div class="cmp-wrap">
+        <table class="cmp">
+          <thead><tr><th></th><th>the film</th><th>my v1</th><th>my v2</th></tr></thead>
+          <tbody>
+            <tr><td>build</td><td>sounds enter one at a time</td><td>full energy after 12 s</td><td>one new sound every 4.8 s</td></tr>
+            <tr><td>space</td><td>room sound, reverb</td><td>dry, silent gaps</td><td>room reverb added</td></tr>
+            <tr><td>low end</td><td class="num">42%</td><td class="num">31%</td><td class="num">43%</td></tr>
+            <tr><td>ending</td><td>long, wide chord</td><td>short chime, then 6 s of near silence</td><td>10 s held chord</td></tr>
+            <tr><td>length</td><td class="num">~86 s</td><td class="num">62 s</td><td class="num">89 s</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose" style="margin-top:16px">One gap is left on purpose: the film recorded real hardware with microphones. Mine uses only the sound files already on the computer.</p>
+    </div>
+  </section>
+
+  <section id="checks">
+    <div class="wrap">
+      <div class="sec-head"><h2>what the reviewers caught</h2></div>
+      <ul class="prose">
+        <li>"eleven sounds." was on screen for 0.15 s, too short to read. It now holds for most of a second.</li>
+        <li>The grid of sound names near the end was covered before the last names could be read.</li>
+        <li>Background stripes behind the words were much brighter than planned and fought the text.</li>
+      </ul>
+      <p class="prose">The timing reviewer also confirmed that every flash in the video lands exactly on its note.</p>
+    </div>
+  </section>
+
+  <section id="try">
+    <div class="wrap">
+      <div class="sec-head"><h2>try it yourself</h2></div>
+      <p class="prose">On a Mac, the alert sounds are in <code>/System/Library/Sounds</code>: Glass, Ping, Submarine, Tink and the rest. Drag one into GarageBand, open it in a Sampler track, and play it up and down the keyboard. One sound, many notes.</p>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="wrap">
+      <div class="sec-head"><h2>the tools, and what each one did</h2></div>
+      <dl class="spec-list">
+        <dt>the plan</dt><dd>Claude (Opus): the beat script, the storyboard and the checks</dd>
+        <dt>the build</dt><dd>Claude (Sonnet): one agent per video section, plus two reviewers</dd>
+        <dt>the music</dt><dd>GarageBand: the 12-track project</dd>
+        <dt>the video</dt><dd>HyperFrames: built as web pages, rendered to MP4</dd>
+        <dt>the files</dt><dd>FFmpeg: converting and checking audio and video</dd>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. Music and visuals are AI-assisted. Every sound is a built-in macOS or iPhone system sound.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No analytics; no cookies unless you play the YouTube video.</span>
+  </div>
+</footer>
+<script>
+document.addEventListener('click', e => {
+  const b = e.target.closest('button.yt');
+  if (b) b.parentElement.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1&rel=0" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+});
+(function () {
+  // One bar of the main groove, 16 steps, taken from the beat's own arrangement.
+  const lanes = [
+    ["Glass", [0, 10]], ["Ping", [0, 2, 4, 6, 8, 10, 12, 14]], ["Click", [1, 3, 5, 7, 9, 11, 13, 15]],
+    ["Kick", [0, 8, 11]], ["Snare", [4, 12]], ["Hats", [0, 2, 4, 6, 8, 10, 12, 14]],
+    ["Bass", [0, 6, 8, 14]], ["Pop", [2, 7, 10, 15]]
+  ];
+  const grid = document.getElementById('grid');
+  lanes.forEach(([name, hits]) => {
+    const row = document.createElement('div'); row.className = 'lane';
+    const label = document.createElement('span'); label.textContent = name; row.appendChild(label);
+    for (let i = 0; i < 16; i++) {
+      const c = document.createElement('span');
+      c.className = 'cell' + (hits.includes(i) ? ' on' : '') + (i % 4 === 0 && i ? ' beat' : '');
+      row.appendChild(c);
+    }
+    grid.appendChild(row);
+  });
+})();
+</script>
+</body>
+</html>
