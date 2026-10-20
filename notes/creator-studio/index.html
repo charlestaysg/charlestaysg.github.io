@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trying Apple Creator Studio · Charles Tay</title>
+<meta name="description" content="Charles Tay tests Apple's Creator Studio apps against the songs, videos and pages he already makes: what is worth trying, what he is skipping, and what he has tested so far.">
+<link rel="canonical" href="https://charlestaysg.com/notes/creator-studio/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Trying Apple Creator Studio · Charles Tay">
+<meta property="og:description" content="Testing Apple's pro apps on the things I already make.">
+<meta property="og:url" content="https://charlestaysg.com/notes/creator-studio/">
+<meta property="og:image" content="https://charlestaysg.com/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  /* app rows: for me / worked / didn't / next (same grid as the other notes) */
+  .steps { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px 16px; margin: 12px 0 0; }
+  .steps dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .steps dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .steps dd.out { font-weight: 700; }
+  .tools .kit { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  /* maybe later / skipping: two short lists side by side */
+  .ledger { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; max-width: 880px; }
+  .ledger h3 { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; font-weight: 500; }
+  .ledger ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .ledger li { font-size: 16px; line-height: 1.45; }
+  .ledger .why { display: block; color: var(--muted); font-size: 15px; }
+  @media (max-width: 640px) {
+    .steps { grid-template-columns: 1fr; gap: 2px; } .steps dd { margin-bottom: 8px; }
+    .ledger { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../toolkit/#trying">← Toolkit</a>
+    <span class="label">Learning in public · <time datetime="2026-10-21">21 Oct 2026</time></span>
+    <h1>Trying Apple Creator Studio</h1>
+    <p class="dek">Apple&rsquo;s pro apps, tested against the songs, videos and pages I already make.</p>
+  </div>
+</header>
+
+<main>
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <p style="max-width:64ch;margin-bottom:20px">Apple now sells its pro apps as one subscription called Creator Studio: Final Cut Pro, Logic Pro, Pixelmator Pro, Motion, Compressor and MainStage, plus extra AI features and content in Keynote, Pages, Numbers and Freeform. I signed up to find out which of these earn a place in how I already work. I&rsquo;m not reviewing the whole bundle.</p>
+      <ul class="short">
+        <li><strong>Worth testing for me:</strong> Logic Pro, Final Cut Pro, Pixelmator Pro, Keynote.</li>
+        <li><strong>Maybe later:</strong> Compressor, Numbers.</li>
+        <li><strong>Skipping:</strong> Motion, MainStage, Freeform.</li>
+        <li><strong>Tested so far:</strong> only Logic Pro, and only partly.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="what-i-make">
+    <div class="wrap">
+      <div class="sec-head"><h2>what I make now</h2></div>
+      <ul class="tools">
+        <li><span class="job">songs</span><div><p>AI tools write and sing the song. I build the lyric video as code, timed to every beat, and render it on my laptop.</p></div></li>
+        <li><span class="job">explainers</span><div><p>Short cartoons, role plays and interactive pages for small businesses and learners.</p></div></li>
+        <li><span class="job">pages</span><div><p>Dashboards and fact sheets, like the ones on <a href="../../#work">the home page</a>.</p></div></li>
+      </ul>
+      <p style="max-width:64ch;margin-top:24px">Each one has the same weak spots: fixing a song after it&rsquo;s generated, getting lyric timing right, smoothing the final cut, and making thumbnails and stills. Those weak spots are what I&rsquo;m testing the apps against.</p>
+    </div>
+  </section>
+
+  <section id="testing">
+    <div class="wrap">
+      <div class="sec-head"><h2>the four worth testing</h2></div>
+      <ul class="tools">
+        <li id="logic-pro">
+          <span class="job">music<br>tested in part</span>
+          <div>
+            <h3>Logic Pro</h3>
+            <p class="kit">Better instrument sounds than GarageBand; cleaning up AI songs</p>
+            <dl class="steps">
+              <dt>for me</dt><dd>I already compose some backing tracks as code. The AI writes a score, GarageBand plays it, and the video takes its timing from the score, so every note lands on screen at the right moment. Logic should do the same job with better sounds.</dd>
+              <dt>worked</dt><dd>I connected Logic to my AI assistant and it could set the tempo, add instrument tracks, and start and stop playback.</dd>
+              <dt>didn&rsquo;t</dt><dd>Writing notes straight into Logic failed every time. The workaround is to write a MIDI file and import it, then move the parts onto real instruments by hand.</dd>
+              <dt>next</dt><dd><strong>Session Players</strong>, Apple&rsquo;s AI drummer, bassist and keyboard player that follow a chosen style. <strong>Stem Splitter</strong>, which separates a song into vocals, drums, bass and the rest: AI songs sometimes put a long instrumental gap after a chorus, and splitting the stems may let me cut it without regenerating the song. <strong>Mastering Assistant</strong>, to see whether it can even out loudness across songs.</dd>
+            </dl>
+          </div>
+        </li>
+        <li id="final-cut-pro">
+          <span class="job">video<br>next to try</span>
+          <div>
+            <h3>Final Cut Pro</h3>
+            <p class="kit">Crossfades, a 9:16 cut, beat markers</p>
+            <dl class="steps">
+              <dt>for me</dt><dd>My videos come out of the render already finished, so any change means rebuilding. One video&rsquo;s hard cuts felt abrupt and I rebuilt the whole thing for one-second fades. Re-laying out a 16:9 video for phones took a second full project. I want to know how far Final Cut&rsquo;s reframing gets on its own, and how its beat detection compares with the beat analyser I use now.</dd>
+              <dt>watch</dt><dd class="out">Transcript search works in US English only. Several of my songs are in Mandarin or Japanese, and lyric timing is where I lose the most time.</dd>
+            </dl>
+          </div>
+        </li>
+        <li id="pixelmator-pro">
+          <span class="job">images<br>next to try</span>
+          <div>
+            <h3>Pixelmator Pro</h3>
+            <p class="kit">Thumbnails, posters, fixing AI stills</p>
+            <dl class="steps">
+              <dt>for me</dt><dd>Every video and project card here needs a poster image, and many of my videos use AI stills. I want to know whether background removal, image repair and detail enhancement do these jobs on the laptop, so I can stop sending images to an online tool.</dd>
+            </dl>
+          </div>
+        </li>
+        <li id="keynote">
+          <span class="job">slides<br>next to try</span>
+          <div>
+            <h3>Keynote</h3>
+            <p class="kit">Turning an outline into a first deck</p>
+            <dl class="steps">
+              <dt>for me</dt><dd>Keynote&rsquo;s new outline-to-slides feature is in beta. I&rsquo;ll test it on a talk I&rsquo;ve given before, so I can judge its slides against ones I already know work.</dd>
+            </dl>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="rest">
+    <div class="wrap">
+      <div class="sec-head"><h2>the rest of the bundle</h2></div>
+      <div class="ledger">
+        <div>
+          <h3>maybe later</h3>
+          <ul>
+            <li>Compressor <span class="why">Smaller files for the web. My current tools already do this.</span></li>
+            <li>Numbers <span class="why">Magic Fill suggests cell contents from patterns, which could help with tracking sheets.</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>skipping</h3>
+          <ul>
+            <li>Motion <span class="why">I already build motion graphics as code.</span></li>
+            <li>MainStage <span class="why">It&rsquo;s for live performance, and I don&rsquo;t perform.</span></li>
+            <li>Freeform <span class="why">No current use.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="watching">
+    <div class="wrap">
+      <div class="sec-head"><h2>what I&rsquo;m watching for</h2></div>
+      <ul class="tools">
+        <li><span class="job">who has the file</span><div><p>If the subscription stops, Final Cut, Logic and Pixelmator projects stay on the computer, but they can&rsquo;t be opened or edited until it&rsquo;s renewed. Before relying on any of them, I&rsquo;ll keep an exported copy of every project in a format I can open without the subscription.</p></div></li>
+        <li><span class="job">where the AI runs</span><div><p>Apple says some features use third-party models and have usage limits. I&rsquo;ll check which features those are before using them on anything private.</p></div></li>
+        <li><span class="job">overlap</span><div><p>A new app has to beat the tool I already use. If it only matches it, I&rsquo;m not switching.</p></div></li>
+      </ul>
+      <p style="max-width:64ch;margin-top:24px">I&rsquo;ll add results here as I try each app, with what I asked it to do, what happened and whether I kept it. An app that earns its place moves to <a href="../../toolkit/">my toolkit</a>.</p>
+      <p style="max-width:64ch;margin-top:12px;color:var(--muted);font-size:14px">Source: <a href="https://www.apple.com/uk/apple-creator-studio/" rel="noopener">Apple&rsquo;s Creator Studio page (UK)</a>, checked 21 Oct 2026. Features and prices differ by country and change over time.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No analytics, no cookies.</span>
+  </div>
+</footer>
+
+</body>
+</html>
