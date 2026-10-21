@@ -50,6 +50,8 @@ h1{font-size:26px;line-height:1.2;margin:0;letter-spacing:-.01em}
 .companion a{color:var(--accent)}
 .fresh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.fresh.is-stale .dot{background:var(--survey-ink)}
+.stale{margin:0 0 16px;padding:10px 14px;border:1px solid var(--survey-border);border-radius:10px;background:var(--survey-bg);color:var(--survey-ink);font-size:14px}
 .badge{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:1px 8px}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;margin:0 -16px 8px;padding-left:16px;padding-right:16px;scrollbar-width:none;position:sticky;top:0;background:var(--page);z-index:5}
 .chips::-webkit-scrollbar{display:none}
@@ -150,6 +152,7 @@ footer p{margin:0 0 8px}
     </div>
     <div class="fresh"><span class="dot" aria-hidden="true"></span><span id="fresh"></span></div>
   </header>
+  <p id="stale" class="stale" role="status" hidden></p>
 
   <nav class="chips" id="chips" aria-label="Sector"></nav>
 
@@ -217,6 +220,15 @@ const D = /*__DATA__*/null;
 const fmt = new Intl.NumberFormat('en-SG');
 const qLabel = q => q.replace('-', ' ');
 const fmtDate = d => new Date(d + 'T00:00:00+08:00').toLocaleDateString('en-SG', {day:'numeric', month:'short', year:'numeric', timeZone:'Asia/Singapore'});
+// Warn readers when the monthly refresh has stopped: over 40 days allows for one late run.
+const flagStale = (iso, label) => {
+  const days = Math.floor((Date.now() - Date.parse(iso.slice(0, 10) + 'T00:00:00+08:00')) / 864e5);
+  if (!(days > 40)) return;
+  const el = document.getElementById('stale');
+  el.textContent = `This page may be out of date: ${label} ${fmtDate(iso)}, ${days} days ago. It normally refreshes early each month.`;
+  el.hidden = false;
+  document.querySelector('.fresh').classList.add('is-stale');
+};
 const METRICS = {
   vac:  {label:'Job vacancies', unit:'', title:'Job vacancies', f:v=>fmt.format(v)},
   rate: {label:'Vacancy rate', unit:'%', title:'Job vacancy rate', f:v=>v.toFixed(1)+'%'},
@@ -499,6 +511,7 @@ function renderStatic(){
     <div class="stat"><div class="big">${M.workers_trained_past_year_pct}%</div><div class="what">of workers had AI training in the past year</div></div>`;
   document.getElementById('surveyCap').innerHTML = `<a href="${M.url}" rel="noopener">${M.source}</a>. These are survey results, not part of the quarterly MOM series, and are not broken down by the sector filter above. Entered by hand on ${M.retrieved}.`;
   document.getElementById('fresh').textContent = `Data as of ${qLabel(D.latest)} · checked ${fmtDate(D.checked)}`;
+  flagStale(D.checked, 'last checked');
   const titles = D.datasets.map(d=>`<a href="https://data.gov.sg/datasets/${d.id}/view">${d.title}</a>`).join('; ');
   document.getElementById('foot').innerHTML = `
     <p>Contains information from ${titles}, accessed on ${D.fetched} from data.gov.sg, which is made available under the terms of the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence version 1.0</a>. Original source: Labour Market Survey, Manpower Research &amp; Statistics Department, Ministry of Manpower.</p>

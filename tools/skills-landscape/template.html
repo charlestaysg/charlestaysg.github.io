@@ -51,6 +51,8 @@ h1{font-size:26px;line-height:1.2;margin:0;letter-spacing:-.01em}
 .sub{color:var(--ink-2);margin:4px 0 0;font-size:14px}
 .fresh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.fresh.is-stale .dot{background:var(--survey-ink)}
+.stale{margin:0 0 16px;padding:10px 14px;border:1px solid var(--survey-border);border-radius:10px;background:var(--survey-bg);color:var(--survey-ink);font-size:14px}
 .badge{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:1px 8px}
 .chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;margin:0 -16px 8px;padding-left:16px;padding-right:16px;scrollbar-width:none;position:sticky;top:0;background:var(--page);z-index:5}
 .chips::-webkit-scrollbar{display:none}
@@ -199,6 +201,7 @@ footer p{margin:0 0 8px}
     </div>
     <div class="fresh"><span class="dot" aria-hidden="true"></span><span id="fresh"></span></div>
   </header>
+  <p id="stale" class="stale" role="status" hidden></p>
 
   <nav class="chips" id="chips" aria-label="Sector"></nav>
 
@@ -270,6 +273,15 @@ const money = v => '$' + fmt.format(Math.round(v));
 const pct = (a, b) => b ? Math.round(a / b * 100) + '%' : '–';
 const qLabel = q => q.replace('-', ' ');
 const fmtDate = d => new Date(d.slice(0, 10) + 'T00:00:00+08:00').toLocaleDateString('en-SG', {day:'numeric', month:'short', year:'numeric', timeZone:'Asia/Singapore'});
+// Warn readers when the monthly refresh has stopped: over 40 days allows for one late run.
+const flagStale = (iso, label) => {
+  const days = Math.floor((Date.now() - Date.parse(iso.slice(0, 10) + 'T00:00:00+08:00')) / 864e5);
+  if (!(days > 40)) return;
+  const el = document.getElementById('stale');
+  el.textContent = `This page may be out of date: ${label} ${fmtDate(iso)}, ${days} days ago. It normally refreshes early each month.`;
+  el.hidden = false;
+  document.querySelector('.fresh').classList.add('is-stale');
+};
 const TYPES = Object.keys(D.type_labels);
 const state = {sector:'all', dsTable:false, pvTable:false};
 const ALL = D.groups.all;
@@ -454,6 +466,7 @@ function renderYears(){
 function renderStatic(){
   const dir = D.datasets.directory, run = D.datasets.runs;
   document.getElementById('fresh').textContent = `Data published ${fmtDate(dir.updated)} · checked ${fmtDate(D.checked)}`;
+  flagStale(D.checked, 'last checked');
   const titles = [dir, run].map(d => `<a href="https://data.gov.sg/datasets/${d.id}/view">${d.title}</a>`).join(' and ');
   document.getElementById('foot').innerHTML = `
     <p>Contains information from ${titles}, accessed on ${fmtDate(D.built)} from data.gov.sg, which is made available under the terms of the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence version 1.0</a>. Publisher: ${dir.publisher}. Open PMET roles: Labour Market Survey, Manpower Research &amp; Statistics Department, Ministry of Manpower, via the <a href="${D.pulse_url}">SME Workforce Pulse</a>.</p>

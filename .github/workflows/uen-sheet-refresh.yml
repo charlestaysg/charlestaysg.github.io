@@ -43,10 +43,11 @@ jobs:
           cp index.html ../../projects/uen-sheet/index.html
           rm index.html
 
-      - name: Commit if the data changed
+      - name: Commit
         run: |
           git checkout -- tools/skills-landscape
-          # the build date changes every run; commit only if anything else in the baked data moved
+          # commit every month, even with no new figures, so the page's build date shows the refresh ran
+          # (the page warns readers when that date is over 40 days old)
           if python - <<'PY'
           import json, subprocess, sys
           old = json.loads(subprocess.run(["git", "show", "HEAD:tools/uen-sheet/data/baked.json"], capture_output=True, text=True, check=True).stdout)
@@ -56,11 +57,14 @@ jobs:
           sys.exit(0 if old == new else 1)
           PY
           then
-            echo "No data change; nothing committed."
-            exit 0
+            msg="Pre-visit fact sheet: monthly check, no new figures"
+          else
+            msg="Pre-visit fact sheet: new Pulse/Landscape figures baked in"
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
           git add tools/uen-sheet/data projects/uen-sheet/index.html
-          git commit -m "Pre-visit fact sheet: new Pulse/Landscape figures baked in"
+          git diff --cached --quiet && { echo "Nothing to commit (already built today)."; exit 0; }
+          git commit -m "$msg"
+          git pull --rebase
           git push

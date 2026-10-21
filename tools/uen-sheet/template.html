@@ -49,6 +49,8 @@ h1{font-size:26px;line-height:1.2;margin:0;letter-spacing:-.01em}
 .sub{color:var(--ink-2);margin:4px 0 0;font-size:14px}
 .fresh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.fresh.is-stale .dot{background:var(--survey-ink)}
+.stale{margin:0 0 16px;padding:10px 14px;border:1px solid var(--survey-border);border-radius:10px;background:var(--survey-bg);color:var(--survey-ink);font-size:14px}
 .badge{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:1px 8px}
 .chip{flex:none;border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer;min-height:36px}
 .chip:hover{border-color:var(--axis)}
@@ -212,6 +214,7 @@ footer p{margin:0 0 8px}
     </div>
     <div class="fresh"><span class="dot" aria-hidden="true"></span><span id="fresh"></span></div>
   </header>
+  <p id="stale" class="stale" role="status" hidden></p>
 
   <section class="card lookup" aria-labelledby="lk">
     <h2 id="lk" class="sr">Look up a company</h2>
@@ -293,6 +296,15 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const qLabel = q => q.replace('-', ' ');
 const fmtDate = d => new Date(d + 'T00:00:00+08:00').toLocaleDateString('en-SG', {day:'numeric', month:'short', year:'numeric', timeZone:'Asia/Singapore'});
+// Warn readers when the monthly refresh has stopped: over 40 days allows for one late run.
+const flagStale = (iso, label) => {
+  const days = Math.floor((Date.now() - Date.parse(iso.slice(0, 10) + 'T00:00:00+08:00')) / 864e5);
+  if (!(days > 40)) return;
+  const el = document.getElementById('stale');
+  el.textContent = `This page may be out of date: ${label} ${fmtDate(iso)}, ${days} days ago. It normally refreshes early each month.`;
+  el.hidden = false;
+  document.querySelector('.fresh').classList.add('is-stale');
+};
 const fmtStamp = t => new Date(t).toLocaleString('en-SG', {day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:false, timeZone:'Asia/Singapore'});
 const fmtTime = t => new Date(t).toLocaleTimeString('en-SG', {hour:'2-digit', minute:'2-digit', hour12:false, timeZone:'Asia/Singapore'});
 const API = 'https://data.gov.sg/api/action/datastore_search';
@@ -664,6 +676,7 @@ $('form').addEventListener('submit', e => { e.preventDefault(); submit($('q').va
 $('eg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; $('q').value = b.dataset.u || b.dataset.n; submit($('q').value); });
 $('matches').addEventListener('click', e => { const b = e.target.closest('.match'); if (!b) return; $('q').value = b.dataset.u; lookupUen(b.dataset.u); });
 $('fresh').textContent = `Sector data as of ${qLabel(D.asof.pulse_q)} · courses ${fmtDate(D.asof.courses)} · company lookup is live`;
+flagStale(D.asof.built, 'sector and course figures last refreshed');
 { const sp = new URLSearchParams(location.search), u = sp.get('uen'), n = sp.get('q');
   if (u) { $('q').value = u; submit(u); } else if (n) { $('q').value = n; submit(n); } }
 </script>
