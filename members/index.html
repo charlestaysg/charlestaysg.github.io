@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Members · Charles Tay</title>
+<meta name="description" content="Sign-in spaces for family, friends, clients and colleagues.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://charlestaysg.com/members/">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../styles.css?v=20261018e">
+<style>
+.doors { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.door { display: flex; flex-direction: column; gap: 8px; height: 100%; padding: 22px 22px 20px; background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--green); color: var(--ink); text-decoration: none; transition: border-color .2s, transform .2s; }
+.door:hover { border-color: var(--green); transform: translateY(-2px); }
+.door .d-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.door h2 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 28px; letter-spacing: -.02em; line-height: 1; text-transform: none; }
+.door .arrow { font-family: var(--font-mono); font-size: 14px; color: var(--green); white-space: nowrap; }
+.door p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.5; }
+.door .who { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+.door .who svg { width: 12px; height: 12px; vertical-align: -1px; margin-right: 6px; }
+.how { margin-top: 40px; }
+@media (max-width: 640px) { .doors { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .door { transition: none; } .door:hover { transform: none; } }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../">← Charles Tay</a>
+    <span class="label">Sign-in spaces</span>
+    <h1>Members</h1>
+    <p class="dek-note">Each space asks for your email and sends a one-time code. Only people on that space&rsquo;s list get in.</p>
+  </div>
+</header>
+
+<main>
+  <section id="spaces">
+    <div class="wrap">
+      <ul class="doors">
+        <li><a class="door" href="https://family.charlestaysg.com/">
+          <div class="d-top"><h2>Family</h2><span class="arrow">Sign in ↗</span></div>
+          <p>Photos, videos and notes for the family.</p>
+          <span class="who"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Family list</span>
+        </a></li>
+        <li><a class="door" href="https://friends.charlestaysg.com/">
+          <div class="d-top"><h2>Friends</h2><span class="arrow">Sign in ↗</span></div>
+          <p>Things I want to share with friends.</p>
+          <span class="who"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Friends list</span>
+        </a></li>
+        <li><a class="door" href="https://clients.charlestaysg.com/">
+          <div class="d-top"><h2>Clients</h2><span class="arrow">Sign in ↗</span></div>
+          <p>Drafts and documents shared with clients.</p>
+          <span class="who"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Clients list</span>
+        </a></li>
+        <li><a class="door" href="https://training.charlestaysg.com/">
+          <div class="d-top"><h2>Training</h2><span class="arrow">Sign in ↗</span></div>
+          <p>Training videos for colleagues.</p>
+          <span class="who"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Work email</span>
+        </a></li>
+        <li><a class="door" href="https://private.charlestaysg.com/">
+          <div class="d-top"><h2>Private</h2><span class="arrow">Sign in ↗</span></div>
+          <p>My own parked files and notes.</p>
+          <span class="who"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg>Just me</span>
+        </a></li>
+      </ul>
+
+      <div class="working how">
+        <h3>Can&rsquo;t get in?</h3>
+        <ul>
+          <li>Use the email address I invited. Other addresses won&rsquo;t receive a code.</li>
+          <li>The code can take a minute and sometimes lands in spam or junk. It works for 10 minutes.</li>
+          <li>Still stuck? Message me on <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Views are my own.</span>
+    <span><a href="../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No analytics, no cookies.</span>
+  </div>
+</footer>
+
+</body>
+</html>
