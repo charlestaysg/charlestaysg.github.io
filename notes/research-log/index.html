@@ -19,8 +19,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="../../styles.css?v=20261018e">
 <style>
-  .toc { margin: 0 0 4px; padding-left: 1.1em; max-width: 64ch; }
-  .toc li { margin: 4px 0; }
+  .toc-label { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin: 30px 0 8px; }
+  .toc { list-style: none; margin: 0; padding: 0; max-width: 64ch; border-top: 1px solid var(--line); }
+  .toc a { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 20px; padding: 13px 0; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+  .toc a span { font-weight: 500; }
+  .toc a:hover span { color: var(--green); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  .toc time { font-family: var(--font-mono); font-size: 13px; color: var(--muted); white-space: nowrap; }
+  @media (max-width: 520px) { .toc a { flex-direction: column; } }
   .asof { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin: 0 0 10px; }
   .cmp { width: 100%; border-collapse: collapse; margin: 14px 0 6px; font-size: 15px; }
   .cmp th, .cmp td { text-align: left; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -52,11 +57,12 @@
         <p>I add to this page as I go, newest entry first. Many entries are a snapshot of prices or model names, and those go out of date. The date on each entry matters more than the date at the top.</p>
         <p>I match things by job and price. I haven&rsquo;t run benchmarks of my own unless an entry says so. Nothing here is advice, so check the sources before you rely on a number.</p>
       </div>
-      <ul class="toc">
-        <li><a href="#macbook-stores">Three ways to buy a MacBook in Singapore</a> &middot; checked 22 Oct 2026</li>
-        <li><a href="#api-credit">API credit I&rsquo;ve loaded, Jan&ndash;Oct 2026</a> &middot; checked 18 Oct 2026</li>
-        <li><a href="#open-models-vs-claude">Open models on Ollama&rsquo;s cloud, matched to Claude</a> &middot; checked 18 Oct 2026</li>
-      </ul>
+      <h3 class="toc-label">Entries &middot; last checked</h3>
+      <ol class="toc">
+        <li><a href="#macbook-stores"><span>Three ways to buy a MacBook in Singapore</span><time datetime="2026-10-22">22 Oct 2026</time></a></li>
+        <li><a href="#api-credit"><span>API credit I&rsquo;ve loaded, Jan&ndash;Oct 2026</span><time datetime="2026-10-18">18 Oct 2026</time></a></li>
+        <li><a href="#open-models-vs-claude"><span>Open models on Ollama&rsquo;s cloud, matched to Claude</span><time datetime="2026-10-18">18 Oct 2026</time></a></li>
+      </ol>
     </div>
   </section>
 
