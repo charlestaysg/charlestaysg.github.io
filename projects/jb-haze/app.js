@@ -10,7 +10,7 @@ const IS_LOCAL = typeof location !== 'undefined' && /^(localhost|127\.0\.0\.1|\[
 const DATA_BASE = IS_LOCAL ? LOCAL_BASE : RAW_BASE;
 // Live data is fetched on demand from a small Worker (APIMS and the news feeds send no CORS headers).
 // Order: Worker -> data branch (hourly backup copy) -> seed files on main. Only this constant needs changing to move it.
-const WORKER_BASE = 'https://jb-haze-api.charlestaysg.workers.dev/';
+const WORKER_BASE = 'https://jb-haze-api.charlestaysg.com/';  // own domain: RP's network blocks *.workers.dev
 const WORKER_TIMEOUT_MS = 6000;
 const WORKER_PATH = { 'latest.json': 'latest', 'history.json': 'history', 'news.json': 'news' };
 // ?noworker=1 skips the Worker (tests the fallback); ?local=1 on localhost uses only the seed files.

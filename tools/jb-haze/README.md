@@ -13,7 +13,7 @@ Feeds `projects/jb-haze/` (Johor Bahru haze page). Standard library only; Python
 ## How the data gets to the page
 
 **Live path (default).** When a visitor opens the page, `app.js` fetches `latest`, `history` and `news` from a small
-Cloudflare Worker (`jb-haze-api`, source in `~/projects/cf-jb-haze`, deployed to workers.dev). APIMS and the Malaysian
+Cloudflare Worker (`jb-haze-api`, source in `~/projects/cf-jb-haze`, deployed at https://jb-haze-api.charlestaysg.com, with the old workers.dev address kept). APIMS and the Malaysian
 feeds send no CORS headers, so the browser cannot call them directly. The Worker is a JavaScript port of `fetch.py`
 (`parse_latest`, `carry_forward`, `merge_history`) and `news_rules.py`, with the same field allowlist and the same
 forbidden-key check (it answers 502 rather than return a key that looks like `OP_`, `ENG_`, phone or e-mail). Answers are cached
