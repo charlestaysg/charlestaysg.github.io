@@ -332,3 +332,19 @@ main section, .card, #top { scroll-margin-top: 60px; }
 .method li { counter-increment: step; display: grid; grid-template-columns: 40px minmax(0, 1fr); align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 17px; line-height: 1.45; }
 .method li::before { content: counter(step, decimal-leading-zero); font-family: var(--font-mono); font-size: 13px; color: var(--green); }
 .about-cta { font-weight: 500; }
+
+/* Latest headlines box (news section) */
+.heads { max-width: 760px; margin: 0 0 44px; padding-bottom: 36px; border-bottom: 1px solid var(--line); }
+.heads-top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.heads-top h3 { font-family: var(--font-display); font-weight: 900; font-size: 26px; letter-spacing: -.02em; line-height: 1.1; margin: 0; }
+.hd-btn { font: 500 13px/1 var(--font-mono); padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--ink); cursor: pointer; }
+.hd-btn:hover { border-color: var(--green); }
+.hd-btn[disabled] { opacity: .6; cursor: default; }
+.hd-note, .hd-foot { color: var(--muted); font-size: 15px; line-height: 1.5; max-width: 64ch; margin: 8px 0 18px; }
+.hd-foot { font-size: 14px; margin: 14px 0 0; }
+.heads .chips { margin: 0 0 8px; }
+.hd-list a { font-size: 17px; line-height: 1.35; }
+.hd-list li { flex-direction: column; align-items: flex-start; gap: 4px; }
+.hd-list .spec { align-self: flex-start; }
+.hd-empty { color: var(--muted); font-size: 16px; }
+@media print { .heads { display: none; } }
