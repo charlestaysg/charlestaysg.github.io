@@ -103,6 +103,16 @@
   var hit = el.querySelector('.o-hit');
 
   var W = 150, st = { x: 0, dir: 1, mode: 'idle', target: 0, until: 0, speed: 0 }, mouseX = null, raf = 0, last = 0;
+  var hooks = { tick: [], start: [], stop: [] };
+  window.__otterAPI = {
+    el: el, st: st,
+    on: function (ev, fn) { if (hooks[ev]) hooks[ev].push(fn); },
+    isOn: function () { return on; },
+    width: function () { return W; },
+    bounds: function () { return bounds(); },
+    setMode: function (m) { setMode(m); },
+    flip: function () { hit.click(); }
+  };
   function measure() {
     W = window.innerWidth < 640 ? 108 : 150;
     el.style.setProperty('--ow', W + 'px');
@@ -112,7 +122,7 @@
 
   function setMode(m) { st.mode = m; el.dataset.mode = m; }
   function render() {
-    el.style.transform = 'translate3d(' + st.x.toFixed(1) + 'px,0,0)';
+    el.style.transform = 'translate3d(' + st.x.toFixed(1) + 'px,' + (-(st.lift || 0)).toFixed(1) + 'px,0)';
     el.style.setProperty('--dir', st.dir);
   }
   function pick(now) {
@@ -130,7 +140,10 @@
     if (!on) return;
     var dt = Math.min(0.08, (ts - last) / 1000);
     last = ts;
-    if (st.mode === 'idle') {
+    for (var h = 0; h < hooks.tick.length; h++) hooks.tick[h](dt, ts);
+    if (st.hold) {
+      /* a game with the capybara is moving the otter */
+    } else if (st.mode === 'idle') {
       if (ts > st.until) pick(ts);
     } else {
       st.x += st.speed * dt * st.dir;
@@ -158,10 +171,13 @@
     last = performance.now();
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(frame);
+    for (var i = 0; i < hooks.start.length; i++) hooks.start[i]();
   }
   function stop() {
     cancelAnimationFrame(raf);
+    st.hold = false; st.lift = 0;
     if (el.parentNode) el.parentNode.removeChild(el);
+    for (var i = 0; i < hooks.stop.length; i++) hooks.stop[i]();
   }
 
   // ---------------------------------------------------------------- interaction
@@ -178,7 +194,7 @@
   var btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'otter-toggle';
-  function label() { btn.textContent = on ? 'Otter: on' : 'Otter: off'; btn.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  function label() { btn.textContent = on ? 'Otter & capybara: on' : 'Otter & capybara: off'; btn.setAttribute('aria-pressed', on ? 'true' : 'false'); }
   btn.addEventListener('click', function () {
     on = !on;
     write(on ? 'on' : 'off');
