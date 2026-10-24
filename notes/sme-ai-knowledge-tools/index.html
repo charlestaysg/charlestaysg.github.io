@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Before You Buy Anything · Charles Tay</title>
+<meta name="description" content="What a Singapore SME really needs to make its files and know-how usable by AI. Mostly habits and the tools you already pay for.">
+<link rel="canonical" href="https://charlestaysg.com/notes/sme-ai-knowledge-tools/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Before You Buy Anything · Charles Tay">
+<meta property="og:description" content="Six layers an SME needs to make its knowledge usable by AI. Four are habits.">
+<meta property="og:url" content="https://charlestaysg.com/notes/sme-ai-knowledge-tools/">
+<meta property="og:image" content="https://charlestaysg.com/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261024k">
+<style>
+  /* the stack table: layer / what you need / cost; stacks into cards on phones */
+  .stack { width: 100%; max-width: 820px; border-collapse: collapse; font-size: 16px; line-height: 1.45; }
+  .stack th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; text-align: left; padding: 0 12px 10px 0; border-bottom: 2px solid var(--ink); }
+  .stack td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .stack td:first-child { font-weight: 700; white-space: nowrap; }
+  .stack td:last-child { color: var(--muted); }
+  .stack tr.buy td:last-child { color: var(--green); font-weight: 700; }
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  .body-text { max-width: 64ch; font-size: 17px; line-height: 1.55; }
+  .body-text + .body-text { margin-top: 12px; }
+  .tools p + p { margin-top: 10px; }
+  .asof { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; color: var(--muted); margin-top: 10px; }
+  @media (max-width: 640px) {
+    .stack thead { display: none; }
+    .stack, .stack tbody, .stack tr, .stack td { display: block; width: 100%; }
+    .stack tr { padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .stack td { border: 0; padding: 2px 0; white-space: normal; }
+    .stack td:first-child { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#news">← Charles Tay</a>
+    <span class="label">For SME owners · <time datetime="2026-10-24">24 Oct 2026</time></span>
+    <h1>Before you buy anything</h1>
+    <p class="dek">What an SME really needs to make its files and know-how usable by AI. Mostly habits, and tools you already pay for.</p>
+    <p class="asof">Checked 24 Oct 2026. Software plans change; check before you rely on them.</p>
+  </div>
+</header>
+
+<main>
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <p class="body-text" style="margin-bottom:20px">A post went round this week saying the biggest barrier to AI in companies is messy knowledge, information and data. I half agree. Messy files do stop AI being useful after the first week. But in the SMEs I work with, the files are rarely the first problem, and a new system is almost never the fix.</p>
+      <p class="body-text" style="margin-bottom:20px">This is what I would put in front of a 20- to 80-person company:</p>
+      <table class="stack">
+        <thead><tr><th>layer</th><th>what most SMEs need</th><th>cost</th></tr></thead>
+        <tbody>
+          <tr><td>storage</td><td>The Google Workspace or Microsoft 365 you already pay for</td><td>already paid</td></tr>
+          <tr><td>housekeeping</td><td>One naming rule, one owner per folder, a clear-out every quarter</td><td>staff time</td></tr>
+          <tr class="buy"><td>asking questions</td><td>NotebookLM (in Workspace) or Copilot (in Microsoft 365)</td><td>included, or a per-user add-on</td></tr>
+          <tr><td>capture</td><td>A phone recorder, meeting transcripts, one-page checklists</td><td>close to zero</td></tr>
+          <tr><td>privacy</td><td>A restricted folder and a written rule on what AI never sees</td><td>staff time</td></tr>
+          <tr><td>judgement</td><td>Your best people training juniors on real jobs</td><td>supervisor time</td></tr>
+        </tbody>
+      </table>
+      <p class="body-text" style="margin-top:20px">Four of the six rows are habits. Only one is a purchase most firms haven&rsquo;t already made.</p>
+    </div>
+  </section>
+
+  <section id="which-problem">
+    <div class="wrap">
+      <div class="sec-head"><h2>check which problem you have</h2></div>
+      <p class="body-text">The Singapore numbers point in different directions. IMDA counted 14.5% of SMEs using AI in their business in 2024. A study commissioned by AWS found skills shortage was the top blocker, named by 43% of firms. EY put cost and not knowing which tools fit side by side.</p>
+      <p class="body-text">So ask one question before you organise anything: has anyone here tried to get AI to answer a question from our own documents, and failed because the documents were the problem? If nobody has tried yet, the gap is skills and habits. A data clean-up won&rsquo;t close it.</p>
+    </div>
+  </section>
+
+  <section id="layers">
+    <div class="wrap">
+      <div class="sec-head"><h2>layer by layer</h2></div>
+      <ul class="tools">
+        <li><span class="job">storage</span><div><h3>Use the drive you already have</h3><p>Don&rsquo;t add Notion, Confluence and a document system on top of it. Three places to look for a file is worse than one messy place.</p></div></li>
+        <li><span class="job">housekeeping</span><div><h3>Three rules, no software</h3>
+          <dl class="spec-list">
+            <dt>folders</dt><dd>one shared drive per team, not per person.</dd>
+            <dt>names</dt><dd>a file name rule people will remember: date, client, type of document.</dd>
+            <dt>owner</dt><dd>one named person per folder who clears out old versions every quarter.</dd>
+          </dl>
+          <p>A lot of paid &ldquo;knowledge organisation&rdquo; time ends up here. Try it in-house first.</p></div></li>
+        <li><span class="job">asking questions</span><div><h3>Comes bundled</h3>
+          <dl class="spec-list">
+            <dt>google</dt><dd>NotebookLM is included in Workspace Business Standard and above. Make one notebook per team; answers point to the page they came from.</dd>
+            <dt>microsoft</dt><dd>Copilot does the same over SharePoint, as a paid add-on per user.</dd>
+            <dt>sensitive files</dt><dd>an open-source tool like Open Notebook can run on one office computer with a local model, so nothing leaves the building. Slower, and someone technical has to set it up.</dd>
+          </dl>
+          <p>Test it with ten real questions your supervisors get asked every week. When an answer comes back wrong, the fix is usually the document, not the tool.</p></div></li>
+        <li><span class="job">capture</span><div><h3>The step people skip</h3><p>What matters most in an SME often isn&rsquo;t in a folder. It&rsquo;s with the technician who has been there 18 years, or the owner who knows which supplier is always late.</p><p>Capturing it is cheap. Record the senior person talking through one job as they do it, get a transcript, and turn it into a one-page checklist. Put the checklist in the shared drive.</p></div></li>
+        <li><span class="job">privacy</span><div><h3>Before the first upload</h3><p>Customer IC numbers, staff medical certificates and salary files often sit in the same drives as the SOPs. Before you point any AI tool at a folder, decide what is off limits under the PDPA and move it out. A separate restricted folder is enough. Write the rule down before something leaks into a chat, not after.</p></div></li>
+        <li><span class="job">judgement</span><div><h3>Where files run out</h3><p>Writers on expertise from Michael Polanyi to Gary Klein make the same point: much of what an expert knows can be written down, but the judgement calls that set them apart from a newcomer mostly can&rsquo;t. A notebook will hold the checklist. It won&rsquo;t hold the feel for when the checklist is wrong. That still needs a junior working beside the expert and getting corrected, on real jobs.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="skip">
+    <div class="wrap">
+      <div class="sec-head"><h2>what you can skip</h2></div>
+      <ul class="short">
+        <li>A data lake or data warehouse. That&rsquo;s for firms whose product is data.</li>
+        <li>A custom chatbot from a vendor, until the bundled tool has failed on your real questions.</li>
+        <li>A &ldquo;knowledge platform&rdquo; subscription that copies the drive you already have.</li>
+        <li>A long readiness study before anyone has tried anything.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="help">
+    <div class="wrap">
+      <div class="sec-head"><h2>where outside help earns its fee</h2></div>
+      <p class="body-text">IMDA&rsquo;s CTO-as-a-Service gives SMEs a free first consultation on which tools fit, and pre-approved AI tools can be co-funded under the Productivity Solutions Grant. Use those before paying anyone for software advice.</p>
+      <p class="body-text">Paid help makes sense on the people side: deciding whose job changes, getting your experts to pass on what they know, and training staff to check AI answers instead of trusting them. No tool does that part for you.</p>
+      <p class="body-text" style="margin-top:24px">New to all of this? Start with <a href="../teaching-myself-ai/#start">a first month of AI for a small business →</a></p>
+      <p class="body-text" style="margin-top:24px">Figures from IMDA&rsquo;s Singapore Digital Economy Report 2025, AWS and Strand Partners&rsquo; <i>Unlocking Singapore&rsquo;s AI Potential</i> (2025), and <a href="https://www.ey.com/en_sg/helping-smes-take-the-next-leap-towards-ai" rel="noopener">EY, &ldquo;Helping SMEs take the next leap towards AI&rdquo; ↗</a> (Jan 2025). The AWS study was paid for by a cloud vendor.</p>
+      <p class="credit" style="margin-top:12px">I use Anthropic&rsquo;s Claude every day and shaped this page with it. Not affiliated with or endorsed by Google, Microsoft, IMDA, AWS or EY.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No analytics, no cookies.</span>
+  </div>
+</footer>
+
+</body>
+</html>
