@@ -194,7 +194,7 @@
   var btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'otter-toggle';
-  function label() { btn.textContent = on ? 'Otter & capybara: on' : 'Otter & capybara: off'; btn.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  function label() { btn.textContent = on ? 'Otter, capybara & cat: on' : 'Otter, capybara & cat: off'; btn.setAttribute('aria-pressed', on ? 'true' : 'false'); }
   btn.addEventListener('click', function () {
     on = !on;
     write(on ? 'on' : 'off');
