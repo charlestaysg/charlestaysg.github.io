@@ -6,7 +6,7 @@
   var CH = {
     coffee: { name: 'Jazz Coffee Vintage', ids: ['LMhu-cXhGRE', 's_IGRv2d2N0', '-tVqyv8vdsc', 'vaVCImnH_Ec', 'keEJfbcPeZs', 'ljXlVvvx5RY', 'fhCAZyCuPnU', 's886qGHiMEc'] },
     bossa: { name: 'Bossa Bean Serenade', ids: ['kkaO7bzJxDA', 'LPYz4XRNuSw', 'gU86PzGEvQA', 'S_2xTRKX040', 'az2UdhcAatw', 'YeqmALX42pA', 'lt3SpdFdmyc', 'jRaz7DRIJJg'] },
-    loved: { name: 'Songs I love', ids: ['URuTrLs7Vtk', 'A0at5cAlbZQ', 'u8XQ8vabPz0', 'sQIEzGVNzHI', 'iWgnNbzq8a8', 'hjXrL7CuAvc', 'JZ9pHBEUWPo', 'YsKKuCUYUMU', 'k8Zmlutc3rQ'] }
+    loved: { name: 'Songs I love', ids: ['URuTrLs7Vtk', 'A0at5cAlbZQ', 'u8XQ8vabPz0', 'sQIEzGVNzHI', 'iWgnNbzq8a8', 'hjXrL7CuAvc', 'JZ9pHBEUWPo', 'YsKKuCUYUMU', 'k8Zmlutc3rQ', '-l3WFwHGeWo'] }
   };
   var panel = document.getElementById('jz-panel'), frame = document.getElementById('jz-frame');
   var toggle = document.getElementById('jz-toggle'), label = document.getElementById('jz-label'), closeBtn = document.getElementById('jz-close');
