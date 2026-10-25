@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Still Searching: how it was made · Charles Tay</title>
+<meta name="description" content="A song for anyone still looking for work, sung by an AI voice that is not a singer yet and tries anyway. The test, the steps and the tools.">
+<link rel="canonical" href="https://charlestaysg.com/projects/still-searching/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Still Searching: how it was made">
+<meta property="og:description" content="A practice song for anyone still looking for work. How an AI voice that isn't a singer became the point of the song.">
+<meta property="og:url" content="https://charlestaysg.com/projects/still-searching/">
+<meta property="og:image" content="https://charlestaysg.com/projects/still-searching/poster.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  .prose { max-width: 64ch; }
+  .steps { list-style: none; padding: 0; margin: 0; }
+  .steps li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .steps li:last-child { border-bottom: 1px solid var(--line); }
+  .steps b.n { font-family: var(--font-mono); color: var(--green); font-weight: 500; padding-top: 2px; }
+  .steps p { margin: 0; max-width: 64ch; }
+  .cmp-wrap { overflow-x: auto; }
+  .cmp { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 16px; }
+  .cmp th, .cmp td { text-align: left; padding: 8px 14px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .cmp th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .cmp td:first-child { font-weight: 700; }
+  .cmp tr.pick td { color: var(--green); }
+  .arc { list-style: none; padding: 0; margin: 16px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+  .arc li { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; font-size: 15px; }
+  .arc li b { display: block; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#still-searching">← Charles Tay</a>
+    <span class="label">How it was made · <time datetime="2026-10-25">Oct 2026</time></span>
+    <h1>Still Searching</h1>
+    <p class="dek">A song for anyone looking for a job and still searching. The singer is an AI voice that isn't a singer yet, and that turned out to be the point.</p>
+  </div>
+</header>
+
+<main>
+  <section id="watch">
+    <div class="wrap">
+      <div class="sec-head"><h2>the video</h2></div>
+      <div class="player"><button type="button" class="yt" data-yt="7xhVA9sB9IY" aria-label="Play Still Searching on YouTube"><img src="poster.jpg" alt=""><span class="yt-play" aria-hidden="true"></span></button></div>
+      <p style="margin-top:10px"><a href="https://www.youtube.com/watch?v=7xhVA9sB9IY" rel="noopener">Watch on YouTube ↗</a></p>
+      <dl class="spec-list" style="margin-top:20px">
+        <dt>length</dt><dd>2:50</dd>
+        <dt>voices</dt><dd>two AI voices: the singer and the friend who pushes her</dd>
+        <dt>pictures</dt><dd>12 pencil-and-watercolour sketches in a notebook</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="idea">
+    <div class="wrap">
+      <div class="sec-head"><h2>where the idea came from</h2></div>
+      <p class="prose">I have made a few songs with AI music tools, and after a while they all started to feel the same: polished, upbeat from the first line, nowhere to go. I wanted the opposite. A song should tell a story about a place, a person, a memory, and it should start low and climb.</p>
+      <ul class="arc" aria-label="The shape of the song">
+        <li><b>verse 1</b>loss: handing back the staff pass</li>
+        <li><b>verse 2</b>despair: rejection letters, kopi gone cold</li>
+        <li><b>pre-chorus</b>first light: her mother's memory</li>
+        <li><b>chorus</b>hope: still searching, still walking</li>
+        <li><b>bridge</b>resolve: the uncles at Bedok Jetty</li>
+        <li><b>ending</b>a direction: Thursday, nine</li>
+      </ul>
+      <p class="prose" style="margin-top:16px">The people are made up. The places are real: a lobby gate, a full train, a void deck at ten in the morning, a kitchen with the light left on.</p>
+    </div>
+  </section>
+
+  <section id="test">
+    <div class="wrap">
+      <div class="sec-head"><h2>the test: four ways to make a speaking voice sing</h2></div>
+      <p class="prose">Fish Audio's Drama 3 is a speaking voice, built for emotion. Before writing the song I made four 30-second samples of the same lines to see which way of singing worked.</p>
+      <div class="cmp-wrap">
+        <table class="cmp">
+          <thead><tr><th>sample</th><th>how</th><th>how it sounded</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>spoken in rhythm, each word moved onto the beat</td><td>clear, more like a chant than a song</td></tr>
+            <tr><td>B1</td><td>pitch fully tuned to a melody</td><td>in tune, and robotic</td></tr>
+            <tr><td>B2</td><td>tuned, but half its own expression kept</td><td>warmer, and still a machine singing</td></tr>
+            <tr class="pick"><td>B0</td><td>asked to sing, nothing corrected</td><td>a person learning to sing, not perfect yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose" style="margin-top:16px">I picked B0. If I want a perfect song, there are tools for that. This one needed the feeling of someone trying, which suits a song about people who keep trying.</p>
+    </div>
+  </section>
+
+  <section id="steps">
+    <div class="wrap">
+      <div class="sec-head"><h2>how it came together</h2></div>
+      <ol class="steps">
+        <li><b class="n">1</b><p><strong>Story first, then lyrics.</strong> The shape of the song (loss, despair, first light, hope, a direction) came before any words. Each section got its own feeling to ask the voice for, from "numb and tired" to "full of hope".</p></li>
+        <li><b class="n">2</b><p><strong>She admits she's practising.</strong> The song opens with her saying it's one of her first tries at singing, and a second, older voice coaxing her: "Step up lah. Don't be shy." The same voice cheers her into the last chorus and closes the song: "First few times, nobody sounds good."</p></li>
+        <li><b class="n">3</b><p><strong>One take, not eight.</strong> My first draft asked for each section separately, and every request came back as a slightly different woman. Asking for her whole part in one go kept her the same person from start to end.</p></li>
+        <li><b class="n">4</b><p><strong>The music follows her.</strong> Her pitch wanders, so the chords were chosen from the notes she actually sang in each half line. When she drifts off the key, the chord drops a note so the clash stays soft. Each section was only nudged up or down as a whole; no single note was corrected.</p></li>
+        <li><b class="n">5</b><p><strong>Piano and bass in Logic Pro.</strong> The arrangement was written as MIDI and played by Logic's Steinway Grand Piano and electric bass. Pad, cello and strings came from a free soundfont.</p></li>
+        <li><b class="n">6</b><p><strong>A notebook for the video.</strong> A practice song gets a practice notebook: her lyrics appear word by word as she sings them, and pencil sketches of each place fill the pages. The pencil turns to warm ink at the first chorus. The friend's lines arrive as yellow sticky notes.</p></li>
+        <li><b class="n">7</b><p><strong>Checked before it shipped.</strong> A speech-to-text pass heard 95% of the lyrics in the final mix. Every page turn was checked frame by frame, and the end credits were held long enough to read.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="lessons">
+    <div class="wrap">
+      <div class="sec-head"><h2>what went wrong on the way</h2></div>
+      <ul class="prose">
+        <li>Asking the voice to sound "sad, voice breaking" made it jump almost an octave higher, and it sounded like someone else. One long take fixed it.</li>
+        <li>The first mix buried the music; the next one buried the voice. The final mix sits in between.</li>
+        <li>Logic opened the arrangement on silent tracks, so the first bounce had no piano in the opening 25 seconds. It was caught by measuring the file, not by ear.</li>
+        <li>Writing each word with a moving pen effect risked black frames when rendering 40 of them per page, so the words fade in instead.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="wrap">
+      <div class="sec-head"><h2>the tools, and what each one did</h2></div>
+      <dl class="spec-list">
+        <dt>the plan</dt><dd>Claude: story, lyrics, the arrangement and the checks</dd>
+        <dt>the voices</dt><dd>Fish Audio Drama 3: the singer and the friend</dd>
+        <dt>the music</dt><dd>Logic Pro (piano, bass) and FluidSynth (pad, strings)</dd>
+        <dt>the pictures</dt><dd>Google Flow: 12 sketches and the painted table, from one character sheet</dd>
+        <dt>the video</dt><dd>HyperFrames: built as web pages, rendered to MP4</dd>
+        <dt>the files</dt><dd>FFmpeg, Rubber Band and Whisper: mixing, key shifts, lyric timing</dd>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. Voices and pictures are AI-generated. The people in the song are made up.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies unless you play the YouTube video. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+<script>
+document.addEventListener('click', e => {
+  const b = e.target.closest('button.yt');
+  if (b) b.parentElement.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1&rel=0" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+});
+</script>
+</body>
+</html>
