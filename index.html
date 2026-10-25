@@ -1028,20 +1028,21 @@ document.querySelectorAll('[data-switch]').forEach(card => {
 <script src="/assets/kitty.js?v=cat" defer></script>
 <script src="/assets/visits.js?v=1" defer></script>
 <script src="/assets/headlines.js" defer></script>
-<aside class="jazz" id="jazz" aria-label="Background jazz">
+<aside class="jazz" id="jazz" aria-label="Background music">
   <div class="jazz-panel" id="jz-panel" hidden>
-    <div class="chips" role="group" aria-label="Pick a channel">
+    <div class="chips" role="group" aria-label="Pick what to play">
       <button type="button" class="chip" data-ch="coffee" aria-pressed="true">Jazz Coffee Vintage</button>
       <button type="button" class="chip" data-ch="bossa" aria-pressed="false">Bossa Bean Serenade</button>
+      <button type="button" class="chip" data-ch="loved" aria-pressed="false">Songs I love</button>
     </div>
     <div class="jz-frame" id="jz-frame"></div>
-    <p class="jz-credit">Music from these two YouTube channels, played by YouTube. Not affiliated with them. Nothing loads from YouTube until you press play.</p>
+    <p class="jz-credit">Jazz from two small YouTube channels; Songs I love are other people's music videos, starting with 细水长流 from the film <i>That Girl in Pinafore</i>. All played by YouTube. Not affiliated with any of them. Nothing loads from YouTube until you press play.</p>
   </div>
   <div class="jazz-bar">
-    <button type="button" id="jz-toggle" class="jz-btn" aria-expanded="false" aria-controls="jz-panel"><span aria-hidden="true">&#9834;</span><span id="jz-label">Play some jazz</span></button>
+    <button type="button" id="jz-toggle" class="jz-btn" aria-expanded="false" aria-controls="jz-panel"><span aria-hidden="true">&#9834;</span><span id="jz-label">Play some music</span></button>
     <button type="button" id="jz-close" class="jz-x" hidden aria-label="Close the player and stop the music">&times;</button>
   </div>
 </aside>
-<script src="/assets/jazz.js" defer></script>
+<script src="/assets/jazz.js?v=music2" defer></script>
 </body>
 </html>
