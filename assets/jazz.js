@@ -6,7 +6,12 @@
   var CH = {
     coffee: { name: 'Jazz Coffee Vintage', ids: ['LMhu-cXhGRE', 's_IGRv2d2N0', '-tVqyv8vdsc', 'vaVCImnH_Ec', 'keEJfbcPeZs', 'ljXlVvvx5RY', 'fhCAZyCuPnU', 's886qGHiMEc'] },
     bossa: { name: 'Bossa Bean Serenade', ids: ['kkaO7bzJxDA', 'LPYz4XRNuSw', 'gU86PzGEvQA', 'S_2xTRKX040', 'az2UdhcAatw', 'YeqmALX42pA', 'lt3SpdFdmyc', 'jRaz7DRIJJg'] },
-    loved: { name: 'Songs I love', ids: ['URuTrLs7Vtk', 'A0at5cAlbZQ', 'u8XQ8vabPz0', 'sQIEzGVNzHI', 'iWgnNbzq8a8', 'hjXrL7CuAvc', 'JZ9pHBEUWPo', 'YsKKuCUYUMU', 'k8Zmlutc3rQ', '-l3WFwHGeWo', 'wckZcVFLU24', 'jcRlGlu199o', 'LOBfzV9s7Pc', 'LKaXY4IdZ40', 'xKWWyO-C2o0', 'WKZUHMWSm1s', 'q3-tOnJrZZM'] }
+    // Songs I love play in a fixed order: Japanese, then Chinese, then English
+    loved: { name: 'Songs I love', ordered: true, ids: [
+      'A0at5cAlbZQ', 'LOBfzV9s7Pc', 'jcRlGlu199o', 'k8Zmlutc3rQ', '-l3WFwHGeWo', 'wckZcVFLU24', 'q3-tOnJrZZM', 'WKZUHMWSm1s',
+      'URuTrLs7Vtk', 'iWgnNbzq8a8', 'hjXrL7CuAvc', 'u8XQ8vabPz0', 'sQIEzGVNzHI',
+      'JZ9pHBEUWPo', 'YsKKuCUYUMU', 'LKaXY4IdZ40', 'xKWWyO-C2o0'
+    ] }
   };
   var panel = document.getElementById('jz-panel'), frame = document.getElementById('jz-frame');
   var toggle = document.getElementById('jz-toggle'), label = document.getElementById('jz-label'), closeBtn = document.getElementById('jz-close');
@@ -15,7 +20,7 @@
 
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function play(key) {
-    var ids = shuffle(CH[key].ids); // playlist must list every id, first one included, or YouTube skips the first
+    var ids = CH[key].ordered ? CH[key].ids : shuffle(CH[key].ids); // playlist must list every id, first one included, or YouTube skips the first
     var f = document.createElement('iframe');
     f.src = 'https://www.youtube-nocookie.com/embed/' + ids[0] + '?playlist=' + ids.join(',') + '&autoplay=1&loop=1&rel=0&playsinline=1';
     f.title = CH[key].name + ' on YouTube';
