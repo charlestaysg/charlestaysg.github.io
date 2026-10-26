@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261026a">
+<link rel="stylesheet" href="styles.css?v=20261026b">
 </head>
 <body>
 
@@ -864,16 +864,34 @@
   <section id="watching">
     <div class="wrap">
       <div class="sec-head"><h2>watching</h2></div>
-      <div class="heads refurb" id="refurb" aria-label="Refurbished MacBook Pro watch">
+      <div class="heads refurb" data-watch="mbp" aria-label="Refurbished MacBook Pro watch">
         <div class="heads-top">
           <h3>Refurbished MacBook Pro watch</h3>
-          <span id="rf-pill" class="src-pill is-wait" role="status" title="Checking Apple’s refurbished store…"><span class="src-dot" aria-hidden="true"></span><span class="src-label">Connecting</span></span>
-          <button type="button" id="rf-check" class="hd-btn">Check now</button>
+          <span class="src-pill rf-pill is-wait" role="status" title="Checking Apple’s refurbished store…"><span class="src-dot" aria-hidden="true"></span><span class="src-label">Connecting</span></span>
+          <button type="button" class="hd-btn rf-check">Check now</button>
         </div>
-        <p class="hd-note" id="rf-note">Apple Singapore&rsquo;s refurbished store: MacBook Pro, 16-inch, 128 GB memory, 2 TB or 4 TB. Read hourly.</p>
-        <ul class="list hd-list" id="rf-list" aria-live="polite"><li class="hd-empty">Checking Apple&rsquo;s store&hellip;</li></ul>
-        <p class="hd-foot">Stock and prices are Apple&rsquo;s, read from its public refurbished page. Stock can go at any time. Not affiliated with Apple.</p>
+        <p class="hd-note rf-note">Apple Singapore&rsquo;s refurbished store: MacBook Pro, 16-inch, 128 GB memory, 2 TB or 4 TB. Read hourly.</p>
+        <ul class="list hd-list rf-list" aria-live="polite"><li class="hd-empty">Checking Apple&rsquo;s store&hellip;</li></ul>
       </div>
+      <div class="heads refurb" data-watch="studio" aria-label="Refurbished Mac Studio watch">
+        <div class="heads-top">
+          <h3>Refurbished Mac Studio watch</h3>
+          <span class="src-pill rf-pill is-wait" role="status" title="Checking Apple’s refurbished store…"><span class="src-dot" aria-hidden="true"></span><span class="src-label">Connecting</span></span>
+          <button type="button" class="hd-btn rf-check">Check now</button>
+        </div>
+        <p class="hd-note rf-note">Apple Singapore&rsquo;s refurbished store: Mac Studio with 256 GB memory or more, any storage. Read hourly.</p>
+        <ul class="list hd-list rf-list" aria-live="polite"><li class="hd-empty">Checking Apple&rsquo;s store&hellip;</li></ul>
+      </div>
+      <div class="heads refurb" data-watch="mini" aria-label="Refurbished Mac mini watch">
+        <div class="heads-top">
+          <h3>Refurbished Mac mini watch</h3>
+          <span class="src-pill rf-pill is-wait" role="status" title="Checking Apple’s refurbished store…"><span class="src-dot" aria-hidden="true"></span><span class="src-label">Connecting</span></span>
+          <button type="button" class="hd-btn rf-check">Check now</button>
+        </div>
+        <p class="hd-note rf-note">Apple Singapore&rsquo;s refurbished store: Mac mini with 64 GB memory or more, any storage. Read hourly.</p>
+        <ul class="list hd-list rf-list" aria-live="polite"><li class="hd-empty">Checking Apple&rsquo;s store&hellip;</li></ul>
+      </div>
+      <p class="hd-foot" id="rf-foot">Stock and prices are Apple&rsquo;s, read from its public refurbished page. Stock can go at any time. Not affiliated with Apple.</p>
     </div>
   </section>
 
@@ -1044,7 +1062,7 @@ document.querySelectorAll('[data-switch]').forEach(card => {
 <script src="/assets/kitty.js?v=cat" defer></script>
 <script src="/assets/visits.js?v=1" defer></script>
 <script src="/assets/headlines.js" defer></script>
-<script src="/assets/refurb.js?v=1" defer></script>
+<script src="/assets/refurb.js?v=2" defer></script>
 <aside class="jazz" id="jazz" aria-label="Background music">
   <div class="jazz-panel" id="jz-panel" hidden>
     <div class="chips" role="group" aria-label="Pick what to play">
