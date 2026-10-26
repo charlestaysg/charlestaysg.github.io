@@ -367,3 +367,4 @@ main section, .card, #top { scroll-margin-top: 60px; }
 body.has-jazz { padding-bottom: 48px; }
 body.has-jazz .otter { bottom: 62px !important; }
 @media print { .jazz { display: none; } }
+.refurb { margin-bottom: 0; padding-bottom: 0; border-bottom: 0; }
