@@ -41,7 +41,7 @@
     var items = w.items || [];
     items.forEach(function (it) {
       var a = document.createElement('a'); a.href = it.url; a.rel = 'noopener'; a.textContent = cfg.name(it);
-      row([a, span('In stock · first seen ' + day(it.firstSeen) + ' · ' + colour(it.color) + ', ' + it.year)]);
+      row([a, span('In stock · first seen ' + day(it.firstSeen) + (it.color || it.year ? ' · ' + [it.color ? colour(it.color) : '', it.year].filter(Boolean).join(', ') : ''))]);
     });
     if (cfg.caps) {
       cfg.caps.forEach(function (c) {
