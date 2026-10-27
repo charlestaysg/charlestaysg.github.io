@@ -1,4 +1,4 @@
-// "Refurbished watch" boxes in the watching section: MacBook Pro 16-inch 128 GB, Mac Studio with 256 GB or more, Mac mini with 64 GB or more.
+// "Refurbished watch" boxes in the watching section: MacBook Pro 16-inch 128 GB, Mac Studio with 96 GB or more, Mac mini with 64 GB or more.
 // Read refurb-api.charlestaysg.com, which reads Apple Singapore's public refurbished page once an hour. Status pill + "Check now".
 (function () {
   'use strict';
@@ -24,7 +24,7 @@
       slot: function (c) { return size(c) + ': not in stock right now'; }
     },
     studio: {
-      note: 'Apple Singapore’s refurbished store: Mac Studio with 256 GB memory or more, any storage. Read hourly.', caps: null, empty: 'No Mac Studio with 256 GB or more is listed right now', label: 'Mac Studio',
+      note: 'Apple Singapore’s refurbished store: Mac Studio with 96 GB memory or more, any storage. Read hourly.', caps: null, empty: 'No Mac Studio with 96 GB or more is listed right now', label: 'Mac Studio',
       name: function (it) { return 'Mac Studio ' + chip(it.title) + ' · ' + it.memory + ' GB · ' + size(it.capacity) + ' · ' + money(it.priceText); }
     },
     mini: {
