@@ -36,6 +36,18 @@
   .src { max-width: 64ch; padding-left: 1.1em; }
   .src li { margin: 4px 0; }
   @media (max-width: 640px) { .cmp { font-size: 14px; } .cmp td.p { white-space: normal; } }
+  .boxes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 14px 0 8px; max-width: 760px; }
+  .box { border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; background: var(--panel); }
+  .box h4 { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--green); font-weight: 500; margin: 0 0 10px; }
+  .box dl { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 6px 0; font-size: 15px; }
+  .box dt { color: var(--muted); }
+  .box dd { margin: 0; padding-left: 14px; font-family: var(--font-mono); font-size: 14px; text-align: right; }
+  .box dt.total, .box dd.total { color: var(--ink); border-top: 1px solid var(--line); padding-top: 8px; }
+  .box dt.total { font-weight: 700; }
+  .box dd.total { font-weight: 500; font-size: 16px; }
+  .box ul { margin: 0; padding-left: 1.1em; font-size: 15px; }
+  .box li { margin: 5px 0; }
+  @media (max-width: 640px) { .boxes { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -43,7 +55,7 @@
 <header class="page-head">
   <div class="wrap">
     <a class="back" href="../../#contact">← Charles Tay</a>
-    <span class="label">Reference · Last updated <time datetime="2026-10-29">29 Oct 2026</time></span>
+    <span class="label">Reference · Last updated <time datetime="2026-10-30">30 Oct 2026</time></span>
     <h1>Research log</h1>
     <p class="dek">Things I look into on and off, written down so I can find them again. Each entry shows the date I last checked it.</p>
   </div>
@@ -59,7 +71,8 @@
       </div>
       <h3 class="toc-label">Entries &middot; last checked</h3>
       <ol class="toc">
-        <li><a href="#mac-studio-512gb"><span>What 512GB gets you that 128GB can&rsquo;t</span><time datetime="2026-10-29">29 Oct 2026</time></a></li>
+        <li><a href="#mac-studio-512gb"><span>What 512GB gets you that 128GB can&rsquo;t</span><time datetime="2026-10-30">30 Oct 2026</time></a></li>
+        <li><a href="#mac-studio-office"><span>One Mac Studio for a small office</span><time datetime="2026-10-30">30 Oct 2026</time></a></li>
         <li><a href="#macbook-stores"><span>Three ways to buy a MacBook in Singapore</span><time datetime="2026-10-22">22 Oct 2026</time></a></li>
         <li><a href="#api-credit"><span>API credit I&rsquo;ve loaded, Jan&ndash;Oct 2026</span><time datetime="2026-10-18">18 Oct 2026</time></a></li>
         <li><a href="#open-models-vs-claude"><span>Open models on Ollama&rsquo;s cloud, matched to Claude</span><time datetime="2026-10-18">18 Oct 2026</time></a></li>
@@ -70,7 +83,7 @@
   <section id="mac-studio-512gb">
     <div class="wrap">
       <div class="sec-head"><h2>what 512gb gets you that 128gb can&rsquo;t</h2></div>
-      <p class="asof">Checked <time datetime="2026-10-29">29 Oct 2026</time></p>
+      <p class="asof">Checked <time datetime="2026-10-30">30 Oct 2026</time></p>
       <div class="prose">
         <p>My laptop is a MacBook Pro with the M5 Max chip and 128GB of memory. Apple now sells a Mac Studio with the M5 Ultra chip and 512GB. I wanted to know what the extra memory would let me do that I can&rsquo;t do today, and whether it is worth the price.</p>
         <p>I haven&rsquo;t bought one. This is the research, not a verdict.</p>
@@ -126,6 +139,31 @@
       </table>
       <p class="credit" style="max-width:64ch;margin:6px 0 22px">36-core CPU and 80-core GPU in all three; only the memory changes. Going from 256GB to 512GB costs S$15,525 on its own, almost the price of the 256GB machine. Against 4TB, 2TB is S$1,350 less, 1TB S$2,025 less and 8TB S$2,700 more.</p>
 
+      <h3 style="margin:22px 0 6px">Two builds, with AppleCare+</h3>
+      <div class="boxes">
+        <div class="box">
+          <h4>256GB memory, 4TB storage</h4>
+          <dl>
+            <dt>Mac Studio</dt><dd>S$16,599</dd>
+            <dt>AppleCare+</dt><dd>S$249</dd>
+            <dt class="total">Total</dt><dd class="total">S$16,848</dd>
+            <dt>Over 3 years</dt><dd>about S$470 a month</dd>
+            <dt>Ships</dt><dd>13 to 15 weeks</dd>
+          </dl>
+        </div>
+        <div class="box">
+          <h4>512GB memory, 2TB storage</h4>
+          <dl>
+            <dt>Mac Studio</dt><dd>S$30,774</dd>
+            <dt>AppleCare+</dt><dd>S$249</dd>
+            <dt class="total">Total</dt><dd class="total">S$31,023</dd>
+            <dt>Over 3 years</dt><dd>about S$860 a month</dd>
+            <dt>Ships</dt><dd>10 to 12 weeks</dd>
+          </dl>
+        </div>
+      </div>
+      <p class="credit" style="max-width:64ch;margin:6px 0 22px">Same M5 Ultra chip in both. The 512GB build costs S$14,175 more. AppleCare+ for this Mac Studio is S$249 whatever the specs. Ship times are what Apple showed on the date above.</p>
+
       <h3 style="margin:22px 0 6px">How it would help me</h3>
       <ul class="src">
         <li><b>The laptop stops being the server.</b> Scheduled jobs, watchers and the image tools run only while my laptop is open. A Studio at home could run them all day, and the laptop could leave the house.</li>
@@ -152,6 +190,32 @@
         <p>Most of the help above needs 96 to 256GB, not 512GB. The extra S$15,525 mainly buys the 700B-class models. So the question for me is how often I have private material that needs a strong model. Every week, and 512GB earns its place. Now and then, and 256GB is the better buy.</p>
       </div>
 
+      <h3 style="margin:22px 0 6px">256GB or 512GB: when each makes sense</h3>
+      <div class="boxes">
+        <div class="box">
+          <h4>Pick 256GB if</h4>
+          <ul>
+            <li>The biggest models you run are around 200B or smaller.</li>
+            <li>Your heaviest job is the 92GB video model with a chat model beside it.</li>
+            <li>Mostly one person uses it.</li>
+            <li>Claude or another paid model still does the hard thinking.</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h4>Pick 512GB if</h4>
+          <ul>
+            <li>Private material needs a 700B-class model every week.</li>
+            <li>You want a big model, an image model and video loaded together.</li>
+            <li>Several people will use it at the same time. Each one needs extra memory on top of the model.</li>
+          </ul>
+        </div>
+      </div>
+      <ul class="src">
+        <li><b>2TB is enough on the 512GB build.</b> A 700B-class model takes about 400GB of disk, so 2TB holds a few of them. Older models can sit on a Thunderbolt 5 external drive, which costs less than Apple&rsquo;s storage upgrade.</li>
+        <li><b>Try the big models before you pay for them.</b> Run the 700B-class models through a cloud service on real work for a month, using material that is safe to send. If you reach for them every week, buy 512GB. If you don&rsquo;t, buy 256GB and keep the S$14,175.</li>
+        <li><b>Or wait a little.</b> No one has published tests of the 512GB M5 Ultra yet, and either build takes 10 to 15 weeks to arrive. Reviews may land before the machine would.</li>
+      </ul>
+
       <h3 style="margin:22px 0 6px">What this does not tell you</h3>
       <ul class="src">
         <li><b>No one has published tests of the 512GB M5 Ultra yet.</b> The measured numbers I found are from 256GB review units, or from the older M3 Ultra.</li>
@@ -169,7 +233,90 @@
       </ul>
 
       <div class="prose" style="margin-top:22px">
+        <p>Run a small business? <a href="#mac-studio-office">The next entry</a> looks at one Mac Studio shared by a whole office.</p>
         <p class="about-cta">Weighing up a machine for AI at work? <a href="https://www.linkedin.com/in/charlestay" rel="noopener">Message me on LinkedIn</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="mac-studio-office">
+    <div class="wrap">
+      <div class="sec-head"><h2>one mac studio for a small office</h2></div>
+      <p class="asof">Checked <time datetime="2026-10-30">30 Oct 2026</time></p>
+      <div class="prose">
+        <p>The entry above is about my own use. This one asks what a small business would get from one Mac Studio running AI models in the office, shared by several staff or several departments.</p>
+        <p>I haven&rsquo;t set this up for a company. It is how I&rsquo;d go about it, based on the tools I run at home.</p>
+      </div>
+
+      <h3 style="margin:22px 0 6px">Why an owner might want one</h3>
+      <ul class="src">
+        <li><b>Files stay in the office.</b> Staff can ask a model about contracts, payslips or customer lists without that text going to a cloud service. It helps with PDPA, but you still need logins, access rules and a policy on what gets deleted when.</li>
+        <li><b>One cost instead of a fee per person.</b> Business plans for cloud AI tools run about S$30 to S$40 per person a month (my rough figure). For 20 staff over three years that is about S$21,600 to S$28,800. A 256GB Mac Studio with AppleCare+ is S$16,848. Most offices would still keep a few cloud seats for the hard jobs.</li>
+        <li><b>It keeps working when the internet or a cloud service is down.</b></li>
+        <li><b>No usage meter.</b> Staff can run a batch of 500 invoices without worrying about a monthly limit.</li>
+      </ul>
+
+      <h3 style="margin:22px 0 6px">How I&rsquo;d set it up</h3>
+      <table class="cmp">
+        <thead><tr><th>Part</th><th>What I&rsquo;d use</th></tr></thead>
+        <tbody>
+          <tr><td><b>The machine</b></td><td>A Mac Studio on a UPS, on the office network, set to start up by itself after a power cut.</td></tr>
+          <tr><td><b>The model server</b></td><td>Ollama or LM Studio, set so other computers on the network can send it requests.</td></tr>
+          <tr><td><b>What staff see</b></td><td>Open WebUI, a chat page in the browser. Each person gets their own login.</td></tr>
+          <tr><td><b>Departments</b></td><td>Groups in Open WebUI. Each department gets its own document collections that only its members can see. They all share the same model.</td></tr>
+          <tr><td><b>Working from home</b></td><td>A VPN (Tailscale is one), so the server is never open to the internet.</td></tr>
+          <tr><td><b>Upkeep</b></td><td>One named person for updates, backups and adding or removing staff accounts.</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin:22px 0 6px">How many people one box can serve</h3>
+      <table class="cmp">
+        <thead><tr><th>Memory</th><th>What it can carry</th></tr></thead>
+        <tbody>
+          <tr><td><b>96GB</b></td><td>A pilot with one department on a mid-size model.</td></tr>
+          <tr><td><b>256GB</b></td><td>One strong mid-size model (30B to 120B) for 10 to 20 people who use it on and off. A handful of requests run at once; past that, people wait their turn.</td></tr>
+          <tr><td><b>512GB</b></td><td>A 700B-class model for the whole office, or separate models for different departments, loaded at the same time.</td></tr>
+        </tbody>
+      </table>
+      <p class="credit" style="max-width:64ch;margin:6px 0 22px">My estimates. Speed depends on the model, how long the documents are and how many people press Enter at the same moment.</p>
+
+      <h3 style="margin:22px 0 6px">Workflows on the on-device model</h3>
+      <table class="cmp">
+        <thead><tr><th>Department</th><th>What it could do</th></tr></thead>
+        <tbody>
+          <tr><td><b>Finance</b></td><td>Read invoices and receipts into a spreadsheet. Draft payment reminders. Flag statement lines that don&rsquo;t match.</td></tr>
+          <tr><td><b>HR</b></td><td>Draft job descriptions. Answer staff questions from the handbook. Summarise r&eacute;sum&eacute;s, with a person making every hiring call.</td></tr>
+          <tr><td><b>Sales</b></td><td>Draft quotes and proposals from past ones. Turn call notes into follow-up emails.</td></tr>
+          <tr><td><b>Operations</b></td><td>Answer questions from SOPs. Translate SOPs into Chinese, Malay, Tamil or Bahasa for foreign staff, checked by a native speaker.</td></tr>
+          <tr><td><b>Admin</b></td><td>Transcribe meetings on the machine with Whisper and draft the minutes.</td></tr>
+          <tr><td><b>Marketing</b></td><td>Product stills and social captions from a local image model.</td></tr>
+          <tr><td><b>Across departments</b></td><td>One search over company documents, where each person only sees results from the folders they&rsquo;re allowed into.</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin:22px 0 6px">What to watch</h3>
+      <ul class="src">
+        <li><b>One box is one point of failure.</b> Keep a cloud tool as the fallback for urgent work.</li>
+        <li><b>Someone has to own it.</b> Updates, backups and staff accounts don&rsquo;t look after themselves.</li>
+        <li><b>Open models are weaker on hard tasks.</b> Use them for drafts, summaries and first passes, with a person checking the output.</li>
+        <li><b>Check each model&rsquo;s licence.</b> Most open models allow business use, but some come with conditions.</li>
+        <li><b>A Mac Studio is not a data centre.</b> It suits an office of tens, not hundreds.</li>
+      </ul>
+
+      <h3 style="margin:22px 0 6px">Where I&rsquo;d start</h3>
+      <div class="prose">
+        <p>Pick one department and one job that eats hours every week, with documents that can&rsquo;t go to the cloud. Run it for a month on a smaller machine, or on a Mac the office already has. If staff keep using it, buy the bigger box and add the next department.</p>
+      </div>
+
+      <h3 style="margin:22px 0 6px">What this does not tell you</h3>
+      <ul class="src">
+        <li><b>I haven&rsquo;t run this in a company.</b> The setup is what I use at home, scaled up on paper.</li>
+        <li><b>User counts and speeds</b> are my estimates.</li>
+        <li><b>Cloud seat prices</b> are a rough range and change often.</li>
+      </ul>
+
+      <div class="prose" style="margin-top:22px">
+        <p class="about-cta">Thinking about AI on your own hardware for your team? <a href="https://www.linkedin.com/in/charlestay" rel="noopener">Message me on LinkedIn</a>.</p>
       </div>
     </div>
   </section>
