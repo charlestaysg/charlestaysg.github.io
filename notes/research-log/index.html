@@ -43,7 +43,7 @@
 <header class="page-head">
   <div class="wrap">
     <a class="back" href="../../#contact">← Charles Tay</a>
-    <span class="label">Reference · Last updated <time datetime="2026-10-22">22 Oct 2026</time></span>
+    <span class="label">Reference · Last updated <time datetime="2026-10-29">29 Oct 2026</time></span>
     <h1>Research log</h1>
     <p class="dek">Things I look into on and off, written down so I can find them again. Each entry shows the date I last checked it.</p>
   </div>
@@ -59,10 +59,90 @@
       </div>
       <h3 class="toc-label">Entries &middot; last checked</h3>
       <ol class="toc">
+        <li><a href="#mac-studio-512gb"><span>What 512GB gets you that 128GB can&rsquo;t</span><time datetime="2026-10-29">29 Oct 2026</time></a></li>
         <li><a href="#macbook-stores"><span>Three ways to buy a MacBook in Singapore</span><time datetime="2026-10-22">22 Oct 2026</time></a></li>
         <li><a href="#api-credit"><span>API credit I&rsquo;ve loaded, Jan&ndash;Oct 2026</span><time datetime="2026-10-18">18 Oct 2026</time></a></li>
         <li><a href="#open-models-vs-claude"><span>Open models on Ollama&rsquo;s cloud, matched to Claude</span><time datetime="2026-10-18">18 Oct 2026</time></a></li>
       </ol>
+    </div>
+  </section>
+
+  <section id="mac-studio-512gb">
+    <div class="wrap">
+      <div class="sec-head"><h2>what 512gb gets you that 128gb can&rsquo;t</h2></div>
+      <p class="asof">Checked <time datetime="2026-10-29">29 Oct 2026</time></p>
+      <div class="prose">
+        <p>My laptop is a MacBook Pro with the M5 Max chip and 128GB of memory. Apple now sells a Mac Studio with the M5 Ultra chip and 512GB. I wanted to know what the extra memory would let me do that I can&rsquo;t do today, and whether it is worth the price.</p>
+        <p>I haven&rsquo;t bought one. This is the research, not a verdict.</p>
+      </div>
+
+      <h3 style="margin:22px 0 6px">The short answer</h3>
+      <div class="prose"><p>Memory decides which AI models fit on the machine. With 512GB:</p></div>
+      <ul class="src">
+        <li><b>Much bigger open models run at home.</b> Models in the 300 to 750 billion parameter range (GLM-5.3, DeepSeek V4 Flash, GLM-5.3-flash) fit. On 128GB they don&rsquo;t, so today I reach them through a cloud service and my text leaves the computer. They are some of the models in the <a href="#open-models-vs-claude">open models entry</a> below.</li>
+        <li><b>Several models can stay loaded at once.</b> A chat model, an image model and a small helper model can all sit in memory, so the Studio can run all day as a home server that the laptop talks to.</li>
+        <li><b>Video jobs stop running out of memory.</b> A video model I use needs about 92GB. On the laptop the third clip in a row crashed. With 512GB I could queue clips overnight.</li>
+      </ul>
+      <div class="prose"><p>Some models still don&rsquo;t fit: Kimi K3 (about 1.4TB even when compressed), DeepSeek V4 Pro and the largest Qwen model.</p></div>
+
+      <table class="cmp">
+        <thead><tr><th>Side by side</th><th>MacBook Pro<br>M5 Max, 128GB</th><th>Mac Studio<br>M5 Ultra, 512GB</th></tr></thead>
+        <tbody>
+          <tr><td><b>Memory speed</b></td><td class="p">614 GB/s</td><td class="p">1.2 TB/s</td></tr>
+          <tr><td><b>GPU cores</b></td><td class="p">40</td><td class="p">80</td></tr>
+          <tr><td><b>Biggest open model that fits</b><small>compressed</small></td><td>about 180B, tight</td><td>about 750B</td></tr>
+          <tr><td><b>Writing speed, same model</b></td><td>baseline</td><td>about 2x</td></tr>
+          <tr><td><b>700B-class model</b></td><td>won&rsquo;t fit</td><td>20 to 40 tokens a second <small>my estimate</small></td></tr>
+          <tr><td><b>Video model needing 92GB</b></td><td>one clip at a time</td><td>a queue of clips</td></tr>
+          <tr><td><b>Storage</b></td><td class="p">2TB</td><td class="p">4TB</td></tr>
+          <tr><td><b>Carry it around</b></td><td>yes</td><td>no</td></tr>
+        </tbody>
+      </table>
+
+      <table class="cmp" style="margin-top:22px">
+        <thead><tr><th>Mac Studio, M5 Ultra, 4TB</th><th>Education Store price</th></tr></thead>
+        <tbody>
+          <tr><td><b>96GB</b></td><td class="p">S$11,199</td></tr>
+          <tr><td><b>256GB</b></td><td class="p">S$16,599</td></tr>
+          <tr><td><b>512GB</b></td><td class="p">S$32,124</td></tr>
+        </tbody>
+      </table>
+      <p class="credit" style="max-width:64ch;margin:6px 0 22px">36-core CPU and 80-core GPU in all three; only the memory changes. Going from 256GB to 512GB costs S$15,525 on its own, almost the price of the 256GB machine. Against 4TB, 2TB is S$1,350 less, 1TB S$2,025 less and 8TB S$2,700 more.</p>
+
+      <h3 style="margin:22px 0 6px">What doesn&rsquo;t change</h3>
+      <ul class="src">
+        <li><b>Open models are still behind the best paid ones.</b> For hard reasoning and long coding jobs I&rsquo;d still use Claude. A home model takes over drafts, summaries and first passes.</li>
+        <li><b>Long prompts are still slow to read in.</b> One owner of an older 512GB Mac Studio reported about 90 seconds before a reply started on a long prompt. The M5 Ultra is faster, but still behind a desktop NVIDIA card here.</li>
+        <li><b>Video is still far slower than renting a cloud GPU.</b> Minutes per clip, not seconds.</li>
+        <li><b>Some tools only run on NVIDIA.</b> More memory doesn&rsquo;t fix that.</li>
+      </ul>
+
+      <h3 style="margin:22px 0 6px">Is it worth it?</h3>
+      <div class="prose">
+        <p>S$32,124 is about S$900 a month over three years. For that to pay off, the machine has to replace about that much cloud spending, on work a home model can actually do.</p>
+        <p>The 256GB Studio at S$16,599 covers a lot of it: the video jobs, and DeepSeek V4 Flash at high quality. What it can&rsquo;t do is run the 700B-class models properly, or keep a big model and everything else loaded at the same time.</p>
+        <p>The way I see it, the extra 256GB is mostly about privacy and convenience: keeping private material on my own machine and not juggling models. If I don&rsquo;t need that every day, the 256GB machine, or my laptop plus a rented GPU for the odd big job, does most of the work for less.</p>
+      </div>
+
+      <h3 style="margin:22px 0 6px">What this does not tell you</h3>
+      <ul class="src">
+        <li><b>No one has published tests of the 512GB M5 Ultra yet.</b> The measured numbers I found are from 256GB review units, or from the older M3 Ultra.</li>
+        <li><b>Speeds for the 700B-class models</b> on the M5 Ultra are my estimates.</li>
+        <li><b>Prices change.</b> These are Apple Singapore&rsquo;s Education Store prices on the date above.</li>
+      </ul>
+
+      <h3 style="margin:22px 0 6px">Sources</h3>
+      <ul class="src">
+        <li><a href="https://www.apple.com/sg-edu/shop/buy-mac/mac-studio" rel="noopener">Apple Singapore Education Store: Mac Studio</a></li>
+        <li><a href="https://9to5mac.com/2026/08/25/apple-unveils-next-generation-mac-studio-with-m5-max-and-m5-ultra/" rel="noopener">9to5Mac: Apple unveils Mac Studio with M5 Max and M5 Ultra</a></li>
+        <li><a href="https://www.bgr.com/2264114/mac-studio-m5-ultra-review/" rel="noopener">BGR: Mac Studio M5 Ultra review</a></li>
+        <li><a href="https://spicyneuron.substack.com/p/a-mac-studio-for-local-ai-6-months" rel="noopener">Spicyneuron: a Mac Studio for local AI, six months in</a></li>
+        <li><a href="https://www.mindstudio.ai/blog/m5-ultra-vs-dual-dgx-spark" rel="noopener">MindStudio: M5 Ultra vs dual DGX Spark</a></li>
+      </ul>
+
+      <div class="prose" style="margin-top:22px">
+        <p class="about-cta">Weighing up a machine for AI at work? <a href="https://www.linkedin.com/in/charlestay" rel="noopener">Message me on LinkedIn</a>.</p>
+      </div>
     </div>
   </section>
 
