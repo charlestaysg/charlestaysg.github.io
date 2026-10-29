@@ -86,16 +86,33 @@
       <div class="prose"><p>Some models still don&rsquo;t fit: Kimi K3 (about 1.4TB even when compressed), DeepSeek V4 Pro and the largest Qwen model.</p></div>
 
       <table class="cmp">
-        <thead><tr><th>Side by side</th><th>MacBook Pro<br>M5 Max, 128GB</th><th>Mac Studio<br>M5 Ultra, 512GB</th></tr></thead>
+        <thead><tr><th>The machines</th><th>MacBook Pro<br>M5 Max, 128GB</th><th>Mac Studio<br>M5 Ultra, 512GB</th></tr></thead>
         <tbody>
-          <tr><td><b>Memory speed</b></td><td class="p">614 GB/s</td><td class="p">1.2 TB/s</td></tr>
+          <tr><td><b>CPU cores</b></td><td class="p">18</td><td class="p">36</td></tr>
           <tr><td><b>GPU cores</b></td><td class="p">40</td><td class="p">80</td></tr>
-          <tr><td><b>Biggest open model that fits</b><small>compressed</small></td><td>about 180B, tight</td><td>about 750B</td></tr>
+          <tr><td><b>Neural Engine</b></td><td class="p">16-core</td><td class="p">32-core</td></tr>
+          <tr><td><b>Memory</b></td><td class="p">128GB</td><td class="p">512GB</td></tr>
+          <tr><td><b>Memory speed</b></td><td class="p">614 GB/s</td><td class="p">1.2 TB/s</td></tr>
+          <tr><td><b>Storage</b></td><td class="p">2TB</td><td class="p">4TB</td></tr>
+          <tr><td><b>Carry it around</b></td><td>yes, battery and screen</td><td>no, needs a desk, a screen and a UPS</td></tr>
+          <tr><td><b>Price</b></td><td>already mine</td><td class="p">S$32,124</td></tr>
+        </tbody>
+      </table>
+
+      <table class="cmp" style="margin-top:22px">
+        <thead><tr><th>What changes for my work</th><th>MacBook Pro<br>128GB</th><th>Mac Studio<br>512GB</th></tr></thead>
+        <tbody>
+          <tr><td><b>Biggest open model that fits</b><small>compressed</small></td><td>about 30 to 180B</td><td>about 750B</td></tr>
           <tr><td><b>Writing speed, same model</b></td><td>baseline</td><td>about 2x</td></tr>
           <tr><td><b>700B-class model</b></td><td>won&rsquo;t fit</td><td>20 to 40 tokens a second <small>my estimate</small></td></tr>
-          <tr><td><b>Video model needing 92GB</b></td><td>one clip at a time</td><td>a queue of clips</td></tr>
-          <tr><td><b>Storage</b></td><td class="p">2TB</td><td class="p">4TB</td></tr>
-          <tr><td><b>Carry it around</b></td><td>yes</td><td>no</td></tr>
+          <tr><td><b>Work files I won&rsquo;t send to the cloud</b></td><td>a smaller model, or the text leaves the machine</td><td>a strong model, nothing leaves</td></tr>
+          <tr><td><b>Models loaded at once</b></td><td>one mid-size model and a small helper</td><td>a big model, helpers and an image model together</td></tr>
+          <tr><td><b>Video model needing 92GB</b></td><td>one clip at a time</td><td>a queue of clips overnight</td></tr>
+          <tr><td><b>Image stills</b></td><td>1.5 to 3 minutes each</td><td>about half <small>my estimate</small></td></tr>
+          <tr><td><b>Background jobs</b></td><td>only while the laptop is on</td><td>always on</td></tr>
+          <tr><td><b>Backup when Claude is down</b></td><td>a 31B model</td><td>a 700B-class model</td></tr>
+          <tr><td><b>Cloud AI tools</b></td><td>same</td><td>same</td></tr>
+          <tr><td><b>Reading long prompts</b></td><td>slow</td><td>faster, still behind NVIDIA</td></tr>
         </tbody>
       </table>
 
@@ -109,12 +126,22 @@
       </table>
       <p class="credit" style="max-width:64ch;margin:6px 0 22px">36-core CPU and 80-core GPU in all three; only the memory changes. Going from 256GB to 512GB costs S$15,525 on its own, almost the price of the 256GB machine. Against 4TB, 2TB is S$1,350 less, 1TB S$2,025 less and 8TB S$2,700 more.</p>
 
+      <h3 style="margin:22px 0 6px">How it would help me</h3>
+      <ul class="src">
+        <li><b>The laptop stops being the server.</b> Scheduled jobs, watchers and the image tools run only while my laptop is open. A Studio at home could run them all day, and the laptop could leave the house.</li>
+        <li><b>Video and image batches without babysitting.</b> I could queue a night of clips and stills and check them in the morning, with the laptop free for editing.</li>
+        <li><b>Private files get a strong model.</b> Work files I won&rsquo;t send to a cloud service could go to a 700B-class model on my own machine, not a small one.</li>
+        <li><b>Several models stay loaded.</b> Today I close one thing to make room for another.</li>
+      </ul>
+
       <h3 style="margin:22px 0 6px">What doesn&rsquo;t change</h3>
       <ul class="src">
         <li><b>Open models are still behind the best paid ones.</b> For hard reasoning and long coding jobs I&rsquo;d still use Claude. A home model takes over drafts, summaries and first passes.</li>
         <li><b>Long prompts are still slow to read in.</b> One owner of an older 512GB Mac Studio reported about 90 seconds before a reply started on a long prompt. The M5 Ultra is faster, but still behind a desktop NVIDIA card here.</li>
         <li><b>Video is still far slower than renting a cloud GPU.</b> Minutes per clip, not seconds.</li>
         <li><b>Some tools only run on NVIDIA.</b> More memory doesn&rsquo;t fix that.</li>
+        <li><b>Cloud tools run the same.</b> Most of my AI work happens on someone else&rsquo;s servers, and a faster Mac doesn&rsquo;t change that.</li>
+        <li><b>Away from home, the laptop still does the work.</b> The Studio adds to it. It doesn&rsquo;t replace it.</li>
       </ul>
 
       <h3 style="margin:22px 0 6px">Is it worth it?</h3>
@@ -122,6 +149,7 @@
         <p>S$32,124 is about S$900 a month over three years. For that to pay off, the machine has to replace about that much cloud spending, on work a home model can actually do.</p>
         <p>The 256GB Studio at S$16,599 covers a lot of it: the video jobs, and DeepSeek V4 Flash at high quality. What it can&rsquo;t do is run the 700B-class models properly, or keep a big model and everything else loaded at the same time.</p>
         <p>The way I see it, the extra 256GB is mostly about privacy and convenience: keeping private material on my own machine and not juggling models. If I don&rsquo;t need that every day, the 256GB machine, or my laptop plus a rented GPU for the odd big job, does most of the work for less.</p>
+        <p>Most of the help above needs 96 to 256GB, not 512GB. The extra S$15,525 mainly buys the 700B-class models. So the question for me is how often I have private material that needs a strong model. Every week, and 512GB earns its place. Now and then, and 256GB is the better buy.</p>
       </div>
 
       <h3 style="margin:22px 0 6px">What this does not tell you</h3>
