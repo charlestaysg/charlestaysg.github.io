@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HyperFrames Two Ways · Charles Tay</title>
+<meta name="description" content="HyperFrames Studio, the desktop app, compared with Claude Code and a browser preview: who builds the video, what it costs, what leaves your computer, and when Charles Tay uses each.">
+<link rel="canonical" href="https://charlestaysg.com/notes/hyperframes-two-ways/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HyperFrames Two Ways · Charles Tay">
+<meta property="og:description" content="The Studio app or Claude Code with a browser preview: same engine, different jobs.">
+<meta property="og:url" content="https://charlestaysg.com/notes/hyperframes-two-ways/">
+<meta property="og:image" content="https://charlestaysg.com/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  .compare-wrap { overflow-x: auto; margin-top: 8px; }
+  table.compare { width: 100%; min-width: 620px; border-collapse: collapse; font-size: 15px; line-height: 1.45; }
+  table.compare th, table.compare td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line, rgba(127,127,127,.25)); }
+  table.compare thead th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  table.compare tbody th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; width: 130px; }
+  .steps { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px 16px; margin: 12px 0 0; max-width: 72ch; }
+  .steps dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .steps dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .credit { max-width: 64ch; margin-top: 24px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  code { font-family: var(--font-mono); font-size: .9em; }
+  @media (max-width: 640px) {
+    table.compare { min-width: 0; }
+    table.compare thead { display: none; }
+    table.compare tr, table.compare tbody th, table.compare td { display: block; width: auto; }
+    table.compare tbody th { padding: 16px 0 4px; border-bottom: 0; color: var(--ink, inherit); }
+    table.compare td { padding: 4px 0 10px; border-bottom: 0; }
+    table.compare td::before { content: attr(data-label); display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+    table.compare tr { border-bottom: 1px solid var(--line, rgba(127,127,127,.25)); }
+  }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; gap: 2px; } .steps dd { margin-bottom: 8px; } }
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../toolkit/#using">← Toolkit</a>
+    <span class="label">Toolkit · <time datetime="2026-10-31">31 Oct 2026</time></span>
+    <h1>HyperFrames two ways</h1>
+    <p class="dek">The Studio app, or Claude Code with a browser preview. Same engine, different jobs.</p>
+  </div>
+</header>
+
+<main>
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <ul class="short">
+        <li><a href="https://github.com/heygen-com/hyperframes" rel="noopener">HyperFrames</a> turns a web page into a video. An AI writes each scene as code, and HyperFrames renders it to MP4. It is free and open source.</li>
+        <li>There are two ways in. <b>HyperFrames Studio</b> is a desktop app with an AI agent built into its chat. The other way is to ask <b>Claude Code</b> to build the video, and watch it in a preview page that opens in your browser.</li>
+        <li>Both play and render the same files. I use Studio for quick, visual, branded pieces, and Claude Code for longer builds that should stay on my own computer.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="wrap">
+      <div class="sec-head"><h2>side by side</h2></div>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead>
+            <tr><th></th><th>HyperFrames Studio</th><th>Claude Code + browser preview</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>what it is</th><td data-label="Studio">HeyGen&rsquo;s free desktop app for Mac, Windows (not Arm) and Linux</td><td data-label="Claude Code + browser">The HyperFrames command-line tool. <code>hyperframes preview</code> opens a local page in your browser</td></tr>
+            <tr><th>who builds</th><td data-label="Studio">An agent inside the app&rsquo;s chat: Claude Code, Codex, Grok, Antigravity, OpenCode, GitHub Copilot or Studio&rsquo;s own</td><td data-label="Claude Code + browser">Claude Code, with the HyperFrames skills (<code>npx skills add heygen-com/hyperframes</code>). The browser page is for watching and checking</td></tr>
+            <tr><th>built in</th><td data-label="Studio">Storyboard to approve stills first, brand kits, 91 caption styles, a library of inspirations, comment or draw on the frame, background removal, podcast multicam edit, HeyGen voices, video clips and lip sync, and computer use (new, 29 Oct 2026, on some accounts)</td><td data-label="Claude Code + browser">Preview, timeline and frame checks. Everything else is whatever you ask Claude Code to do</td></tr>
+            <tr><th>sign-in, cost</th><td data-label="Studio">Free HeyGen account. HeyGen voices, clips and lip sync use HeyGen credits. The agent bills to its own plan</td><td data-label="Claude Code + browser">No sign-in. Local and free, apart from your Claude plan</td></tr>
+            <tr><th>privacy</th><td data-label="Studio">In my copy, usage telemetry and &ldquo;agent traces&rdquo; (prompts, replies and tool results, with file paths and keys removed) were on by default. Screen-recording sharing was off</td><td data-label="Claude Code + browser">Nothing goes to HeyGen unless you add a HeyGen tool on purpose</td></tr>
+            <tr><th>files live</th><td data-label="Studio">A hidden <code>.hyperframes-studio</code> folder in your home folder</td><td data-label="Claude Code + browser">Wherever you build the project</td></tr>
+            <tr><th>best for</th><td data-label="Studio">Steering by pointing and clicking, branded samples, quick drafts</td><td data-label="Claude Code + browser">Long explainers and music videos, your own voice and music tools, work you want to keep off other servers</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="when">
+    <div class="wrap">
+      <div class="sec-head"><h2>use this when</h2></div>
+      <dl class="steps">
+        <dt>Studio</dt><dd>You want to see stills before anything moves, mark fixes on the frame, or keep a brand kit (colours, fonts, logos, rules) the agent follows every time.</dd>
+        <dt>Claude Code</dt><dd>The video is long, uses voices or music you made elsewhere, or holds work or client material you don&rsquo;t want leaving your computer.</dd>
+        <dt>both</dt><dd>Start a draft in one and finish in the other. Studio can import existing HyperFrames projects.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="check">
+    <div class="wrap">
+      <div class="sec-head"><h2>things I&rsquo;d check</h2></div>
+      <ul class="short">
+        <li><b>Privacy settings in Studio.</b> Settings &rarr; General has the telemetry and agent-trace switches. Turn them off before you use it for anything you wouldn&rsquo;t share.</li>
+        <li><b>Leave the risky switches off.</b> Studio can give agents full access, stop asking before computer use acts, and start runs from other agents on their own. Each one asks you to confirm. I keep all three off.</li>
+        <li><b>Studio needs Claude Code signed in on its own.</b> If a run stops with &ldquo;Login expired&rdquo;, run <code>claude auth login</code> in Terminal. Signing in to the Claude app doesn&rsquo;t cover it.</li>
+        <li><b>Preview pages keep running.</b> Each <code>hyperframes preview</code> stays open in the background after the build is done. If HyperFrames tabs keep appearing in your browser, that&rsquo;s why. Stop them when the project is finished.</li>
+      </ul>
+      <p class="credit">Based on HyperFrames Studio as installed on my Mac on 31 Oct 2026. The app changes often, so check its own settings and <a href="https://hyperframes.heygen.com/studio-app/index" rel="noopener">HeyGen&rsquo;s Studio docs</a> before relying on this.</p>
+      <p style="max-width:64ch;margin-top:12px;color:var(--muted)">Back to the <a href="../../toolkit/">toolkit</a>, or see what I&rsquo;ve <a href="../../toolkit/#trying">been trying</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+
+</body>
+</html>
