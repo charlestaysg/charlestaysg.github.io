@@ -206,6 +206,27 @@ footer p{margin:0 0 8px}
 </style>
 </head>
 <body>
+<!-- topbar:start -->
+<style>
+.sitebar,.sitebar *{box-sizing:border-box}
+.sitebar{position:relative;z-index:1200;display:block;width:auto;margin:0 calc(50% - 50vw);padding:10px 16px;background:#F3F6FA;border-bottom:1px solid #D6DEE9;font:14px/1.4 "IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace}
+.sitebar .sb-in{max-width:860px;margin:0 auto;padding:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px}
+.sitebar a{display:inline;padding:0;border:0;background:none;color:#0B1324;text-decoration:none;white-space:nowrap}
+.sitebar a:hover{color:#148A4E}
+.sitebar .me{font:900 18px/1.2 Barlow,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.02em;margin-right:auto}
+.sitebar .tb-ext{color:#148A4E}
+@media (prefers-color-scheme:dark){.sitebar{background:#0B1324;border-color:#1F2A40}.sitebar a{color:#E6EDF7}.sitebar a:hover,.sitebar .tb-ext{color:#3DDC84}}
+@media (max-width:640px){.sitebar{font-size:13px;padding:8px 16px}.sitebar .sb-in{gap:2px 14px}.sitebar .tb-ext{display:none}}
+@media (max-width:480px){.sitebar .me{flex-basis:100%}}
+</style>
+<nav class="sitebar" aria-label="Site">
+  <div class="sb-in">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
 <div class="wrap">
   <header>
     <div>
