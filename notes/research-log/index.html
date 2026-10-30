@@ -71,12 +71,82 @@
       </div>
       <h3 class="toc-label">Entries &middot; last checked</h3>
       <ol class="toc">
+        <li><a href="#search-labels"><span>Better search labels for 3,800 notes, for about US$4</span><time datetime="2026-10-30">30 Oct 2026</time></a></li>
         <li><a href="#mac-studio-512gb"><span>What 512GB gets you that 128GB can&rsquo;t</span><time datetime="2026-10-30">30 Oct 2026</time></a></li>
         <li><a href="#mac-studio-office"><span>One Mac Studio for a small office</span><time datetime="2026-10-30">30 Oct 2026</time></a></li>
         <li><a href="#macbook-stores"><span>Three ways to buy a MacBook in Singapore</span><time datetime="2026-10-22">22 Oct 2026</time></a></li>
         <li><a href="#api-credit"><span>API credit I&rsquo;ve loaded, Jan&ndash;Oct 2026</span><time datetime="2026-10-18">18 Oct 2026</time></a></li>
         <li><a href="#open-models-vs-claude"><span>Open models on Ollama&rsquo;s cloud, matched to Claude</span><time datetime="2026-10-18">18 Oct 2026</time></a></li>
       </ol>
+    </div>
+  </section>
+
+  <section id="search-labels">
+    <div class="wrap">
+      <div class="sec-head"><h2>better search labels for 3,800 notes</h2></div>
+      <p class="asof">Checked <time datetime="2026-10-30">30 Oct 2026</time></p>
+      <div class="prose">
+        <p>I keep my notes as about 3,800 plain-text pages, and an AI answers questions from them. Before it can answer, a search step has to find the right pages. That search cuts every page into small pieces, about 11,400 in all, and gives each piece a label.</p>
+        <p>Every label in my index said &ldquo;(untitled)&rdquo;, so the search could only match the words inside each piece. A piece that says &ldquo;she signs off before it goes out&rdquo; never mentions what &ldquo;it&rdquo; is, and a search for &ldquo;who approves proposals&rdquo; walks past it.</p>
+        <p>Anthropic published a fix for this in 2024: have a cheap model write one line for each piece, saying where it sits in its page, and put that line in front of the piece before indexing. I tried it on my whole collection.</p>
+      </div>
+
+      <h3 style="margin:22px 0 6px">What a label looks like</h3>
+      <table class="cmp">
+        <thead><tr><th>Before</th><th>After</th></tr></thead>
+        <tbody>
+          <tr><td>This passage is from the page &ldquo;(untitled)&rdquo;. The page opens: # Example Bakery Pte Ltd</td><td>This part opens the Example Bakery profile, a small family bakery that supplies coffee shops, and sets out who owns it and what it sells.</td></tr>
+        </tbody>
+      </table>
+      <p class="credit" style="max-width:64ch;margin:6px 0 22px">A made-up example in the same shape as my real ones. My notes stay off this site.</p>
+
+      <h3 style="margin:0 0 6px">How I ran it</h3>
+      <ol class="src">
+        <li><b>A 20-page test first.</b> 54 pieces, about 1 US cent. I read the old and new labels side by side before going further.</li>
+        <li><b>The cheapest model.</b> Claude Haiku 5.5, with its &ldquo;thinking&rdquo; turned off. A one-line label doesn&rsquo;t need it, and thinking tokens cost money.</li>
+        <li><b>The page sent once, reused for every piece.</b> Anthropic&rsquo;s prompt caching keeps the page on their side for a few minutes, and reading it again costs a tenth of the normal price. Pieces of one page went one after another so the cache stayed warm; four pages ran at a time.</li>
+        <li><b>A backup of the old index</b> before anything changed, so I could put it back in one step.</li>
+        <li><b>A clean-up.</b> 69 leftover folders from renamed or deleted pages would have shown up as duplicate results. I moved them out.</li>
+      </ol>
+
+      <h3 style="margin:22px 0 6px">The numbers</h3>
+      <table class="cmp">
+        <thead><tr><th>Item</th><th>Count</th></tr></thead>
+        <tbody>
+          <tr><td>Pages</td><td>3,798</td></tr>
+          <tr><td>Pieces labelled</td><td>11,409, none failed</td></tr>
+          <tr><td>Text read fresh</td><td>about 10 million tokens</td></tr>
+          <tr><td>Text read from the cache</td><td>about 157 million tokens</td></tr>
+          <tr><td>Labels written</td><td>about 0.9 million tokens</td></tr>
+          <tr><td>Cost</td><td>about US$4, roughly 0.04 US cents a piece</td></tr>
+        </tbody>
+      </table>
+      <p class="credit" style="max-width:64ch;margin:6px 0 22px">Cost worked out from the token counts at Anthropic&rsquo;s list prices on 30 Oct 2026. My first guess was US$2: there were more pieces than I had counted.</p>
+
+      <h3 style="margin:0 0 6px">Did search get better?</h3>
+      <div class="prose">
+        <p>Mixed, so far. I asked eight questions of the old index and the new one. Two came back better, two worse and four the same. A question about a privacy tool moved the right page from 9th to 2nd. A question about why AI pilots stall pushed the best page from 6th to 14th.</p>
+        <p>Eight questions is a small test, and it only checked the keyword part of my search. Anthropic&rsquo;s own tests found about a third fewer missed pages with labels alone, and about half with keyword search added. I&rsquo;m keeping the new index and judging it by a week of normal questions.</p>
+      </div>
+
+      <h3 style="margin:22px 0 6px">If you try this</h3>
+      <ul class="src">
+        <li><b>Test 20 pages before the rest.</b> It costs cents and shows you the labels.</li>
+        <li><b>Send the page once, then every piece.</b> Without caching, my run would have cost about four times as much.</li>
+        <li><b>Keep your API key out of your coding assistant.</b> I store mine in the Mac Keychain and the script reads it when it runs. If the key sits in your terminal settings, your assistant may bill the credit instead of your plan.</li>
+        <li><b>Back up the old index</b> and test with questions you already know the answer to.</li>
+        <li><b>Your text goes to the provider.</b> I only did this because these notes are mine to send. Keep private material on a model on your own computer.</li>
+      </ul>
+
+      <h3 style="margin:22px 0 6px">Sources</h3>
+      <ul class="src">
+        <li><a href="https://www.anthropic.com/news/contextual-retrieval" rel="noopener">Anthropic: Introducing Contextual Retrieval</a> (Sep 2024)</li>
+        <li><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" rel="noopener">Claude docs: prompt caching</a></li>
+      </ul>
+
+      <div class="prose" style="margin-top:22px">
+        <p class="about-cta">Want search over your own files that finds the right page? <a href="https://www.linkedin.com/in/charlestay" rel="noopener">Message me on LinkedIn</a>.</p>
+      </div>
     </div>
   </section>
 
