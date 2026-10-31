@@ -630,16 +630,12 @@ function loadFinder(key){
 const SSIC_STOP = new Set(('manufacture manufacturing repair repairs other others nec the and for with without from into products product '
   + 'equipment services service activities activity related including include wholesale trade retail sale sales general goods variety '
   + 'dominant elsewhere classified parts accessories similar industries industry supplies supply items articles materials material made '
-  + 'use based specialised mainly main n.e.c').split(' '));
+  + 'use based specialised mainly main via').split(' '));
 const stem = w => w.length > 6 ? w.slice(0, 6) : w;
-function ssicWords(...infos){
-  const out = new Set();
-  for (const i of infos) {
-    if (!i || !i.title || i.holding) continue;
-    const t = i.title.toLowerCase().replace(/\(?\bexcept\b[^)]*\)?/g, ' ');
-    for (const w of t.match(/[a-z]+/g) || []) if (w.length > 2 && !SSIC_STOP.has(w)) out.add(w);
-  }
-  return [...out];
+function titleWords(t, out){
+  t = t.toLowerCase().replace(/\(?\bexcept\b[^)]*\)?/g, ' ');
+  for (const w of t.match(/[a-z]+/g) || []) if (w.length > 2 && !SSIC_STOP.has(w)) out.add(w);
+  return out;
 }
 // soonest class first, then rating, then title (as in the Course Finder)
 function byNext(a, b){
@@ -663,16 +659,22 @@ function renderCourses(S, sector){
   links.innerHTML = h;
   if (!S) { box.innerHTML = '<p>No sector applies, so no course list. Pick a sector in the Course Finder.</p>'; return; }
   const codes = [sector.p, sector.s].filter(i => i && i.title && !i.holding);
-  const words = ssicWords(...codes), wstems = words.map(stem);
+  // words from the five-digit SSIC titles rank first, then words from their two-digit division titles
+  const w1 = new Set(), w2 = new Set();
+  codes.forEach(i => titleWords(i.title, w1));
+  codes.forEach(i => titleWords(D.divTitle[i.div] || '', w2));
+  w1.forEach(w => w2.delete(w));
+  const words = [...w1, ...w2], wstems = words.map(stem), n1 = w1.size;
   box.innerHTML = '<p>Loading courses from the Course Finder…</p>';
   loadFinder(S.key).then(cs => {
     if (id !== courseRun) return;
-    const dated = cs.filter(c => c.next).length;
-    // courses whose titles share a word with the SSIC activity come first, then the soonest class
-    const hits = c => wstems.filter(s => [...c.stems].some(t => stem(t) === s));
-    const scored = cs.map(c => ({c, h: hits(c)}));
-    const matched = scored.filter(x => x.h.length).length;
-    scored.sort((a, b) => b.h.length - a.h.length || byNext(a.c, b.c));
+    // Only courses whose titles share a word with the SSIC activity are listed. Sector placement is by
+    // keyword, so the sector alone is too broad (food-safety classes sit in Manufacturing, for one).
+    const hits = c => { const ts = new Set([...c.stems].map(stem)); return wstems.filter(s => ts.has(s)); };
+    const scored = cs.map(c => ({c, h: hits(c)})).filter(x => x.h.length);
+    const tier = h => [h.filter(s => wstems.indexOf(s) < n1).length, h.length];
+    scored.sort((a, b) => { const ta = tier(a.h), tb = tier(b.h); return tb[0] - ta[0] || tb[1] - ta[1] || byNext(a.c, b.c); });
+    const matched = scored.length;
     // one line per title: the same course from several providers is shown once
     const seen = new Map(), pick = [];
     for (const x of scored) {
@@ -683,11 +685,11 @@ function renderCourses(S, sector){
     }
     const row = ({c, h, more}) => `<li><a href="${COURSE_URL}${encodeURIComponent(c.ref)}" target="_blank" rel="noopener">${esc(c.title)}</a><span>${esc(c.pv)}${more ? ` (+${more} other provider${more === 1 ? '' : 's'})` : ''} · ${c.next ? 'next class ' + fmtDate(c.next) : 'no date listed'}${c.hours != null ? ' · ' + (Math.round(c.hours * 10) / 10) + ' h' : ''}${c.fee != null ? ' · full fee $' + fmt.format(c.fee) : ''}${h.length ? ' · matches: ' + h.map(s => esc(words[wstems.indexOf(s)])).join(', ') : ''}</span></li>`;
     const codeText = codes.map(i => esc(i.code)).join(' and ');
-    box.innerHTML = `<h3>Courses for SSIC ${codeText || '–'} → ${esc(S.label)}</h3>
-      <p>${!words.length ? `${fmt.format(cs.length)} courses in this sector, soonest class first.`
-        : matched ? `${fmt.format(matched)} of ${fmt.format(cs.length)} courses in this sector have a title that shares a word with the SSIC activity (${words.map(esc).join(', ')}). They come first; then the soonest class.`
-        : `No course title among the ${fmt.format(cs.length)} in this sector shares a word with the SSIC activity (${words.map(esc).join(', ')}), so these are the soonest classes.`} ${fmt.format(dated)} have a class date from today. Each opens on MySkillsFuture.</p>
-      <ol>${pick.map(row).join('')}</ol>`;
+    const wordText = words.map(esc).join(', ');
+    box.innerHTML = `<h3>Courses for SSIC ${codeText || '–'} → ${esc(S.label)}</h3>` + (matched
+      ? `<p>${fmt.format(matched)} of the ${fmt.format(cs.length)} courses in this sector have a title with a word from the SSIC activity (${wordText}). Closest match first, then the soonest class. Each opens on MySkillsFuture.</p>
+         <ol>${pick.map(row).join('')}</ol>`
+      : `<p>None of the ${fmt.format(cs.length)} course titles in this sector has a word from the SSIC activity${words.length ? ` (${wordText})` : ''}, so no list is shown. Browse the sector in the Course Finder below.</p>`);
   }, () => {
     if (id !== courseRun) return;
     box.innerHTML = `<p>Could not load the course list. ${a(FINDER + '?sector=' + encodeURIComponent(S.key), 'Open the Course Finder →')}</p>`;
