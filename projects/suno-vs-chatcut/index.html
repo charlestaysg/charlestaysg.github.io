@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suno vs ChatCut · Charles Tay</title>
+<meta name="description" content="The same song made by two AI singers, both run from Claude Code. Switch between Suno and ChatCut on the same line and hear the difference.">
+<link rel="canonical" href="https://charlestaysg.com/projects/suno-vs-chatcut/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Suno vs ChatCut">
+<meta property="og:description" content="Same lyrics, same style brief, two AI singers. Switch between them mid-line.">
+<meta property="og:url" content="https://charlestaysg.com/projects/suno-vs-chatcut/">
+<meta property="og:image" content="https://charlestaysg.com/projects/suno-vs-chatcut/poster.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  .ab { background: var(--panel); border: 1px solid var(--line); padding: 20px; margin: 0 0 28px; max-width: 760px; }
+  .ab h3 { margin: 0 0 4px; }
+  .ab .note { font-size: 15px; color: var(--muted); margin: 0 0 16px; }
+  .ab-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .ab button { font: 500 15px/1 var(--font-mono); padding: 12px 16px; border: 1px solid var(--line); background: transparent; color: inherit; cursor: pointer; min-height: 44px; }
+  .ab button.play { min-width: 92px; }
+  .ab .seg { display: inline-flex; border: 1px solid var(--line); }
+  .ab .seg button { border: 0; }
+  .ab .seg button[aria-pressed="true"].suno { background: #f2a541; color: #111; }
+  .ab .seg button[aria-pressed="true"].chatcut { background: #4fd1c5; color: #111; }
+  .ab .lyric { font-size: 22px; font-weight: 700; line-height: 1.35; min-height: 2.7em; margin: 18px 0 10px; }
+  .ab .lyric .next { display: block; font-size: 16px; font-weight: 500; color: var(--muted); margin-top: 4px; }
+  .ab .track { height: 6px; background: var(--line); position: relative; cursor: pointer; }
+  .ab .track i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--green); }
+  .ab .who { font-family: var(--font-mono); font-size: 13px; color: var(--muted); margin-top: 8px; }
+  table.cmp { border-collapse: collapse; width: 100%; max-width: 860px; font-size: 16px; }
+  table.cmp th, table.cmp td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-top: 1px solid var(--line); }
+  table.cmp th { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--muted); width: 30%; }
+  table.cmp thead th { border-top: 0; font-size: 15px; color: inherit; }
+  .cmp-wrap { overflow-x: auto; }
+  .chap { font-family: var(--font-mono); font-size: 14px; color: var(--muted); line-height: 1.8; margin-top: 12px; }
+  .chap b { color: var(--green); font-weight: 500; }
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../toolkit/">← Toolkit</a>
+    <span class="label">Experiment · <time datetime="2026-10-31">Oct 2026</time></span>
+    <h1>Suno vs ChatCut</h1>
+    <p class="dek">I connected Suno to Claude Code and asked both Suno and ChatCut for the same song: same lyrics, same style brief, one take each. Below you can switch between the two singers on the same line. Headphones help.</p>
+  </div>
+</header>
+
+<main>
+  <section id="listen">
+    <div class="wrap">
+      <div class="sec-head"><h2>switch singers mid-line</h2></div>
+      <p style="max-width:64ch;margin-bottom:20px">Press play, then flip between Suno and ChatCut. The other singer picks up at the same line. Both are set to the same loudness, so neither sounds better just by being louder.</p>
+      <div class="ab" data-round="r1">
+        <h3>Verse 1</h3>
+        <p class="note">Round 1 &middot; 4 lines</p>
+        <div class="ab-row">
+          <button type="button" class="play">&#9654; Play</button>
+          <span class="seg" role="group" aria-label="Singer">
+            <button type="button" class="suno" data-k="suno" aria-pressed="true">Suno</button><button type="button" class="chatcut" data-k="chatcut" aria-pressed="false">ChatCut</button>
+          </span>
+        </div>
+        <p class="lyric" aria-live="polite"></p>
+        <div class="track" aria-hidden="true"><i></i></div>
+        <p class="who">Now singing: Suno</p>
+      </div>
+      <div class="ab" data-round="r2">
+        <h3>First chorus</h3>
+        <p class="note">Round 2 &middot; 4 lines</p>
+        <div class="ab-row">
+          <button type="button" class="play">&#9654; Play</button>
+          <span class="seg" role="group" aria-label="Singer">
+            <button type="button" class="suno" data-k="suno" aria-pressed="true">Suno</button><button type="button" class="chatcut" data-k="chatcut" aria-pressed="false">ChatCut</button>
+          </span>
+        </div>
+        <p class="lyric" aria-live="polite"></p>
+        <div class="track" aria-hidden="true"><i></i></div>
+        <p class="who">Now singing: Suno</p>
+      </div>
+      <div class="ab" data-round="r3">
+        <h3>Last chorus</h3>
+        <p class="note">Round 3 &middot; 4 lines</p>
+        <div class="ab-row">
+          <button type="button" class="play">&#9654; Play</button>
+          <span class="seg" role="group" aria-label="Singer">
+            <button type="button" class="suno" data-k="suno" aria-pressed="true">Suno</button><button type="button" class="chatcut" data-k="chatcut" aria-pressed="false">ChatCut</button>
+          </span>
+        </div>
+        <p class="lyric" aria-live="polite"></p>
+        <div class="track" aria-hidden="true"><i></i></div>
+        <p class="who">Now singing: Suno</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="watch">
+    <div class="wrap">
+      <div class="sec-head"><h2>or watch it as one video</h2></div>
+      <div class="player"><button type="button" class="yt" data-yt="UX_dOrzr6Mk" aria-label="Play Suno vs ChatCut on YouTube"><img src="poster.jpg" alt=""><span class="yt-play" aria-hidden="true"></span></button></div>
+      <p style="margin-top:10px"><a href="https://www.youtube.com/watch?v=UX_dOrzr6Mk" rel="noopener">Watch on YouTube ↗</a></p>
+      <p class="chap"><b>0:06</b> verse 1<br><b>0:54</b> first chorus<br><b>1:39</b> last chorus<br><b>2:25</b> suno&rsquo;s cover<br><b>2:54</b> the comparison table</p>
+    </div>
+  </section>
+
+  <section id="cover">
+    <div class="wrap">
+      <div class="sec-head"><h2>bonus: suno&rsquo;s cover tool</h2></div>
+      <p style="max-width:64ch;margin-bottom:16px">From Claude Code I asked Suno to remake its own song as a slow xinyao-style ballad: nylon-string guitar, harmonica, soft vocals. Same lyrics, new style, about 40 seconds to make.</p>
+      <audio controls preload="none" src="audio/cover-chorus.mp3" style="width:100%;max-width:420px"></audio>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="wrap">
+      <div class="sec-head"><h2>using them from claude code</h2></div>
+      <div class="cmp-wrap">
+      <table class="cmp">
+        <thead><tr><th></th><th style="color:#c9821c">Suno</th><th style="color:#1f9e93">ChatCut</th></tr></thead>
+        <tbody>
+          <tr><th>How Claude Code reaches it</th><td>Suno&#x27;s own MCP. Sign in once, no key</td><td>ChatCut Desktop&#x27;s MCP. The app must be open</td></tr>
+          <tr><th>Time to make one song</th><td>Under 40 seconds</td><td>About 2 minutes</td></tr>
+          <tr><th>Song length</th><td>Can be set: asked 2:00, got 2:00</td><td>No setting: got 3:27</td></tr>
+          <tr><th>Cover, extend, join</th><td>All three, from Claude Code</td><td>Not tried</td></tr>
+          <tr><th>Getting the audio file</th><td>Download on the Pro plan</td><td>MP3 saved to the Mac straight away</td></tr>
+          <tr><th>Cost</th><td>Free: 100 credits a month. Pro: US$10 a month</td><td>ChatCut plan credits</td></tr>
+          <tr><th>My take on the voice</th><td>Sings differently. I like it</td><td>Also good</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="row-note" style="margin-top:12px;max-width:64ch">From one test on 31 Oct 2026. Suno ran on its free model (v6-mini); its paid plans use newer models. One take each, so luck plays a part.</p>
+    </div>
+  </section>
+
+  <section id="heard">
+    <div class="wrap">
+      <div class="sec-head"><h2>what I heard</h2></div>
+      <ul class="tools">
+        <li><span class="job">my take</span><div><p>Suno sings differently from ChatCut, and I like it. ChatCut is also good. I&rsquo;ll keep both and pick by the feel a song needs.</p></div></li>
+        <li><span class="job">fair test</span><div><p>ChatCut&rsquo;s file came out about 3 dB louder. Louder tends to sound better, so I levelled both before putting them side by side.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="wrap">
+      <div class="sec-head"><h2>the tools, and what each one did</h2></div>
+      <dl class="spec-list">
+        <dt>the songs</dt><dd>Suno and ChatCut: AI-generated, both asked for from Claude Code</dd>
+        <dt>the lyrics</dt><dd>written for this test, with Claude</dd>
+        <dt>the timing</dt><dd>Suno&rsquo;s own word timings, and Whisper for ChatCut&rsquo;s, so the player can jump to the same line</dd>
+        <dt>the video</dt><dd>HyperFrames, built from Claude Code</dd>
+      </dl>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. Both songs are AI-generated, with Suno and ChatCut.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies unless you play the YouTube video. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+<script>
+const ROUNDS = {"r1":{"text":["Six a.m., the rain on the corridor floor","Didn't want to get up, didn't want to go","Lift's out again, ten flights down","Kaya toast in a paper bag, the whole sky brown"],"suno":{"src":"audio/r1-suno.mp3","lines":[[1.4,5.68],[6.45,10.23],[11.7,14.37],[14.58,19.27]],"anchors":[1.4,5.68,6.45,10.23,11.7,14.37,14.58,19.27]},"chatcut":{"src":"audio/r1-chatcut.mp3","lines":[[1.4,5.6],[7.0,11.3],[12.86,17.06],[17.06,22.76]],"anchors":[1.4,5.6,7.0,11.3,12.86,17.06,17.06,22.76]}},"r2":{"text":["Still I'm walking down Lorong 4","Shoes full of water, can't feel them no more","Gutters running over, sky hanging low","Mum, I said I'd come, so I go"],"suno":{"src":"audio/r2-suno.mp3","lines":[[1.4,4.67],[6.38,10.66],[12.14,16.32],[17.45,21.98]],"anchors":[1.4,4.67,6.38,10.66,12.14,16.32,17.45,21.98]},"chatcut":{"src":"audio/r2-chatcut.mp3","lines":[[1.4,4.32],[5.48,8.3],[9.08,11.14],[11.96,17.28]],"anchors":[1.4,4.32,5.48,8.3,9.08,11.14,11.96,17.28]}},"r3":{"text":["So I'm walking down Lorong 4","Two more blocks to the fourteenth floor","Gutters gone quiet, sky washed clean","Mum's at the window, waving to me"],"suno":{"src":"audio/r3-suno.mp3","lines":[[1.4,5.15],[6.42,10.93],[12.11,16.65],[17.51,22.43]],"anchors":[1.4,5.15,6.42,10.93,12.11,16.65,17.51,22.43]},"chatcut":{"src":"audio/r3-chatcut.mp3","lines":[[1.4,4.42],[5.3,8.44],[8.66,11.24],[11.72,17.34]],"anchors":[1.4,4.42,5.3,8.44,8.66,11.24,11.72,17.34]}}};
+document.addEventListener('click', e => {
+  const b = e.target.closest('button.yt');
+  if (b) b.parentElement.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1&rel=0" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+});
+// Map a time in one take to the same place in the other, line by line.
+function mapTime(t, from, to) {
+  const a = from.anchors, b = to.anchors;
+  if (t <= a[0]) return Math.max(0, b[0] - (a[0] - t));
+  for (let i = 1; i < a.length; i++) {
+    if (t <= a[i]) return b[i - 1] + (b[i] - b[i - 1]) * (t - a[i - 1]) / (a[i] - a[i - 1]);
+  }
+  return b[b.length - 1] + (t - a[a.length - 1]);
+}
+const players = [];
+document.querySelectorAll('.ab').forEach(box => {
+  const r = ROUNDS[box.dataset.round];
+  const au = { suno: new Audio(r.suno.src), chatcut: new Audio(r.chatcut.src) };
+  Object.values(au).forEach(a => { a.preload = 'none'; });
+  let cur = 'suno';
+  const play = box.querySelector('.play'), lyric = box.querySelector('.lyric'), fill = box.querySelector('.track i');
+  const who = box.querySelector('.who');
+  const segBtns = box.querySelectorAll('.seg button');
+  const p = { stop() { au[cur].pause(); play.textContent = '▶ Play'; } };
+  // Load both takes whole on first use (about 300 KB each), so a switch is instant and can jump on any server.
+  let loading = null;
+  const ready = () => loading || (loading = Promise.all(Object.entries(au).map(async ([k, a]) => {
+    const blob = await (await fetch(r[k].src)).blob();
+    a.src = URL.createObjectURL(blob);
+    await new Promise(res => a.readyState >= 1 ? res() : a.addEventListener('loadedmetadata', res, { once: true }));
+  })));
+  players.push(p);
+  function show() {
+    const a = au[cur], t = a.currentTime, lines = r[cur].lines;
+    let i = lines.findIndex(l => t < l[1]);
+    if (i < 0) i = lines.length - 1;
+    // Between lines, keep the last sung line up; before the first, show it as coming next.
+    if (t < lines[i][0] - 0.3 && i > 0) i -= 1;
+    lyric.innerHTML = r.text[i] + (r.text[i + 1] ? `<span class="next">${r.text[i + 1]}</span>` : '');
+    fill.style.width = (a.duration ? 100 * t / a.duration : 0) + '%';
+    who.textContent = `Now singing: ${cur === 'suno' ? 'Suno' : 'ChatCut'}`;
+  }
+  Object.entries(au).forEach(([k, a]) => {
+    a.addEventListener('timeupdate', () => { if (k === cur) show(); });
+    a.addEventListener('ended', () => { if (k === cur) { play.textContent = '▶ Play'; } });
+  });
+  play.addEventListener('click', async () => {
+    if (!au[cur].paused) return p.stop();
+    players.forEach(o => o !== p && o.stop());
+    document.querySelectorAll('audio').forEach(x => x.pause());
+    play.textContent = '… Loading';
+    await ready();
+    au[cur].play(); play.textContent = '❚❚ Pause';
+  });
+  segBtns.forEach(btn => btn.addEventListener('click', async () => {
+    const k = btn.dataset.k;
+    if (k === cur) return;
+    const from = au[cur], to = au[k], playing = !from.paused;
+    const target = mapTime(from.currentTime, r[cur], r[k]);
+    from.pause();
+    cur = k;
+    segBtns.forEach(b => b.setAttribute('aria-pressed', b.dataset.k === k));
+    await ready();
+    to.currentTime = target;
+    if (playing) to.play();
+    show();
+  }));
+  box.querySelector('.track').addEventListener('click', e => {
+    const a = au[cur], rect = e.currentTarget.getBoundingClientRect();
+    if (a.duration) { a.currentTime = a.duration * (e.clientX - rect.left) / rect.width; show(); }
+  });
+  lyric.innerHTML = r.text[0] + `<span class="next">${r.text[1] || ''}</span>`;
+});
+document.addEventListener('play', e => {
+  document.querySelectorAll('audio').forEach(a => { if (a !== e.target) a.pause(); });
+  if (e.target.closest && e.target.closest('#cover')) players.forEach(p => p.stop());
+}, true);
+</script>
+</body>
+</html>
