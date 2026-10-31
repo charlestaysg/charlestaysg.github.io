@@ -1,8 +1,15 @@
-# Monthly refresh of the SME Workforce Pulse page (projects/sme-pulse/).
-# Fetches MOM data from data.gov.sg. If the data changed, the new snapshot is kept; if not,
-# the old one is restored. Either way it records the check date in data/last-checked.json,
-# rebuilds, runs the independent check, and commits. The monthly commit also keeps the repo
-# active, so GitHub does not disable this schedule after 60 quiet days.
+# Monthly refresh of the SME Workforce Pulse page, Evidence version.
+# Same data chain as the hand-built page: tools/sme-pulse/fetch.py pulls MOM data from
+# data.gov.sg; if the data changed the new snapshot is kept, if not the old one is restored;
+# either way the check date goes into data/last-checked.json. Then the Evidence project
+# (tools/sme-pulse-evidence) turns that data into CSVs, checks them against the raw files
+# and builds the static site. The built site replaces the live folder only after every
+# earlier step has passed, so a failed fetch, check or build leaves the live page as it was.
+# The monthly commit also keeps the repo active, so GitHub does not disable this schedule
+# after 60 quiet days.
+#
+# Where the page lives: SITE_DIR below must match deployment.basePath in
+# tools/sme-pulse-evidence/evidence.config.yaml (basePath is "/" + SITE_DIR).
 name: Refresh SME Workforce Pulse
 
 on:
@@ -17,13 +24,13 @@ concurrency:
   group: sme-pulse-refresh
   cancel-in-progress: false
 
+env:
+  SITE_DIR: projects/sme-pulse   # must match deployment.basePath in tools/sme-pulse-evidence/evidence.config.yaml
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    defaults:
-      run:
-        working-directory: tools/sme-pulse
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -31,14 +38,24 @@ jobs:
         with:
           python-version: "3.12"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: tools/sme-pulse-evidence/package-lock.json
+
+      # ---- 1. data: fetch, keep only if MOM data changed, record the check date
       - name: Keep previous snapshot
+        working-directory: tools/sme-pulse
         run: cp data/snapshot.json "$RUNNER_TEMP/old-snapshot.json"
 
       - name: Fetch from data.gov.sg
+        working-directory: tools/sme-pulse
         run: python fetch.py
 
       - name: Did the data change?
         id: diff
+        working-directory: tools/sme-pulse
         run: |
           python - <<'EOF' >> "$GITHUB_OUTPUT"
           import json, os
@@ -49,23 +66,54 @@ jobs:
 
       - name: Keep the old snapshot if nothing changed
         if: steps.diff.outputs.changed != 'true'
+        working-directory: tools/sme-pulse
         run: git checkout -- data/snapshot.json data/raw
 
-      - name: Record check date, build and check
+      - name: Record check date
+        working-directory: tools/sme-pulse
         run: |
           result=$([ "${{ steps.diff.outputs.changed }}" = "true" ] && echo updated || echo unchanged)
           printf '{"checked": "%s", "result": "%s"}\n' "$(TZ=Asia/Singapore date +%F)" "$result" > data/last-checked.json
+
+      # ---- 2. the existing independent check, on the raw files and the old page's own build.
+      # check.py reads index.html, so build the old page into a temporary file first.
+      - name: Existing check (build.py + check.py, output discarded)
+        working-directory: tools/sme-pulse
+        run: |
           python build.py
           python check.py
-          cp index.html ../../projects/sme-pulse/index.html
           rm index.html
 
+      # ---- 3. Evidence: CSVs, check the CSVs against the raw files, build the site
+      - name: Install Evidence
+        working-directory: tools/sme-pulse-evidence
+        run: npm ci
+
+      - name: Prepare CSVs and check them
+        working-directory: tools/sme-pulse-evidence
+        run: |
+          npm run prep
+          npm run check
+
+      - name: Load sources and build (strict)
+        working-directory: tools/sme-pulse-evidence
+        run: |
+          npx evidence sources
+          npm run build:strict
+          test -s build/index.html
+
+      # ---- 4. only now touch the live folder
+      - name: Replace the live page
+        run: |
+          rm -rf "$SITE_DIR"
+          mkdir -p "$(dirname "$SITE_DIR")"
+          cp -R tools/sme-pulse-evidence/build "$SITE_DIR"
+
       - name: Commit
-        working-directory: .
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898299+github-actions[bot]@users.noreply.github.com"
-          git add tools/sme-pulse/data projects/sme-pulse/index.html
+          git add tools/sme-pulse/data "$SITE_DIR"
           latest=$(python -c "import json;print(json.load(open('tools/sme-pulse/data/snapshot.json'))['datasets']['vacancies_total']['latest'])")
           if [ "${{ steps.diff.outputs.changed }}" = "true" ]; then
             msg="SME Workforce Pulse: new MOM data (latest $latest)"

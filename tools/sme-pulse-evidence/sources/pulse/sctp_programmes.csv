@@ -1,0 +1,82 @@
+seq,inst,inst_name,inst_url,title,sector
+1,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,AI-Driven Digital Marketing and E-Commerce,cross
+2,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,AI-Driven Market Research Professionals,cross
+3,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,AI-nnovate for Business Development,cross
+4,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Automation with AI: Digital Transformation Mastery,cross
+5,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Capture and Create: Mastering Photography and Videography,ict
+6,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Cloud Computing and Cybersecurity for Digital Transformation,ict
+7,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Content Creation using Generative AI,cross
+8,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Digital Transformation in Finance: Skills for the New Economy,finance
+9,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Driving Business Transformation with Digital Technologies,cross
+10,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Engineering Design,manufacturing
+11,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Essential Skills for Social Services,health
+12,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Facade Inspection Using Drone for Facilities Management Professionals,admin
+13,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,HR Professionals,cross
+14,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Food & Beverage Entrepreneurship,food
+15,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Sustainability and Environmental Professionals,cross
+16,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Wellness Professionals,other
+17,RP,Republic Polytechnic,https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/,Environmental Services for Facility Management,admin
+18,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Supply Chain Operations & Sustainability,transport
+19,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Human-Centric HR: Enhancing People Experience in a Sustainable Business,cross
+20,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Community Care and Support,health
+21,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Data Governance,cross
+22,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Unlocking Gen-AI in Digital Commerce,cross
+23,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Software Quality Assurance,ict
+24,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Smart and Sustainable Facilities Management,admin
+25,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,i.am-vitalize Full Stack Developer,ict
+26,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Accountancy Career Launchpad,professional
+27,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Data Science Bootcamp,cross
+28,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Digital Commerce and Content Marketing,cross
+29,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Customer Experience Innovation,cross
+30,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Advanced Data Analytics and Visualisation,cross
+31,NP,Ngee Ann Polytechnic,https://www.cet.np.edu.sg/career-transition-programme-sctp,Postnatal Mother and Newborn Care,health
+32,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Pharmaceutical Manufacturing,manufacturing
+33,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Precision Machining,manufacturing
+34,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Food Safety and Analysis,manufacturing
+35,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,WSQ Diploma in Retail (Retail Operations),retail
+36,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,WSQ Diploma in Retail (E-Commerce: Omni-Channel),retail
+37,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,WSQ Diploma in Food Services,food
+38,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,WSQ Certificate in Food Services (Culinary Arts),food
+39,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,WSQ Certificate in Food Services (Pastry & Baking),food
+40,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Kitchen Operations Specialist (Culinary Arts),food
+41,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Kitchen Operations Specialist (Pastry & Baking),food
+42,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Tourism Innovation,food
+43,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Cybersecurity Incident Investigator,ict
+44,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in The Art of Motion Graphics,ict
+45,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Enhancing Moving Images,ict
+46,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in 360 Video Production,ict
+47,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Gamification Approach to User Experience Design,ict
+48,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Digital Transformation with Cloud and AI,cross
+49,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Digital Transformation with Robotic Process Automation,cross
+50,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Marketing & Digital Communication,cross
+51,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Service Innovation,cross
+52,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Data Analytics with Artificial Intelligence,cross
+53,NYP,Nanyang Polytechnic,https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP,Certificate in Digital Marketing & Content Curation,cross
+54,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,Intelligent Data-Driven Digitalisation,cross
+55,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,Applied HR and Business Digitalisation,cross
+56,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,Energy Efficiency and Sustainability Management,cross
+57,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,Sustainability Practices and Reporting,cross
+58,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,Green and Sustainable Data Centre Technologies,ict
+59,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,Data Centre Professionals,ict
+60,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,AI and Cloud Services,ict
+61,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,Full Stack Development,ict
+62,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,Advanced Certificate of Performance in Ophthalmic Dispensing & Refraction,health
+63,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,Sustainable Process Operations,manufacturing
+64,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,Facilities Operations Management,admin
+65,SP,Singapore Polytechnic,https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes,Aircraft Maintenance for Technician,transport
+66,TP,Temasek Polytechnic,https://www.tp.edu.sg/schools-and-courses/adult-learners/all-courses/skillsfuture-career-transition-programme.html,Junior Data Engineer & Analyst,cross
+67,TP,Temasek Polytechnic,https://www.tp.edu.sg/schools-and-courses/adult-learners/all-courses/skillsfuture-career-transition-programme.html,Cloud Support & DevOps,ict
+68,TP,Temasek Polytechnic,https://www.tp.edu.sg/schools-and-courses/adult-learners/all-courses/skillsfuture-career-transition-programme.html,Junior Full-Stack Developer,ict
+69,TP,Temasek Polytechnic,https://www.tp.edu.sg/schools-and-courses/adult-learners/all-courses/skillsfuture-career-transition-programme.html,Patient Service Associate,health
+70,TP,Temasek Polytechnic,https://www.tp.edu.sg/schools-and-courses/adult-learners/all-courses/skillsfuture-career-transition-programme.html,Environmental Services Specialist,admin
+71,TP,Temasek Polytechnic,https://www.tp.edu.sg/schools-and-courses/adult-learners/all-courses/skillsfuture-career-transition-programme.html,Beyond the GIG Economy: Elevate your Freelance Career,other
+72,TP,Temasek Polytechnic,https://www.tp.edu.sg/schools-and-courses/adult-learners/all-courses/skillsfuture-career-transition-programme.html,Security Systems Technician,security
+73,TP,Temasek Polytechnic,https://www.tp.edu.sg/schools-and-courses/adult-learners/all-courses/skillsfuture-career-transition-programme.html,Security Operations,security
+74,ITE,ITE,https://www.ite.edu.sg/adult-learners/skillsfuture-career-transition-programme-sctp/,Digital Media Marketing,cross
+75,ITE,ITE,https://www.ite.edu.sg/adult-learners/skillsfuture-career-transition-programme-sctp/,Human Resource Professionals,cross
+76,ITE,ITE,https://www.ite.edu.sg/adult-learners/skillsfuture-career-transition-programme-sctp/,Semiconductor Industry Technicians,manufacturing
+77,ITE,ITE,https://www.ite.edu.sg/adult-learners/skillsfuture-career-transition-programme-sctp/,Passenger Services,transport
+78,ITE,ITE,https://www.ite.edu.sg/adult-learners/skillsfuture-career-transition-programme-sctp/,Security Technology,security
+79,ITE,ITE,https://www.ite.edu.sg/adult-learners/skillsfuture-career-transition-programme-sctp/,Attractions Professionals,food
+80,ITE,ITE,https://www.ite.edu.sg/adult-learners/skillsfuture-career-transition-programme-sctp/,Associate Infrastructure Support Engineers,ict
+81,ITE,ITE,https://www.ite.edu.sg/adult-learners/skillsfuture-career-transition-programme-sctp/,Media Creation for Video Content Creators,ict

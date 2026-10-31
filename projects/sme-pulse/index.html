@@ -1,602 +1,188 @@
 <!doctype html>
-<html lang="en-SG">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SME Workforce Pulse</title>
-<meta name="description" content="Singapore job vacancies, vacancy rates and retrenchments by sector, from MOM open data. Unofficial teaching example.">
-<style>
-:root{
-  color-scheme:light;
-  --page:#f9f9f7; --surface:#fcfcfb; --card:#ffffff;
-  --ink:#0b0b0b; --ink-2:#52514e; --muted:#6f6d68;
-  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,.10);
-  --accent:#2a78d6; --accent-soft:rgba(42,120,214,.12);
-  --other:#c9c7bf; --bar-other:#b9c9dc;
-  --survey-bg:#fbf7ee; --survey-border:#d9c9a3; --survey-ink:#6b5a2e;
-  --chip-on-ink:#ffffff;
-  --c-ret:#eb6834;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    color-scheme:dark;
-    --page:#0d0d0d; --surface:#1a1a19; --card:#1a1a19;
-    --ink:#ffffff; --ink-2:#c3c2b7; --muted:#9a988f;
-    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
-    --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
-    --other:#4a4a46; --bar-other:#34465c;
-    --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
-    --c-ret:#d95926;
-  }
-}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --page:#0d0d0d; --surface:#1a1a19; --card:#1a1a19;
-  --ink:#ffffff; --ink-2:#c3c2b7; --muted:#9a988f;
-  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
-  --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
-  --other:#4a4a46; --bar-other:#34465c;
-  --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
-  --c-ret:#d95926;
-}
-*{box-sizing:border-box}
-html,body{margin:0}
-body{background:var(--page);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 40px}
-header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 24px;margin-bottom:16px}
-h1{font-size:26px;line-height:1.2;margin:0;letter-spacing:-.01em}
-.sub{color:var(--ink-2);margin:4px 0 0;font-size:14px}
-.companion{font-size:13px;color:var(--ink-2);margin:6px 0 0}
-.companion a{color:var(--accent)}
-.fresh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);white-space:nowrap}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
-.fresh.is-stale .dot{background:var(--survey-ink)}
-.stale{margin:0 0 16px;padding:10px 14px;border:1px solid var(--survey-border);border-radius:10px;background:var(--survey-bg);color:var(--survey-ink);font-size:14px}
-.badge{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:1px 8px}
-.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;margin:0 -16px 8px;padding-left:16px;padding-right:16px;scrollbar-width:none;position:sticky;top:0;background:var(--page);z-index:5}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:none;border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer;min-height:36px}
-.chip:hover{border-color:var(--axis)}
-.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--chip-on-ink)}
-.chip:focus-visible,.seg button:focus-visible,.linkbtn:focus-visible,.plot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
-.kpi .lab{font-size:13px;color:var(--ink-2);display:flex;justify-content:space-between;gap:8px}
-.kpi .q{color:var(--muted);white-space:nowrap;font-size:12px}
-.kpi .val{font-size:32px;font-weight:600;line-height:1.15;margin:6px 0 4px;letter-spacing:-.01em}
-.kpi .val.na{font-size:18px;font-weight:500;color:var(--ink-2);padding:9px 0 5px}
-.kpi .delta{font-size:13px;color:var(--ink-2)}
-.kpi .gloss{font-size:12px;color:var(--muted);margin-top:2px}
-.kpi{display:flex;flex-direction:column}
-.kpi .adv{font-size:12px;margin-top:4px}
-.kpi .adv a{color:var(--ink-2);text-decoration:underline;text-underline-offset:2px}
-.src{font-size:12px;color:var(--ink-2);margin:8px 0 0}
-.src a{color:var(--ink-2);text-decoration:underline;text-underline-offset:2px}
-.kpi .src{margin-top:auto;padding-top:8px}
-.grid2{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px}
-.card h2{font-size:15px;margin:0;font-weight:600}
-.card .hint{font-size:13px;color:var(--ink-2);margin:2px 0 0}
-.chead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px 16px;margin-bottom:8px}
-.seg{display:inline-flex;background:var(--page);border:1px solid var(--border);border-radius:8px;padding:2px}
-.seg button{border:0;background:transparent;color:var(--ink-2);font:inherit;font-size:13px;padding:5px 10px;border-radius:6px;cursor:pointer;min-height:30px}
-.seg button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 0 0 1px var(--border)}
-.readout{font-size:13px;color:var(--ink-2);min-height:20px;font-variant-numeric:tabular-nums}
-.readout b{color:var(--ink);font-weight:600}
-.plot{width:100%;display:block;touch-action:pan-y}
-.plot text{font-size:11px;fill:var(--muted);font-variant-numeric:tabular-nums}
-.plot .lbl{font-size:12px;fill:var(--ink);font-weight:600}
-.plot .lbl2{font-size:11px;fill:var(--ink-2)}
-.below{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
-.linkbtn{background:none;border:0;color:var(--accent);font:inherit;font-size:13px;cursor:pointer;padding:4px 0}
-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;font-variant-numeric:tabular-nums}
-th,td{text-align:right;padding:5px 8px;border-bottom:1px solid var(--grid)}
-th:first-child,td:first-child{text-align:left}
-th{color:var(--ink-2);font-weight:500}
-.tablewrap{max-height:320px;overflow:auto}
-.bars .row,.pm .row{cursor:pointer}
-.bars .row:hover .name,.pm .row:hover .nm{color:var(--ink)}
-.bars .row{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:2px 8px;align-items:center;padding:3px 0;cursor:default}
-.bars .name{font-size:12px;color:var(--ink-2);grid-column:1/-1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bars .row.on .name{color:var(--ink);font-weight:600}
-.bars .track{position:relative;height:10px}
-.bars .bar{height:10px;border-radius:0 4px 4px 0;background:var(--bar-other)}
-.bars .row.on .bar{background:var(--accent)}
-.bars .ref{position:absolute;top:-3px;bottom:-3px;width:0;border-left:1px solid var(--ink-2)}
-.bars .num{font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
-.bars .row.on .num{color:var(--ink);font-weight:600}
-.pm-sum{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:12px 0 4px}
-.pm-sum .big{font-size:26px;font-weight:600;line-height:1.15}
-.pm-sum .what{font-size:13px;color:var(--ink-2)}
-.pm-sel{font-size:14px;margin:10px 0 0;padding:10px 12px;border-radius:8px;background:var(--page)}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--ink-2);margin:14px 0 6px}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
-.pm .row{display:grid;grid-template-columns:minmax(110px,170px) 1fr;gap:4px 12px;align-items:center;padding:6px 0;border-top:1px solid var(--grid)}
-.pm .row.dim{opacity:.45}
-.pm .row.on .nm{font-weight:600;color:var(--ink)}
-.pm .nm{font-size:13px;color:var(--ink-2)}
-.pm .pair{display:grid;gap:2px}
-.pm .ln{display:grid;grid-template-columns:1fr 52px;gap:8px;align-items:center}
-.pm .b{height:9px;border-radius:0 4px 4px 0;min-width:2px}
-.pm .b.r{background:var(--c-ret)} .pm .b.v{background:var(--accent)}
-.pm .n{font-size:12px;text-align:right;color:var(--ink-2);font-variant-numeric:tabular-nums}
-.pm .na{font-size:12px;color:var(--muted)}
-@media (max-width:560px){.pm .row{grid-template-columns:1fr}.pm-sum{grid-template-columns:1fr}}
-.bars .sub{font-size:11px;color:var(--muted);grid-column:1/-1;margin-top:-2px}
-.sclist{margin-top:14px;font-size:13px}
-.sclist h3{font-size:13px;margin:12px 0 4px;font-weight:600}
-.sclist ul{margin:0;padding-left:18px;color:var(--ink-2)}
-.sclist a{color:var(--ink-2)}
-.sklinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin-top:12px}
-.sklinks a{display:block;border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--ink);text-decoration:none;font-size:14px;line-height:1.35}
-.sklinks a:hover{border-color:var(--accent)}
-.sklinks a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.sklinks small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
-.survey{background:var(--survey-bg);border:1.5px dashed var(--survey-border);border-radius:12px;padding:16px;margin-bottom:12px}
-.survey .pill{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--survey-ink);border:1px solid var(--survey-border);border-radius:999px;padding:1px 8px;margin-bottom:8px}
-.survey h2{font-size:15px;margin:0 0 10px}
-.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.stat .big{font-size:28px;font-weight:600;line-height:1.1}
-.stat .what{font-size:13px;color:var(--ink-2)}
-.stat .was{font-size:12px;color:var(--muted)}
-.survey .cap{font-size:12px;color:var(--ink-2);margin:12px 0 0}
-footer{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:20px}
-footer a{color:var(--ink-2)}
-footer p{margin:0 0 8px}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-@media (min-width:861px){.chips{flex-wrap:wrap;overflow:visible;position:static}}
-@media (max-width:860px){.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:560px){.sgrid{grid-template-columns:1fr}.kpi .val{font-size:26px}h1{font-size:22px}.fresh{white-space:normal;align-items:flex-start}.dot{flex:none;margin-top:6px}}
-@media (max-width:480px){.kpi{padding:14px 12px}.kpi .lab{flex-direction:column;gap:2px}}
-</style>
-</head>
-<body>
-<!-- topbar:start -->
-<style>
-.sitebar,.sitebar *{box-sizing:border-box}
-.sitebar{position:relative;z-index:1200;display:block;width:auto;margin:0 calc(50% - 50vw);padding:10px 16px;background:#F3F6FA;border-bottom:1px solid #D6DEE9;font:14px/1.4 "IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace}
-.sitebar .sb-in{max-width:860px;margin:0 auto;padding:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px}
-.sitebar a{display:inline;padding:0;border:0;background:none;color:#0B1324;text-decoration:none;white-space:nowrap}
-.sitebar a:hover{color:#148A4E}
-.sitebar .me{font:900 18px/1.2 Barlow,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.02em;margin-right:auto}
-.sitebar .tb-ext{color:#148A4E}
-@media (prefers-color-scheme:dark){.sitebar{background:#0B1324;border-color:#1F2A40}.sitebar a{color:#E6EDF7}.sitebar a:hover,.sitebar .tb-ext{color:#3DDC84}}
-@media (max-width:640px){.sitebar{font-size:13px;padding:8px 16px}.sitebar .sb-in{gap:2px 14px}.sitebar .tb-ext{display:none}}
-@media (max-width:480px){.sitebar .me{flex-basis:100%}}
-</style>
-<nav class="sitebar" aria-label="Site">
-  <div class="sb-in">
-    <a class="me" href="/">Charles Tay</a>
-    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/#contact">Contact</a>
-    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
-  </div>
-</nav>
-<!-- topbar:end -->
-<div class="wrap">
-  <header>
-    <div>
-      <h1>SME Workforce Pulse <span class="badge">Unofficial</span></h1>
-      <p class="sub">Job vacancies, vacancy rates and retrenchments in Singapore, by sector. Source: MOM Labour Market Survey via data.gov.sg.</p>
-      <p class="companion">Meeting a company? Look it up on the <a href="../uen-sheet/">Pre-visit Fact Sheet</a> for its ACRA record, sector figures and questions to ask.</p>
-      <p class="companion">Ready to pick a course? Use the <a href="../course-finder/">Course Finder</a> to see actual courses and class dates for a sector.</p>
-    </div>
-    <div class="fresh"><span class="dot" aria-hidden="true"></span><span id="fresh"></span></div>
-  </header>
-  <p id="stale" class="stale" role="status" hidden></p>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/projects/sme-pulse/favicon.ico" sizes="32x32" />
+		<link rel="icon" href="/projects/sme-pulse/icon.svg" type="image/svg+xml" />
+		<link rel="apple-touch-icon" href="/projects/sme-pulse/apple-touch-icon.png" />
+		<link rel="manifest" href="/projects/sme-pulse/manifest.webmanifest" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script>
+			try {
+				/** @type {'light' | 'dark' | 'system'} */
+				const savedTheme = localStorage.getItem('evidence-theme') ?? 'system';
+				const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+				const theme = savedTheme === 'system' ? (prefersDark ? 'dark' : 'light') : savedTheme;
+				document.documentElement.setAttribute('data-theme', theme);
+			} catch (e) {}
+		</script>
+		
+		<link href="/projects/sme-pulse/_app/immutable/assets/0.C2rBo2yQ.css" rel="stylesheet">
+		<link href="/projects/sme-pulse/_app/immutable/assets/VennDiagram.BCpuTJYF.css" rel="stylesheet">
+		<link href="/projects/sme-pulse/_app/immutable/assets/4.QCoG6k4A.css" rel="stylesheet">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/entry/start.bfmeyhHo.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/chunks/entry.T6BOzPt-.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/chunks/scheduler.CXm8j6KI.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/entry/app.5aiMkV9K.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/chunks/preload-helper.DkQcwHb9.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/chunks/index.BhCqHqsn.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/nodes/0.BzgZSRGb.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/chunks/index.rV6zwFgL.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/chunks/VennDiagram.svelte_svelte_type_style_lang.CIWMZsPM.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/chunks/setTrackProxy.DjIbdjlZ.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/chunks/stores.YWRWWm5R.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/chunks/index.DM2Tbsba.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/chunks/AccordionItem.X1Norixn.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/chunks/checkRequiredProps.o_C_V3S5.js">
+		<link rel="modulepreload" href="/projects/sme-pulse/_app/immutable/nodes/4.a6h3zZ_P.js"><title>SME Workforce Pulse</title><!-- HEAD_svelte-2igo1p_START --> <meta property="og:title" content="SME Workforce Pulse"> <meta name="twitter:title" content="SME Workforce Pulse"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@evidence_dev"> <!-- HEAD_svelte-2igo1p_END -->
+	</head>
+	<body>
+		<script>
+			
+		</script>
+		<div>
+			<!-- SvelteKit Hydrated Content -->
+			   <nav class="sitebar svelte-goqx4p" aria-label="Site" data-svelte-h="svelte-den1jq"><div class="sb-in svelte-goqx4p"><a class="me svelte-goqx4p" href="/">Charles Tay</a> <a href="/#work" class="svelte-goqx4p">Work</a><a href="/#news" class="svelte-goqx4p">News</a><a href="/#about" class="svelte-goqx4p">About</a><a href="/#toolkit" class="svelte-goqx4p">Toolkit</a><a href="/#contact" class="svelte-goqx4p">Contact</a> <a class="tb-ext svelte-goqx4p" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a></div></nav>   <div class="z-[1] fixed right-0 bottom-0 mx-10 my-6 w-80"></div> <div data-sveltekit-preload-data="hover" class="antialiased">  <div class="max-w-full print:w-[650px] print:md:w-[841px] mx-auto print:md:px-0 print:px-0 px-6 sm:px-8 md:px-12 flex justify-start" style="max-width:1100pxpx;"> <main class=" mt-4 sm:mt-[26px] flex-grow overflow-x-hidden print:px-0 print:mt-8"> <article id="evidence-main-article" class="select-text markdown pb-10">  <h1 class="title">SME Workforce Pulse</h1>     <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="over-container svelte-1p12lev"> </div> <div class="pulse-head svelte-6fdnj0"><div data-svelte-h="svelte-438pet"><h1 class="pulse-title svelte-6fdnj0">SME Workforce Pulse <span class="pulse-badge svelte-6fdnj0">Unofficial</span></h1> <p class="pulse-sub svelte-6fdnj0">Job vacancies, vacancy rates and retrenchments in Singapore, by sector. Source: MOM Labour
+			Market Survey via data.gov.sg.</p> <p class="pulse-companion svelte-6fdnj0">Meeting a company? Look it up on the
+			<a href="/projects/uen-sheet/" class="svelte-6fdnj0">Pre-visit Fact Sheet</a> for its ACRA record, sector figures and
+			questions to ask.</p></div> <div class="pulse-fresh svelte-6fdnj0"><span class="pulse-dot svelte-6fdnj0" aria-hidden="true"></span><span>Data as of 2026 Q2 · checked 22 Oct 2026 · full Q3 figures due mid-December 2026</span></div></div>  <label class="sector-pick svelte-um2t50"><span class="lab svelte-um2t50" data-svelte-h="svelte-1ln1a6k">Sector</span> <select value="all" aria-label="Sector" class="svelte-um2t50"><option value="all" class="svelte-um2t50">All industries</option><option value="manufacturing" class="svelte-um2t50">Manufacturing</option><option value="construction" class="svelte-um2t50">Construction</option><option value="transport" class="svelte-um2t50">Transport &amp; storage</option><option value="food" class="svelte-um2t50">Food &amp; accommodation</option><option value="health" class="svelte-um2t50">Health &amp; social</option><option value="admin" class="svelte-um2t50">Admin &amp; support</option><option value="security" class="svelte-um2t50">Security</option><option value="retail" class="svelte-um2t50">Wholesale &amp; retail</option><option value="ict" class="svelte-um2t50">Info &amp; comms</option><option value="finance" class="svelte-um2t50">Finance &amp; insurance</option><option value="realestate" class="svelte-um2t50">Real estate</option><option value="professional" class="svelte-um2t50">Professional services</option><option value="publicedu" class="svelte-um2t50">Public admin &amp; education</option><option value="arts" class="svelte-um2t50">Arts &amp; recreation</option></select> </label> <div class="pulse-kpis svelte-6pr5bk"><div class="pulse-card svelte-6pr5bk"><div class="kpi-lab svelte-1pd5hbs"><span>Job vacancies</span><span class="kpi-q svelte-1pd5hbs">2026 Q2</span></div>   <div class="inline-block font-sans pt-2 pb-3 pl-0 mr-3 items-center align-top" style="
+        min-width: 18%;
+        max-width: none;
+		"><p class="text-sm align-top leading-none">  </p> <div class="relative text-xl font-medium mt-1.5">   <span style="color: ">69,900 </span> </div> </div> <div class="kpi-delta svelte-1pd5hbs">▼ 5,300 (7%) vs last quarter <br> ▼ 8,200 (10%) vs a year ago</div>   <div class="kpi-src svelte-1pd5hbs"><a href="https://data.gov.sg/datasets/d_59a34aef12e0ecf666de5746e50586e8/view" rel="noopener" title="MOM, Number of Job Vacancy - Quarterly (data.gov.sg)" class="svelte-1pd5hbs">Source ↗</a></div></div> <div class="pulse-card svelte-6pr5bk"><div class="kpi-lab svelte-1pd5hbs"><span>Vacancy rate</span><span class="kpi-q svelte-1pd5hbs">2026 Q2</span></div>   <div class="inline-block font-sans pt-2 pb-3 pl-0 mr-3 items-center align-top" style="
+        min-width: 18%;
+        max-width: none;
+		"><p class="text-sm align-top leading-none">  </p> <div class="relative text-xl font-medium mt-1.5">   <span style="color: ">2.9% </span> </div> </div> <div class="kpi-delta svelte-1pd5hbs">▼ 0.1 pts vs last quarter <br> ▼ 0.1 pts vs a year ago</div> <div class="kpi-gloss svelte-1pd5hbs">Unfilled jobs as a share of all jobs (filled and unfilled)</div>  <div class="kpi-src svelte-1pd5hbs"><a href="https://data.gov.sg/datasets/d_c57f5cd0558e429e2ac055d83030e75f/view" rel="noopener" title="MOM, Job Vacancy Rate - Quarterly (data.gov.sg)" class="svelte-1pd5hbs">Source ↗</a></div></div> <div class="pulse-card svelte-6pr5bk"><div class="kpi-lab svelte-1pd5hbs"><span>Retrenchments</span><span class="kpi-q svelte-1pd5hbs">2026 Q2</span></div>   <div class="inline-block font-sans pt-2 pb-3 pl-0 mr-3 items-center align-top" style="
+        min-width: 18%;
+        max-width: none;
+		"><p class="text-sm align-top leading-none">  </p> <div class="relative text-xl font-medium mt-1.5">   <span style="color: ">4,620 </span> </div> </div> <div class="kpi-delta svelte-1pd5hbs">▲ 790 (21%) vs last quarter <br> ▲ 1,080 (31%) vs a year ago</div>  <div class="kpi-adv svelte-1pd5hbs"><a href="https://www.mom.gov.sg/newsroom/press-releases/2026/1030-labour-market-advance-release-3q-2026" rel="noopener" class="svelte-1pd5hbs">2026 Q3 advance estimate: 4,800 (preliminary)</a></div> <div class="kpi-src svelte-1pd5hbs"><a href="https://data.gov.sg/datasets/d_000d49cda016c13522d7d5be6a050f59/view" rel="noopener" title="MOM, Number of Retrenched Employees - Quarterly (data.gov.sg)" class="svelte-1pd5hbs">Source ↗</a></div></div> <div class="pulse-card svelte-6pr5bk"><div class="kpi-lab svelte-1pd5hbs"><span>Vacancies per jobseeker</span><span class="kpi-q svelte-1pd5hbs">2026 Q2</span></div>   <div class="inline-block font-sans pt-2 pb-3 pl-0 mr-3 items-center align-top" style="
+        min-width: 18%;
+        max-width: none;
+		"><p class="text-sm align-top leading-none">  </p> <div class="relative text-xl font-medium mt-1.5">   <span style="color: ">1.48 </span> </div> </div> <div class="kpi-delta svelte-1pd5hbs">▲ 0.02 vs last quarter <br> ▲ 0.10 vs a year ago</div> <div class="kpi-gloss svelte-1pd5hbs">All of Singapore, not by sector. Above 1 means more open jobs than unemployed people.</div>  <div class="kpi-src svelte-1pd5hbs"><a href="https://data.gov.sg/datasets/d_80c0cf251ee9a26d240808297f52c820/view" rel="noopener" title="MOM, Job Vacancy to Unemployed Person Ratio - Quarterly (data.gov.sg)" class="svelte-1pd5hbs">Source ↗</a></div></div></div> <div class="pulse-grid2 svelte-6pr5bk"><div class="pulse-card svelte-6pr5bk"><h2 class="pulse-h2 svelte-6pr5bk">Job vacancies · All industries</h2> <div class="pulse-hint svelte-6pr5bk">Quarterly, all industries.</div> <div class="contents print:hidden"><div class="inline-block overflow-scroll no-scrollbar align-bottom w-fit max-w-full flex-col mt-0.5 mb-3 ml-0 mr-2"><span class="text-xs font-medium text-base-content block mb-0.5">Measure </span> <div class="inline-flex rounded-md shadow-sm overflow-auto border border-base-300 no-scrollbar h-8 mb-1" role="group"><button type="button" class="flex-none py-1 font-medium px-3 text-xs truncate border-r last:border-none border-base-300 hover:bg-base-200 focus:z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-base-300 z-10 bg-base-200 text-primary">Vacancies</button> <button type="button" class="flex-none py-1 font-medium px-3 text-xs truncate border-r last:border-none border-base-300 hover:bg-base-200 focus:z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-base-300 z-0 bg-base-100">Rate</button> <button type="button" class="flex-none py-1 font-medium px-3 text-xs truncate border-r last:border-none border-base-300 hover:bg-base-200 focus:z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-base-300 z-0 bg-base-100">Retrenched</button> </div></div></div> <div class="contents print:hidden"><div class="inline-block overflow-scroll no-scrollbar align-bottom w-fit max-w-full flex-col mt-0.5 mb-3 ml-0 mr-2"><span class="text-xs font-medium text-base-content block mb-0.5">Time range </span> <div class="inline-flex rounded-md shadow-sm overflow-auto border border-base-300 no-scrollbar h-8 mb-1" role="group"><button type="button" class="flex-none py-1 font-medium px-3 text-xs truncate border-r last:border-none border-base-300 hover:bg-base-200 focus:z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-base-300 z-0 bg-base-100">5Y</button> <button type="button" class="flex-none py-1 font-medium px-3 text-xs truncate border-r last:border-none border-base-300 hover:bg-base-200 focus:z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-base-300 z-10 bg-base-200 text-primary">10Y</button> <button type="button" class="flex-none py-1 font-medium px-3 text-xs truncate border-r last:border-none border-base-300 hover:bg-base-200 focus:z-10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-base-300 z-0 bg-base-100">Max</button> </div></div></div>       <div role="none" class="chart-container mt-2 mb-3 svelte-19r8f8"><div role="status" class="animate-pulse"><span class="sr-only" data-svelte-h="svelte-1wtojot">Loading...</span> <div class="bg-base-100 rounded-md max-w-[100%]" style="height:460px; margin-top: 15px; margin-bottom: 31px;"></div></div>  <div class="chart-footer svelte-19r8f8"> </div> </div>   <div class="mb-4 mt-2"><button class="text-sm text-base-content-muted cursor-pointer inline-flex gap-2 svelte-6m89aj"><span class="marker svelte-6m89aj"></span> <span>Show table</span></button> </div> <p class="srcline svelte-31q1mm">Source: MOM, <a href="https://data.gov.sg/datasets/d_59a34aef12e0ecf666de5746e50586e8/view" rel="noopener" class="svelte-31q1mm">Number of Job Vacancy - Quarterly</a> (data.gov.sg)
+</p></div> <div class="pulse-card svelte-6pr5bk"><h2 class="pulse-h2 svelte-6pr5bk" data-svelte-h="svelte-97p9nj">Vacancy rate by sector</h2> <div class="pulse-hint svelte-6pr5bk">2026 Q2. Line marks all industries (2.9%).</div>       <div role="none" class="chart-container mt-2 mb-3 svelte-19r8f8"><div role="status" class="animate-pulse"><span class="sr-only" data-svelte-h="svelte-1wtojot">Loading...</span> <div class="bg-base-100 rounded-md max-w-[100%]" style="height:685px; margin-top: 15px; margin-bottom: 31px;"></div></div>  <div class="chart-footer svelte-19r8f8"> </div> </div>  <div class="pulse-hint svelte-6pr5bk" data-svelte-h="svelte-w92ig7">Security is part of admin &amp; support.</div> <p class="srcline svelte-31q1mm">Source: MOM, <a href="https://data.gov.sg/datasets/d_fe705c7af162331d36cc31193f8f50c9/view" rel="noopener" class="svelte-31q1mm">Job Vacancy Rate by Industry - Quarterly</a> (data.gov.sg)
+</p></div></div> <div class="pulse-card svelte-6pr5bk"><h2 class="pulse-h2 svelte-6pr5bk" data-svelte-h="svelte-1sumdvg">PMETs: retrenched vs open roles</h2> <div class="pulse-hint svelte-6pr5bk">Professionals, managers, executives and technicians. Retrenched is the total for 2025 Q3 to 2026 Q2; open roles are vacancies at the end of 2026 Q2. One is a year&#39;s total and the other a count on one day, so compare them side by side rather than as a ratio. A vacancy is not necessarily a fit for someone retrenched.</div> <div class="pulse-two svelte-6pr5bk"><div>  <div class="inline-block font-sans pt-2 pb-3 pl-0 mr-3 items-center align-top" style="
+        min-width: 18%;
+        max-width: none;
+		"><p class="text-sm align-top leading-none">PMETs retrenched, 2025 Q3–2026 Q2 </p> <div class="relative text-xl font-medium mt-1.5">   <span style="color: ">13,520 </span> </div> </div> <div class="pulse-what svelte-6pr5bk">86% of all 15,810 retrenchments</div></div> <div>  <div class="inline-block font-sans pt-2 pb-3 pl-0 mr-3 items-center align-top" style="
+        min-width: 18%;
+        max-width: none;
+		"><p class="text-sm align-top leading-none">PMET vacancies open at the end of 2026 Q2 </p> <div class="relative text-xl font-medium mt-1.5">   <span style="color: ">39,200 </span> </div> </div></div></div>      <div role="none" class="chart-container mt-2 mb-3 svelte-19r8f8"><div role="status" class="animate-pulse"><span class="sr-only" data-svelte-h="svelte-1wtojot">Loading...</span> <div class="bg-base-100 rounded-md max-w-[100%]" style="height:945px; margin-top: 15px; margin-bottom: 31px;"></div></div>  <div class="chart-footer svelte-19r8f8"> </div> </div>  <div class="pulse-hint svelte-6pr5bk">* Some quarters not published: Public admin &amp; education, Arts &amp; recreation. Totals use the quarters MOM published. Security is part of admin &amp; support; MOM does not publish its PMET figures (counts too small).</div>  <div class="mb-4 mt-2"><button class="text-sm text-base-content-muted cursor-pointer inline-flex gap-2 svelte-6m89aj"><span class="marker svelte-6m89aj"></span> <span>Show table</span></button> </div> <p class="srcline svelte-31q1mm">Source: MOM, <a href="https://data.gov.sg/datasets/d_d3f02543c4d0dd197c56637eefc32624/view" rel="noopener" class="svelte-31q1mm">Number of Job Vacancy by Industry and Occupation - Quarterly</a> and <a href="https://data.gov.sg/datasets/d_cdde7c4701d917ae58aa63e4015490aa/view" rel="noopener" class="svelte-31q1mm">Number of Retrenched Employees by Industry and Occupation - Quarterly</a> (data.gov.sg)
+</p></div> <div class="pulse-card svelte-6pr5bk"><h2 class="pulse-h2 svelte-6pr5bk" data-svelte-h="svelte-1z8q7w">Career-switch courses (SCTP) by sector</h2> <div class="pulse-hint svelte-6pr5bk">SCTP programmes listed on the public course pages of the five polytechnics and ITE, collected on 11 Oct 2026. This counts programmes, not class places or intakes, so it shows where courses exist rather than how many people they train. The sector for each programme is our judgement from its title and listed job roles.</div> <div class="pulse-two svelte-6pr5bk"><div>  <div class="inline-block font-sans pt-2 pb-3 pl-0 mr-3 items-center align-top" style="
+        min-width: 18%;
+        max-width: none;
+		"><p class="text-sm align-top leading-none">SCTP programmes across 6 institutions </p> <div class="relative text-xl font-medium mt-1.5">   <span style="color: ">81 </span> </div> </div></div> <div>  <div class="inline-block font-sans pt-2 pb-3 pl-0 mr-3 items-center align-top" style="
+        min-width: 18%;
+        max-width: none;
+		"><p class="text-sm align-top leading-none">teach skills used in any sector (marketing, HR, data, digital, sustainability) </p> <div class="relative text-xl font-medium mt-1.5">   <span style="color: ">28 </span> </div> </div> <div class="pulse-what svelte-6pr5bk">35% of all SCTP programmes</div></div></div>          <div data-testid="DataTable-sc_table" role="none" class="table-container mt-2 mb-2 svelte-1vxfjlq">  <div class="scrollbox pretty-scrollbar svelte-1vxfjlq"><table class="svelte-1vxfjlq"><thead> <tr class="border-b border-base-content-muted/60">   </tr> </thead> <tr class="border-b border-base-content-muted/20 svelte-orfja7">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7 bg-base-200">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7 bg-base-200">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7 bg-base-200">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7 bg-base-200">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7 bg-base-200">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7 bg-base-200">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7 bg-base-200">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7">   </tr><tr class="border-b border-base-content-muted/20 svelte-orfja7 bg-base-200">   </tr> </table></div> <div class="noresults svelte-1vxfjlq" data-svelte-h="svelte-l3t0gi">No Results</div> <div class="table-footer mt-3 svelte-1vxfjlq"> </div></div>  <p class="sc-hint svelte-1f7hf1x">Pick a sector above to list its SCTP programmes. Sources: <a href="https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/" rel="noopener" class="svelte-1f7hf1x">RP</a>,
+			<a href="https://www.cet.np.edu.sg/career-transition-programme-sctp" rel="noopener" class="svelte-1f7hf1x">NP</a>,
+			<a href="https://www.nyp.edu.sg/adult-learner/courses?categories=&amp;types=SCTP" rel="noopener" class="svelte-1f7hf1x">NYP</a>,
+			<a href="https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes" rel="noopener" class="svelte-1f7hf1x">SP</a>,
+			<a href="https://www.tp.edu.sg/schools-and-courses/adult-learners/all-courses/skillsfuture-career-transition-programme.html" rel="noopener" class="svelte-1f7hf1x">TP</a>,
+			<a href="https://www.ite.edu.sg/adult-learners/skillsfuture-career-transition-programme-sctp/" rel="noopener" class="svelte-1f7hf1x">ITE</a>.</p> <a class="sc-landscape svelte-1f7hf1x" href="/projects/skills-landscape/">All SkillsFuture-listed courses by sector, not just SCTPs, on the Skills Training Landscape →</a></div> <div class="pulse-card svelte-6pr5bk"><h2 class="sk-h svelte-1o5gx9v">Skills to train for</h2> <p class="sk-hint svelte-1o5gx9v">Pick a sector above for its Skills Framework and courses.</p> <div class="sk-links svelte-1o5gx9v"><a href="https://jobsandskills.swda.gov.sg/frameworks/sector-information" rel="noopener" class="svelte-1o5gx9v">Skills Frameworks for 38 sectors ↗<small class="svelte-1o5gx9v">SWDA Jobs-Skills Portal</small></a><a href="https://jobsandskills.swda.gov.sg/data-and-tools/dashboards/job-skills-demand-trends-dashboard" rel="noopener" class="svelte-1o5gx9v">Jobs-Skills Demand Trends dashboard ↗<small class="svelte-1o5gx9v">Hiring demand and in-demand skills by job role. Pick the sector inside the dashboard.</small></a> </div></div> <section class="survey svelte-1mpfrtr" aria-labelledby="sv"><span class="pill svelte-1mpfrtr" data-svelte-h="svelte-ptbfah">Survey figures · entered by hand</span> <h2 id="sv" class="svelte-1mpfrtr" data-svelte-h="svelte-wi7z71">AI at work: adoption is rising faster than training</h2> <div class="sgrid svelte-1mpfrtr"><div><div class="big svelte-1mpfrtr">23.4%</div> <div class="what svelte-1mpfrtr">of SMEs used AI in 2025</div> <div class="was svelte-1mpfrtr">up from 14.5% in 2024</div></div> <div><div class="big svelte-1mpfrtr">68%</div> <div class="what svelte-1mpfrtr" data-svelte-h="svelte-14zfhwi">of workers say they need AI upskilling</div></div> <div><div class="big svelte-1mpfrtr">37%</div> <div class="what svelte-1mpfrtr" data-svelte-h="svelte-9krrcb">of workers had AI training in the past year</div></div></div> <p class="cap svelte-1mpfrtr"><a href="https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches/singapore-digital-economy-2026" rel="noopener" class="svelte-1mpfrtr">IMDA, Singapore Digital Economy Report 2026 (press release, 5 Oct 2026)</a>. These are survey results, not part of the
+		quarterly MOM series, and are not broken down by the sector filter above. Entered by hand on 2026-10-11.</p> </section> <footer class="pulse-foot svelte-1krk26o"><p class="svelte-1krk26o">Contains information from <a href="https://data.gov.sg/datasets/d_3f17bbf67d31d4d402caa8755eb74afc/view" class="svelte-1krk26o">Number of Job Vacancy by Industry - Quarterly</a>; <a href="https://data.gov.sg/datasets/d_fe705c7af162331d36cc31193f8f50c9/view" class="svelte-1krk26o">Job Vacancy Rate by Industry - Quarterly</a>; <a href="https://data.gov.sg/datasets/d_61d92d31ca400be135190614277da825/view" class="svelte-1krk26o">Number of Retrenched Employees by Industry - Quarterly</a>; <a href="https://data.gov.sg/datasets/d_80c0cf251ee9a26d240808297f52c820/view" class="svelte-1krk26o">Job Vacancy to Unemployed Person Ratio - Quarterly</a>; <a href="https://data.gov.sg/datasets/d_59a34aef12e0ecf666de5746e50586e8/view" class="svelte-1krk26o">Number of Job Vacancy - Quarterly</a>; <a href="https://data.gov.sg/datasets/d_c57f5cd0558e429e2ac055d83030e75f/view" class="svelte-1krk26o">Job Vacancy Rate - Quarterly</a>; <a href="https://data.gov.sg/datasets/d_000d49cda016c13522d7d5be6a050f59/view" class="svelte-1krk26o">Number of Retrenched Employees - Quarterly</a>; <a href="https://data.gov.sg/datasets/d_cdde7c4701d917ae58aa63e4015490aa/view" class="svelte-1krk26o">Number of Retrenched Employees by Industry and Occupation - Quarterly</a>; <a href="https://data.gov.sg/datasets/d_d3f02543c4d0dd197c56637eefc32624/view" class="svelte-1krk26o">Number of Job Vacancy by Industry and Occupation - Quarterly</a>, accessed on 2026-10-11 from data.gov.sg, which is made available under the terms of
+		the
+		<a href="https://data.gov.sg/open-data-licence" class="svelte-1krk26o" data-svelte-h="svelte-bz4lv9">Singapore Open Data Licence version 1.0</a>.
+		Original source: Labour Market Survey, Manpower Research &amp; Statistics Department, Ministry of
+		Manpower.</p> <p class="svelte-1krk26o">Survey figures: <a href="https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches/singapore-digital-economy-2026" rel="noopener" class="svelte-1krk26o">IMDA, Singapore Digital Economy Report 2026 (press release, 5 Oct 2026)</a>.</p> <p class="svelte-1krk26o">This is an unofficial teaching example, not a product of MOM, IMDA or any government agency.
+		Figures were fetched on 11 Oct 2026 and are not live. The page checks data.gov.sg for new MOM
+		figures each month (last checked 22 Oct 2026); MOM publishes each quarter a few months after
+		it ends. Not advice.</p> </footer></article></main> </div></div>  <p class="site-disclaimer svelte-goqx4p" data-svelte-h="svelte-by5sj8">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional
+	advice. Install and try any tool at your own risk: back up your data first and watch out for
+	malware. <a href="/disclaimer/">Full disclaimer</a>.
+</p> 
+			<script type="application/json" data-sveltekit-fetched data-url="/projects/sme-pulse/api/customFormattingSettings.json/GET.json">{"status":200,"statusText":"","headers":{},"body":"{\"customFormattingSettings\":{\"version\":\"1.0\",\"customFormats\":[]}}"}</script>
+			<script type="application/json" data-sveltekit-fetched data-url="/projects/sme-pulse/api///evidencemeta.json">{"status":200,"statusText":"","headers":{},"body":"{\"queries\":[{\"id\":\"meta\",\"compiledQueryString\":\"-- Evidence reads date-looking text as dates; keep these as plain text\\nselect * replace (\\n    strftime(checked, '%Y-%m-%d') as checked,\\n    strftime(fetched, '%Y-%m-%d') as fetched,\\n    strftime(sctp_collected, '%Y-%m-%d') as sctp_collected,\\n    strftime(imda_retrieved, '%Y-%m-%d') as imda_retrieved\\n) from pulse.meta\",\"inputQueryString\":\"-- Evidence reads date-looking text as dates; keep these as plain text\\nselect * replace (\\n    strftime(checked, '%Y-%m-%d') as checked,\\n    strftime(fetched, '%Y-%m-%d') as fetched,\\n    strftime(sctp_collected, '%Y-%m-%d') as sctp_collected,\\n    strftime(imda_retrieved, '%Y-%m-%d') as imda_retrieved\\n) from pulse.meta\",\"compiled\":false,\"inline\":true},{\"id\":\"sector_list\",\"compiledQueryString\":\"select sector, label from pulse.sectors order by sort\",\"inputQueryString\":\"select sector, label from pulse.sectors order by sort\",\"compiled\":false,\"inline\":true},{\"id\":\"sel\",\"compiledQueryString\":\"-- the chosen sector: key, label and the PMET figures\\nselect 'all' as sector, 'All industries' as label, null::double as ret, null::double as vac\\nunion all\\nselect sector, label, pmet_retrenched, pmet_vacancies from pulse.sectors\",\"inputQueryString\":\"-- the chosen sector: key, label and the PMET figures\\nselect 'all' as sector, 'All industries' as label, null::double as ret, null::double as vac\\nunion all\\nselect sector, label, pmet_retrenched, pmet_vacancies from pulse.sectors\",\"compiled\":false,\"inline\":true},{\"id\":\"chosen\",\"compiledQueryString\":\"select * from (-- the chosen sector: key, label and the PMET figures\\nselect 'all' as sector, 'All industries' as label, null::double as ret, null::double as vac\\nunion all\\nselect sector, label, pmet_retrenched, pmet_vacancies from pulse.sectors) where sector = '${inputs.sector.value}'\",\"inputQueryString\":\"select * from ${sel} where sector = '${inputs.sector.value}'\",\"compiled\":true,\"inline\":true},{\"id\":\"kpi\",\"compiledQueryString\":\"-- one row per headline figure for the chosen sector (V/U is always all of Singapore).\\n-- li = last quarter with a published value; cur / prev / yago = values at li, li-1 and li-4.\\nwith s as (\\n    select measure, q_idx, quarter_label, value from pulse.series\\n    where (scope = '${inputs.sector.value}' and measure in ('vac', 'rate', 'ret'))\\n       or (scope = 'all' and measure = 'vu')\\n),\\nli as (\\n    select measure, max(q_idx) filter (where value is not null) as li from s group by measure\\n)\\nselect\\n    li.measure,\\n    li.li,\\n    (select latest_idx from pulse.meta) as L,\\n    (select latest_label from pulse.meta) as latest_label,\\n    (select quarter_label from s where s.measure = li.measure and s.q_idx = li.li) as q_label,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) as cur,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 1) as prev,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 4) as yago,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) / (case when li.measure = 'rate' then 100 else 1 end) as cur_bv,\\n    d.url as src_url,\\n    d.title as src_title\\nfrom li\\njoin pulse.datasets d on d.key = case\\n    when li.measure = 'vu' then 'vu_ratio'\\n    when '${inputs.sector.value}' = 'all' then case li.measure when 'vac' then 'vacancies_total' when 'rate' then 'vacancy_rate_total' else 'retrenched_total' end\\n    else case li.measure when 'vac' then 'vacancies' when 'rate' then 'vacancy_rate' else 'retrenched' end\\nend\",\"inputQueryString\":\"-- one row per headline figure for the chosen sector (V/U is always all of Singapore).\\n-- li = last quarter with a published value; cur / prev / yago = values at li, li-1 and li-4.\\nwith s as (\\n    select measure, q_idx, quarter_label, value from pulse.series\\n    where (scope = '${inputs.sector.value}' and measure in ('vac', 'rate', 'ret'))\\n       or (scope = 'all' and measure = 'vu')\\n),\\nli as (\\n    select measure, max(q_idx) filter (where value is not null) as li from s group by measure\\n)\\nselect\\n    li.measure,\\n    li.li,\\n    (select latest_idx from pulse.meta) as L,\\n    (select latest_label from pulse.meta) as latest_label,\\n    (select quarter_label from s where s.measure = li.measure and s.q_idx = li.li) as q_label,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) as cur,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 1) as prev,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 4) as yago,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) / (case when li.measure = 'rate' then 100 else 1 end) as cur_bv,\\n    d.url as src_url,\\n    d.title as src_title\\nfrom li\\njoin pulse.datasets d on d.key = case\\n    when li.measure = 'vu' then 'vu_ratio'\\n    when '${inputs.sector.value}' = 'all' then case li.measure when 'vac' then 'vacancies_total' when 'rate' then 'vacancy_rate_total' else 'retrenched_total' end\\n    else case li.measure when 'vac' then 'vacancies' when 'rate' then 'vacancy_rate' else 'retrenched' end\\nend\",\"compiled\":false,\"inline\":true},{\"id\":\"k_vac\",\"compiledQueryString\":\"select * from (-- one row per headline figure for the chosen sector (V/U is always all of Singapore).\\n-- li = last quarter with a published value; cur / prev / yago = values at li, li-1 and li-4.\\nwith s as (\\n    select measure, q_idx, quarter_label, value from pulse.series\\n    where (scope = '${inputs.sector.value}' and measure in ('vac', 'rate', 'ret'))\\n       or (scope = 'all' and measure = 'vu')\\n),\\nli as (\\n    select measure, max(q_idx) filter (where value is not null) as li from s group by measure\\n)\\nselect\\n    li.measure,\\n    li.li,\\n    (select latest_idx from pulse.meta) as L,\\n    (select latest_label from pulse.meta) as latest_label,\\n    (select quarter_label from s where s.measure = li.measure and s.q_idx = li.li) as q_label,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) as cur,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 1) as prev,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 4) as yago,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) / (case when li.measure = 'rate' then 100 else 1 end) as cur_bv,\\n    d.url as src_url,\\n    d.title as src_title\\nfrom li\\njoin pulse.datasets d on d.key = case\\n    when li.measure = 'vu' then 'vu_ratio'\\n    when '${inputs.sector.value}' = 'all' then case li.measure when 'vac' then 'vacancies_total' when 'rate' then 'vacancy_rate_total' else 'retrenched_total' end\\n    else case li.measure when 'vac' then 'vacancies' when 'rate' then 'vacancy_rate' else 'retrenched' end\\nend) where measure = 'vac'\",\"inputQueryString\":\"select * from ${kpi} where measure = 'vac'\",\"compiled\":true,\"inline\":true},{\"id\":\"k_rate\",\"compiledQueryString\":\"select * from (-- one row per headline figure for the chosen sector (V/U is always all of Singapore).\\n-- li = last quarter with a published value; cur / prev / yago = values at li, li-1 and li-4.\\nwith s as (\\n    select measure, q_idx, quarter_label, value from pulse.series\\n    where (scope = '${inputs.sector.value}' and measure in ('vac', 'rate', 'ret'))\\n       or (scope = 'all' and measure = 'vu')\\n),\\nli as (\\n    select measure, max(q_idx) filter (where value is not null) as li from s group by measure\\n)\\nselect\\n    li.measure,\\n    li.li,\\n    (select latest_idx from pulse.meta) as L,\\n    (select latest_label from pulse.meta) as latest_label,\\n    (select quarter_label from s where s.measure = li.measure and s.q_idx = li.li) as q_label,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) as cur,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 1) as prev,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 4) as yago,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) / (case when li.measure = 'rate' then 100 else 1 end) as cur_bv,\\n    d.url as src_url,\\n    d.title as src_title\\nfrom li\\njoin pulse.datasets d on d.key = case\\n    when li.measure = 'vu' then 'vu_ratio'\\n    when '${inputs.sector.value}' = 'all' then case li.measure when 'vac' then 'vacancies_total' when 'rate' then 'vacancy_rate_total' else 'retrenched_total' end\\n    else case li.measure when 'vac' then 'vacancies' when 'rate' then 'vacancy_rate' else 'retrenched' end\\nend) where measure = 'rate'\",\"inputQueryString\":\"select * from ${kpi} where measure = 'rate'\",\"compiled\":true,\"inline\":true},{\"id\":\"k_ret\",\"compiledQueryString\":\"select * from (-- one row per headline figure for the chosen sector (V/U is always all of Singapore).\\n-- li = last quarter with a published value; cur / prev / yago = values at li, li-1 and li-4.\\nwith s as (\\n    select measure, q_idx, quarter_label, value from pulse.series\\n    where (scope = '${inputs.sector.value}' and measure in ('vac', 'rate', 'ret'))\\n       or (scope = 'all' and measure = 'vu')\\n),\\nli as (\\n    select measure, max(q_idx) filter (where value is not null) as li from s group by measure\\n)\\nselect\\n    li.measure,\\n    li.li,\\n    (select latest_idx from pulse.meta) as L,\\n    (select latest_label from pulse.meta) as latest_label,\\n    (select quarter_label from s where s.measure = li.measure and s.q_idx = li.li) as q_label,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) as cur,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 1) as prev,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 4) as yago,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) / (case when li.measure = 'rate' then 100 else 1 end) as cur_bv,\\n    d.url as src_url,\\n    d.title as src_title\\nfrom li\\njoin pulse.datasets d on d.key = case\\n    when li.measure = 'vu' then 'vu_ratio'\\n    when '${inputs.sector.value}' = 'all' then case li.measure when 'vac' then 'vacancies_total' when 'rate' then 'vacancy_rate_total' else 'retrenched_total' end\\n    else case li.measure when 'vac' then 'vacancies' when 'rate' then 'vacancy_rate' else 'retrenched' end\\nend) where measure = 'ret'\",\"inputQueryString\":\"select * from ${kpi} where measure = 'ret'\",\"compiled\":true,\"inline\":true},{\"id\":\"k_vu\",\"compiledQueryString\":\"select * from (-- one row per headline figure for the chosen sector (V/U is always all of Singapore).\\n-- li = last quarter with a published value; cur / prev / yago = values at li, li-1 and li-4.\\nwith s as (\\n    select measure, q_idx, quarter_label, value from pulse.series\\n    where (scope = '${inputs.sector.value}' and measure in ('vac', 'rate', 'ret'))\\n       or (scope = 'all' and measure = 'vu')\\n),\\nli as (\\n    select measure, max(q_idx) filter (where value is not null) as li from s group by measure\\n)\\nselect\\n    li.measure,\\n    li.li,\\n    (select latest_idx from pulse.meta) as L,\\n    (select latest_label from pulse.meta) as latest_label,\\n    (select quarter_label from s where s.measure = li.measure and s.q_idx = li.li) as q_label,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) as cur,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 1) as prev,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li - 4) as yago,\\n    (select value from s where s.measure = li.measure and s.q_idx = li.li) / (case when li.measure = 'rate' then 100 else 1 end) as cur_bv,\\n    d.url as src_url,\\n    d.title as src_title\\nfrom li\\njoin pulse.datasets d on d.key = case\\n    when li.measure = 'vu' then 'vu_ratio'\\n    when '${inputs.sector.value}' = 'all' then case li.measure when 'vac' then 'vacancies_total' when 'rate' then 'vacancy_rate_total' else 'retrenched_total' end\\n    else case li.measure when 'vac' then 'vacancies' when 'rate' then 'vacancy_rate' else 'retrenched' end\\nend) where measure = 'vu'\",\"inputQueryString\":\"select * from ${kpi} where measure = 'vu'\",\"compiled\":true,\"inline\":true},{\"id\":\"trend\",\"compiledQueryString\":\"-- chosen sector, measure and range. Rate is stored as a number like 2.9, shown as a percentage.\\nwith p as (\\n    -- before the buttons have a value (the static pre-render), fall back to their defaults\\n    select case when '${inputs.measure}' in ('vac', 'rate', 'ret') then '${inputs.measure}' else 'vac' end as m,\\n           coalesce(try_cast('${inputs.range}' as integer), 40) as n\\n)\\nselect\\n    period_start,\\n    quarter_label,\\n    case when measure = 'rate' then value / 100 else value end as value\\nfrom pulse.series, p\\nwhere scope = '${inputs.sector.value}'\\n  and measure = p.m\\n  and published_since_start = 'Started'\\n  and q_idx > (select latest_idx from pulse.meta) - p.n\\norder by period_start\",\"inputQueryString\":\"-- chosen sector, measure and range. Rate is stored as a number like 2.9, shown as a percentage.\\nwith p as (\\n    -- before the buttons have a value (the static pre-render), fall back to their defaults\\n    select case when '${inputs.measure}' in ('vac', 'rate', 'ret') then '${inputs.measure}' else 'vac' end as m,\\n           coalesce(try_cast('${inputs.range}' as integer), 40) as n\\n)\\nselect\\n    period_start,\\n    quarter_label,\\n    case when measure = 'rate' then value / 100 else value end as value\\nfrom pulse.series, p\\nwhere scope = '${inputs.sector.value}'\\n  and measure = p.m\\n  and published_since_start = 'Started'\\n  and q_idx > (select latest_idx from pulse.meta) - p.n\\norder by period_start\",\"compiled\":false,\"inline\":true},{\"id\":\"trend_info\",\"compiledQueryString\":\"-- first quarter with a published value for the chosen sector and measure\\nwith p as (\\n    select case when '${inputs.measure}' in ('vac', 'rate', 'ret') then '${inputs.measure}' else 'vac' end as m\\n)\\nselect min(q_idx) as first_idx, arg_min(quarter_label, q_idx) as first_label\\nfrom pulse.series, p\\nwhere scope = '${inputs.sector.value}' and measure = p.m and published_since_start = 'Started'\",\"inputQueryString\":\"-- first quarter with a published value for the chosen sector and measure\\nwith p as (\\n    select case when '${inputs.measure}' in ('vac', 'rate', 'ret') then '${inputs.measure}' else 'vac' end as m\\n)\\nselect min(q_idx) as first_idx, arg_min(quarter_label, q_idx) as first_label\\nfrom pulse.series, p\\nwhere scope = '${inputs.sector.value}' and measure = p.m and published_since_start = 'Started'\",\"compiled\":false,\"inline\":true},{\"id\":\"trend_table\",\"compiledQueryString\":\"with p as (\\n    -- before the buttons have a value (the static pre-render), fall back to their defaults\\n    select case when '${inputs.measure}' in ('vac', 'rate', 'ret') then '${inputs.measure}' else 'vac' end as m,\\n           coalesce(try_cast('${inputs.range}' as integer), 40) as n\\n)\\nselect\\n    quarter_label,\\n    case when value is null then '–'\\n         when measure = 'rate' then printf('%.1f%%', value)\\n         else format('{:,}', cast(value as bigint)) end as shown\\nfrom pulse.series, p\\nwhere scope = '${inputs.sector.value}'\\n  and measure = p.m\\n  and published_since_start = 'Started'\\n  and q_idx > (select latest_idx from pulse.meta) - p.n\\norder by period_start desc\",\"inputQueryString\":\"with p as (\\n    -- before the buttons have a value (the static pre-render), fall back to their defaults\\n    select case when '${inputs.measure}' in ('vac', 'rate', 'ret') then '${inputs.measure}' else 'vac' end as m,\\n           coalesce(try_cast('${inputs.range}' as integer), 40) as n\\n)\\nselect\\n    quarter_label,\\n    case when value is null then '–'\\n         when measure = 'rate' then printf('%.1f%%', value)\\n         else format('{:,}', cast(value as bigint)) end as shown\\nfrom pulse.series, p\\nwhere scope = '${inputs.sector.value}'\\n  and measure = p.m\\n  and published_since_start = 'Started'\\n  and q_idx > (select latest_idx from pulse.meta) - p.n\\norder by period_start desc\",\"compiled\":false,\"inline\":true},{\"id\":\"trend_src\",\"compiledQueryString\":\"with p as (\\n    -- before the buttons have a value (the static pre-render), fall back to their defaults\\n    select case when '${inputs.measure}' in ('vac', 'rate', 'ret') then '${inputs.measure}' else 'vac' end as m,\\n           coalesce(try_cast('${inputs.range}' as integer), 40) as n\\n)\\nselect title, url from pulse.datasets, p\\nwhere key = case when '${inputs.sector.value}' = 'all'\\n    then case p.m when 'vac' then 'vacancies_total' when 'rate' then 'vacancy_rate_total' else 'retrenched_total' end\\n    else case p.m when 'vac' then 'vacancies' when 'rate' then 'vacancy_rate' else 'retrenched' end\\nend\",\"inputQueryString\":\"with p as (\\n    -- before the buttons have a value (the static pre-render), fall back to their defaults\\n    select case when '${inputs.measure}' in ('vac', 'rate', 'ret') then '${inputs.measure}' else 'vac' end as m,\\n           coalesce(try_cast('${inputs.range}' as integer), 40) as n\\n)\\nselect title, url from pulse.datasets, p\\nwhere key = case when '${inputs.sector.value}' = 'all'\\n    then case p.m when 'vac' then 'vacancies_total' when 'rate' then 'vacancy_rate_total' else 'retrenched_total' end\\n    else case p.m when 'vac' then 'vacancies' when 'rate' then 'vacancy_rate' else 'retrenched' end\\nend\",\"compiled\":false,\"inline\":true},{\"id\":\"rate_bars\",\"compiledQueryString\":\"select\\n    s.label,\\n    case when s.sector = '${inputs.sector.value}' then null else r.value / 100 end as other,\\n    case when s.sector = '${inputs.sector.value}' then r.value / 100 end as selected\\nfrom pulse.sectors s\\njoin pulse.series r on r.scope = s.sector and r.measure = 'rate' and r.q_idx = (select latest_idx from pulse.meta)\\nwhere r.value is not null\\norder by r.value desc\",\"inputQueryString\":\"select\\n    s.label,\\n    case when s.sector = '${inputs.sector.value}' then null else r.value / 100 end as other,\\n    case when s.sector = '${inputs.sector.value}' then r.value / 100 end as selected\\nfrom pulse.sectors s\\njoin pulse.series r on r.scope = s.sector and r.measure = 'rate' and r.q_idx = (select latest_idx from pulse.meta)\\nwhere r.value is not null\\norder by r.value desc\",\"compiled\":false,\"inline\":true},{\"id\":\"all_rate\",\"compiledQueryString\":\"select value / 100 as rate from pulse.series\\nwhere scope = 'all' and measure = 'rate' and q_idx = (select latest_idx from pulse.meta)\",\"inputQueryString\":\"select value / 100 as rate from pulse.series\\nwhere scope = 'all' and measure = 'rate' and q_idx = (select latest_idx from pulse.meta)\",\"compiled\":false,\"inline\":true},{\"id\":\"bars_src\",\"compiledQueryString\":\"select title, url from pulse.datasets where key = 'vacancy_rate'\",\"inputQueryString\":\"select title, url from pulse.datasets where key = 'vacancy_rate'\",\"compiled\":false,\"inline\":true},{\"id\":\"pm\",\"compiledQueryString\":\"select * from pulse.pmet_total\",\"inputQueryString\":\"select * from pulse.pmet_total\",\"compiled\":false,\"inline\":true},{\"id\":\"pm_long\",\"compiledQueryString\":\"-- retrenched (past 4 quarters) and open roles (latest quarter) by sector, most retrenched first\\nwith p as (\\n    select label || case when pmet_missing_quarters > 0 then ' *' else '' end as label,\\n           pmet_retrenched, pmet_vacancies, sort\\n    from pulse.sectors\\n    where pmet_retrenched is not null or pmet_vacancies is not null\\n)\\nselect label, 'Retrenched, ' || (select from_label from pulse.pmet_total) || '–' || (select to_label from pulse.pmet_total) as measure,\\n       pmet_retrenched as value, coalesce(pmet_retrenched, 0) as ord from p\\nunion all\\nselect label, 'Open roles, ' || (select to_label from pulse.pmet_total), pmet_vacancies, coalesce(pmet_retrenched, 0) from p\\norder by ord desc, label, measure desc\",\"inputQueryString\":\"-- retrenched (past 4 quarters) and open roles (latest quarter) by sector, most retrenched first\\nwith p as (\\n    select label || case when pmet_missing_quarters > 0 then ' *' else '' end as label,\\n           pmet_retrenched, pmet_vacancies, sort\\n    from pulse.sectors\\n    where pmet_retrenched is not null or pmet_vacancies is not null\\n)\\nselect label, 'Retrenched, ' || (select from_label from pulse.pmet_total) || '–' || (select to_label from pulse.pmet_total) as measure,\\n       pmet_retrenched as value, coalesce(pmet_retrenched, 0) as ord from p\\nunion all\\nselect label, 'Open roles, ' || (select to_label from pulse.pmet_total), pmet_vacancies, coalesce(pmet_retrenched, 0) from p\\norder by ord desc, label, measure desc\",\"compiled\":false,\"inline\":true},{\"id\":\"pm_table\",\"compiledQueryString\":\"select\\n    label,\\n    pmet_retrenched,\\n    pmet_vacancies,\\n    case when pmet_missing_quarters > 0 then 'Some quarters not published' else '' end as note\\nfrom pulse.sectors\\nwhere pmet_retrenched is not null or pmet_vacancies is not null\\norder by coalesce(pmet_retrenched, 0) desc\",\"inputQueryString\":\"select\\n    label,\\n    pmet_retrenched,\\n    pmet_vacancies,\\n    case when pmet_missing_quarters > 0 then 'Some quarters not published' else '' end as note\\nfrom pulse.sectors\\nwhere pmet_retrenched is not null or pmet_vacancies is not null\\norder by coalesce(pmet_retrenched, 0) desc\",\"compiled\":false,\"inline\":true},{\"id\":\"pm_missing\",\"compiledQueryString\":\"select string_agg(label, ', ' order by sort) as names from pulse.sectors where pmet_missing_quarters > 0 and (pmet_retrenched is not null or pmet_vacancies is not null)\",\"inputQueryString\":\"select string_agg(label, ', ' order by sort) as names from pulse.sectors where pmet_missing_quarters > 0 and (pmet_retrenched is not null or pmet_vacancies is not null)\",\"compiled\":false,\"inline\":true},{\"id\":\"pm_src\",\"compiledQueryString\":\"select title, url from pulse.datasets where key in ('retrenched_occ', 'vacancies_occ') order by key desc\",\"inputQueryString\":\"select title, url from pulse.datasets where key in ('retrenched_occ', 'vacancies_occ') order by key desc\",\"compiled\":false,\"inline\":true},{\"id\":\"sc_table\",\"compiledQueryString\":\"-- SCTP programmes per sector next to PMET roles open (security is counted inside admin & support too)\\nselect label || case when sector = 'security' then ' (part of admin & support)' else '' end as sector,\\n       sctp_programmes as programmes, pmet_vacancies as pmet_open, coalesce(pmet_vacancies, 0) as ord\\nfrom pulse.sectors\\nunion all\\nselect 'Any sector (cross-industry skills)', (select sctp_cross from pulse.meta), null, -1\\nunion all\\nselect 'Other', (select sctp_other from pulse.meta), null, -2\\norder by ord desc\",\"inputQueryString\":\"-- SCTP programmes per sector next to PMET roles open (security is counted inside admin & support too)\\nselect label || case when sector = 'security' then ' (part of admin & support)' else '' end as sector,\\n       sctp_programmes as programmes, pmet_vacancies as pmet_open, coalesce(pmet_vacancies, 0) as ord\\nfrom pulse.sectors\\nunion all\\nselect 'Any sector (cross-industry skills)', (select sctp_cross from pulse.meta), null, -1\\nunion all\\nselect 'Other', (select sctp_other from pulse.meta), null, -2\\norder by ord desc\",\"compiled\":false,\"inline\":true},{\"id\":\"sc_list\",\"compiledQueryString\":\"select inst, title from pulse.sctp_programmes\\nwhere sector = '${inputs.sector.value}' or ('${inputs.sector.value}' = 'admin' and sector = 'security')\\norder by seq\",\"inputQueryString\":\"select inst, title from pulse.sctp_programmes\\nwhere sector = '${inputs.sector.value}' or ('${inputs.sector.value}' = 'admin' and sector = 'security')\\norder by seq\",\"compiled\":false,\"inline\":true},{\"id\":\"sc_inst\",\"compiledQueryString\":\"select code, name, url from pulse.sctp_institutions\",\"inputQueryString\":\"select code, name, url from pulse.sctp_institutions\",\"compiled\":false,\"inline\":true},{\"id\":\"datasets\",\"compiledQueryString\":\"select title, url from pulse.datasets\",\"inputQueryString\":\"select title, url from pulse.datasets\",\"compiled\":false,\"inline\":true}]}"}</script>
+			<script type="application/json" data-sveltekit-fetched data-url="/projects/sme-pulse/api/pagesManifest.json">{"status":200,"statusText":"","headers":{},"body":"{\"label\":\"Home\",\"href\":\"/\",\"children\":{},\"frontMatter\":{\"title\":\"SME Workforce Pulse\",\"full_width\":true,\"hide_toc\":true},\"isTemplated\":false,\"isPage\":true}"}</script>
+			<script>
+				{
+					__sveltekit_15i4exi = {
+						base: "/projects/sme-pulse",
+						assets: "/projects/sme-pulse"
+					};
 
-  <nav class="chips" id="chips" aria-label="Sector"></nav>
+					const element = document.currentScript.parentElement;
 
-  <section class="kpis" id="kpis" aria-live="polite"></section>
+					const data = [null,null];
 
-  <div class="grid2">
-    <section class="card">
-      <div class="chead">
-        <div><h2 id="lineTitle"></h2><p class="hint" id="lineHint"></p></div>
-        <div class="seg" id="metricSeg" role="group" aria-label="Measure"></div>
-      </div>
-      <div class="readout" id="readout"></div>
-      <svg class="plot" id="line" tabindex="0" role="img" aria-describedby="lineHint"></svg>
-      <div class="below">
-        <div class="seg" id="rangeSeg" role="group" aria-label="Time range"></div>
-        <button class="linkbtn" id="tblBtn" aria-expanded="false">Show table</button>
-      </div>
-      <div class="tablewrap" id="tbl" hidden></div>
-      <p class="src" id="lineSrc"></p>
-    </section>
+					Promise.all([
+						import("/projects/sme-pulse/_app/immutable/entry/start.bfmeyhHo.js"),
+						import("/projects/sme-pulse/_app/immutable/entry/app.5aiMkV9K.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 4],
+							data,
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		
 
-    <section class="card">
-      <h2>Vacancy rate by sector</h2>
-      <p class="hint" id="barHint"></p>
-      <div class="bars" id="bars" style="margin-top:10px"></div>
-      <p class="src" id="barSrc"></p>
-    </section>
-  </div>
-
-  <section class="card" aria-labelledby="pmh" style="margin-bottom:12px">
-    <h2 id="pmh">PMETs: retrenched vs open roles</h2>
-    <p class="hint" id="pmHint"></p>
-    <div class="pm-sum" id="pmSum"></div>
-    <p class="pm-sel" id="pmSel" hidden></p>
-    <div class="legend" aria-hidden="true"><span><i style="background:var(--c-ret)"></i><span id="pmLegR"></span></span><span><i style="background:var(--accent)"></i><span id="pmLegV"></span></span></div>
-    <div class="pm" id="pm"></div>
-    <div class="below"><span></span><button class="linkbtn" id="pmTblBtn" aria-expanded="false">Show table</button></div>
-    <div class="tablewrap" id="pmTbl" hidden></div>
-    <p class="src" id="pmSrc"></p>
-  </section>
-
-  <section class="card" aria-labelledby="sch" style="margin-bottom:12px">
-    <h2 id="sch">Career-switch courses (SCTP) by sector</h2>
-    <p class="hint" id="scHint"></p>
-    <div class="pm-sum" id="scSum"></div>
-    <div class="bars" id="scBars" style="margin-top:10px"></div>
-    <div id="scList"></div>
-  </section>
-
-  <section class="card skills" aria-labelledby="sk" style="margin-bottom:12px">
-    <h2 id="sk"></h2>
-    <p class="hint" id="skHint"></p>
-    <div class="sklinks" id="skLinks"></div>
-  </section>
-
-  <section class="survey" aria-labelledby="sv">
-    <span class="pill">Survey figures · entered by hand</span>
-    <h2 id="sv">AI at work: adoption is rising faster than training</h2>
-    <div class="sgrid" id="survey"></div>
-    <p class="cap" id="surveyCap"></p>
-  </section>
-
-  <footer id="foot"></footer>
-</div>
-
-<script>
-const D = {"quarters":["1998-Q1","1998-Q2","1998-Q3","1998-Q4","1999-Q1","1999-Q2","1999-Q3","1999-Q4","2000-Q1","2000-Q2","2000-Q3","2000-Q4","2001-Q1","2001-Q2","2001-Q3","2001-Q4","2002-Q1","2002-Q2","2002-Q3","2002-Q4","2003-Q1","2003-Q2","2003-Q3","2003-Q4","2004-Q1","2004-Q2","2004-Q3","2004-Q4","2005-Q1","2005-Q2","2005-Q3","2005-Q4","2006-Q1","2006-Q2","2006-Q3","2006-Q4","2007-Q1","2007-Q2","2007-Q3","2007-Q4","2008-Q1","2008-Q2","2008-Q3","2008-Q4","2009-Q1","2009-Q2","2009-Q3","2009-Q4","2010-Q1","2010-Q2","2010-Q3","2010-Q4","2011-Q1","2011-Q2","2011-Q3","2011-Q4","2012-Q1","2012-Q2","2012-Q3","2012-Q4","2013-Q1","2013-Q2","2013-Q3","2013-Q4","2014-Q1","2014-Q2","2014-Q3","2014-Q4","2015-Q1","2015-Q2","2015-Q3","2015-Q4","2016-Q1","2016-Q2","2016-Q3","2016-Q4","2017-Q1","2017-Q2","2017-Q3","2017-Q4","2018-Q1","2018-Q2","2018-Q3","2018-Q4","2019-Q1","2019-Q2","2019-Q3","2019-Q4","2020-Q1","2020-Q2","2020-Q3","2020-Q4","2021-Q1","2021-Q2","2021-Q3","2021-Q4","2022-Q1","2022-Q2","2022-Q3","2022-Q4","2023-Q1","2023-Q2","2023-Q3","2023-Q4","2024-Q1","2024-Q2","2024-Q3","2024-Q4","2025-Q1","2025-Q2","2025-Q3","2025-Q4","2026-Q1","2026-Q2"],"fetched":"2026-10-11","checked":"2026-10-22","latest":"2026-Q2","total":{"vac":[26100.0,19100.0,15500.0,12600.0,16800.0,19300.0,25100.0,22000.0,26200.0,29800.0,32400.0,22100.0,19800.0,17300.0,14100.0,12500.0,13900.0,16100.0,17200.0,12900.0,12100.0,12000.0,13100.0,13100.0,15400.0,15400.0,18900.0,16200.0,17500.0,19200.0,20100.0,19800.0,26100.0,33000.0,32200.0,33300.0,35700.0,39200.0,38800.0,40800.0,40900.0,42300.0,40400.0,27400.0,22900.0,26100.0,36900.0,35800.0,37300.0,45100.0,50200.0,44100.0,49300.0,55900.0,54000.0,51700.0,46800.0,47300.0,56400.0,43900.0,51100.0,52100.0,61900.0,56500.0,60500.0,63900.0,67400.0,61200.0,63700.0,63000.0,60000.0,50600.0,49200.0,50500.0,53800.0,44500.0,45300.0,50000.0,53100.0,46600.0,52100.0,58300.0,63300.0,57800.0,54700.0,53900.0,52900.0,50000.0,44400.0,42800.0,53300.0,53000.0,67000.0,93800.0,104200.0,114000.0,123100.0,127000.0,107200.0,102700.0,97400.0,89400.0,78100.0,78300.0,82200.0,82600.0,61400.0,75800.0,82200.0,78100.0,67800.0,75700.0,75200.0,69900.0],"rate":[2.7,2.0,1.5,1.3,1.8,2.0,2.5,2.3,2.7,3.0,3.1,2.2,1.9,1.7,1.3,1.2,1.4,1.6,1.6,1.2,1.2,1.2,1.3,1.3,1.5,1.5,1.7,1.5,1.6,1.8,1.7,1.7,2.0,2.5,2.3,2.4,2.5,2.7,2.6,2.7,2.6,2.7,2.4,1.7,1.4,1.6,2.2,2.1,2.2,2.7,2.8,2.5,2.8,3.1,2.9,2.7,2.4,2.5,2.8,2.2,2.6,2.6,3.0,2.8,3.0,3.1,3.2,2.9,3.0,2.9,2.7,2.4,2.4,2.4,2.4,2.2,2.3,2.5,2.5,2.3,2.5,2.8,2.9,2.7,2.5,2.5,2.4,2.3,2.1,2.1,2.6,2.6,3.3,4.9,5.5,5.2,5.5,5.6,4.8,4.5,4.3,3.9,3.4,3.3,3.5,3.4,2.7,3.0,3.3,3.0,2.8,3.0,3.0,2.9],"ret":[8830.0,7750.0,7620.0,8600.0,3700.0,3620.0,3570.0,4640.0,6210.0,1880.0,1810.0,2050.0,3520.0,6280.0,8880.0,8890.0,5110.0,4580.0,4370.0,6070.0,4610.0,5510.0,4310.0,2840.0,3010.0,2120.0,2090.0,3430.0,2280.0,2250.0,3240.0,3380.0,3690.0,3430.0,2570.0,3390.0,2100.0,2030.0,2350.0,2110.0,2420.0,1880.0,3180.0,9410.0,12760.0,5980.0,2470.0,2220.0,2400.0,2280.0,1930.0,3190.0,2750.0,2020.0,1960.0,3250.0,2600.0,2210.0,2850.0,3350.0,2120.0,3080.0,2710.0,3660.0,3110.0,2410.0,3500.0,3910.0,3500.0,3250.0,3460.0,5370.0,4710.0,4800.0,4220.0,5440.0,4000.0,3640.0,3400.0,3680.0,2320.0,3030.0,2860.0,2510.0,3230.0,2320.0,2470.0,2670.0,3220.0,8130.0,9120.0,5640.0,2270.0,2340.0,1900.0,1500.0,1320.0,830.0,1300.0,2990.0,3820.0,3200.0,4110.0,3460.0,3030.0,3270.0,3050.0,3680.0,3590.0,3540.0,3670.0,3690.0,3830.0,4620.0],"vu":[1.32,0.87,0.37,0.35,0.47,0.57,0.68,0.89,0.83,0.72,1.3,0.92,0.87,0.64,0.36,0.32,0.35,0.4,0.37,0.31,0.29,0.27,0.21,0.3,0.35,0.34,0.47,0.42,0.44,0.45,0.43,0.56,0.58,0.65,0.67,0.75,0.8,0.96,1.29,1.42,1.29,0.99,0.87,0.53,0.36,0.4,0.56,0.79,0.85,0.97,1.1,1.03,1.3,1.23,1.18,1.16,1.03,0.98,1.24,1.03,1.15,1.19,1.41,1.41,1.32,1.41,1.41,1.39,1.41,1.24,1.18,1.12,1.04,0.9,0.93,0.78,0.79,0.84,0.92,0.95,1.02,1.08,1.1,1.11,1.01,0.89,0.9,0.85,0.66,0.52,0.67,0.78,0.99,1.58,2.09,2.08,2.38,2.55,2.12,2.24,2.34,1.87,1.63,1.69,1.64,1.72,1.34,1.57,1.67,1.38,1.5,1.58,1.46,1.48]},"sectors":[{"key":"manufacturing","label":"Manufacturing","mom":"manufacturing","chip":true,"vac":[8200.0,4600.0,4000.0,3900.0,4300.0,5900.0,7400.0,6400.0,8000.0,9700.0,10300.0,6400.0,4500.0,4100.0,3500.0,3200.0,4600.0,5400.0,5900.0,4400.0,4100.0,4300.0,4500.0,4100.0,6200.0,4700.0,5600.0,5200.0,5600.0,6800.0,6000.0,6500.0,7300.0,9300.0,8600.0,8000.0,9000.0,8400.0,7900.0,8800.0,8300.0,7700.0,7300.0,2900.0,2700.0,4300.0,6000.0,6100.0,7800.0,8900.0,8500.0,7400.0,9200.0,10300.0,8500.0,7800.0,7600.0,7700.0,7100.0,6000.0,7700.0,7700.0,8200.0,7400.0,8200.0,8900.0,9200.0,7600.0,7800.0,6800.0,6800.0,6400.0,5900.0,6200.0,6100.0,5200.0,6600.0,6200.0,7200.0,6000.0,8100.0,8300.0,9200.0,7500.0,7200.0,6900.0,6200.0,6000.0,6100.0,4600.0,5400.0,5900.0,8900.0,15200.0,13400.0,13800.0,14500.0,15900.0,12100.0,11300.0,9500.0,8500.0,6700.0,8500.0,9400.0,8700.0,6100.0,8200.0,8000.0,7700.0,6500.0,8000.0,8500.0,8700.0],"rate":[2.4,1.4,1.2,1.3,1.4,1.9,2.3,2.1,2.8,3.2,3.3,2.0,1.5,1.3,1.1,1.0,1.5,1.7,1.8,1.4,1.3,1.4,1.4,1.3,1.9,1.5,1.7,1.5,1.7,2.0,1.7,1.9,2.1,2.6,2.2,2.1,2.3,2.2,2.0,2.2,2.0,1.9,1.7,0.7,0.7,1.1,1.5,1.6,2.0,2.3,2.1,1.9,2.4,2.6,2.1,2.0,1.9,1.9,1.7,1.5,1.9,1.9,2.0,1.8,2.0,2.2,2.3,1.9,2.0,1.7,1.7,1.7,1.6,1.7,1.6,1.4,1.9,1.8,2.0,1.7,2.3,2.3,2.5,2.1,2.1,2.0,1.8,1.7,1.8,1.3,1.6,1.9,2.8,5.1,4.6,4.3,4.6,4.7,3.6,3.3,2.8,2.4,1.9,2.3,2.5,2.2,1.7,2.0,2.1,1.9,1.8,2.0,2.2,2.3],"ret":[6170.0,5010.0,4330.0,5190.0,1220.0,1980.0,1870.0,3300.0,5120.0,590.0,810.0,980.0,2020.0,4120.0,5480.0,4060.0,2000.0,1750.0,2260.0,3650.0,1950.0,2690.0,1620.0,1220.0,1560.0,800.0,810.0,1540.0,1270.0,1270.0,2050.0,2500.0,2600.0,1960.0,1910.0,2390.0,1440.0,1430.0,1310.0,1320.0,1810.0,1230.0,2230.0,5160.0,9100.0,2820.0,870.0,860.0,1000.0,1140.0,970.0,1370.0,1440.0,600.0,770.0,1660.0,750.0,520.0,1200.0,1580.0,680.0,1630.0,1250.0,1430.0,820.0,710.0,1270.0,1170.0,950.0,870.0,920.0,2480.0,1790.0,1380.0,1120.0,1990.0,890.0,840.0,730.0,1330.0,510.0,820.0,870.0,380.0,1040.0,490.0,600.0,670.0,720.0,1550.0,2070.0,990.0,320.0,760.0,360.0,280.0,510.0,170.0,250.0,1180.0,1470.0,530.0,700.0,780.0,660.0,690.0,580.0,850.0,1020.0,650.0,550.0,570.0,670.0,870.0],"pmet":{"ret":2060.0,"ret_missing":0,"vac":5000.0}},{"key":"construction","label":"Construction","mom":"construction","chip":true,"vac":[3700.0,3100.0,2600.0,1200.0,2600.0,1800.0,1900.0,1100.0,1900.0,1800.0,1700.0,1000.0,1100.0,800.0,700.0,900.0,700.0,900.0,600.0,600.0,500.0,700.0,600.0,400.0,300.0,800.0,1000.0,400.0,500.0,600.0,800.0,1000.0,700.0,2200.0,1400.0,1900.0,1800.0,2400.0,2600.0,3000.0,3400.0,3600.0,3600.0,1300.0,1100.0,1400.0,3000.0,2000.0,2100.0,2000.0,3400.0,3400.0,3700.0,3700.0,3800.0,3400.0,3300.0,3400.0,4100.0,2700.0,3800.0,3700.0,4000.0,3900.0,3500.0,3500.0,3800.0,3600.0,3200.0,3300.0,3200.0,1900.0,2000.0,1800.0,2400.0,1600.0,1400.0,1800.0,2000.0,1600.0,1500.0,1900.0,4300.0,4400.0,3400.0,2200.0,2300.0,1200.0,1300.0,900.0,3500.0,4900.0,6500.0,11600.0,11900.0,12400.0,12300.0,11700.0,8300.0,8800.0,7700.0,7200.0,5900.0,6300.0,7400.0,8700.0,4900.0,8400.0,9500.0,9600.0,8800.0,13200.0,10900.0,10900.0],"rate":[2.2,1.9,1.4,0.7,1.6,1.1,1.2,0.7,1.2,1.1,1.0,0.6,0.7,0.5,0.5,0.7,0.5,0.7,0.4,0.5,0.4,0.6,0.4,0.3,0.3,0.6,0.8,0.3,0.4,0.5,0.6,0.8,0.6,1.6,1.0,1.4,1.3,1.6,1.6,1.8,1.9,2.0,1.7,0.6,0.5,0.7,1.2,0.9,1.0,1.0,1.4,1.4,1.6,1.6,1.5,1.3,1.3,1.3,1.5,1.0,1.4,1.3,1.3,1.3,1.1,1.2,1.2,1.2,1.0,1.1,1.0,0.6,0.7,0.6,0.7,0.6,0.5,0.6,0.7,0.6,0.5,0.7,1.5,1.6,1.2,0.8,0.8,0.5,0.5,0.4,1.3,1.9,2.6,4.7,5.0,4.7,4.5,4.0,2.8,2.8,2.4,2.3,1.8,1.8,2.2,2.6,1.4,2.2,2.4,2.2,2.2,3.3,2.8,2.8],"ret":[560.0,600.0,600.0,680.0,420.0,110.0,110.0,190.0,140.0,60.0,60.0,110.0,160.0,170.0,260.0,320.0,310.0,250.0,140.0,300.0,210.0,210.0,200.0,120.0,70.0,200.0,60.0,80.0,140.0,160.0,150.0,90.0,60.0,390.0,30.0,10.0,null,10.0,50.0,20.0,10.0,20.0,130.0,390.0,350.0,240.0,140.0,250.0,340.0,150.0,170.0,690.0,310.0,410.0,100.0,240.0,260.0,180.0,140.0,70.0,130.0,250.0,260.0,480.0,400.0,280.0,210.0,800.0,610.0,230.0,430.0,520.0,390.0,350.0,600.0,580.0,660.0,470.0,490.0,400.0,350.0,470.0,200.0,180.0,280.0,150.0,160.0,270.0,140.0,440.0,340.0,70.0,20.0,90.0,90.0,40.0,60.0,50.0,10.0,150.0,180.0,120.0,140.0,150.0,120.0,100.0,140.0,90.0,240.0,140.0,60.0,140.0,80.0,170.0],"pmet":{"ret":330.0,"ret_missing":0,"vac":3000.0}},{"key":"transport","label":"Transport & storage","mom":"transportation and storage","chip":true,"vac":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,2200.0,2900.0,2900.0,2800.0,3000.0,3200.0,2700.0,3400.0,2500.0,3100.0,2000.0,1500.0,1200.0,1100.0,1800.0,2000.0,2600.0,3600.0,3000.0,2900.0,2900.0,3800.0,3500.0,3900.0,3500.0,3600.0,3500.0,2700.0,4100.0,3600.0,3800.0,3800.0,4100.0,4500.0,4100.0,4100.0,4500.0,4100.0,3500.0,3100.0,3200.0,3300.0,2800.0,2200.0,3100.0,3700.0,3500.0,3000.0,3900.0,4100.0,3800.0,3600.0,3500.0,3500.0,2700.0,2100.0,1500.0,1200.0,1900.0,2200.0,3300.0,4500.0,6500.0,6900.0,8000.0,8200.0,7900.0,7400.0,7400.0,4900.0,5000.0,5000.0,5900.0,5800.0,3600.0,3800.0,5200.0,5000.0,5100.0,4100.0,5300.0,3500.0],"rate":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,2.2,2.8,2.8,2.8,2.9,3.1,2.6,3.1,2.3,2.7,1.7,1.3,1.0,1.0,1.6,1.7,2.3,3.1,2.3,2.2,2.2,2.8,2.6,2.9,2.6,2.6,2.4,1.9,2.8,2.5,2.6,2.6,2.9,3.1,2.7,2.6,2.8,2.6,2.3,2.0,2.1,2.2,1.8,1.5,2.1,2.5,2.2,2.0,2.5,2.7,2.3,2.2,2.2,2.2,1.8,1.4,1.0,0.9,1.3,1.5,2.4,3.5,4.7,4.6,5.2,5.3,5.0,4.7,4.6,3.6,3.9,3.7,4.1,3.9,2.7,2.6,3.6,3.3,3.6,2.8,3.7,2.4],"ret":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,100.0,130.0,110.0,70.0,80.0,90.0,50.0,60.0,40.0,70.0,110.0,380.0,310.0,510.0,160.0,60.0,30.0,140.0,100.0,50.0,40.0,50.0,120.0,30.0,80.0,90.0,80.0,30.0,90.0,80.0,110.0,160.0,120.0,110.0,130.0,110.0,110.0,140.0,180.0,250.0,230.0,230.0,120.0,280.0,150.0,170.0,300.0,280.0,110.0,280.0,120.0,190.0,330.0,170.0,180.0,90.0,130.0,260.0,660.0,1730.0,190.0,130.0,130.0,100.0,60.0,40.0,20.0,30.0,40.0,80.0,310.0,120.0,150.0,140.0,140.0,90.0,140.0,220.0,630.0,190.0,160.0,190.0],"pmet":{"ret":720.0,"ret_missing":0,"vac":700.0}},{"key":"food","label":"Food & accommodation","mom":"accommodation and food services","chip":true,"vac":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1600.0,2200.0,2600.0,2200.0,2000.0,2400.0,2500.0,2600.0,2500.0,2800.0,3000.0,1900.0,900.0,1400.0,3400.0,2900.0,3500.0,3500.0,4900.0,3500.0,3600.0,4200.0,5200.0,4400.0,4200.0,3400.0,6800.0,5000.0,4900.0,4900.0,7900.0,7000.0,6700.0,7000.0,8300.0,7600.0,7500.0,6900.0,8300.0,6100.0,5900.0,5300.0,6500.0,4900.0,4300.0,5500.0,6100.0,5400.0,4800.0,6100.0,6200.0,6400.0,5700.0,6500.0,5300.0,6000.0,3400.0,4000.0,4900.0,4300.0,5600.0,5400.0,8200.0,8900.0,9900.0,11300.0,9600.0,9100.0,8700.0,8800.0,8000.0,6800.0,6800.0,7000.0,5500.0,6600.0,7000.0,5700.0,6200.0,5400.0,4900.0,4800.0],"rate":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,2.5,3.2,3.7,3.3,3.0,3.4,3.2,3.3,3.2,3.4,3.4,2.1,1.0,1.6,3.6,3.2,3.9,3.9,4.9,3.6,3.8,4.2,4.7,3.9,3.8,3.1,6.0,4.6,4.6,4.4,6.4,5.9,5.7,6.0,6.3,5.6,5.7,5.3,6.0,4.6,4.6,4.1,4.5,3.9,3.9,4.4,4.2,4.1,3.6,4.5,4.2,4.4,3.8,4.4,3.5,3.4,2.0,2.5,3.7,3.4,4.4,5.1,6.7,6.3,6.9,7.5,6.3,5.7,5.3,5.3,4.9,4.2,4.1,4.1,3.4,3.6,3.9,3.0,3.6,3.3,3.1,3.1],"ret":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,50.0,40.0,30.0,110.0,60.0,50.0,150.0,70.0,10.0,60.0,40.0,50.0,40.0,90.0,10.0,60.0,60.0,null,20.0,60.0,160.0,80.0,100.0,20.0,200.0,30.0,30.0,10.0,50.0,60.0,40.0,70.0,270.0,40.0,20.0,50.0,70.0,50.0,20.0,60.0,100.0,20.0,200.0,20.0,60.0,180.0,120.0,110.0,40.0,40.0,220.0,50.0,40.0,30.0,30.0,70.0,380.0,720.0,450.0,150.0,20.0,50.0,70.0,40.0,null,10.0,30.0,null,10.0,10.0,30.0,100.0,70.0,40.0,50.0,20.0,40.0,90.0,40.0,70.0,150.0,180.0],"pmet":{"ret":190.0,"ret_missing":0,"vac":900.0}},{"key":"health","label":"Health & social","mom":"health and social services","chip":true,"vac":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1100.0,1200.0,1200.0,1300.0,1500.0,1600.0,1400.0,1300.0,1400.0,1700.0,1300.0,1400.0,1400.0,1600.0,1500.0,1900.0,2100.0,2200.0,1500.0,1600.0,2600.0,3100.0,2200.0,2500.0,2500.0,2600.0,2700.0,2100.0,2600.0,3100.0,3000.0,3600.0,4100.0,5100.0,4300.0,4200.0,4600.0,4300.0,3000.0,2600.0,3100.0,2700.0,3500.0,3000.0,2700.0,2700.0,2800.0,2700.0,3100.0,3300.0,3500.0,3200.0,3600.0,3500.0,3700.0,3800.0,3900.0,3200.0,4200.0,4600.0,4600.0,5000.0,6600.0,6500.0,7700.0,8100.0,7800.0,7400.0,7800.0,7700.0,7200.0,5800.0,5400.0,5900.0,5600.0,6000.0,5900.0,5200.0,4500.0,5100.0,5300.0,4400.0],"rate":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,2.3,2.5,2.4,2.6,3.0,3.1,2.7,2.5,2.7,3.0,2.4,2.5,2.5,2.8,2.4,3.0,3.3,3.4,2.3,2.4,3.7,4.2,3.1,3.5,3.4,3.4,3.4,2.6,3.2,3.7,3.5,4.0,4.5,5.5,4.6,4.5,4.8,4.5,3.2,2.8,3.2,2.8,3.5,3.0,2.8,2.6,2.7,2.6,3.0,3.1,3.1,2.9,3.2,3.1,3.3,3.4,3.7,3.1,3.8,4.2,4.1,4.7,6.1,5.1,5.9,6.2,5.9,5.6,5.7,6.2,5.7,4.5,4.1,4.1,4.0,4.0,4.1,3.7,3.4,3.5,3.5,3.0],"ret":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,100.0,null,10.0,10.0,20.0,10.0,null,10.0,20.0,null,20.0,120.0,10.0,null,null,null,20.0,10.0,null,null,null,null,null,null,null,null,30.0,null,null,null,null,10.0,null,null,null,20.0,30.0,20.0,null,40.0,20.0,null,10.0,10.0,20.0,10.0,10.0,10.0,10.0,null,null,null,40.0,null,10.0,50.0,null,30.0,null,10.0,null,null,null,null,10.0,10.0,null,80.0,30.0,30.0,10.0,10.0,10.0,10.0,20.0,30.0,10.0,20.0,10.0,150.0,60.0,40.0],"pmet":{"ret":140.0,"ret_missing":0,"vac":3200.0}},{"key":"admin","label":"Admin & support","mom":"administrative and support services","chip":true,"vac":[null,null,null,null,null,null,null,null,400.0,1000.0,900.0,600.0,800.0,700.0,400.0,300.0,300.0,300.0,600.0,400.0,300.0,200.0,500.0,400.0,500.0,600.0,900.0,700.0,1200.0,900.0,1400.0,1600.0,1800.0,1800.0,2200.0,2100.0,2100.0,2100.0,3400.0,3200.0,3000.0,3000.0,3500.0,2700.0,1800.0,1600.0,3300.0,2100.0,2000.0,2800.0,4300.0,3800.0,4200.0,4400.0,4900.0,4200.0,3300.0,3300.0,4800.0,3300.0,3300.0,3400.0,5400.0,5100.0,5300.0,5200.0,5900.0,5100.0,5500.0,5600.0,5300.0,4800.0,4500.0,4200.0,5900.0,4800.0,4200.0,4900.0,5200.0,4200.0,4200.0,4500.0,5900.0,5300.0,3900.0,3500.0,4100.0,4200.0,3200.0,4200.0,4600.0,3800.0,3700.0,6200.0,7600.0,7200.0,7500.0,8100.0,6900.0,7800.0,8400.0,6300.0,6200.0,5300.0,5400.0,5100.0,4600.0,5500.0,5100.0,5900.0,3300.0,5400.0,4100.0,2700.0],"rate":[null,null,null,null,null,null,null,null,2.4,5.5,4.4,3.7,4.1,3.9,2.1,1.6,1.4,1.4,2.5,1.4,1.0,0.7,2.1,1.6,1.7,2.0,3.0,2.4,4.4,2.8,3.5,3.8,3.8,3.6,3.8,3.8,3.8,3.5,4.8,4.6,4.1,4.3,4.4,3.4,2.3,2.1,3.7,2.4,2.2,3.2,4.4,3.9,4.3,4.6,4.8,4.1,3.2,3.2,4.3,3.0,3.0,3.1,4.6,4.4,4.6,4.5,4.8,4.1,4.4,4.3,3.8,3.4,3.3,3.0,3.9,3.3,3.1,3.4,3.3,3.1,3.0,3.2,3.9,3.6,2.7,2.3,2.6,2.9,2.2,3.0,3.1,2.5,2.5,4.6,5.9,4.4,4.8,5.0,4.5,5.1,5.3,4.2,4.2,3.7,3.7,3.4,3.1,3.4,2.9,3.2,2.0,2.9,2.2,1.6],"ret":[null,null,null,null,null,null,null,null,10.0,null,10.0,null,20.0,20.0,180.0,40.0,20.0,30.0,50.0,10.0,10.0,150.0,70.0,10.0,10.0,10.0,60.0,20.0,20.0,null,40.0,10.0,50.0,60.0,null,100.0,50.0,20.0,40.0,50.0,40.0,10.0,70.0,250.0,220.0,200.0,160.0,110.0,130.0,20.0,50.0,80.0,10.0,10.0,30.0,60.0,70.0,80.0,70.0,70.0,20.0,60.0,60.0,70.0,90.0,40.0,180.0,30.0,120.0,120.0,100.0,40.0,90.0,50.0,110.0,90.0,190.0,70.0,120.0,40.0,80.0,30.0,60.0,30.0,40.0,50.0,130.0,50.0,130.0,570.0,590.0,310.0,40.0,100.0,170.0,40.0,30.0,30.0,70.0,100.0,30.0,170.0,60.0,120.0,190.0,190.0,80.0,80.0,60.0,150.0,160.0,130.0,140.0,140.0],"pmet":{"ret":520.0,"ret_missing":0,"vac":400.0}},{"key":"security","label":"Security","mom":"security and investigation","chip":true,"vac":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1000.0,800.0,1100.0,1100.0,1200.0,1500.0,2000.0,2100.0,1900.0,1900.0,1500.0,1500.0,1100.0,1100.0,1800.0,1100.0,1000.0,1600.0,2100.0,2100.0,2300.0,2300.0,2300.0,2300.0,1500.0,1600.0,1600.0,1300.0,1200.0,1200.0,2000.0,1900.0,1900.0,2100.0,2200.0,2000.0,2500.0,2300.0,2500.0,2400.0,2300.0,2000.0,2600.0,2200.0,2000.0,2000.0,2300.0,1600.0,1400.0,1500.0,2100.0,2400.0,1600.0,1300.0,1600.0,1400.0,1100.0,1500.0,1900.0,1300.0,1600.0,1800.0,1700.0,1800.0,2100.0,2100.0,1900.0,2000.0,2000.0,1400.0,1700.0,1500.0,1500.0,1400.0,1400.0,1200.0,1400.0,1100.0,900.0,1000.0,1000.0,700.0],"rate":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,5.0,3.8,4.9,5.6,5.7,6.4,7.6,7.4,6.6,6.6,5.8,5.9,4.1,3.9,5.9,3.9,3.3,5.3,6.5,6.4,6.9,7.2,6.8,6.8,4.6,4.5,4.5,3.8,3.3,3.5,5.2,5.0,4.5,5.1,5.5,4.9,5.9,5.4,5.7,5.3,5.0,4.4,5.5,4.7,4.3,4.2,4.9,4.9,4.5,4.9,6.1,6.9,4.5,3.8,4.5,4.0,3.2,4.3,4.7,3.4,4.1,5.4,6.1,4.2,5.4,5.4,5.4,5.6,5.1,3.8,4.8,4.4,3.8,3.6,3.5,3.1,2.9,2.3,2.0,1.9,1.9,1.4],"ret":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,70.0,null,null,null,null,null,null,null,null,null,null,null,null,null,null,10.0,null,null,null,null,40.0,null,70.0,10.0,null,70.0,null,null,null,null,20.0,null,120.0,null,null,null,10.0,null,null,null,null,null,10.0,null,null,null,null,null,10.0,null,null,null,null,10.0,null,null,null,null,10.0,10.0,50.0,null,null,null,null,10.0,null,null,null,null],"pmet":{"ret":null,"ret_missing":4,"vac":null}},{"key":"retail","label":"Wholesale & retail","mom":"wholesale and retail trade","chip":true,"vac":[2700.0,1700.0,1500.0,900.0,2100.0,2700.0,2900.0,2700.0,3300.0,3300.0,3500.0,2800.0,2500.0,1700.0,1700.0,900.0,1200.0,1800.0,1800.0,1100.0,1400.0,1300.0,1300.0,800.0,1500.0,1200.0,2200.0,1600.0,2000.0,2000.0,2500.0,1900.0,2600.0,3000.0,3000.0,3800.0,3700.0,4300.0,4100.0,4300.0,4600.0,4500.0,3900.0,2200.0,2200.0,2300.0,3900.0,3400.0,4000.0,5100.0,5900.0,4200.0,4800.0,5000.0,6400.0,6600.0,5500.0,5400.0,7000.0,5700.0,6600.0,6200.0,7800.0,7200.0,7600.0,7600.0,9100.0,7400.0,7500.0,8200.0,7000.0,6300.0,6200.0,6400.0,6500.0,5900.0,5900.0,5900.0,5900.0,5700.0,6200.0,7000.0,6800.0,6000.0,5700.0,5500.0,5200.0,5400.0,5600.0,5100.0,5300.0,5100.0,6500.0,8900.0,10700.0,10600.0,11500.0,12500.0,10400.0,10500.0,9100.0,7500.0,7200.0,7100.0,7600.0,7200.0,5200.0,6600.0,7100.0,6500.0,5100.0,5200.0,5500.0,5500.0],"rate":[2.4,1.6,1.2,0.8,1.8,2.3,2.4,2.3,2.8,2.6,2.7,2.1,1.9,1.3,1.3,0.7,1.0,1.4,1.3,0.8,1.0,1.0,0.9,0.6,1.1,0.9,1.5,1.1,1.3,1.4,1.6,1.2,1.7,1.9,1.9,2.4,2.3,2.6,2.4,2.4,2.5,2.4,2.1,1.1,1.1,1.2,2.0,1.8,2.1,2.7,3.0,1.9,2.2,2.2,3.0,3.0,2.6,2.5,3.1,2.5,2.9,2.7,3.4,3.1,3.3,3.3,3.8,2.9,3.0,3.3,2.9,2.7,2.6,2.7,2.7,2.5,2.6,2.6,2.4,2.4,2.6,2.9,2.8,2.4,2.3,2.2,2.1,2.3,2.4,2.2,2.3,2.3,2.9,4.2,5.0,4.6,4.8,5.3,4.4,4.3,3.8,2.8,3.0,3.0,3.3,3.0,2.3,2.8,3.1,2.5,2.2,2.3,2.3,2.4],"ret":[880.0,690.0,1170.0,1260.0,620.0,700.0,580.0,410.0,380.0,260.0,190.0,170.0,480.0,560.0,840.0,1100.0,640.0,510.0,490.0,730.0,840.0,630.0,590.0,380.0,440.0,340.0,220.0,260.0,270.0,190.0,300.0,220.0,190.0,250.0,270.0,310.0,220.0,150.0,620.0,250.0,180.0,190.0,280.0,890.0,1000.0,830.0,530.0,310.0,320.0,280.0,220.0,350.0,200.0,260.0,270.0,320.0,420.0,370.0,570.0,470.0,270.0,270.0,320.0,430.0,460.0,370.0,670.0,700.0,490.0,540.0,560.0,590.0,550.0,820.0,470.0,550.0,650.0,500.0,520.0,500.0,450.0,420.0,450.0,470.0,620.0,480.0,520.0,470.0,750.0,1870.0,1380.0,980.0,570.0,310.0,250.0,270.0,190.0,170.0,90.0,470.0,400.0,590.0,1310.0,560.0,350.0,500.0,570.0,760.0,600.0,600.0,330.0,790.0,810.0,830.0],"pmet":{"ret":2330.0,"ret_missing":0,"vac":2500.0}},{"key":"ict","label":"Info & comms","mom":"information and communications","chip":true,"vac":[null,null,null,null,null,null,null,null,1800.0,2000.0,2000.0,1300.0,1000.0,800.0,400.0,500.0,800.0,500.0,500.0,300.0,600.0,600.0,400.0,500.0,600.0,600.0,700.0,800.0,700.0,600.0,800.0,700.0,900.0,1000.0,1100.0,1100.0,1100.0,1100.0,1500.0,1300.0,1500.0,1800.0,1700.0,800.0,400.0,700.0,1000.0,1100.0,1300.0,1100.0,1500.0,1700.0,1500.0,1900.0,1900.0,1700.0,1300.0,1500.0,1800.0,1500.0,1400.0,1500.0,2000.0,2200.0,2300.0,2300.0,2500.0,2600.0,2800.0,3000.0,3400.0,2500.0,2700.0,2800.0,3300.0,2700.0,2700.0,3400.0,3000.0,3100.0,4000.0,3800.0,4300.0,4100.0,3500.0,4100.0,4600.0,4500.0,4600.0,3800.0,4900.0,4900.0,6100.0,8700.0,8500.0,11100.0,11700.0,12100.0,9300.0,8200.0,8100.0,6700.0,7100.0,6300.0,7300.0,6500.0,5700.0,5600.0,6500.0,6000.0,5100.0,5800.0,5300.0,4400.0],"rate":[null,null,null,null,null,null,null,null,5.5,6.4,5.3,3.8,2.8,2.0,1.1,1.6,2.3,1.4,1.3,0.8,1.5,1.6,1.2,1.4,1.7,1.5,1.9,1.9,1.7,1.5,2.0,1.9,2.3,2.4,2.4,2.4,2.6,2.5,3.1,2.6,2.9,3.4,3.4,1.6,0.8,1.4,2.0,2.1,2.6,2.3,2.8,3.2,2.8,3.4,2.9,2.6,2.1,2.3,2.8,2.6,2.4,2.5,2.9,3.4,3.5,3.4,3.6,3.6,3.8,4.1,4.4,3.4,3.7,3.8,4.3,3.6,3.8,4.5,3.7,4.0,4.9,4.7,4.7,4.6,3.9,4.5,4.9,4.9,4.8,4.2,5.3,5.3,6.6,9.4,9.9,9.9,10.0,10.2,8.0,6.8,6.6,5.9,6.1,5.4,5.9,5.4,4.9,4.4,5.1,4.6,4.3,4.7,4.4,3.7],"ret":[null,null,null,null,null,null,null,null,30.0,230.0,60.0,100.0,240.0,200.0,380.0,870.0,600.0,420.0,290.0,420.0,310.0,260.0,220.0,100.0,180.0,100.0,50.0,170.0,170.0,140.0,100.0,240.0,70.0,350.0,50.0,150.0,90.0,40.0,20.0,120.0,30.0,50.0,80.0,300.0,270.0,230.0,130.0,50.0,140.0,90.0,60.0,60.0,100.0,150.0,100.0,160.0,200.0,200.0,140.0,190.0,210.0,230.0,130.0,280.0,340.0,140.0,150.0,180.0,180.0,200.0,200.0,160.0,410.0,150.0,160.0,260.0,250.0,240.0,250.0,200.0,220.0,230.0,210.0,470.0,210.0,180.0,160.0,160.0,240.0,540.0,370.0,290.0,400.0,200.0,230.0,210.0,200.0,110.0,520.0,370.0,560.0,860.0,700.0,620.0,580.0,400.0,670.0,410.0,380.0,500.0,580.0,480.0,530.0,720.0],"pmet":{"ret":2250.0,"ret_missing":0,"vac":3900.0}},{"key":"finance","label":"Finance & insurance","mom":"financial and insurance services","chip":true,"vac":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1500.0,1700.0,1400.0,2100.0,2300.0,2500.0,2800.0,2800.0,2700.0,2700.0,1400.0,900.0,800.0,1000.0,1400.0,2000.0,1800.0,2800.0,2500.0,3000.0,3200.0,3600.0,2200.0,2300.0,2700.0,2500.0,2700.0,2100.0,2400.0,2800.0,3100.0,2900.0,3900.0,4100.0,3900.0,3400.0,3600.0,4100.0,3500.0,3700.0,3200.0,3200.0,3200.0,3400.0,3700.0,4200.0,4700.0,4200.0,4400.0,5000.0,6000.0,4700.0,5300.0,5800.0,5400.0,4600.0,4600.0,4500.0,4500.0,3700.0,5500.0,7000.0,7200.0,13100.0,13100.0,10700.0,9300.0,7700.0,7000.0,6000.0,5100.0,7200.0,5500.0,5600.0,4000.0,5300.0,6500.0,6300.0,5100.0,4900.0,6600.0,5100.0],"rate":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.7,2.0,1.5,2.2,2.4,2.5,2.6,2.9,2.7,2.6,1.4,1.0,0.8,1.0,1.3,1.9,1.8,2.7,2.3,2.9,3.0,3.4,1.8,1.9,2.2,2.0,2.2,1.7,1.9,2.3,2.5,2.3,3.0,3.1,2.9,2.6,2.7,3.0,2.6,2.7,2.4,2.4,2.3,2.5,2.8,3.1,3.5,3.0,3.2,3.5,4.1,3.3,3.6,3.9,3.5,3.0,2.9,3.0,3.1,2.5,3.7,4.9,5.3,6.4,6.4,5.2,6.0,4.9,4.7,4.1,2.9,4.0,3.1,3.0,2.3,2.8,3.3,3.2,2.8,2.6,3.4,3.0],"ret":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,190.0,80.0,70.0,60.0,40.0,60.0,30.0,60.0,110.0,110.0,100.0,1120.0,690.0,610.0,260.0,280.0,200.0,170.0,80.0,170.0,140.0,170.0,170.0,390.0,380.0,420.0,200.0,390.0,320.0,260.0,290.0,400.0,250.0,360.0,370.0,360.0,430.0,410.0,440.0,480.0,470.0,540.0,650.0,640.0,510.0,480.0,440.0,350.0,300.0,330.0,320.0,370.0,240.0,430.0,310.0,320.0,310.0,1020.0,400.0,400.0,330.0,330.0,330.0,330.0,110.0,120.0,200.0,270.0,570.0,310.0,430.0,510.0,390.0,600.0,270.0,620.0,510.0,580.0,730.0,540.0,610.0,760.0],"pmet":{"ret":2590.0,"ret_missing":0,"vac":4500.0}},{"key":"realestate","label":"Real estate","mom":"real estate services","chip":true,"vac":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,500.0,700.0,700.0,700.0,1100.0,900.0,1000.0,800.0,700.0,800.0,1000.0,1000.0,700.0,1000.0,1000.0,900.0,900.0,1100.0,2100.0,1600.0,1700.0,1800.0,2400.0,1800.0,1400.0,2400.0,2000.0,1300.0,2000.0,1900.0,2500.0,2000.0,2300.0,2200.0,2500.0,2000.0,2300.0,2000.0,2600.0,1900.0,1200.0,1800.0,1800.0,1300.0,1100.0,1100.0,1200.0,1100.0,1000.0,1100.0,1300.0,1400.0,1300.0,1300.0,1200.0,1200.0,1100.0,900.0,1200.0,1000.0,1000.0,1500.0,1900.0,1800.0,1900.0,2200.0,2100.0,2100.0,2000.0,2100.0,1300.0,1900.0,1900.0,2200.0,1500.0,1500.0,1800.0,1600.0,1300.0,1400.0,1600.0,1900.0],"rate":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.2,1.7,1.5,1.7,2.5,2.0,2.2,1.8,1.6,1.8,2.2,2.1,1.4,2.1,2.1,1.9,1.8,2.4,4.1,3.2,3.2,3.4,4.3,3.1,2.5,4.1,3.4,2.3,3.3,3.2,4.1,3.3,3.9,3.7,4.4,3.4,3.9,3.4,4.6,3.5,2.3,3.4,3.4,2.5,2.2,2.0,2.3,2.2,1.9,2.2,2.5,2.7,2.5,2.6,2.9,2.8,2.6,2.1,2.7,2.4,2.6,3.6,5.1,4.3,4.6,5.3,5.0,5.0,4.8,5.3,2.5,3.9,3.9,4.3,3.0,2.9,3.7,3.0,2.6,2.6,3.5,3.9],"ret":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,90.0,20.0,10.0,30.0,10.0,null,null,null,20.0,null,30.0,20.0,80.0,20.0,30.0,20.0,10.0,40.0,40.0,50.0,40.0,20.0,10.0,70.0,40.0,20.0,null,null,null,null,20.0,10.0,10.0,50.0,30.0,null,null,30.0,null,20.0,10.0,20.0,10.0,40.0,20.0,40.0,20.0,null,20.0,40.0,10.0,20.0,110.0,30.0,20.0,40.0,40.0,40.0,40.0,30.0,50.0,20.0,20.0,20.0,null,10.0,10.0,10.0,20.0,20.0,10.0,20.0,20.0,40.0,10.0,10.0,10.0,30.0,10.0,40.0,10.0,60.0],"pmet":{"ret":100.0,"ret_missing":0,"vac":800.0}},{"key":"professional","label":"Professional services","mom":"professional services","chip":true,"vac":[null,null,null,null,null,null,null,null,1500.0,1100.0,1600.0,800.0,700.0,600.0,600.0,400.0,600.0,500.0,600.0,300.0,300.0,300.0,500.0,600.0,600.0,600.0,1000.0,1400.0,1200.0,1100.0,1100.0,1400.0,1700.0,2000.0,1600.0,2100.0,2100.0,3000.0,2600.0,3200.0,3400.0,2800.0,2200.0,1800.0,1500.0,1000.0,1700.0,1600.0,1600.0,1900.0,2500.0,2100.0,2300.0,2500.0,2700.0,2500.0,2300.0,2400.0,3100.0,2400.0,2900.0,3000.0,3300.0,2500.0,3100.0,3000.0,4000.0,4100.0,4600.0,4100.0,3700.0,3300.0,3300.0,3800.0,3400.0,2500.0,2600.0,2800.0,3000.0,2600.0,3500.0,4000.0,4400.0,4000.0,4000.0,4000.0,4200.0,3400.0,2800.0,2800.0,3800.0,3400.0,4700.0,7100.0,8200.0,8600.0,9800.0,10300.0,8300.0,7900.0,7700.0,7400.0,5600.0,6200.0,7200.0,6900.0,4100.0,5800.0,6200.0,5800.0,5500.0,6900.0,6300.0,6300.0],"rate":[null,null,null,null,null,null,null,null,3.6,2.6,3.1,1.9,1.5,1.2,1.1,0.7,1.2,0.9,1.1,0.7,0.7,0.6,0.9,1.0,1.0,1.1,1.7,2.4,2.1,1.9,1.8,2.2,2.7,3.1,2.2,3.0,2.9,4.0,3.2,3.8,3.9,3.1,2.3,1.8,1.6,1.1,1.7,1.5,1.6,1.9,2.3,2.0,2.2,2.3,2.3,2.1,1.9,2.0,2.3,1.8,2.2,2.3,2.5,1.9,2.4,2.3,2.9,3.0,3.5,3.1,2.7,2.5,2.5,2.9,2.5,2.1,2.3,2.3,2.3,2.1,2.8,3.1,3.2,3.0,2.9,2.9,3.0,2.5,1.9,2.0,2.7,2.4,3.3,5.2,6.0,5.5,6.1,6.0,5.1,4.6,4.4,4.2,3.3,3.2,3.7,3.6,2.4,3.1,3.3,2.8,3.0,3.3,3.1,3.0],"ret":[null,null,null,null,null,null,null,null,180.0,110.0,80.0,140.0,160.0,680.0,430.0,440.0,200.0,190.0,330.0,260.0,190.0,190.0,270.0,120.0,60.0,50.0,70.0,80.0,50.0,50.0,160.0,80.0,60.0,80.0,40.0,80.0,30.0,40.0,50.0,160.0,70.0,90.0,70.0,470.0,650.0,260.0,130.0,180.0,130.0,170.0,200.0,220.0,280.0,160.0,250.0,250.0,160.0,210.0,350.0,510.0,310.0,210.0,190.0,240.0,330.0,270.0,460.0,470.0,460.0,560.0,590.0,690.0,620.0,730.0,670.0,720.0,470.0,620.0,250.0,360.0,230.0,340.0,260.0,280.0,240.0,250.0,300.0,420.0,330.0,630.0,820.0,540.0,290.0,280.0,240.0,120.0,100.0,90.0,100.0,210.0,380.0,420.0,390.0,430.0,480.0,470.0,390.0,530.0,550.0,450.0,500.0,410.0,570.0,600.0],"pmet":{"ret":1990.0,"ret_missing":0,"vac":4700.0}},{"key":"publicedu","label":"Public admin & education","mom":"public administration and education","chip":true,"vac":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,3200.0,4100.0,4300.0,3900.0,4400.0,5500.0,4500.0,4500.0,5300.0,5800.0,7800.0,7800.0,7300.0,7600.0,7000.0,6900.0,5800.0,6900.0,7000.0,6400.0,6100.0,8000.0,7200.0,7200.0,6400.0,6000.0,7100.0,5800.0,5700.0,7100.0,7100.0,6000.0,6400.0,7300.0,6500.0,5900.0,5900.0,7300.0,6000.0,4500.0,4800.0,6500.0,5600.0,4800.0,4400.0,5200.0,5300.0,4900.0,4900.0,6300.0,5300.0,4500.0,5500.0,5000.0,5800.0,5300.0,5000.0,6200.0,7000.0,7300.0,8200.0,9700.0,9500.0,9500.0,10200.0,10900.0,10300.0,9600.0,9200.0,11500.0,9000.0,8600.0,9000.0,10200.0,7700.0,8700.0,10200.0,9400.0,8100.0,6900.0,8300.0,9000.0],"rate":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,2.8,3.5,3.6,3.2,3.7,4.5,3.6,3.6,4.1,4.5,5.9,5.8,5.3,5.4,4.9,4.9,4.1,4.8,4.7,4.3,4.0,5.2,4.6,4.6,4.0,3.8,4.3,3.6,3.6,4.3,4.2,3.6,3.8,4.3,3.9,3.4,3.4,4.2,3.4,2.6,2.7,3.7,3.1,2.7,2.5,2.9,2.9,2.7,2.7,3.5,2.8,2.4,3.0,2.7,3.1,2.8,2.7,3.3,3.7,3.8,4.2,5.0,5.1,5.0,5.4,5.7,5.4,5.2,4.9,6.1,4.8,4.5,4.6,5.3,4.1,4.4,5.2,4.8,4.4,3.6,4.7,4.8],"ret":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,50.0,60.0,30.0,20.0,30.0,80.0,10.0,null,30.0,30.0,null,60.0,10.0,80.0,10.0,null,null,null,20.0,30.0,null,null,null,10.0,null,30.0,10.0,10.0,10.0,10.0,null,10.0,10.0,30.0,10.0,null,null,20.0,null,20.0,null,10.0,20.0,20.0,null,10.0,null,20.0,10.0,10.0,40.0,20.0,null,40.0,30.0,20.0,30.0,130.0,40.0,30.0,10.0,30.0,10.0,10.0,10.0,null,10.0,40.0,20.0,10.0,10.0,10.0,10.0,40.0,null,160.0,40.0,70.0,10.0,30.0,null,20.0],"pmet":{"ret":50.0,"ret_missing":1,"vac":8400.0}},{"key":"arts","label":"Arts & recreation","mom":"arts, entertainment and recreation","chip":true,"vac":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,300.0,300.0,400.0,600.0,600.0,600.0,500.0,500.0,600.0,600.0,500.0,400.0,300.0,500.0,700.0,1800.0,600.0,1800.0,1700.0,1000.0,2100.0,2200.0,1300.0,1900.0,1300.0,1500.0,1300.0,1400.0,1500.0,1500.0,1500.0,1500.0,1400.0,1500.0,1000.0,2200.0,2500.0,1700.0,1700.0,1900.0,1800.0,1200.0,1300.0,1400.0,1600.0,1500.0,1600.0,1100.0,1500.0,1200.0,800.0,1100.0,800.0,900.0,1100.0,1500.0,500.0,500.0,800.0,800.0,1000.0,1200.0,1300.0,1000.0,2200.0,2500.0,2400.0,1800.0,2000.0,2000.0,1400.0,800.0,700.0,800.0,800.0,1000.0,800.0,900.0,800.0,600.0,500.0,600.0],"rate":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,2.0,1.7,2.6,3.4,3.9,3.6,3.0,2.6,3.4,3.0,2.6,2.3,1.9,2.5,3.3,6.9,2.0,4.7,4.4,2.8,5.5,5.6,3.1,4.4,3.2,3.6,3.3,3.5,3.6,3.8,3.7,3.8,3.5,3.7,2.4,5.3,5.9,4.2,4.3,4.7,4.4,3.1,3.0,3.6,4.1,3.9,3.9,2.8,3.7,3.0,1.9,2.7,2.1,2.1,2.9,3.7,1.3,1.3,2.2,2.4,3.2,3.6,4.3,3.2,6.7,7.2,7.0,5.4,5.4,5.8,4.4,3.7,3.2,3.5,3.4,3.9,3.0,3.5,3.4,2.7,2.1,2.4],"ret":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,40.0,null,null,10.0,20.0,70.0,null,null,20.0,30.0,20.0,150.0,null,10.0,null,null,null,50.0,null,null,10.0,null,10.0,30.0,20.0,60.0,10.0,null,10.0,10.0,10.0,10.0,null,10.0,null,10.0,null,null,10.0,null,10.0,400.0,90.0,10.0,110.0,10.0,120.0,null,null,10.0,90.0,30.0,null,10.0,10.0,null,10.0,270.0,1900.0,40.0,20.0,40.0,null,10.0,10.0,10.0,10.0,30.0,null,10.0,10.0,10.0,null,40.0,null,null,10.0,10.0,10.0,20.0,20.0,10.0],"pmet":{"ret":30.0,"ret_missing":1,"vac":200.0}}],"pmet":{"from":"2025-Q3","to":"2026-Q2","ret":13520.0,"vac":39200.0,"ret_all":15810.0},"datasets":[{"key":"vacancies","id":"d_3f17bbf67d31d4d402caa8755eb74afc","title":"Number of Job Vacancy by Industry - Quarterly"},{"key":"vacancy_rate","id":"d_fe705c7af162331d36cc31193f8f50c9","title":"Job Vacancy Rate by Industry - Quarterly"},{"key":"retrenched","id":"d_61d92d31ca400be135190614277da825","title":"Number of Retrenched Employees by Industry - Quarterly"},{"key":"vu_ratio","id":"d_80c0cf251ee9a26d240808297f52c820","title":"Job Vacancy to Unemployed Person Ratio - Quarterly"},{"key":"vacancies_total","id":"d_59a34aef12e0ecf666de5746e50586e8","title":"Number of Job Vacancy - Quarterly"},{"key":"vacancy_rate_total","id":"d_c57f5cd0558e429e2ac055d83030e75f","title":"Job Vacancy Rate - Quarterly"},{"key":"retrenched_total","id":"d_000d49cda016c13522d7d5be6a050f59","title":"Number of Retrenched Employees - Quarterly"},{"key":"retrenched_occ","id":"d_cdde7c4701d917ae58aa63e4015490aa","title":"Number of Retrenched Employees by Industry and Occupation - Quarterly"},{"key":"vacancies_occ","id":"d_d3f02543c4d0dd197c56637eefc32624","title":"Number of Job Vacancy by Industry and Occupation - Quarterly"}],"manual":{"_note":"Hand-entered survey figures from the IMDA press release linked in url (checked 11 Oct 2026). Not from the quarterly MOM series. Check against the source before each rebuild. mom_advance is MOM's advance retrenchment estimate for a quarter data.gov.sg does not have yet; the page hides it once data.gov.sg catches up.","source":"IMDA, Singapore Digital Economy Report 2026 (press release, 5 Oct 2026)","url":"https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches/singapore-digital-economy-2026","retrieved":"2026-10-11","sme_ai_adoption":[{"year":2024,"pct":14.5},{"year":2025,"pct":23.4}],"workers_need_ai_upskilling_pct":68,"workers_trained_past_year_pct":37,"mom_advance":{"quarter":"2026-Q3","retrenched":4800,"preliminary":true,"source":"MOM, Labour Market Advance Release 3Q 2026 (30 Oct 2026)","url":"https://www.mom.gov.sg/newsroom/press-releases/2026/1030-labour-market-advance-release-3q-2026","retrieved":"2026-11-01","full_report_due":"mid-December 2026"}},"sctp":{"_note":"Collected by hand from each institution's public SCTP page. Sector is a judgement from the programme title and, where listed, job roles. Not refreshed automatically.","collected":"2026-10-11","institutions":[{"code":"RP","name":"Republic Polytechnic","url":"https://www.rp.edu.sg/lifelong-learning/skillsfuture-career-transition-programme/"},{"code":"NP","name":"Ngee Ann Polytechnic","url":"https://www.cet.np.edu.sg/career-transition-programme-sctp"},{"code":"NYP","name":"Nanyang Polytechnic","url":"https://www.nyp.edu.sg/adult-learner/courses?categories=&types=SCTP"},{"code":"SP","name":"Singapore Polytechnic","url":"https://www.sp.edu.sg/pace/workforce-upskilling/skillsfuture-career-transition-programmes"},{"code":"TP","name":"Temasek Polytechnic","url":"https://www.tp.edu.sg/schools-and-courses/adult-learners/all-courses/skillsfuture-career-transition-programme.html"},{"code":"ITE","name":"ITE","url":"https://www.ite.edu.sg/adult-learners/skillsfuture-career-transition-programme-sctp/"}],"programmes":[{"inst":"RP","title":"AI-Driven Digital Marketing and E-Commerce","sector":"cross"},{"inst":"RP","title":"AI-Driven Market Research Professionals","sector":"cross"},{"inst":"RP","title":"AI-nnovate for Business Development","sector":"cross"},{"inst":"RP","title":"Automation with AI: Digital Transformation Mastery","sector":"cross"},{"inst":"RP","title":"Capture and Create: Mastering Photography and Videography","sector":"ict"},{"inst":"RP","title":"Cloud Computing and Cybersecurity for Digital Transformation","sector":"ict"},{"inst":"RP","title":"Content Creation using Generative AI","sector":"cross"},{"inst":"RP","title":"Digital Transformation in Finance: Skills for the New Economy","sector":"finance"},{"inst":"RP","title":"Driving Business Transformation with Digital Technologies","sector":"cross"},{"inst":"RP","title":"Engineering Design","sector":"manufacturing"},{"inst":"RP","title":"Essential Skills for Social Services","sector":"health"},{"inst":"RP","title":"Facade Inspection Using Drone for Facilities Management Professionals","sector":"admin"},{"inst":"RP","title":"HR Professionals","sector":"cross"},{"inst":"RP","title":"Food & Beverage Entrepreneurship","sector":"food"},{"inst":"RP","title":"Sustainability and Environmental Professionals","sector":"cross"},{"inst":"RP","title":"Wellness Professionals","sector":"other"},{"inst":"RP","title":"Environmental Services for Facility Management","sector":"admin"},{"inst":"NP","title":"Supply Chain Operations & Sustainability","sector":"transport"},{"inst":"NP","title":"Human-Centric HR: Enhancing People Experience in a Sustainable Business","sector":"cross"},{"inst":"NP","title":"Community Care and Support","sector":"health"},{"inst":"NP","title":"Data Governance","sector":"cross"},{"inst":"NP","title":"Unlocking Gen-AI in Digital Commerce","sector":"cross"},{"inst":"NP","title":"Software Quality Assurance","sector":"ict"},{"inst":"NP","title":"Smart and Sustainable Facilities Management","sector":"admin"},{"inst":"NP","title":"i.am-vitalize Full Stack Developer","sector":"ict"},{"inst":"NP","title":"Accountancy Career Launchpad","sector":"professional"},{"inst":"NP","title":"Data Science Bootcamp","sector":"cross"},{"inst":"NP","title":"Digital Commerce and Content Marketing","sector":"cross"},{"inst":"NP","title":"Customer Experience Innovation","sector":"cross"},{"inst":"NP","title":"Advanced Data Analytics and Visualisation","sector":"cross"},{"inst":"NP","title":"Postnatal Mother and Newborn Care","sector":"health"},{"inst":"NYP","title":"Certificate in Pharmaceutical Manufacturing","sector":"manufacturing"},{"inst":"NYP","title":"Certificate in Precision Machining","sector":"manufacturing"},{"inst":"NYP","title":"Certificate in Food Safety and Analysis","sector":"manufacturing"},{"inst":"NYP","title":"WSQ Diploma in Retail (Retail Operations)","sector":"retail"},{"inst":"NYP","title":"WSQ Diploma in Retail (E-Commerce: Omni-Channel)","sector":"retail"},{"inst":"NYP","title":"WSQ Diploma in Food Services","sector":"food"},{"inst":"NYP","title":"WSQ Certificate in Food Services (Culinary Arts)","sector":"food"},{"inst":"NYP","title":"WSQ Certificate in Food Services (Pastry & Baking)","sector":"food"},{"inst":"NYP","title":"Kitchen Operations Specialist (Culinary Arts)","sector":"food"},{"inst":"NYP","title":"Kitchen Operations Specialist (Pastry & Baking)","sector":"food"},{"inst":"NYP","title":"Certificate in Tourism Innovation","sector":"food"},{"inst":"NYP","title":"Certificate in Cybersecurity Incident Investigator","sector":"ict"},{"inst":"NYP","title":"Certificate in The Art of Motion Graphics","sector":"ict"},{"inst":"NYP","title":"Certificate in Enhancing Moving Images","sector":"ict"},{"inst":"NYP","title":"Certificate in 360 Video Production","sector":"ict"},{"inst":"NYP","title":"Certificate in Gamification Approach to User Experience Design","sector":"ict"},{"inst":"NYP","title":"Certificate in Digital Transformation with Cloud and AI","sector":"cross"},{"inst":"NYP","title":"Certificate in Digital Transformation with Robotic Process Automation","sector":"cross"},{"inst":"NYP","title":"Certificate in Marketing & Digital Communication","sector":"cross"},{"inst":"NYP","title":"Certificate in Service Innovation","sector":"cross"},{"inst":"NYP","title":"Certificate in Data Analytics with Artificial Intelligence","sector":"cross"},{"inst":"NYP","title":"Certificate in Digital Marketing & Content Curation","sector":"cross"},{"inst":"SP","title":"Intelligent Data-Driven Digitalisation","sector":"cross"},{"inst":"SP","title":"Applied HR and Business Digitalisation","sector":"cross"},{"inst":"SP","title":"Energy Efficiency and Sustainability Management","sector":"cross"},{"inst":"SP","title":"Sustainability Practices and Reporting","sector":"cross"},{"inst":"SP","title":"Green and Sustainable Data Centre Technologies","sector":"ict"},{"inst":"SP","title":"Data Centre Professionals","sector":"ict"},{"inst":"SP","title":"AI and Cloud Services","sector":"ict"},{"inst":"SP","title":"Full Stack Development","sector":"ict"},{"inst":"SP","title":"Advanced Certificate of Performance in Ophthalmic Dispensing & Refraction","sector":"health"},{"inst":"SP","title":"Sustainable Process Operations","sector":"manufacturing"},{"inst":"SP","title":"Facilities Operations Management","sector":"admin"},{"inst":"SP","title":"Aircraft Maintenance for Technician","sector":"transport"},{"inst":"TP","title":"Junior Data Engineer & Analyst","sector":"cross"},{"inst":"TP","title":"Cloud Support & DevOps","sector":"ict"},{"inst":"TP","title":"Junior Full-Stack Developer","sector":"ict"},{"inst":"TP","title":"Patient Service Associate","sector":"health"},{"inst":"TP","title":"Environmental Services Specialist","sector":"admin"},{"inst":"TP","title":"Beyond the GIG Economy: Elevate your Freelance Career","sector":"other"},{"inst":"TP","title":"Security Systems Technician","sector":"security"},{"inst":"TP","title":"Security Operations","sector":"security"},{"inst":"ITE","title":"Digital Media Marketing","sector":"cross"},{"inst":"ITE","title":"Human Resource Professionals","sector":"cross"},{"inst":"ITE","title":"Semiconductor Industry Technicians","sector":"manufacturing"},{"inst":"ITE","title":"Passenger Services","sector":"transport"},{"inst":"ITE","title":"Security Technology","sector":"security"},{"inst":"ITE","title":"Attractions Professionals","sector":"food"},{"inst":"ITE","title":"Associate Infrastructure Support Engineers","sector":"ict"},{"inst":"ITE","title":"Media Creation for Video Content Creators","sector":"ict"}]}};
-const fmt = new Intl.NumberFormat('en-SG');
-const qLabel = q => q.replace('-', ' ');
-const fmtDate = d => new Date(d + 'T00:00:00+08:00').toLocaleDateString('en-SG', {day:'numeric', month:'short', year:'numeric', timeZone:'Asia/Singapore'});
-// Warn readers when the monthly refresh has stopped: over 40 days allows for one late run.
-const flagStale = (iso, label) => {
-  const days = Math.floor((Date.now() - Date.parse(iso.slice(0, 10) + 'T00:00:00+08:00')) / 864e5);
-  if (!(days > 40)) return;
-  const el = document.getElementById('stale');
-  el.textContent = `This page may be out of date: ${label} ${fmtDate(iso)}, ${days} days ago. It normally refreshes early each month.`;
-  el.hidden = false;
-  document.querySelector('.fresh').classList.add('is-stale');
-};
-const METRICS = {
-  vac:  {label:'Job vacancies', unit:'', title:'Job vacancies', f:v=>fmt.format(v)},
-  rate: {label:'Vacancy rate', unit:'%', title:'Job vacancy rate', f:v=>v.toFixed(1)+'%'},
-  ret:  {label:'Retrenchments', unit:'', title:'Retrenchments', f:v=>fmt.format(v)},
-};
-const RANGES = {'5Y':20,'10Y':40,'Max':Infinity};
-const state = {sector:'all', metric:'vac', range:'10Y', hover:null, table:false, pmTable:false};
-const N = D.quarters.length, L = N - 1;
-
-function sectorObj(key){
-  if (key === 'all') return {key:'all', label:'All industries', vac:D.total.vac, rate:D.total.rate, ret:D.total.ret};
-  return D.sectors.find(s => s.key === key);
-}
-// Source links: D.datasets carries key, id and title for each data.gov.sg dataset used.
-const DS = Object.fromEntries(D.datasets.map(d => [d.key, d]));
-const dsUrl = k => `https://data.gov.sg/datasets/${DS[k].id}/view`;
-const dsLink = k => `<a href="${dsUrl(k)}" rel="noopener">${DS[k].title}</a>`;
-const srcText = (...ks) => `Source: MOM, ${ks.map(dsLink).join(' and ')} (data.gov.sg)`;
-// the total series for "All industries", the by-industry series once a sector is chosen
-const dsKey = (total, byInd) => state.sector === 'all' ? total : byInd;
-// MOM's advance retrenchment estimate shows only while data.gov.sg is still a quarter behind (quarters sort as text)
-const advance = () => { const a = D.manual.mom_advance; return a && state.sector === 'all' && a.quarter > D.latest ? a : null; };
-function lastIdx(arr, from=L){ for (let i=from;i>=0;i--) if (arr[i]!=null) return i; return -1; }
-
-/* ---------- chips & segmented controls ---------- */
-function buildChips(){
-  const el = document.getElementById('chips');
-  const items = [{key:'all',label:'All industries'}, ...D.sectors.filter(s=>s.chip)];
-  el.innerHTML = items.map(s=>`<button class="chip" data-k="${s.key}" aria-pressed="${s.key===state.sector}">${s.label}</button>`).join('');
-  el.onclick = e => { const b = e.target.closest('.chip'); if (!b) return; state.sector = b.dataset.k; render(); };
-}
-function buildSeg(id, opts, key){
-  const el = document.getElementById(id);
-  el.innerHTML = opts.map(([k,l])=>`<button data-k="${k}" aria-pressed="${state[key]===k}">${l}</button>`).join('');
-  el.onclick = e => { const b = e.target.closest('button'); if (!b) return; state[key] = b.dataset.k; render(); };
-}
-
-/* ---------- KPI tiles ---------- */
-function deltaText(arr, i, kind){
-  const fmtD = (a,b) => {
-    if (a==null || b==null) return null;
-    const d = a-b;
-    if (kind==='pp') return (d>0?'▲ ':d<0?'▼ ':'')+Math.abs(d).toFixed(1)+' pts';
-    if (kind==='ratio') return (d>0?'▲ ':d<0?'▼ ':'')+Math.abs(d).toFixed(2);
-    const pct = b ? (d/b*100) : 0;
-    return (d>0?'▲ ':d<0?'▼ ':'')+fmt.format(Math.abs(d))+` (${Math.abs(pct).toFixed(0)}%)`;
-  };
-  const qoq = fmtD(arr[i], arr[i-1]), yoy = fmtD(arr[i], arr[i-4]);
-  const parts = [];
-  if (qoq) parts.push(qoq+' vs last quarter');
-  if (yoy) parts.push(yoy+' vs a year ago');
-  return parts.join('<br>');
-}
-function renderKpis(){
-  const s = sectorObj(state.sector);
-  const tile = (lab, arr, f, kind, gloss, dk, extra='') => {
-    const src = `<div class="src"><a href="${dsUrl(dk)}" rel="noopener" title="MOM, ${DS[dk].title} (data.gov.sg)">Source ↗</a></div>`;
-    const i = lastIdx(arr);
-    if (i !== L) {
-      return `<div class="card kpi"><div class="lab"><span>${lab}</span><span class="q">${qLabel(D.latest)}</span></div>
-        <div class="val na">Not published</div><div class="gloss">MOM does not publish this figure for ${qLabel(D.latest)} (counts too small to report).${i>=0?' Last published: '+f(arr[i])+' in '+qLabel(D.quarters[i])+'.':''}</div>${src}</div>`;
-    }
-    return `<div class="card kpi"><div class="lab"><span>${lab}</span><span class="q">${qLabel(D.quarters[i])}</span></div>
-      <div class="val">${f(arr[i])}</div><div class="delta">${deltaText(arr,i,kind)}</div>${gloss?`<div class="gloss">${gloss}</div>`:''}${extra}${src}</div>`;
-  };
-  const a = advance();
-  const advLine = a ? `<div class="adv"><a href="${a.url}" rel="noopener">${qLabel(a.quarter)} advance estimate: ${fmt.format(a.retrenched)}${a.preliminary?' (preliminary)':''}</a></div>` : '';
-  const vu = D.total.vu, vi = lastIdx(vu);
-  document.getElementById('kpis').innerHTML =
-    tile('Job vacancies', s.vac, METRICS.vac.f, 'n', '', dsKey('vacancies_total','vacancies')) +
-    tile('Vacancy rate', s.rate, METRICS.rate.f, 'pp', 'Unfilled jobs as a share of all jobs (filled and unfilled)', dsKey('vacancy_rate_total','vacancy_rate')) +
-    tile('Retrenchments', s.ret, METRICS.ret.f, 'n', '', dsKey('retrenched_total','retrenched'), advLine) +
-    `<div class="card kpi"><div class="lab"><span>Vacancies per jobseeker</span><span class="q">${qLabel(D.quarters[vi])}</span></div>
-      <div class="val">${vu[vi].toFixed(2)}</div><div class="delta">${deltaText(vu,vi,'ratio')}</div>
-      <div class="gloss">All of Singapore, not by sector. Above 1 means more open jobs than unemployed people.</div>
-      <div class="src"><a href="${dsUrl('vu_ratio')}" rel="noopener" title="MOM, ${DS.vu_ratio.title} (data.gov.sg)">Source ↗</a></div></div>`;
-}
-
-/* ---------- line chart ---------- */
-function niceMax(v){ const p = Math.pow(10, Math.floor(Math.log10(v))); for (const m of [1,1.5,2,2.5,3,4,5,6,8,10]) if (m*p >= v) return m*p; return 10*p; }
-function renderLine(){
-  const svg = document.getElementById('line');
-  const W = svg.parentElement.clientWidth - 32 || 600, H = Math.max(220, Math.min(320, W*0.5));
-  const m = {t:12, r:W<480?16:110, b:26, l:44};
-  const met = METRICS[state.metric];
-  const sel = sectorObj(state.sector);
-  // grey comparison lines only for the rate, where sectors share a scale; counts differ by 10x+
-  const others = state.sector==='all' || state.metric!=='rate' ? [] : D.sectors.filter(s=>s.chip && s.key!==state.sector);
-  const span = RANGES[state.range];
-  let i0 = Math.max(0, N - span);
-  const first = sel[state.metric].findIndex(v=>v!=null);
-  if (state.range==='Max') i0 = first;
-  const xs = i => m.l + (i - i0) / (L - i0) * (W - m.l - m.r);
-  const vals = [sel, ...others].flatMap(s => s[state.metric].slice(i0)).filter(v=>v!=null);
-  const ymax = niceMax(Math.max(...vals) || 1);
-  const ys = v => m.t + (1 - v/ymax) * (H - m.t - m.b);
-  const path = arr => { let d='', pen=false; for (let i=i0;i<=L;i++){ const v=arr[i]; if (v==null){pen=false;continue;} d += (pen?'L':'M')+xs(i).toFixed(1)+','+ys(v).toFixed(1); pen=true; } return d; };
-  let g = '';
-  for (let k=0;k<=4;k++){ const v=ymax*k/4, y=ys(v);
-    g += `<line x1="${m.l}" x2="${W-m.r}" y1="${y}" y2="${y}" stroke="var(--${k?'grid':'axis'})" stroke-width="1"/>`;
-    g += `<text x="${m.l-6}" y="${y+4}" text-anchor="end">${state.metric==='rate'?v.toFixed(1)+'%':v>=1000?(+(v/1000).toFixed(1))+'k':fmt.format(Math.round(v))}</text>`; }
-  const years = []; for (let i=i0;i<=L;i++) if (D.quarters[i].endsWith('Q1')) years.push(i);
-  const step = Math.ceil(years.length / (W<480?4:7));
-  years.filter((_,j)=>j%step===0).forEach(i => g += `<text x="${xs(i)}" y="${H-6}" text-anchor="middle">${D.quarters[i].slice(0,4)}</text>`);
-  const c20 = D.quarters.indexOf('2020-Q2');
-  if (c20 >= i0) g += `<line x1="${xs(c20)}" x2="${xs(c20)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--axis)" stroke-width="1"/><text x="${xs(c20)+4}" y="${m.t+10}">Covid-19</text>`;
-  others.forEach(s => g += `<path d="${path(s[state.metric])}" fill="none" stroke="var(--other)" stroke-width="1.25"/>`);
-  const sp = path(sel[state.metric]);
-  const li = lastIdx(sel[state.metric]);
-  if (li >= i0) {
-    const fi = Math.max(i0, first);
-    g += `<path d="${sp} L${xs(li)},${ys(0)} L${xs(fi)},${ys(0)} Z" fill="var(--accent-soft)" stroke="none"/>`;
-  }
-  g += `<path d="${sp}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>`;
-  if (li >= 0 && W >= 480) g += `<text class="lbl" x="${xs(li)+8}" y="${ys(sel[state.metric][li])+4}">${sel.label.length>16?sel.label.split(' ')[0]:sel.label}</text>`;
-  if (others.length && W >= 480) g += `<text class="lbl2" x="${W-m.r+8}" y="${m.t+10}">Grey: other</text><text class="lbl2" x="${W-m.r+8}" y="${m.t+24}">sectors</text>`;
-  // hover layer
-  const h = state.hover;
-  if (h != null && h >= i0) {
-    g += `<line x1="${xs(h)}" x2="${xs(h)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--ink-2)" stroke-width="1"/>`;
-    const v = sel[state.metric][h];
-    if (v != null) g += `<circle cx="${xs(h)}" cy="${ys(v)}" r="5" fill="var(--accent)" stroke="var(--card)" stroke-width="2"/>`;
-  }
-  g += `<rect x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent" id="hit"/>`;
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('height', H); svg.innerHTML = g;
-  svg.setAttribute('aria-label', `${met.title}, ${sel.label}, ${qLabel(D.quarters[i0])} to ${qLabel(D.latest)}. Use left and right arrow keys to read values.`);
-  // readout
-  const ri = h!=null && h>=i0 ? h : li;
-  const rv = sel[state.metric][ri];
-  document.getElementById('readout').innerHTML = ri>=0 ? `<b>${qLabel(D.quarters[ri])}</b> · ${sel.label}: <b>${rv==null?'not published':met.f(rv)}</b>` : '';
-  svg.onpointermove = e => { const r = svg.getBoundingClientRect(); const x = (e.clientX - r.left) * W / r.width;
-    const i = Math.round(i0 + (x - m.l) / (W - m.l - m.r) * (L - i0)); state.hover = Math.min(L, Math.max(i0, i)); renderLine(); };
-  svg.onpointerleave = () => { state.hover = null; renderLine(); };
-  svg.onkeydown = e => { if (e.key!=='ArrowLeft' && e.key!=='ArrowRight') return; e.preventDefault();
-    const cur = state.hover ?? L; state.hover = Math.min(L, Math.max(i0, cur + (e.key==='ArrowRight'?1:-1))); renderLine(); };
-  // titles
-  document.getElementById('lineTitle').textContent = `${met.title} · ${sel.label}`;
-  const notes = [];
-  if (first > 0 && state.sector!=='all') notes.push(`Series starts ${qLabel(D.quarters[first])} (current industry codes).`);
-  if (state.metric==='ret' && state.sector==='security') notes.push('Most quarters not published (small counts).');
-  const lead = others.length ? 'Selected sector in blue, other sectors in grey. '
-    : state.sector==='all' ? 'Quarterly, all industries. '
-    : 'Quarterly. Switch to Rate to compare sectors. ';
-  document.getElementById('lineHint').textContent = lead + notes.join(' ');
-  if (state.table) renderTable(sel, met, i0);
-}
-function renderLineSrc(){
-  const k = {vac:['vacancies_total','vacancies'], rate:['vacancy_rate_total','vacancy_rate'], ret:['retrenched_total','retrenched']}[state.metric];
-  document.getElementById('lineSrc').innerHTML = srcText(dsKey(...k));
-}
-function renderTable(sel, met, i0){
-  const rows = []; for (let i=L;i>=i0;i--) { const v = sel[state.metric][i]; rows.push(`<tr><td>${qLabel(D.quarters[i])}</td><td>${v==null?'–':met.f(v)}</td></tr>`); }
-  document.getElementById('tbl').innerHTML = `<table><caption class="sr">${met.title}, ${sel.label}</caption><thead><tr><th>Quarter</th><th>${met.label}</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
-}
-
-/* ---------- bars ---------- */
-function renderBars(){
-  const items = D.sectors.map(s => ({s, v:s.rate[L]})).filter(x=>x.v!=null).sort((a,b)=>b.v-a.v);
-  const max = Math.max(...items.map(x=>x.v), D.total.rate[L]);
-  const nat = D.total.rate[L];
-  const onKey = state.sector;
-  document.getElementById('barHint').textContent = `${qLabel(D.latest)}. Line marks all industries (${nat.toFixed(1)}%).`;
-  document.getElementById('barSrc').innerHTML = srcText('vacancy_rate');
-  document.getElementById('bars').innerHTML = items.map(({s,v}) => `
-    <div class="row ${s.key===onKey?'on':''}" data-k="${s.key}" title="${s.label}: ${v.toFixed(1)}%">
-      <div class="name">${s.label}${s.key==='security'?' (part of admin & support)':''}</div>
-      <div class="track"><div class="bar" style="width:${v/max*100}%"></div><div class="ref" style="left:${nat/max*100}%"></div></div>
-      <div class="num">${v.toFixed(1)}%</div>
-    </div>`).join('');
-}
-
-/* ---------- PMET retrenched vs open roles ---------- */
-// Plain-language reading of one sector's figures. Thresholds are deliberately coarse.
-function pmetReading(p){
-  if (p.ret == null || p.vac == null) return '';
-  if (p.vac >= 5 * p.ret) return ' Few PMETs are being let go and many roles are open, so this sector is a likely destination for people moving in from other sectors.';
-  if (p.vac >= 0.9 * p.ret) return ' The sector is letting PMETs go while still hiring them, which points to a skills gap within the sector.';
-  return ' More PMETs were retrenched than there are open PMET roles here, so moving into other sectors matters more.';
-}
-function renderPmet(){
-  const P = D.pmet, from = qLabel(P.from), to = qLabel(P.to);
-  document.getElementById('pmHint').textContent = `Professionals, managers, executives and technicians. Retrenched is the total for ${from} to ${to}; open roles are vacancies at the end of ${to}. One is a year's total and the other a count on one day, so compare them side by side rather than as a ratio. A vacancy is not necessarily a fit for someone retrenched.`;
-  document.getElementById('pmSum').innerHTML = `
-    <div><div class="big">${fmt.format(P.ret)}</div><div class="what">PMETs retrenched, ${from}–${to} (${Math.round(P.ret/P.ret_all*100)}% of all ${fmt.format(P.ret_all)} retrenchments)</div></div>
-    <div><div class="big">${fmt.format(P.vac)}</div><div class="what">PMET vacancies open at the end of ${to}</div></div>`;
-  document.getElementById('pmSrc').innerHTML = srcText('retrenched_occ', 'vacancies_occ');
-  document.getElementById('pmLegR').textContent = `Retrenched, ${from}–${to}`;
-  document.getElementById('pmLegV').textContent = `Open roles, ${to}`;
-  const rows = D.sectors.filter(s => s.pmet.ret != null || s.pmet.vac != null).sort((a,b) => (b.pmet.ret||0) - (a.pmet.ret||0));
-  const max = Math.max(...rows.flatMap(s => [s.pmet.ret||0, s.pmet.vac||0]));
-  const sel = state.sector;
-  const line = (v, cls) => v == null ? `<div class="ln"><span class="na">Not published</span><span></span></div>`
-    : `<div class="ln"><div class="b ${cls}" style="width:${v/max*100}%"></div><span class="n">${fmt.format(v)}</span></div>`;
-  document.getElementById('pm').innerHTML = rows.map(s => `
-    <div class="row ${s.key===sel?'on':''} ${sel!=='all'&&s.key!==sel?'dim':''}" data-k="${s.key}" title="${s.label}: ${s.pmet.ret==null?'n/a':fmt.format(s.pmet.ret)} retrenched, ${s.pmet.vac==null?'n/a':fmt.format(s.pmet.vac)} open">
-      <div class="nm">${s.label}${s.pmet.ret_missing?'<br><span class="na">some quarters not published</span>':''}</div>
-      <div class="pair">${line(s.pmet.ret,'r')}${line(s.pmet.vac,'v')}</div>
-    </div>`).join('');
-  const el = document.getElementById('pmSel'), s = sel==='all' ? null : D.sectors.find(x=>x.key===sel);
-  if (!s) { el.hidden = true; }
-  else if (s.pmet.ret == null && s.pmet.vac == null) { el.hidden = false; el.textContent = `${s.label}: MOM does not publish PMET figures for this sector (counts too small).`; }
-  else {
-    el.hidden = false;
-    el.textContent = `${s.label}: ${s.pmet.ret==null?'retrenchments not published':fmt.format(s.pmet.ret)+' PMETs retrenched in the past year'}; ${s.pmet.vac==null?'vacancies not published':fmt.format(s.pmet.vac)+' PMET roles open in '+to}.`
-      + pmetReading(s.pmet);
-  }
-  if (state.pmTable) {
-    document.getElementById('pmTbl').innerHTML = `<table><caption class="sr">PMETs retrenched vs open roles by sector</caption><thead><tr><th>Sector</th><th>Retrenched, ${from}–${to}</th><th>Open roles, ${to}</th></tr></thead><tbody>${
-      rows.map(s=>`<tr><td>${s.label}</td><td>${s.pmet.ret==null?'–':fmt.format(s.pmet.ret)}</td><td>${s.pmet.vac==null?'–':fmt.format(s.pmet.vac)}</td></tr>`).join('')}</tbody></table>`;
-  }
-}
-document.getElementById('pmTblBtn').onclick = e => { state.pmTable = !state.pmTable; document.getElementById('pmTbl').hidden = !state.pmTable;
-  e.target.textContent = state.pmTable ? 'Hide table' : 'Show table'; e.target.setAttribute('aria-expanded', state.pmTable); renderPmet(); };
-
-/* ---------- SCTP supply by sector (public course pages) ---------- */
-const LANDSCAPE = '../skills-landscape/';
-function landscapeLink(){
-  const s = state.sector === 'all' ? null : sectorObj(state.sector);
-  return `<a class="linkbtn" style="display:inline-block;margin-top:10px" href="${LANDSCAPE}${s ? '?sector=' + s.key : ''}">${s ? `All ${s.label} courses on MySkillsFuture, not just SCTPs, on the Skills Training Landscape →` : 'All SkillsFuture-listed courses by sector, not just SCTPs, on the Skills Training Landscape →'}</a>`;
-}
-function renderSctp(){
-  const S = D.sctp, progs = S.programmes, insts = Object.fromEntries(S.institutions.map(i=>[i.code,i]));
-  const col = fmtDate(S.collected);
-  // admin & support includes security programmes, as MOM's industry grouping does
-  const inSector = (p, key) => p.sector === key || (key === 'admin' && p.sector === 'security');
-  document.getElementById('scHint').textContent = `SCTP programmes listed on the public course pages of the five polytechnics and ITE, collected on ${col}. This counts programmes, not class places or intakes, so it shows where courses exist rather than how many people they train. The sector for each programme is our judgement from its title and listed job roles.`;
-  const cross = progs.filter(p=>p.sector==='cross').length;
-  document.getElementById('scSum').innerHTML = `
-    <div><div class="big">${progs.length}</div><div class="what">SCTP programmes across ${S.institutions.length} institutions</div></div>
-    <div><div class="big">${cross} (${Math.round(cross/progs.length*100)}%)</div><div class="what">teach skills used in any sector (marketing, HR, data, digital, sustainability)</div></div>`;
-  const rows = D.sectors.map(s => ({key:s.key, label:s.label, n:progs.filter(p=>inSector(p,s.key)).length, open:s.pmet.vac}))
-    .sort((a,b)=>(b.open||0)-(a.open||0));
-  rows.push({key:'cross', label:'Any sector (cross-industry skills)', n:cross, open:null}, {key:'other', label:'Other', n:progs.filter(p=>p.sector==='other').length, open:null});
-  const max = Math.max(...rows.map(r=>r.n), 1);
-  document.getElementById('scBars').innerHTML = rows.map(r => `
-    <div class="row ${r.key===state.sector?'on':''}" ${D.sectors.some(x=>x.key===r.key)?`data-k="${r.key}"`:''} title="${r.label}: ${r.n} SCTP programmes">
-      <div class="name">${r.label}${r.key==='security'?' (part of admin & support)':''}</div>
-      <div class="track"><div class="bar" style="width:${r.n/max*100}%;min-width:${r.n?2:0}px"></div></div>
-      <div class="num">${r.n}</div>
-      ${r.open!=null?`<div class="sub">PMET roles open: ${fmt.format(r.open)}</div>`:''}
-    </div>`).join('');
-  const box = document.getElementById('scList');
-  if (state.sector === 'all') { box.innerHTML = `<p class="hint" style="margin-top:12px">Pick a sector above to list its SCTP programmes. Sources: ${S.institutions.map(i=>`<a href="${i.url}" rel="noopener">${i.code}</a>`).join(', ')}.</p>` + landscapeLink(); return; }
-  const sel = sectorObj(state.sector), mine = progs.filter(p=>inSector(p,state.sector));
-  if (!mine.length) { box.innerHTML = `<div class="sclist"><p class="pm-sel">${sel.label}: no SCTP programme found on the six institutions' public pages on ${col}. Other training providers also run SCTPs; check MySkillsFuture.</p></div>` + landscapeLink(); return; }
-  box.innerHTML = `<div class="sclist"><p class="pm-sel" style="margin:12px 0 0">${sel.label}: ${mine.length} SCTP programme${mine.length>1?'s':''} found.</p>` +
-    S.institutions.filter(i=>mine.some(p=>p.inst===i.code)).map(i=>`<h3><a href="${i.url}" rel="noopener">${i.name} ↗</a></h3><ul>${mine.filter(p=>p.inst===i.code).map(p=>`<li>${p.title}</li>`).join('')}</ul>`).join('') + '</div>' + landscapeLink();
-}
-
-/* ---------- skills links (SWDA Jobs-Skills Portal) ---------- */
-// Skills Framework names as listed at jobsandskills.swda.gov.sg/frameworks/sector-information (checked 11 Oct 2026).
-// pdf: file under SFW_BASE; page: a web page used instead where the portal links to one.
-const SFW_BASE = 'https://jobsandskills.skillsfuture.gov.sg/resources/skills-framework-sector/';
-const DEMAND_DASH = 'https://jobsandskills.swda.gov.sg/data-and-tools/dashboards/job-skills-demand-trends-dashboard';
-const SFW_INDEX = 'https://jobsandskills.swda.gov.sg/frameworks/sector-information';
-const SKILLS = {
-  manufacturing: [{n:'Precision Engineering', pdf:'Precision-Engineering.pdf'}, {n:'Electronics', pdf:'Electronics.pdf'}, {n:'Food Manufacturing', pdf:'Food-Manufacturing.pdf'}],
-  construction:  [{n:'Built Environment', pdf:'Built-environment.pdf'}],
-  transport:     [{n:'Logistics', pdf:'Logistics.pdf'}, {n:'Public Transport', pdf:'Public-Transport.pdf'}],
-  food:          [{n:'Food Services', page:'https://www.wsg.gov.sg/home/employers-industry-partners/jobs-transformation-maps/jobs-transformation-map-singapore-food-services-industry', kind:'Jobs Transformation Map (WSG)'},
-                  {n:'Hotel and Accommodation Services', pdf:'Hotel-and-Accommodation%20Services.pdf'}],
-  health:        [{n:'Healthcare', pdf:'Healthcare.pdf'}, {n:'Social Service', pdf:'Social-Service.pdf'}],
-  admin:         [{n:'Security', pdf:'Security.pdf'}, {n:'Environmental Services', pdf:'Environmental-Services.pdf'}],
-  security:      [{n:'Security', pdf:'Security.pdf'}],
-  retail:        [{n:'Retail', pdf:'Retail.pdf'}, {n:'Wholesale Trade', pdf:'Wholesale-Trade.pdf'}],
-  ict:           [{n:'Infocomm Technology', page:'https://www.wsg.gov.sg/home/employers-industry-partners/jobs-transformation-maps/jobs-transformation-map-ict-and-media-jobs-in-singapore', kind:'Jobs Transformation Map (WSG)'}],
-  finance:       [{n:'Financial Services', pdf:'Financial-Services.pdf'}],
-  publicedu:     [{n:'Training and Adult Education', pdf:'Training-and-Adult-Education.pdf'}],
-};
-const courseUrl = q => 'https://courses.myskillsfuture.gov.sg/search?q=' + encodeURIComponent(q);
-function renderSkills(){
-  const s = sectorObj(state.sector), list = SKILLS[state.sector];
-  const a = (href, title, sub) => `<a href="${href}" rel="noopener">${title} ↗<small>${sub}</small></a>`;
-  let html = '';
-  if (list) {
-    list.forEach(f => {
-      html += f.pdf ? a(SFW_BASE + f.pdf, `${f.n}: Skills Framework`, 'PDF download · job roles, skills and career paths')
-                    : a(f.page, `${f.n}: ${f.kind}`, 'Web page · how jobs and skills in the sector are changing');
-      html += a(courseUrl(f.n), `${f.n}: courses`, 'MySkillsFuture course search');
-    });
-  } else {
-    html += a(SFW_INDEX, 'Skills Frameworks for 38 sectors', 'SWDA Jobs-Skills Portal');
-  }
-  html += a(DEMAND_DASH, 'Jobs-Skills Demand Trends dashboard', 'Hiring demand and in-demand skills by job role. Pick the sector inside the dashboard.');
-  document.getElementById('sk').textContent = state.sector==='all' ? 'Skills to train for' : `Skills to train for · ${s.label}`;
-  document.getElementById('skHint').textContent = list
-    ? `Where hiring is tight, these SWDA (SkillsFuture) resources show the job roles and skills employers in this sector ask for. Skills Framework sectors don't match MOM's industry groups exactly.`
-    : state.sector==='all' ? 'Pick a sector above for its Skills Framework and courses.'
-    : `No single Skills Framework matches ${s.label}; browse the frameworks for all 38 sectors.`;
-  document.getElementById('skLinks').innerHTML = html;
-}
-
-/* ---------- freshness line ---------- */
-function renderFresh(){
-  const a = advance();
-  document.getElementById('fresh').textContent = `Data as of ${qLabel(D.latest)} · checked ${fmtDate(D.checked)}` + (a ? ` · full ${qLabel(a.quarter).split(' ')[1]} figures due ${a.full_report_due}` : '');
-}
-
-/* ---------- survey card & footer ---------- */
-function renderStatic(){
-  const M = D.manual, a = M.sme_ai_adoption;
-  document.getElementById('survey').innerHTML = `
-    <div class="stat"><div class="big">${a[1].pct}%</div><div class="what">of SMEs used AI in ${a[1].year}</div><div class="was">up from ${a[0].pct}% in ${a[0].year}</div></div>
-    <div class="stat"><div class="big">${M.workers_need_ai_upskilling_pct}%</div><div class="what">of workers say they need AI upskilling</div></div>
-    <div class="stat"><div class="big">${M.workers_trained_past_year_pct}%</div><div class="what">of workers had AI training in the past year</div></div>`;
-  document.getElementById('surveyCap').innerHTML = `<a href="${M.url}" rel="noopener">${M.source}</a>. These are survey results, not part of the quarterly MOM series, and are not broken down by the sector filter above. Entered by hand on ${M.retrieved}.`;
-  flagStale(D.checked, 'last checked');
-  const titles = D.datasets.map(d=>`<a href="https://data.gov.sg/datasets/${d.id}/view">${d.title}</a>`).join('; ');
-  document.getElementById('foot').innerHTML = `
-    <p>Contains information from ${titles}, accessed on ${D.fetched} from data.gov.sg, which is made available under the terms of the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence version 1.0</a>. Original source: Labour Market Survey, Manpower Research &amp; Statistics Department, Ministry of Manpower.</p>
-    <p>Survey figures: <a href="${D.manual.url}" rel="noopener">${D.manual.source}</a>.</p>
-    <p>This is an unofficial teaching example, not a product of MOM, IMDA or any government agency. Figures were fetched on ${fmtDate(D.fetched)} and are not live. The page checks data.gov.sg for new MOM figures each month (last checked ${fmtDate(D.checked)}); MOM publishes each quarter a few months after it ends. Not advice.</p>`;
-}
-
-function render(){
-  document.querySelectorAll('#chips .chip').forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===state.sector));
-  buildSeg('metricSeg', [['vac','Vacancies'],['rate','Rate'],['ret','Retrenched']], 'metric');
-  buildSeg('rangeSeg', [['5Y','5Y'],['10Y','10Y'],['Max','Max']], 'range');
-  state.hover = null;
-  try { const u = new URL(location.href); state.sector === 'all' ? u.searchParams.delete('sector') : u.searchParams.set('sector', state.sector); history.replaceState(null, '', u); } catch (e) {}
-  renderKpis(); renderLine(); renderLineSrc(); renderFresh(); renderBars(); renderPmet(); renderSctp(); renderSkills();
-}
-document.getElementById('tblBtn').onclick = e => { state.table = !state.table; const t = document.getElementById('tbl'); t.hidden = !state.table;
-  e.target.textContent = state.table ? 'Hide table' : 'Show table'; e.target.setAttribute('aria-expanded', state.table); renderLine(); };
-let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(renderLine, 120); });
-// tapping a sector row in any chart selects that sector
-['bars','pm','scBars'].forEach(id => document.getElementById(id).addEventListener('click', e => {
-  const r = e.target.closest('.row[data-k]'); if (!r) return;
-  state.sector = r.dataset.k; render();
-  document.querySelector(`.chip[data-k="${r.dataset.k}"]`)?.scrollIntoView({block:'nearest', inline:'center'});
-}));
-// ?sector=<key> picks a sector on load, so the Skills Training Landscape can link straight to one
-{ const k = new URLSearchParams(location.search).get('sector'); if (k && D.sectors.some(s => s.key === k && s.chip)) state.sector = k; }
-buildChips(); renderStatic(); render();
-if (state.sector !== 'all') document.querySelector(`.chip[data-k="${state.sector}"]`)?.scrollIntoView({block:'nearest', inline:'center'});
-</script>
-<p class="site-disclaimer" style="max-width:1080px;margin:0 auto;padding:16px 16px 32px;font-size:13px;line-height:1.5;opacity:.75">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
-</body>
+			<!-- SplashScreen -->
+			<div
+				aria-disabled
+				id="__evidence_project_splash"
+				data-test-id="__evidence_project_splash"
+				style="visibility: hidden"
+			>
+				<svg width="100" height="100" viewBox="-8 -8 588 588" xmlns="http://www.w3.org/2000/svg">
+					<path
+						d="M7.19462e-05 74.3583C109.309 74.3583 195.795 86.2578 286.834 37.825C377.872 -10.6077 466.416 1.29174 573.667 1.29175L573.667 126.549C466.416 126.549 377.373 114.91 286.834 163.082C196.294 211.254 109.309 199.615 6.11417e-05 199.615L7.19462e-05 74.3583Z"
+						class="draw-path"
+					/>
+					<path
+						d="M573.669 499.31C464.36 499.31 377.874 487.411 286.835 535.843C195.797 584.276 107.252 572.377 0.0014801 572.377V447.12C107.252 447.12 196.295 458.758 286.835 410.586C377.375 362.415 464.36 374.053 573.669 374.053V499.31Z"
+						class="draw-path"
+					/>
+					<path
+						d="M452.896 186.499C395.028 187.686 341.581 194.947 286.835 224.074C211.396 264.212 136.995 262.826 52.2355 261.247C35.2696 260.931 17.8887 260.608 0.0014801 260.608V385.865C18.1032 385.865 35.6721 386.204 52.81 386.534C137.212 388.162 211.162 389.589 286.835 349.331C341.838 320.07 395.18 312.831 452.896 311.685V186.499Z"
+						class="draw-path"
+					/>
+				</svg>
+			</div>
+		</div>
+	</body>
 </html>
+
+<style>
+	#__evidence_project_splash {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background-color: #ffffff;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 9999;
+	}
+
+	[data-theme='dark'] #__evidence_project_splash {
+		background-color: #000000;
+	}
+
+	.draw-path {
+		fill: #000000;
+		animation: blinking-logo 2s;
+		animation-fill-mode: both;
+		animation-iteration-count: infinite;
+		animation-timing-function: ease-in-out;
+	}
+
+	[data-theme='dark'] .draw-path {
+		fill: #ffffff;
+	}
+
+	@keyframes blinking-logo {
+		0% {
+			fill-opacity: 1;
+		}
+		50% {
+			fill-opacity: 0.2;
+		}
+		100% {
+			fill-opacity: 1;
+		}
+	}
+</style>

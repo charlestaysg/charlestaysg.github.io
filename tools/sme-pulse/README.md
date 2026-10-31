@@ -6,11 +6,11 @@ One-page dashboard of Singapore job vacancies, vacancy rates and retrenchments b
 - `fetch.py` — downloads 9 MOM datasets (paged, 10,000 rows per call) from data.gov.sg (no API key; calls spaced for the rate limit) → `data/raw/`, `data/snapshot.json`
 - `data/manual.json` — hand-entered IMDA survey figures and MOM's advance retrenchment estimate (`mom_advance`); check against the source before each rebuild
 - `data/sctp.json` — SCTP programmes from the public course pages of RP, NP, NYP, SP, TP and ITE (collected by hand, 11 Oct 2026); sector tags are judgement calls. Not refreshed automatically — recollect every few months
-- `template.html` — the page; `build.py` inlines the data → `index.html` (no network calls at runtime)
+- `template.html` — the old hand-built page. Since 1 Nov 2026 the live page at `projects/sme-pulse/` is built by the Evidence project in `../sme-pulse-evidence/` from this folder's data. `build.py` + `check.py` still run in the monthly refresh as an independent check, and the UEN Sheet and Skills Training Landscape read `build.py` and `data/`, so keep them
 - `check.py` — recomputes every headline figure from `data/raw/` and compares it with the page
 
 ## Refresh
-Automatic: `.github/workflows/sme-pulse-refresh.yml` runs on the 2nd of each month (and on demand from the Actions tab). It fetches; keeps the new snapshot only if the MOM data changed; writes the check date to `data/last-checked.json` (shown on the page as "checked …"); rebuilds; runs `check.py`; and commits. A failed fetch or check stops the run and leaves the live page as it was. The monthly commit also stops GitHub disabling the schedule after 60 days without repo activity.
+Automatic: `.github/workflows/sme-pulse-refresh.yml` runs on the 2nd of each month (and on demand from the Actions tab). It fetches; keeps the new snapshot only if the MOM data changed; writes the check date to `data/last-checked.json` (shown on the page as "checked …"); runs `build.py` + `check.py` as a check; builds the Evidence page (`../sme-pulse-evidence/`, see its README); and commits. A failed fetch or check stops the run and leaves the live page as it was. The monthly commit also stops GitHub disabling the schedule after 60 days without repo activity.
 
 Manual (from this folder):
 ```
@@ -26,7 +26,7 @@ Everything from MOM refreshes on its own (see Refresh). These parts don't:
 | IMDA survey figures (SME AI adoption, workers needing AI upskilling, workers trained) | `data/manual.json` | Once a year, when IMDA publishes the next Singapore Digital Economy Report (next expected around Oct 2027) | Check each figure against the press release, update `url` and `retrieved`, rebuild |
 | MOM advance retrenchment estimate (`mom_advance`: quarter, retrenched, preliminary, source, url, retrieved, full_report_due) | `data/manual.json` | Each time MOM publishes a Labour Market Advance Release (about 6 weeks before the full report; 3Q 2026 came out 30 Oct 2026) | Copy the total retrenchments, quarter and release link into the block and rebuild. It shows on the Retrenchments card (All industries only) and in the freshness line, and hides itself once data.gov.sg has that quarter, so no hand removal is needed. Replace it with the next advance release, or delete the block if you no longer want it |
 | SCTP programme list (81 programmes, 11 Oct 2026) | `data/sctp.json` | Every few months (next by Jan 2027) | Recollect from the six institutions' SCTP pages listed in the file; tag each programme's sector the same way |
-| Skills Framework and Jobs Transformation Map links | `template.html` (`SKILLS`, `SFW_BASE`, `DEMAND_DASH`) | When a link breaks; SWDA sites are split across two domains as of Oct 2026 | Fix the URL and rebuild |
+| Skills Framework and Jobs Transformation Map links | `../sme-pulse-evidence/components/SkillsLinks.svelte` (live page); `template.html` (`SKILLS`, `SFW_BASE`, `DEMAND_DASH`) only feeds the old build | When a link breaks; SWDA sites are split across two domains as of Oct 2026 | Fix the URL and rebuild |
 | Sector list | `build.py` (`SECTORS`) | Only if MOM renames an industry | Edit the name; the Skills Training Landscape's `check.py` fails until its list matches |
 
 Each data card (KPIs, line chart, vacancy rate by sector, PMETs) ends with a source line linking to its data.gov.sg dataset; it follows the chosen sector and measure, using dataset keys from `fetch.py` via `build.py`. The SCTP and Skills cards list their own sources.
