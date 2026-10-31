@@ -76,7 +76,7 @@ data = {
                  "vac": series("vacancies", name), "rate": series("vacancy_rate", name),
                  "ret": series("retrenched", name), "pmet": pmet_row(name)} for k, lab, name, chip in SECTORS],
     "pmet": {"from": last4[0], "to": last4[-1], **pmet_total},
-    "datasets": [{"id": d["id"], "title": d["title"]} for d in ds.values()],
+    "datasets": [{"key": k, "id": d["id"], "title": d["title"]} for k, d in ds.items()],
     "manual": manual,
     "sctp": json.loads((HERE / "data" / "sctp.json").read_text()),
 }

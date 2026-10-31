@@ -67,6 +67,12 @@ h1{font-size:26px;line-height:1.2;margin:0;letter-spacing:-.01em}
 .kpi .val.na{font-size:18px;font-weight:500;color:var(--ink-2);padding:9px 0 5px}
 .kpi .delta{font-size:13px;color:var(--ink-2)}
 .kpi .gloss{font-size:12px;color:var(--muted);margin-top:2px}
+.kpi{display:flex;flex-direction:column}
+.kpi .adv{font-size:12px;margin-top:4px}
+.kpi .adv a{color:var(--ink-2);text-decoration:underline;text-underline-offset:2px}
+.src{font-size:12px;color:var(--ink-2);margin:8px 0 0}
+.src a{color:var(--ink-2);text-decoration:underline;text-underline-offset:2px}
+.kpi .src{margin-top:auto;padding-top:8px}
 .grid2{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px}
 .card h2{font-size:15px;margin:0;font-weight:600}
 .card .hint{font-size:13px;color:var(--ink-2);margin:2px 0 0}
@@ -139,7 +145,8 @@ footer p{margin:0 0 8px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 @media (min-width:861px){.chips{flex-wrap:wrap;overflow:visible;position:static}}
 @media (max-width:860px){.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:560px){.sgrid{grid-template-columns:1fr}.kpi .val{font-size:26px}h1{font-size:22px}}
+@media (max-width:560px){.sgrid{grid-template-columns:1fr}.kpi .val{font-size:26px}h1{font-size:22px}.fresh{white-space:normal;align-items:flex-start}.dot{flex:none;margin-top:6px}}
+@media (max-width:480px){.kpi{padding:14px 12px}.kpi .lab{flex-direction:column;gap:2px}}
 </style>
 </head>
 <body>
@@ -192,12 +199,14 @@ footer p{margin:0 0 8px}
         <button class="linkbtn" id="tblBtn" aria-expanded="false">Show table</button>
       </div>
       <div class="tablewrap" id="tbl" hidden></div>
+      <p class="src" id="lineSrc"></p>
     </section>
 
     <section class="card">
       <h2>Vacancy rate by sector</h2>
       <p class="hint" id="barHint"></p>
       <div class="bars" id="bars" style="margin-top:10px"></div>
+      <p class="src" id="barSrc"></p>
     </section>
   </div>
 
@@ -210,6 +219,7 @@ footer p{margin:0 0 8px}
     <div class="pm" id="pm"></div>
     <div class="below"><span></span><button class="linkbtn" id="pmTblBtn" aria-expanded="false">Show table</button></div>
     <div class="tablewrap" id="pmTbl" hidden></div>
+    <p class="src" id="pmSrc"></p>
   </section>
 
   <section class="card" aria-labelledby="sch" style="margin-bottom:12px">
@@ -263,6 +273,15 @@ function sectorObj(key){
   if (key === 'all') return {key:'all', label:'All industries', vac:D.total.vac, rate:D.total.rate, ret:D.total.ret};
   return D.sectors.find(s => s.key === key);
 }
+// Source links: D.datasets carries key, id and title for each data.gov.sg dataset used.
+const DS = Object.fromEntries(D.datasets.map(d => [d.key, d]));
+const dsUrl = k => `https://data.gov.sg/datasets/${DS[k].id}/view`;
+const dsLink = k => `<a href="${dsUrl(k)}" rel="noopener">${DS[k].title}</a>`;
+const srcText = (...ks) => `Source: MOM, ${ks.map(dsLink).join(' and ')} (data.gov.sg)`;
+// the total series for "All industries", the by-industry series once a sector is chosen
+const dsKey = (total, byInd) => state.sector === 'all' ? total : byInd;
+// MOM's advance retrenchment estimate shows only while data.gov.sg is still a quarter behind (quarters sort as text)
+const advance = () => { const a = D.manual.mom_advance; return a && state.sector === 'all' && a.quarter > D.latest ? a : null; };
 function lastIdx(arr, from=L){ for (let i=from;i>=0;i--) if (arr[i]!=null) return i; return -1; }
 
 /* ---------- chips & segmented controls ---------- */
@@ -296,23 +315,27 @@ function deltaText(arr, i, kind){
 }
 function renderKpis(){
   const s = sectorObj(state.sector);
-  const tile = (lab, arr, f, kind, gloss) => {
+  const tile = (lab, arr, f, kind, gloss, dk, extra='') => {
+    const src = `<div class="src"><a href="${dsUrl(dk)}" rel="noopener" title="MOM, ${DS[dk].title} (data.gov.sg)">Source ↗</a></div>`;
     const i = lastIdx(arr);
     if (i !== L) {
       return `<div class="card kpi"><div class="lab"><span>${lab}</span><span class="q">${qLabel(D.latest)}</span></div>
-        <div class="val na">Not published</div><div class="gloss">MOM does not publish this figure for ${qLabel(D.latest)} (counts too small to report).${i>=0?' Last published: '+f(arr[i])+' in '+qLabel(D.quarters[i])+'.':''}</div></div>`;
+        <div class="val na">Not published</div><div class="gloss">MOM does not publish this figure for ${qLabel(D.latest)} (counts too small to report).${i>=0?' Last published: '+f(arr[i])+' in '+qLabel(D.quarters[i])+'.':''}</div>${src}</div>`;
     }
     return `<div class="card kpi"><div class="lab"><span>${lab}</span><span class="q">${qLabel(D.quarters[i])}</span></div>
-      <div class="val">${f(arr[i])}</div><div class="delta">${deltaText(arr,i,kind)}</div>${gloss?`<div class="gloss">${gloss}</div>`:''}</div>`;
+      <div class="val">${f(arr[i])}</div><div class="delta">${deltaText(arr,i,kind)}</div>${gloss?`<div class="gloss">${gloss}</div>`:''}${extra}${src}</div>`;
   };
+  const a = advance();
+  const advLine = a ? `<div class="adv"><a href="${a.url}" rel="noopener">${qLabel(a.quarter)} advance estimate: ${fmt.format(a.retrenched)}${a.preliminary?' (preliminary)':''}</a></div>` : '';
   const vu = D.total.vu, vi = lastIdx(vu);
   document.getElementById('kpis').innerHTML =
-    tile('Job vacancies', s.vac, METRICS.vac.f, 'n', '') +
-    tile('Vacancy rate', s.rate, METRICS.rate.f, 'pp', 'Unfilled jobs as a share of all jobs (filled and unfilled)') +
-    tile('Retrenchments', s.ret, METRICS.ret.f, 'n', '') +
+    tile('Job vacancies', s.vac, METRICS.vac.f, 'n', '', dsKey('vacancies_total','vacancies')) +
+    tile('Vacancy rate', s.rate, METRICS.rate.f, 'pp', 'Unfilled jobs as a share of all jobs (filled and unfilled)', dsKey('vacancy_rate_total','vacancy_rate')) +
+    tile('Retrenchments', s.ret, METRICS.ret.f, 'n', '', dsKey('retrenched_total','retrenched'), advLine) +
     `<div class="card kpi"><div class="lab"><span>Vacancies per jobseeker</span><span class="q">${qLabel(D.quarters[vi])}</span></div>
       <div class="val">${vu[vi].toFixed(2)}</div><div class="delta">${deltaText(vu,vi,'ratio')}</div>
-      <div class="gloss">All of Singapore, not by sector. Above 1 means more open jobs than unemployed people.</div></div>`;
+      <div class="gloss">All of Singapore, not by sector. Above 1 means more open jobs than unemployed people.</div>
+      <div class="src"><a href="${dsUrl('vu_ratio')}" rel="noopener" title="MOM, ${DS.vu_ratio.title} (data.gov.sg)">Source ↗</a></div></div>`;
 }
 
 /* ---------- line chart ---------- */
@@ -383,6 +406,10 @@ function renderLine(){
   document.getElementById('lineHint').textContent = lead + notes.join(' ');
   if (state.table) renderTable(sel, met, i0);
 }
+function renderLineSrc(){
+  const k = {vac:['vacancies_total','vacancies'], rate:['vacancy_rate_total','vacancy_rate'], ret:['retrenched_total','retrenched']}[state.metric];
+  document.getElementById('lineSrc').innerHTML = srcText(dsKey(...k));
+}
 function renderTable(sel, met, i0){
   const rows = []; for (let i=L;i>=i0;i--) { const v = sel[state.metric][i]; rows.push(`<tr><td>${qLabel(D.quarters[i])}</td><td>${v==null?'–':met.f(v)}</td></tr>`); }
   document.getElementById('tbl').innerHTML = `<table><caption class="sr">${met.title}, ${sel.label}</caption><thead><tr><th>Quarter</th><th>${met.label}</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
@@ -395,6 +422,7 @@ function renderBars(){
   const nat = D.total.rate[L];
   const onKey = state.sector;
   document.getElementById('barHint').textContent = `${qLabel(D.latest)}. Line marks all industries (${nat.toFixed(1)}%).`;
+  document.getElementById('barSrc').innerHTML = srcText('vacancy_rate');
   document.getElementById('bars').innerHTML = items.map(({s,v}) => `
     <div class="row ${s.key===onKey?'on':''}" data-k="${s.key}" title="${s.label}: ${v.toFixed(1)}%">
       <div class="name">${s.label}${s.key==='security'?' (part of admin & support)':''}</div>
@@ -417,6 +445,7 @@ function renderPmet(){
   document.getElementById('pmSum').innerHTML = `
     <div><div class="big">${fmt.format(P.ret)}</div><div class="what">PMETs retrenched, ${from}–${to} (${Math.round(P.ret/P.ret_all*100)}% of all ${fmt.format(P.ret_all)} retrenchments)</div></div>
     <div><div class="big">${fmt.format(P.vac)}</div><div class="what">PMET vacancies open at the end of ${to}</div></div>`;
+  document.getElementById('pmSrc').innerHTML = srcText('retrenched_occ', 'vacancies_occ');
   document.getElementById('pmLegR').textContent = `Retrenched, ${from}–${to}`;
   document.getElementById('pmLegV').textContent = `Open roles, ${to}`;
   const rows = D.sectors.filter(s => s.pmet.ret != null || s.pmet.vac != null).sort((a,b) => (b.pmet.ret||0) - (a.pmet.ret||0));
@@ -523,6 +552,12 @@ function renderSkills(){
   document.getElementById('skLinks').innerHTML = html;
 }
 
+/* ---------- freshness line ---------- */
+function renderFresh(){
+  const a = advance();
+  document.getElementById('fresh').textContent = `Data as of ${qLabel(D.latest)} · checked ${fmtDate(D.checked)}` + (a ? ` · full ${qLabel(a.quarter).split(' ')[1]} figures due ${a.full_report_due}` : '');
+}
+
 /* ---------- survey card & footer ---------- */
 function renderStatic(){
   const M = D.manual, a = M.sme_ai_adoption;
@@ -531,7 +566,6 @@ function renderStatic(){
     <div class="stat"><div class="big">${M.workers_need_ai_upskilling_pct}%</div><div class="what">of workers say they need AI upskilling</div></div>
     <div class="stat"><div class="big">${M.workers_trained_past_year_pct}%</div><div class="what">of workers had AI training in the past year</div></div>`;
   document.getElementById('surveyCap').innerHTML = `<a href="${M.url}" rel="noopener">${M.source}</a>. These are survey results, not part of the quarterly MOM series, and are not broken down by the sector filter above. Entered by hand on ${M.retrieved}.`;
-  document.getElementById('fresh').textContent = `Data as of ${qLabel(D.latest)} · checked ${fmtDate(D.checked)}`;
   flagStale(D.checked, 'last checked');
   const titles = D.datasets.map(d=>`<a href="https://data.gov.sg/datasets/${d.id}/view">${d.title}</a>`).join('; ');
   document.getElementById('foot').innerHTML = `
@@ -546,7 +580,7 @@ function render(){
   buildSeg('rangeSeg', [['5Y','5Y'],['10Y','10Y'],['Max','Max']], 'range');
   state.hover = null;
   try { const u = new URL(location.href); state.sector === 'all' ? u.searchParams.delete('sector') : u.searchParams.set('sector', state.sector); history.replaceState(null, '', u); } catch (e) {}
-  renderKpis(); renderLine(); renderBars(); renderPmet(); renderSctp(); renderSkills();
+  renderKpis(); renderLine(); renderLineSrc(); renderFresh(); renderBars(); renderPmet(); renderSctp(); renderSkills();
 }
 document.getElementById('tblBtn').onclick = e => { state.table = !state.table; const t = document.getElementById('tbl'); t.hidden = !state.table;
   e.target.textContent = state.table ? 'Hide table' : 'Show table'; e.target.setAttribute('aria-expanded', state.table); renderLine(); };

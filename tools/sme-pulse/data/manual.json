@@ -1,5 +1,5 @@
 {
-  "_note": "Hand-entered survey figures from the IMDA press release linked in url (checked 11 Oct 2026). Not from the quarterly MOM series. Check against the source before each rebuild.",
+  "_note": "Hand-entered survey figures from the IMDA press release linked in url (checked 11 Oct 2026). Not from the quarterly MOM series. Check against the source before each rebuild. mom_advance is MOM's advance retrenchment estimate for a quarter data.gov.sg does not have yet; the page hides it once data.gov.sg catches up.",
   "source": "IMDA, Singapore Digital Economy Report 2026 (press release, 5 Oct 2026)",
   "url": "https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches/singapore-digital-economy-2026",
   "retrieved": "2026-10-11",
@@ -14,5 +14,14 @@
     }
   ],
   "workers_need_ai_upskilling_pct": 68,
-  "workers_trained_past_year_pct": 37
+  "workers_trained_past_year_pct": 37,
+  "mom_advance": {
+    "quarter": "2026-Q3",
+    "retrenched": 4800,
+    "preliminary": true,
+    "source": "MOM, Labour Market Advance Release 3Q 2026 (30 Oct 2026)",
+    "url": "https://www.mom.gov.sg/newsroom/press-releases/2026/1030-labour-market-advance-release-3q-2026",
+    "retrieved": "2026-11-01",
+    "full_report_due": "mid-December 2026"
+  }
 }
