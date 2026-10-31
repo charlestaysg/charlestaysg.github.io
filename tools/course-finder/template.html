@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Course Finder</title>
+<meta name="description" content="Pick your sector and find SkillsFuture-listed courses to send staff on, with class dates, fees and ratings, from MySkillsFuture open data. Unofficial teaching example.">
+<style>
+:root{
+  color-scheme:light;
+  --page:#f9f9f7; --surface:#fcfcfb; --card:#ffffff;
+  --ink:#0b0b0b; --ink-2:#52514e; --muted:#6f6d68;
+  --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,.10);
+  --accent:#2a78d6; --accent-soft:rgba(42,120,214,.12);
+  --other:#c9c7bf; --bar-other:#b9c9dc;
+  --survey-bg:#fbf7ee; --survey-border:#d9c9a3; --survey-ink:#6b5a2e;
+  --chip-on-ink:#ffffff;
+  --c-ret:#eb6834;
+  --c-sup:#1baf7a; --t-ihl:#2a78d6; --t-university:#1baf7a; --t-public:#eda100; --t-private:#4a3aa7;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --card:#1a1a19;
+    --ink:#ffffff; --ink-2:#c3c2b7; --muted:#9a988f;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+    --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
+    --other:#4a4a46; --bar-other:#34465c;
+    --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
+    --c-ret:#d95926;
+    --c-sup:#199e70; --t-ihl:#3987e5; --t-university:#199e70; --t-public:#c98500; --t-private:#9085e9;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#0d0d0d; --surface:#1a1a19; --card:#1a1a19;
+  --ink:#ffffff; --ink-2:#c3c2b7; --muted:#9a988f;
+  --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,.10);
+  --accent:#3987e5; --accent-soft:rgba(57,135,229,.18);
+  --other:#4a4a46; --bar-other:#34465c;
+  --survey-bg:#221e14; --survey-border:#5c4f2c; --survey-ink:#d8c58f;
+  --c-ret:#d95926;
+  --c-sup:#199e70; --t-ihl:#3987e5; --t-university:#199e70; --t-public:#c98500; --t-private:#9085e9;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--page);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 40px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:8px 24px;margin-bottom:16px}
+h1{font-size:26px;line-height:1.2;margin:0;letter-spacing:-.01em}
+.sub{color:var(--ink-2);margin:4px 0 0;font-size:14px;max-width:62ch}
+.sub a,.companion a{color:var(--accent)}
+.companion{font-size:13px;color:var(--ink-2);margin:6px 0 0}
+.fresh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2)}
+.dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.fresh.is-stale .dot{background:var(--survey-ink)}
+.stale{margin:0 0 16px;padding:10px 14px;border:1px solid var(--survey-border);border-radius:10px;background:var(--survey-bg);color:var(--survey-ink);font-size:14px}
+.badge{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:1px 8px;vertical-align:middle}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;margin:0 -16px 8px;padding-left:16px;padding-right:16px;scrollbar-width:none;position:sticky;top:0;background:var(--page);z-index:5}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer;min-height:36px}
+.chip:hover{border-color:var(--axis)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--chip-on-ink)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[tabindex="-1"]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.roles{margin:0 0 12px;padding:10px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--border);font-size:14px;color:var(--ink-2)}
+.roles b{color:var(--ink);font-weight:600}
+.roles a{color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.filters{margin-bottom:12px}
+.filters h2{font-size:15px;margin:0 0 10px;font-weight:600}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 20px;align-items:start}
+.field label,.field legend{display:block;font-size:13px;color:var(--ink-2);margin:0 0 4px;padding:0}
+.field input[type=search],.field select{width:100%;font:inherit;font-size:14px;color:var(--ink);background:var(--page);border:1px solid var(--border);border-radius:8px;padding:7px 10px;min-height:38px}
+fieldset.field{border:0;margin:0;padding:0;min-width:0}
+.check{display:flex;align-items:flex-start;gap:10px;font-size:14px;padding:3px 0;color:var(--ink);cursor:pointer;line-height:1.35}
+.check input{margin:3px 0 0;flex:none;width:16px;height:16px;accent-color:var(--accent)}
+.check small{color:var(--muted);font-size:12px}
+.check i{display:inline-block;width:9px;height:9px;border-radius:2px;margin:0 6px 0 2px}
+.ftoggles{display:flex;flex-wrap:wrap;gap:4px 24px;margin-top:10px}
+.linkbtn{background:none;border:0;color:var(--accent);font:inherit;font-size:13px;cursor:pointer;padding:4px 0}
+.status{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 16px;margin:4px 0 10px}
+.count{font-size:16px;font-weight:600}
+.scope{font-size:13px;color:var(--ink-2);margin:0 0 10px}
+.hintline{font-size:13px;color:var(--ink-2);margin:0 0 10px}
+.empty{border:1.5px dashed var(--axis);border-radius:12px;padding:28px 20px;text-align:center;color:var(--ink-2);font-size:15px}
+.cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.course{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.course h3{font-size:15px;line-height:1.35;margin:0;font-weight:600;overflow-wrap:anywhere}
+.course h3 a{color:var(--ink);text-decoration:none}
+.course h3 a:hover{color:var(--accent);text-decoration:underline}
+.course .pv{font-size:13px;color:var(--ink-2);margin:0;overflow-wrap:anywhere}
+.course .pv i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
+.tag{font-size:11px;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:0 7px;margin-left:4px;white-space:nowrap}
+.when{margin:2px 0 0;font-size:14px;font-weight:600}
+.when.none{font-weight:400;color:var(--ink-2)}
+.when small{font-weight:400;font-size:13px;color:var(--ink-2)}
+.facts{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:2px 14px;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.stars{position:relative;display:inline-block;color:var(--axis);letter-spacing:1px;line-height:1}
+.stars::before{content:"★★★★★";position:absolute;left:0;top:0;width:var(--w);overflow:hidden;color:var(--t-public);letter-spacing:1px}
+.step{margin:auto 0 0;padding-top:4px;font-size:12px}
+.step a{color:var(--accent)}
+.more{display:block;margin:16px auto 0;font:inherit;font-size:14px;border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 22px;cursor:pointer;min-height:40px}
+.more:hover{border-color:var(--axis)}
+.notes{margin-top:20px}
+.notes h2{font-size:15px;margin:0 0 8px}
+.notes ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:13px;line-height:1.55}
+.notes li{margin-bottom:4px}
+footer{font-size:12px;color:var(--ink-2);line-height:1.6;margin-top:20px}
+footer a{color:var(--ink-2)}
+footer p{margin:0 0 8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (min-width:861px){.chips{flex-wrap:wrap;overflow:visible;position:static}}
+@media (max-width:560px){h1{font-size:22px}.cards{grid-template-columns:minmax(0,1fr)}.fgrid{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<style>
+.sitebar,.sitebar *{box-sizing:border-box}
+.sitebar{position:relative;z-index:1200;display:block;width:auto;margin:0 calc(50% - 50vw);padding:10px 16px;background:#F3F6FA;border-bottom:1px solid #D6DEE9;font:14px/1.4 "IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace}
+.sitebar .sb-in{max-width:860px;margin:0 auto;padding:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px}
+.sitebar a{display:inline;padding:0;border:0;background:none;color:#0B1324;text-decoration:none;white-space:nowrap}
+.sitebar a:hover{color:#148A4E}
+.sitebar .me{font:900 18px/1.2 Barlow,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.02em;margin-right:auto}
+.sitebar .tb-ext{color:#148A4E}
+@media (prefers-color-scheme:dark){.sitebar{background:#0B1324;border-color:#1F2A40}.sitebar a{color:#E6EDF7}.sitebar a:hover,.sitebar .tb-ext{color:#3DDC84}}
+@media (max-width:640px){.sitebar{font-size:13px;padding:8px 16px}.sitebar .sb-in{gap:2px 14px}.sitebar .tb-ext{display:none}}
+@media (max-width:480px){.sitebar .me{flex-basis:100%}}
+</style>
+<nav class="sitebar" aria-label="Site">
+  <div class="sb-in">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Course Finder <span class="badge">Unofficial</span></h1>
+      <p class="sub">Pick your sector to see SkillsFuture-listed courses you can send staff on. Each card links to the course page on MySkillsFuture, where you check the class and sign up. Source: <a href="https://data.gov.sg/datasets/d_b5802b76f409764c16dde4bf2feb19cd/view">MySkillsFuture Course Directory</a> and <a href="https://data.gov.sg/datasets/d_60e4423c61d7bbe3c4cf07552197987b/view">Course Run</a> (SWDA), via data.gov.sg.</p>
+      <p class="companion">Want the totals by sector first? See the <a id="landscapeLink" href="#">Skills Training Landscape</a>.</p>
+    </div>
+    <div class="fresh"><span class="dot" aria-hidden="true"></span><span id="fresh"></span></div>
+  </header>
+  <p id="stale" class="stale" role="status" hidden></p>
+
+  <nav class="chips" id="chips" aria-label="Sector"></nav>
+  <p class="roles" id="roles" hidden></p>
+
+  <section class="card filters" aria-labelledby="fh">
+    <h2 id="fh">Filter the courses</h2>
+    <div class="fgrid">
+      <div class="field"><label for="q">Keyword (searches every sector)</label><input type="search" id="q" autocomplete="off" placeholder="For example: forklift, Excel, first aid"></div>
+      <fieldset class="field" id="types"><legend>Provider type</legend></fieldset>
+      <div class="field"><label for="hours">Length</label><select id="hours"></select></div>
+      <div class="field"><label for="mode">Study mode</label><select id="mode"></select></div>
+      <div class="field"><label for="fee">Full fee, before subsidies</label><select id="fee"></select></div>
+    </div>
+    <div class="ftoggles">
+      <label class="check"><input type="checkbox" id="dated"> Has a class date</label>
+      <label class="check"><input type="checkbox" id="ai"> AI-related</label>
+      <button type="button" class="linkbtn" id="reset">Reset filters</button>
+    </div>
+  </section>
+
+  <div class="status"><span class="count" id="count" role="status" aria-live="polite"></span></div>
+  <p class="scope" id="scope" hidden></p>
+  <div id="out" aria-busy="false"></div>
+
+  <section class="card notes" aria-labelledby="nh">
+    <h2 id="nh">Read this before you pick a course</h2>
+    <ul id="notes"></ul>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const D = /*__DATA__*/null;
+const fmt = new Intl.NumberFormat('en-SG');
+const money = v => '$' + fmt.format(Math.round(v));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtDate = d => new Date(d.slice(0, 10) + 'T00:00:00+08:00').toLocaleDateString('en-SG', {day:'numeric', month:'short', year:'numeric', timeZone:'Asia/Singapore'});
+// Today in Singapore as YYYY-MM-DD, so "next class" is worked out when the page is opened, not when it was built.
+const TODAY = new Date().toLocaleDateString('en-CA', {timeZone:'Asia/Singapore'});
+const COURSE_URL = 'https://courses.myskillsfuture.gov.sg/courses/';
+const STEP_URL = 'https://step.polite.edu.sg/';
+const PAGE = 50;
+const KEYS = D.sectors.map(s => s.key);
+const SECTOR = Object.fromEntries(D.sectors.map(s => [s.key, s]));
+const TYPE_DOT = {ihl:'--t-ihl', university:'--t-university', public:'--t-public', private:'--t-private'};
+
+// Warn readers when the monthly refresh has stopped: over 40 days allows for one late run.
+const flagStale = (iso, label) => {
+  const days = Math.floor((Date.now() - Date.parse(iso.slice(0, 10) + 'T00:00:00+08:00')) / 864e5);
+  if (!(days > 40)) return;
+  const el = document.getElementById('stale');
+  el.textContent = `This page may be out of date: ${label} ${fmtDate(iso)}, ${days} days ago. It normally refreshes early each month.`;
+  el.hidden = false;
+  document.querySelector('.fresh').classList.add('is-stale');
+};
+
+const state = {sector:null, q:'', types:new Set(['ihl']), dated:false, ai:false, hours:'', mode:'', fee:'', shown:PAGE};
+let token = 0;
+const providers = {};
+const cache = {};   // sector key -> Promise of course objects
+
+/* ---------- data ---------- */
+function loadSector(key){
+  return cache[key] || (cache[key] = fetch(`data/${key}.json`).then(r => {
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  }).then(j => {
+    for (const [id, [name, t]] of Object.entries(j.p)) providers[id] = {name, type:j.t[t]};
+    return j.c.map(r => {
+      const c = {ref:r[0], title:r[1], pv:r[2], hours:r[3], mode:r[4], fee:r[5], stars:r[6], resp:r[7], ai:r[8], dates:r[9], runs:r[10], sector:key};
+      const p = providers[c.pv];
+      c.type = p.type;
+      c.low = (c.title + ' ' + p.name).toLowerCase();
+      // stored dates are the first few upcoming at build time; drop any that have passed since
+      let past = 0;
+      while (past < c.dates.length && c.dates[past] < TODAY) past++;
+      c.next = past < c.dates.length ? c.dates[past] : null;
+      c.further = c.next ? Math.max(0, c.runs - past - 1) : 0;
+      c.rated = c.stars != null && c.resp != null && c.resp >= D.min_respondents;
+      return c;
+    });
+  }).catch(e => { delete cache[key]; throw e; }));
+}
+const loadAll = () => Promise.all(KEYS.map(loadSector)).then(a => [].concat(...a));
+const band = (v, bands) => { for (let i = 0; i < bands.length; i++) if (bands[i][0] === null || v <= bands[i][0]) return i; };
+const keyword = () => state.q.trim().length >= 2 ? state.q.trim().toLowerCase().split(/\s+/) : null;
+
+/* ---------- filters ---------- */
+// every filter except provider type, which is counted separately so each box can show how many it would add
+function passes(c, words){
+  if (state.dated && !c.next) return false;
+  if (state.ai && !c.ai) return false;
+  if (state.mode !== '' && c.mode !== +state.mode) return false;
+  if (state.hours !== '' && (c.hours == null || band(c.hours, D.hours_bands) !== +state.hours)) return false;
+  if (state.fee !== '' && (c.fee == null || band(c.fee, D.fee_bands) !== +state.fee)) return false;
+  if (words) for (const w of words) if (!c.low.includes(w)) return false;
+  return true;
+}
+function byNext(a, b){
+  if (!!a.next !== !!b.next) return a.next ? -1 : 1;
+  if (a.next !== b.next) return a.next < b.next ? -1 : 1;
+  const ra = a.rated ? a.stars : -1, rb = b.rated ? b.stars : -1;
+  if (ra !== rb) return rb - ra;
+  if (a.rated && b.rated && a.resp !== b.resp) return b.resp - a.resp;
+  return a.title.localeCompare(b.title, 'en');
+}
+
+/* ---------- cards ---------- */
+const hoursText = h => {
+  if (h == null) return 'Hours not stated';
+  const t = (Math.round(h * 10) / 10) + (h === 1 ? ' hour' : ' hours');
+  return h > 8 ? `${t} (~${Math.max(1, Math.round(h / 8))} days)` : t;
+};
+function cardHtml(c, showSector){
+  const p = providers[c.pv];
+  const when = c.next
+    ? `<p class="when">Next class ${fmtDate(c.next)}${c.further ? ` <small>· ${c.further} more dated ${c.further === 1 ? 'run' : 'runs'} after that</small>` : ''}</p>`
+    : `<p class="when none">No date listed: check the course page</p>`;
+  const rating = c.rated
+    ? `<li><span class="stars" style="--w:${c.stars / 5 * 100}%" aria-hidden="true">★★★★★</span> ${Number(c.stars).toFixed(1)} <span class="sr">out of 5 stars, </span>(${fmt.format(c.resp)} ${c.resp === 1 ? 'rating' : 'ratings'})</li>` : '';
+  const step = c.type === 'ihl'
+    ? `<p class="step"><a href="${STEP_URL}" target="_blank" rel="noopener" aria-label="Also on STEP (home page, opens in a new tab)">Also on STEP ↗</a></p>` : '';
+  return `<li class="course"><h3><a href="${COURSE_URL}${encodeURIComponent(c.ref)}" target="_blank" rel="noopener">${esc(c.title)}<span class="sr"> (opens MySkillsFuture in a new tab)</span></a></h3>
+<p class="pv"><i style="background:var(${TYPE_DOT[c.type]})" aria-hidden="true"></i>${esc(p.name)} <span class="tag">${esc(D.type_labels[c.type])}</span>${showSector ? ` <span class="tag">${esc(SECTOR[c.sector].label)}</span>` : ''}</p>
+${when}
+<ul class="facts"><li>${hoursText(c.hours)}</li><li>${c.mode === D.modes.length - 1 ? 'Study mode not stated' : esc(D.modes[c.mode])}</li><li>${c.fee == null ? 'Full fee not stated' : 'Full fee ' + money(c.fee)}</li>${rating}</ul>
+${step}</li>`;
+}
+
+/* ---------- render ---------- */
+let current = {list:[], showSector:false, drawn:0};
+function drawMore(focusFirst){
+  const out = document.getElementById('out');
+  let ul = out.querySelector('ul.cards');
+  const old = out.querySelector('.more'); if (old) old.remove();
+  const from = current.drawn, to = Math.min(current.list.length, from + PAGE);
+  const html = current.list.slice(from, to).map(c => cardHtml(c, current.showSector)).join('');
+  if (!ul) { out.innerHTML = '<ul class="cards"></ul>'; ul = out.querySelector('ul.cards'); }
+  ul.insertAdjacentHTML('beforeend', html);
+  current.drawn = to;
+  if (to < current.list.length) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'more';
+    b.textContent = `Show more (${fmt.format(current.list.length - to)} left)`;
+    b.onclick = () => drawMore(true);
+    out.appendChild(b);
+  }
+  if (focusFirst) { const li = ul.children[from]; if (li) { li.tabIndex = -1; li.focus({preventScroll:false}); } }
+}
+function typeBoxes(counts){
+  const box = document.getElementById('types');
+  if (!box.dataset.built) {
+    box.innerHTML = '<legend>Provider type</legend>' + D.type_order.map(t =>
+      `<label class="check"><input type="checkbox" data-t="${t}"><span><i style="background:var(${TYPE_DOT[t]})" aria-hidden="true"></i>${esc(D.type_labels[t])} <small data-n="${t}"></small></span></label>`).join('');
+    box.dataset.built = 1;
+    box.onchange = e => { const t = e.target.dataset.t; if (!t) return; e.target.checked ? state.types.add(t) : state.types.delete(t); state.shown = PAGE; render(); };
+  }
+  box.querySelectorAll('input').forEach(i => { i.checked = state.types.has(i.dataset.t); });
+  box.querySelectorAll('[data-n]').forEach(s => { s.textContent = counts ? `(${fmt.format(counts[s.dataset.n] || 0)})` : ''; });
+}
+function setUrl(){
+  try { const u = new URL(location.href); state.sector ? u.searchParams.set('sector', state.sector) : u.searchParams.delete('sector'); history.replaceState(null, '', u); } catch (e) {}
+}
+async function render(){
+  const my = ++token, words = keyword();
+  document.querySelectorAll('#chips .chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === state.sector));
+  renderRoles(); setUrl();
+  const out = document.getElementById('out'), count = document.getElementById('count'), scope = document.getElementById('scope');
+  if (!state.sector && !words) {
+    typeBoxes(null); count.textContent = ''; scope.hidden = true;
+    out.innerHTML = '<p class="empty">Choose your sector above to see its courses, or type a keyword to search every sector.</p>';
+    return;
+  }
+  out.setAttribute('aria-busy', 'true');
+  let pool;
+  try {
+    const first = !words && !cache[state.sector];
+    if (first || words) { count.textContent = words ? 'Loading every sector…' : 'Loading courses…'; }
+    pool = words ? await loadAll() : await loadSector(state.sector);
+  } catch (e) {
+    if (my !== token) return;
+    out.setAttribute('aria-busy', 'false'); count.textContent = '';
+    out.innerHTML = '<p class="empty">The course list could not be loaded. Check your connection and reload the page. (The list does not load if you open this file straight from disk.)</p>';
+    return;
+  }
+  if (my !== token) return;
+  const counts = {}; const hits = [];
+  for (const c of pool) if (passes(c, words)) { counts[c.type] = (counts[c.type] || 0) + 1; if (state.types.has(c.type)) hits.push(c); }
+  hits.sort(byNext);
+  typeBoxes(counts);
+  const dated = hits.reduce((n, c) => n + (c.next ? 1 : 0), 0);
+  const where = words ? 'across all sectors' : 'in ' + SECTOR[state.sector].label;
+  count.textContent = `${fmt.format(hits.length)} ${hits.length === 1 ? 'course' : 'courses'} ${where}` + (hits.length ? ` · ${fmt.format(dated)} with a class date listed` : '');
+  scope.hidden = !words;
+  if (words) scope.textContent = `Searching every sector for “${state.q.trim()}”.` + (state.sector ? ` Clear the keyword to go back to ${SECTOR[state.sector].label} only.` : '');
+  out.setAttribute('aria-busy', 'false');
+  if (!hits.length) {
+    const hidden = D.type_order.filter(t => !state.types.has(t)).reduce((n, t) => n + (counts[t] || 0), 0);
+    out.innerHTML = `<p class="empty">No courses match these filters.${hidden ? ` ${fmt.format(hidden)} more ${hidden === 1 ? 'matches' : 'match'} if you tick other provider types.` : ' Try loosening a filter.'}</p>`;
+    return;
+  }
+  current = {list:hits, showSector:!!words, drawn:0};
+  out.innerHTML = '';
+  drawMore(false);
+}
+
+function renderRoles(){
+  const el = document.getElementById('roles');
+  if (!state.sector) { el.hidden = true; return; }
+  const s = SECTOR[state.sector], q = D.demand_quarter.replace('-', ' ');
+  const link = `<a href="${D.pulse_url}">SME Workforce Pulse</a>`;
+  const data = `<a href="https://data.gov.sg/datasets/${D.vacancy_dataset.id}/view">MOM data</a>`;
+  el.hidden = false;
+  el.innerHTML = state.sector === 'general'
+    ? `Cross-sector courses are not tied to one sector, so there is no open-roles figure. See hiring by sector on the ${link}.`
+    : s.pmet_open == null
+      ? `Open PMET roles in ${esc(s.label)} are not published for ${q} (${data}). See the ${link}.`
+      : `Open PMET roles in ${esc(s.label)}: <b>${fmt.format(s.pmet_open)}</b> (${data}, ${q}). See the ${link} for vacancies and retrenchments.`;
+}
+
+/* ---------- setup ---------- */
+function buildControls(){
+  document.getElementById('chips').innerHTML = D.sectors.map(s => `<button type="button" class="chip" data-k="${s.key}" aria-pressed="false">${esc(s.label)}</button>`).join('');
+  document.getElementById('chips').onclick = e => {
+    const b = e.target.closest('.chip'); if (!b) return;
+    state.sector = b.dataset.k; state.shown = PAGE; render();
+    b.scrollIntoView({block:'nearest', inline:'center'});
+  };
+  const opts = (id, any, labels) => { document.getElementById(id).innerHTML = `<option value="">${any}</option>` + labels.map((l, i) => `<option value="${i}">${esc(l)}</option>`).join(''); };
+  opts('hours', 'Any length', D.hours_bands.map(b => b[1]));
+  opts('mode', 'Any study mode', D.modes);
+  opts('fee', 'Any full fee', D.fee_bands.map(b => b[1]));
+  for (const id of ['hours', 'mode', 'fee']) document.getElementById(id).onchange = e => { state[id] = e.target.value; render(); };
+  for (const id of ['dated', 'ai']) document.getElementById(id).onchange = e => { state[id] = e.target.checked; render(); };
+  let t; document.getElementById('q').oninput = e => { clearTimeout(t); t = setTimeout(() => { state.q = e.target.value; render(); }, 220); };
+  document.getElementById('reset').onclick = () => {
+    Object.assign(state, {q:'', types:new Set(['ihl']), dated:false, ai:false, hours:'', mode:'', fee:''});
+    document.getElementById('q').value = ''; document.getElementById('dated').checked = false; document.getElementById('ai').checked = false;
+    for (const id of ['hours', 'mode', 'fee']) document.getElementById(id).value = '';
+    render();
+  };
+}
+function renderStatic(){
+  const dir = D.datasets.directory, run = D.datasets.runs;
+  document.getElementById('fresh').textContent = `Data published ${fmtDate(dir.updated)} · checked ${fmtDate(D.checked)}`;
+  flagStale(D.checked, 'last checked');
+  document.getElementById('landscapeLink').href = D.landscape_url;
+  const undated = Math.round(D.runs_undated / D.runs_total * 100);
+  document.getElementById('notes').innerHTML = [
+    `Only some course runs in SWDA's file have a start date: ${undated}% have none. So “No date listed” does not mean there is no class. Check the course page. ${fmt.format(D.courses_dated)} of the ${fmt.format(D.courses_total)} courses have a dated run from ${fmtDate(D.built)}.`,
+    'A course on this list is not a class place. Seats, entry requirements and funding are on the course page.',
+    'Sectors are matched by keywords in each course’s title and description, so some courses sit in the wrong sector. Courses that match no sector are under Cross-sector. If you cannot find a course, try the keyword search, which looks in every sector.',
+    'Fees are full fees before subsidies. Most Singaporean learners, and staff sponsored by an SME, pay less. The source does not say which subsidy its net fee assumes, so this page does not show it.',
+    `Ratings show only when at least ${D.min_respondents} learners rated the course. Days are hours divided by 8.`,
+    'Next-class dates are worked out in your browser from the dates in the file, which is refreshed monthly. A class may have just started, or a new one may not be listed yet.',
+    'This is not advice. It is not a product of SWDA, MOM or any government agency.'
+  ].map(t => `<li>${t}</li>`).join('');
+  const titles = [dir, run].map(d => `<a href="https://data.gov.sg/datasets/${d.id}/view">${esc(d.title)}</a>`).join(' and ');
+  document.getElementById('foot').innerHTML = `
+    <p>Contains information from ${titles}, accessed on ${fmtDate(D.built)} from data.gov.sg, which is made available under the terms of the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence version 1.0</a>. Publisher: ${esc(dir.publisher)}. Open PMET roles: Labour Market Survey, Manpower Research &amp; Statistics Department, Ministry of Manpower, via the <a href="${D.pulse_url}">SME Workforce Pulse</a>.</p>
+    <p>This is an unofficial teaching example, not a product of SWDA, MOM or any government agency. The data is a snapshot, not live; the page checks data.gov.sg for a new version each month (last checked ${fmtDate(D.checked)}). Not advice.</p>`;
+}
+// ?sector=<key> picks a sector on load, so other pages can link straight to one
+{ const k = new URLSearchParams(location.search).get('sector'); if (k && SECTOR[k]) state.sector = k; }
+buildControls(); renderStatic(); render();
+if (state.sector) document.querySelector(`.chip[data-k="${state.sector}"]`)?.scrollIntoView({block:'nearest', inline:'center'});
+</script>
+<p class="site-disclaimer" style="max-width:1080px;margin:0 auto;padding:16px 16px 32px;font-size:13px;line-height:1.5;opacity:.75">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+</body>
+</html>
