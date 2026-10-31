@@ -370,3 +370,29 @@ body.has-jazz .otter { bottom: 62px !important; }
 @media print { .jazz { display: none; } }
 .refurb { margin-bottom: 0; padding-bottom: 0; border-bottom: 0; }
 .refurb + .refurb { margin-top: 36px; }
+
+/* home #toolkit: ChatCut vs HyperFrames Studio table (stacks on phones) */
+.tk-cmp { margin-top: 32px; }
+.tk-cmp h3 { margin: 0 0 4px; font-size: 20px; }
+.tk-cmp .asof { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+.tk-cmp-wrap { overflow-x: auto; margin-top: 8px; }
+table.tk-table { width: 100%; min-width: 620px; border-collapse: collapse; font-size: 15px; line-height: 1.45; }
+table.tk-table th, table.tk-table td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+table.tk-table thead th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+table.tk-table tbody th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; width: 130px; }
+table.tk-table .new { display: block; margin-top: 4px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--green); }
+.tk-when { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 8px 16px; margin: 18px 0 0; max-width: 72ch; }
+.tk-when dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--green); padding-top: 3px; }
+.tk-when dd { margin: 0; font-size: 16px; line-height: 1.5; }
+.tk-note { max-width: 64ch; margin-top: 14px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+@media (max-width: 640px) {
+  table.tk-table { min-width: 0; }
+  table.tk-table thead { display: none; }
+  table.tk-table tr, table.tk-table tbody th, table.tk-table td { display: block; width: auto; }
+  table.tk-table tbody th { padding: 16px 0 4px; border-bottom: 0; color: var(--ink); }
+  table.tk-table td { padding: 4px 0 10px; border-bottom: 0; }
+  table.tk-table td::before { content: attr(data-label); display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+  table.tk-table tr { border-bottom: 1px solid var(--line); }
+  .tk-when { grid-template-columns: 1fr; gap: 2px; }
+  .tk-when dd { margin-bottom: 8px; }
+}
