@@ -1,5 +1,5 @@
 <script>
-	// Title, sub line, Pre-visit Fact Sheet link, freshness line and the "may be out of date" notice.
+	// Title, sub line, Pre-visit Fact Sheet and Course Finder links, freshness line and the "may be out of date" notice.
 	// Lives in a component so the site paths below are not rewritten with Evidence's base path.
 	export let meta;
 	const m = meta ?? {};
@@ -27,6 +27,10 @@
 			Meeting a company? Look it up on the
 			<a href="/projects/uen-sheet/">Pre-visit Fact Sheet</a> for its ACRA record, sector figures and
 			questions to ask.
+		</p>
+		<p class="pulse-companion">
+			Ready to pick a course? Use the <a href="/projects/course-finder/">Course Finder</a> to see
+			actual courses and class dates for a sector.
 		</p>
 	</div>
 	<div class="pulse-fresh" class:stale={staleText !== ''}>
