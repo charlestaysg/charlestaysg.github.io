@@ -3,11 +3,12 @@
 Run:  python3 ssic.py && python3 build.py
 Reads (never writes) the sibling projects:
   ../sme-workforce-pulse/   build.py SECTORS, data/snapshot.json, data/manual.json, data/sctp.json
-  ../skills-training-landscape/   data/latest.json; clean.py + sectors.py for the top courses
+  ../skills-training-landscape/   data/latest.json (course totals per sector)
+  ../course-finder/   data/meta.json (rating threshold); the page reads its per-sector course files live
 Writes data/baked.json and index.html. The company lookup itself happens in the browser at run
 time; only the reference data is baked.
 """
-import ast, collections, datetime, json, os, pathlib, re, sys
+import ast, datetime, json, os, pathlib, re, sys, urllib.request
 
 sys.dont_write_bytecode = True  # do not leave __pycache__ in the sibling folders
 
@@ -18,6 +19,7 @@ def sibling(*names):  # vault folder names first, then the site repo's tools/ na
     return next((HERE.parent / n for n in names if (HERE.parent / n).exists()), HERE.parent / names[0])
 PULSE = pathlib.Path(os.environ.get("UEN_PULSE_DIR") or sibling("sme-workforce-pulse", "sme-pulse"))
 LAND = pathlib.Path(os.environ.get("UEN_LAND_DIR") or sibling("skills-training-landscape", "skills-landscape"))
+FINDER = pathlib.Path(os.environ.get("UEN_FINDER_DIR") or sibling("course-finder"))
 PMET = "professionals, managers, executives and technicians"
 
 # 27 shard IDs, copied from data-findings.md (check.py re-reads that file and compares)
@@ -33,6 +35,18 @@ SHARDS = {
     "Y": "d_31af23fdb79119ed185c256f03cb5773", "Z": "d_4e3db8955fdcda6f9944097bef3d2724", "Others": "d_300ddc8da4e8f7bdc1bfc62d0d99e2e7",
 }
 IDS = {"slim": "d_3f960c10fed6145404ca7b821f263b87", "other": "d_b1d2b840ab9e993570c037b706b39bb8"}
+META_API = "https://api-production.data.gov.sg/v2/public/api/datasets/{}/metadata"
+UA = {"User-Agent": "curl/8.7.1"}  # the API returns 403 to Python's default user agent (as in the Landscape's fetch.py)
+
+
+def acra_updated(fallback):
+    """The 'last updated' date of the ACRA register on data.gov.sg; the hand-entered date if the call fails."""
+    try:
+        with urllib.request.urlopen(urllib.request.Request(META_API.format(IDS["slim"]), headers=UA), timeout=30) as r:
+            return json.load(r)["data"]["lastUpdatedAt"][:10]
+    except Exception as e:  # network or format change: keep building with the manual date
+        print(f"warning: ACRA metadata not read ({e}); using data/manual.json {fallback}")
+        return fallback
 
 
 def pulse_sectors():
@@ -79,31 +93,6 @@ def pulse_figures(sectors):
     return q, last4[0], out, nat, snap["fetched_at"][:10]
 
 
-def top_courses(latest):
-    """Top 8 courses by attendance per sector, recomputed from the Landscape's raw files."""
-    sys.path.insert(0, str(LAND))
-    try:
-        import clean, sectors as sec
-    except ImportError as e:
-        raise SystemExit(f"Cannot import the Landscape code: {e}")
-    try:
-        courses, _, _ = clean.load()
-    except FileNotFoundError:
-        raise SystemExit("Landscape raw course files are missing. Run ../skills-training-landscape/fetch.py (or copy "
-                         "directory.xlsx and runs.xlsx to its data/raw/), then run this build again.")
-    by = collections.defaultdict(list)
-    for c in courses:
-        s, _ = sec.classify(c["title"], c["learn"] + " " + c["about"])
-        if c["attendance"] is not None:
-            by[s].append(c)
-    out = {}
-    for k, cs in by.items():
-        cs.sort(key=lambda c: (-c["attendance"], c["title"]))
-        out[k] = [[c["title"], c["provider"], int(c["attendance"])] for c in cs[:8]]
-    all_cs = sorted((c for cs in by.values() for c in cs), key=lambda c: (-c["attendance"], c["title"]))
-    out["all"] = [[c["title"], c["provider"], int(c["attendance"])] for c in all_cs[:8]]
-    return out
-
 
 def main():
     sectors = pulse_sectors()
@@ -114,32 +103,32 @@ def main():
     manual = json.loads((DATA / "manual.json").read_text())
     pm = json.loads((PULSE / "data" / "manual.json").read_text())
     sctp = json.loads((PULSE / "data" / "sctp.json").read_text())
-    tops = top_courses(latest)
+    finder = json.loads((FINDER / "data" / "meta.json").read_text())
 
     def sctp_for(key):  # admin & support includes security programmes, as in the Pulse
         return [[p["inst"], p["title"]] for p in sctp["programmes"]
                 if p["sector"] == key or (key == "admin" and p["sector"] == "security")]
 
-    def course_block(group, titles):
+    def course_block(group):
         g = latest["groups"][group]
-        return {"n": g["n"], "providers": g["providers"], "ai": g["ai"], "fee_median": g["fee_median"],
-                "top": [[t[0], t[1], t[2]] for t in g["top"][:5]], "titles": titles}
+        return {"n": g["n"], "providers": g["providers"], "ai": g["ai"], "fee_median": g["fee_median"]}
 
     secs = {}
     for key, label, mom, _ in sectors:
         secs[key] = {"label": label, "mom": mom, "pulse": fig[key],
-                     "courses": course_block(key, tops.get(key, [])), "sctp": sctp_for(key)}
+                     "courses": course_block(key), "sctp": sctp_for(key)}
     baked = {
         "built": datetime.date.today().isoformat(),
         "asof": {"pulse_q": q, "pmet_from": p_from, "courses": latest["datasets"]["directory"]["updated"][:10],
-                 "acra": manual["acra_updated"], "built": datetime.date.today().isoformat(), "pulse_fetched": fetched},
+                 "acra": acra_updated(manual["acra_updated"]), "built": datetime.date.today().isoformat(), "pulse_fetched": fetched},
         "ids": IDS, "shards": SHARDS,
         "ssic": ssic["codes"],
         "divTitle": ssic["divisions"],
         "divSector": {d: (k if k != "none" else "") for d, k in smap["divisions"].items()},
         "holding": smap["holding"], "ambiguous": smap["ambiguous"],
         "sectors": secs, "national": nat,
-        "allCourses": course_block("all", tops["all"]),
+        "allCourses": course_block("all"),
+        "finder": {"min_respondents": finder["min_respondents"]},
         "imda": {k: pm[k] for k in ("source", "url", "retrieved", "sme_ai_adoption")},
         "sctpCollected": sctp["collected"], "sctpInst": [i["code"] for i in sctp["institutions"]],
         "datasets": [{"id": IDS["slim"], "title": "Entities Registered with ACRA"},

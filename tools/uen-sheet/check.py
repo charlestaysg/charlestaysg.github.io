@@ -1,9 +1,9 @@
 """Check the built page against the Pulse, the Landscape and the SSIC table. Exit 1 on any failure.
 
 Run:  python3 check.py   (after ssic.py and build.py)
-Sector figures are recomputed from the Pulse snapshot, course figures read from the Landscape's
-latest.json, and top-course attendance counted straight from the Landscape's raw XLSX with plain
-openpyxl (not through its clean.py).
+Sector figures are recomputed from the Pulse snapshot and course totals read from the Landscape's
+latest.json. The course list is read live from the Course Finder's per-sector files, so this checks
+that every sector has a file in the shape the page expects.
 """
 import ast, json, os, pathlib, re, sys
 
@@ -14,6 +14,8 @@ def sibling(*names):  # vault folder names first, then the site repo's tools/ na
     return next((HERE.parent / n for n in names if (HERE.parent / n).exists()), HERE.parent / names[0])
 PULSE = pathlib.Path(os.environ.get("UEN_PULSE_DIR") or sibling("sme-workforce-pulse", "sme-pulse"))
 LAND = pathlib.Path(os.environ.get("UEN_LAND_DIR") or sibling("skills-training-landscape", "skills-landscape"))
+FINDER = pathlib.Path(os.environ.get("UEN_FINDER_DIR") or sibling("course-finder"))
+FINDER_OUT = pathlib.Path(os.environ.get("UEN_FINDER_OUT") or HERE.parent.parent / "projects" / "course-finder" / "data")
 fails = []
 
 
@@ -78,31 +80,22 @@ bad = [k for k in baked["sectors"] if any(
     baked["sectors"][k]["courses"][f] != latest["groups"][k][f] for f in ("n", "providers", "ai", "fee_median"))]
 check("course n/providers/ai/fee_median equal Landscape latest.json", not bad, str(bad) if bad else "")
 check("national course figures equal latest.json", all(baked["allCourses"][f] == latest["groups"]["all"][f] for f in ("n", "providers", "ai", "fee_median")))
-check("top-5 providers equal latest.json", all(baked["sectors"][k]["courses"]["top"] == [t for t in latest["groups"][k]["top"][:5]] for k in baked["sectors"]))
 check("course date matches Landscape", baked["asof"]["courses"] == latest["datasets"]["directory"]["updated"][:10])
 
-# top-8 titles vs the raw XLSX
-try:
-    import openpyxl
-    it = openpyxl.load_workbook(LAND / "data" / "raw" / "directory.xlsx", read_only=True).active.iter_rows(values_only=True)
-    head = next(it)
-    att = {}
-    for r in it:
-        d = dict(zip(head, r))
-        t = re.sub(r"\s+", " ", str(d["coursetitle"] or "").replace("_x000D_", "")).strip()
-        try:
-            a = float(d["attendancecount"])
-        except (TypeError, ValueError):
-            continue
-        att.setdefault(t, set()).add(int(a))
-    bad = [(k, t[0]) for k, c in list(baked["sectors"].items()) + [("all", {"courses": baked["allCourses"]})]
-           for t in c["courses"]["titles"] if t[2] not in att.get(t[0], set())]
-    check("top-8 course titles exist with those attendance values", not bad, str(bad[:3]) if bad else "")
-    check("each sector has up to 8 titles, sorted by attendance", all(
-        len(c["courses"]["titles"]) <= 8 and [t[2] for t in c["courses"]["titles"]] == sorted((t[2] for t in c["courses"]["titles"]), reverse=True)
-        for c in baked["sectors"].values()))
-except FileNotFoundError:
-    check("Landscape raw directory.xlsx available for the top-8 check", False)
+# Course Finder files the page reads at run time
+FIELDS = ["ref", "title", "provider", "hours", "mode", "fee", "stars", "respondents", "ai", "dates", "runs"]
+fmeta = json.loads((FINDER / "data" / "meta.json").read_text())
+check("Course Finder sector keys equal the sheet's", [s["key"] for s in fmeta["sectors"] if s["key"] != "general"] == list(baked["sectors"]))
+check("rating threshold equals the Course Finder's", baked["finder"]["min_respondents"] == fmeta["min_respondents"])
+bad = []
+for k in list(baked["sectors"]) + ["general"]:
+    f = FINDER_OUT / f"{k}.json"
+    if not f.exists():
+        bad.append(f"{k}: missing"); continue
+    j = json.loads(f.read_text())
+    if j.get("f") != FIELDS or not j.get("c") or any(str(r[2]) not in j["p"] for r in j["c"]):
+        bad.append(f"{k}: shape")
+check("every sector has a Course Finder file in the expected shape", not bad, str(bad) if bad else "")
 
 # SSIC
 smap = json.loads((HERE / "data" / "ssic-map.json").read_text())

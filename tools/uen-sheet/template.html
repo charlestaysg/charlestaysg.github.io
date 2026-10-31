@@ -129,11 +129,15 @@ footer p{margin:0 0 8px}
 .stats .was{font-size:12px;color:var(--muted)}
 .survey.mini{padding:12px;margin:12px 0 0}
 .survey.mini .stat .big{font-size:22px}
-.two{display:grid;grid-template-columns:1fr 1.6fr;gap:16px;margin-top:12px}
-.two h3,.sc h3{font-size:13px;margin:0 0 4px;font-weight:600}
-.two ol,.two ul,.sc ul{margin:0;padding-left:18px;font-size:13px;color:var(--ink-2)}
-.two li{padding:1px 0}
-.two li span{color:var(--muted);font-size:12px}
+.clist{margin-top:12px}
+.clist h3,.sc h3{font-size:13px;margin:0 0 4px;font-weight:600}
+.clist ol,.sc ul{margin:0;padding-left:18px;font-size:13px;color:var(--ink-2)}
+.clist li{padding:2px 0}
+.clist li a{color:var(--ink);text-decoration:none}
+.clist li a:hover{color:var(--accent);text-decoration:underline}
+.clist li span{display:block;color:var(--muted);font-size:12px}
+.clist p{font-size:13px;color:var(--ink-2);margin:0}
+.cflinks{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px}
 .sc{font-size:13px;margin-top:12px}
 .sc p{margin:0 0 4px;color:var(--ink-2)}
 .qlist{margin:10px 0 0;padding-left:20px;font-size:14px}
@@ -287,7 +291,8 @@ footer p{margin:0 0 8px}
       <h2 id="th"></h2>
       <p class="hint" id="thint"></p>
       <div class="stats" id="tstats"></div>
-      <div class="two" id="two"></div>
+      <div class="clist" id="clist"></div>
+      <div class="cflinks noprint" id="cfLinks"></div>
       <div class="sc" id="sctp"></div>
       <div class="sklinks noprint" id="skLinks"></div>
       <p class="src" id="srcTrain"></p>
@@ -316,7 +321,10 @@ const fmt = new Intl.NumberFormat('en-SG');
 const $ = id => document.getElementById(id);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const qLabel = q => q.replace('-', ' ');
-const fmtDate = d => new Date(d + 'T00:00:00+08:00').toLocaleDateString('en-SG', {day:'numeric', month:'short', year:'numeric', timeZone:'Asia/Singapore'});
+// Calendar dates are read and shown in UTC: Singapore was UTC+7:30 before 1982, so a +08:00 parse put older dates a day early.
+const fmtDate = d => new Date(d.slice(0, 10) + 'T00:00:00Z').toLocaleDateString('en-SG', {day:'numeric', month:'short', year:'numeric', timeZone:'UTC'});
+// Today in Singapore as YYYY-MM-DD
+const TODAY = new Date().toLocaleDateString('en-CA', {timeZone:'Asia/Singapore'});
 // Warn readers when the monthly refresh has stopped: over 40 days allows for one late run.
 const flagStale = (iso, label) => {
   const days = Math.floor((Date.now() - Date.parse(iso.slice(0, 10) + 'T00:00:00+08:00')) / 864e5);
@@ -332,7 +340,10 @@ const API = 'https://data.gov.sg/api/action/datastore_search';
 const UEN_RE = /^(\d{8}|\d{9})[A-Z]$|^[TSR]\d{2}[A-Z]{2}\d{4}[A-Z]$/;
 // Live dashboards on the public site; full URLs so the links work wherever this page is opened
 const SITE = 'https://charlestaysg.com/projects/';
-const LANDSCAPE = SITE + 'skills-landscape/', PULSE = SITE + 'sme-pulse/';
+const LANDSCAPE = SITE + 'skills-landscape/', PULSE = SITE + 'sme-pulse/', FINDER = SITE + 'course-finder/';
+// Course Finder's per-sector files, read from the same site so the list is as fresh as Course Finder
+const FINDER_DATA = '../course-finder/data/';
+const COURSE_URL = 'https://courses.myskillsfuture.gov.sg/courses/';
 const SFW_BASE = 'https://jobsandskills.skillsfuture.gov.sg/resources/skills-framework-sector/';
 const DEMAND_DASH = 'https://jobsandskills.swda.gov.sg/data-and-tools/dashboards/job-skills-demand-trends-dashboard';
 const SFW_INDEX = 'https://jobsandskills.swda.gov.sg/frameworks/sector-information';
@@ -412,6 +423,12 @@ async function fetchRecord(uen, id){
     rec.ssic1 = clean(r.primary_ssic_code); rec.ssic2 = clean(r.secondary_ssic_code);
     rec.act1 = clean(r.primary_user_described_activity); rec.act2 = clean(r.secondary_user_described_activity);
     rec.officers = clean(r.no_of_officers);
+    // full company address: this file covers corporate entities only, never sole proprietors
+    if (!isSole(rec.type)) {
+      const blk = clean(r.block), st = clean(r.street_name), lvl = clean(r.level_no), unit = clean(r.unit_no), bld = clean(r.building_name);
+      if (st) rec.street = [blk, st].filter(Boolean).join(' ') + (lvl && unit ? ` #${lvl}-${unit}` : '') + (bld ? ', ' + bld : '');
+      if (clean(r.postal_code)) rec.postal = clean(r.postal_code);
+    }
     for (let i = 1; i <= 3; i++) { const f = clean(r['former_entity_name' + i]); if (f) rec.former.push(f); }
     for (let i = 1; i <= 5; i++) { const a = clean(r['name_of_audit_firm' + i]); if (a) rec.audit.push(a); }
     break;
@@ -445,7 +462,8 @@ function placeSector(r){
   } else out.notes.push(`No Pulse sector for SSIC division ${p.div} (${D.divTitle[p.div] || 'division'}).`);
   return out;
 }
-const yearsSince = d => { if (!d) return null; const a = new Date(d + 'T00:00:00+08:00'), n = new Date(); let y = n.getFullYear() - a.getFullYear(); if (n.getMonth() < a.getMonth() || (n.getMonth() === a.getMonth() && n.getDate() < a.getDate())) y--; return Math.max(0, y); };
+// whole years from a YYYY-MM-DD date to today in Singapore, compared as plain calendar dates
+const yearsSince = d => { if (!d) return null; let y = +TODAY.slice(0, 4) - +d.slice(0, 4); if (TODAY.slice(5, 10) < d.slice(5, 10)) y--; return Math.max(0, y); };
 const isLive = st => /^live/i.test(st || '') || st === 'Registered';
 const isSole = t => /sole|partnership/i.test(t || '');
 // A sole proprietorship's or partnership's business name is often the owner's own name, so it is
@@ -488,7 +506,7 @@ function render(rec, how){
   if (rec.nameHidden) row('Name', '<small>Not shown. The name of a sole proprietorship or partnership is often the owner\'s own name. It is on <a href="https://www.bizfile.gov.sg" rel="noopener">ACRA Bizfile</a> if you need it.</small>');
   row('UEN', esc(rec.uen));
   row('Entity type', esc(rec.type) + (rec.kind === 'other' && rec.issuer ? ` <small>· issued by ${esc(rec.issuer)}</small>` : ''));
-  if (rec.inc) row('Incorporated', `${fmtDate(rec.inc)} <small>· ${yrs} year${yrs === 1 ? '' : 's'}</small>`);
+  if (rec.inc) row(isSole(rec.type) ? 'Registered' : 'Incorporated', `${fmtDate(rec.inc)} <small>· ${yrs} year${yrs === 1 ? '' : 's'}</small>`);
   else if (rec.issued) row('UEN issued', `${fmtDate(rec.issued)} <small>· ${yrs} year${yrs === 1 ? '' : 's'} ago</small>`);
   const ssicLine = (i, act) => i ? `${esc(i.code)} · ${i.title ? esc(i.title) : '<em>not in SSIC 2025 table</em>'}${act ? `<br><small>Described by the entity as: ${esc(act)}</small>` : ''}` : '';
   if (rec.kind === 'acra' && !rec.partial) {
@@ -558,9 +576,9 @@ function renderSector(S, P){
 
 function renderTraining(S, sector){
   const C = S ? S.courses : D.allCourses, q = fmtDate(D.asof.courses);
-  $('th').textContent = S ? `Training supply for this sector · ${S.label}` : 'Training supply · all sectors';
+  $('th').textContent = S ? `Courses for this industry · ${S.label}` : 'Courses · all sectors';
   $('thint').textContent = S
-    ? `SkillsFuture-listed courses that our keyword rules place in this sector. A course is placed by its title, so treat the counts as a guide.`
+    ? `SkillsFuture-listed courses that the Course Finder places in this sector, the sector of the company's SSIC code. A course is placed by its title, so treat the list and counts as a guide.`
     : 'No Pulse sector applies, so these are the figures for all SkillsFuture-listed courses.';
   const aiPct = C.n ? Math.round(C.ai / C.n * 100) : 0;
   $('tstats').innerHTML =
@@ -568,9 +586,7 @@ function renderTraining(S, sector){
      <div><div class="big">${fmt.format(C.providers)}</div><div class="what">providers</div></div>
      <div><div class="big">${fmt.format(C.ai)} (${aiPct}%)</div><div class="what">AI-related, by title</div></div>
      <div><div class="big">${C.fee_median == null ? '–' : '$' + fmt.format(C.fee_median)}</div><div class="what">median full fee</div><div class="was">universities left out</div></div>`;
-  const top = C.top.slice(0, 5).map(t => `<li>${esc(t[0])} <span>· ${fmt.format(t[2])} courses</span></li>`).join('');
-  const titles = C.titles.map(t => `<li>${esc(t[0])} <span>· ${esc(t[1])} · ${fmt.format(t[2])} attended</span></li>`).join('');
-  $('two').innerHTML = `<div><h3>Top providers by courses listed</h3><ol>${top}</ol></div><div><h3>Most-attended courses</h3><ol>${titles}</ol></div>`;
+  renderCourses(S, sector);
   // SCTPs and Skills Framework links need a sector
   const sc = $('sctp'), sk = $('skLinks');
   if (S) {
@@ -593,7 +609,89 @@ function renderTraining(S, sector){
     sk.innerHTML = `<a href="${SFW_INDEX}" rel="noopener">Skills Frameworks for 38 sectors ↗<small>SWDA Jobs-Skills Portal</small></a>`;
     $('landLink').href = LANDSCAPE;
   }
-  $('srcTrain').innerHTML = `Source: MySkillsFuture Course Directory (SWDA/SSG) via data.gov.sg, published ${q}; sector placement by keyword rules (Skills Training Landscape). SCTP lists collected by hand ${fmtDate(D.sctpCollected)} from public pages of ${D.sctpInst.map(i => esc(i)).join(', ')}. Baked into this page, not live.`;
+  $('srcTrain').innerHTML = `Source: MySkillsFuture Course Directory and Course Run (SWDA) via data.gov.sg, published ${q}; sector placement by keyword rules (Skills Training Landscape). Totals baked into this page; the course list is read from the <a href="${FINDER}">Course Finder</a>, which refreshes monthly. SCTP lists collected by hand ${fmtDate(D.sctpCollected)} from public pages of ${D.sctpInst.map(i => esc(i)).join(', ')}.`;
+}
+
+/* ---------- courses for the sector, from the Course Finder's files ---------- */
+const finderCache = {};
+function loadFinder(key){
+  return finderCache[key] || (finderCache[key] = fetch(FINDER_DATA + key + '.json').then(r => {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }).then(j => j.c.map(r => {
+    // row: [ref, title, provider id, hours, mode, fee, stars, respondents, ai, dates, runs]; stored dates that have passed are skipped
+    const next = r[9].find(d => d >= TODAY) || null;
+    return {ref: r[0], title: r[1], pv: j.p[r[2]][0], hours: r[3], fee: r[5], stars: r[6], resp: r[7], next,
+            rated: r[6] != null && r[7] != null && r[7] >= D.finder.min_respondents, stems: new Set(r[1].toLowerCase().match(/[a-z]+/g) || [])};
+  })).catch(e => { delete finderCache[key]; throw e; }));
+}
+// Words from the SSIC titles that say what the business makes or does. Generic words are dropped, and so is
+// anything after "except", so "food products (except food chemicals and additives)" gives only "food".
+const SSIC_STOP = new Set(('manufacture manufacturing repair repairs other others nec the and for with without from into products product '
+  + 'equipment services service activities activity related including include wholesale trade retail sale sales general goods variety '
+  + 'dominant elsewhere classified parts accessories similar industries industry supplies supply items articles materials material made '
+  + 'use based specialised mainly main n.e.c').split(' '));
+const stem = w => w.length > 6 ? w.slice(0, 6) : w;
+function ssicWords(...infos){
+  const out = new Set();
+  for (const i of infos) {
+    if (!i || !i.title || i.holding) continue;
+    const t = i.title.toLowerCase().replace(/\(?\bexcept\b[^)]*\)?/g, ' ');
+    for (const w of t.match(/[a-z]+/g) || []) if (w.length > 2 && !SSIC_STOP.has(w)) out.add(w);
+  }
+  return [...out];
+}
+// soonest class first, then rating, then title (as in the Course Finder)
+function byNext(a, b){
+  if (!!a.next !== !!b.next) return a.next ? -1 : 1;
+  if (a.next !== b.next) return a.next < b.next ? -1 : 1;
+  const ra = a.rated ? a.stars : -1, rb = b.rated ? b.stars : -1;
+  if (ra !== rb) return rb - ra;
+  return a.title.localeCompare(b.title, 'en');
+}
+const SHOW_COURSES = 8;
+let courseRun = 0;
+function renderCourses(S, sector){
+  const id = ++courseRun, box = $('clist'), links = $('cfLinks');
+  const label = k => (D.sectors[k] || {}).label || k;
+  const a = (href, text) => `<a class="linkbtn" href="${href}" rel="noopener">${text}</a>`;
+  let h = S ? a(FINDER + '?sector=' + encodeURIComponent(S.key), `Open ${esc(S.label)} in the Course Finder →`) : a(FINDER, 'Open the Course Finder →');
+  // the secondary activity can sit in another sector
+  const s2 = sector.s && sector.s.title && !sector.s.holding && sector.s.sector;
+  if (S && s2 && s2 !== S.key) h += a(FINDER + '?sector=' + encodeURIComponent(s2), `Secondary activity: ${esc(label(s2))} courses →`);
+  h += a(FINDER + '?sector=general', 'Cross-sector courses →');
+  links.innerHTML = h;
+  if (!S) { box.innerHTML = '<p>No sector applies, so no course list. Pick a sector in the Course Finder.</p>'; return; }
+  const codes = [sector.p, sector.s].filter(i => i && i.title && !i.holding);
+  const words = ssicWords(...codes), wstems = words.map(stem);
+  box.innerHTML = '<p>Loading courses from the Course Finder…</p>';
+  loadFinder(S.key).then(cs => {
+    if (id !== courseRun) return;
+    const dated = cs.filter(c => c.next).length;
+    // courses whose titles share a word with the SSIC activity come first, then the soonest class
+    const hits = c => wstems.filter(s => [...c.stems].some(t => stem(t) === s));
+    const scored = cs.map(c => ({c, h: hits(c)}));
+    const matched = scored.filter(x => x.h.length).length;
+    scored.sort((a, b) => b.h.length - a.h.length || byNext(a.c, b.c));
+    // one line per title: the same course from several providers is shown once
+    const seen = new Map(), pick = [];
+    for (const x of scored) {
+      const k = x.c.title.toLowerCase().replace(/\s+/g, ' ').trim();
+      if (seen.has(k)) { seen.get(k).more++; continue; }
+      if (pick.length === SHOW_COURSES) continue;
+      const p = {...x, more: 0}; seen.set(k, p); pick.push(p);
+    }
+    const row = ({c, h, more}) => `<li><a href="${COURSE_URL}${encodeURIComponent(c.ref)}" target="_blank" rel="noopener">${esc(c.title)}</a><span>${esc(c.pv)}${more ? ` (+${more} other provider${more === 1 ? '' : 's'})` : ''} · ${c.next ? 'next class ' + fmtDate(c.next) : 'no date listed'}${c.hours != null ? ' · ' + (Math.round(c.hours * 10) / 10) + ' h' : ''}${c.fee != null ? ' · full fee $' + fmt.format(c.fee) : ''}${h.length ? ' · matches: ' + h.map(s => esc(words[wstems.indexOf(s)])).join(', ') : ''}</span></li>`;
+    const codeText = codes.map(i => esc(i.code)).join(' and ');
+    box.innerHTML = `<h3>Courses for SSIC ${codeText || '–'} → ${esc(S.label)}</h3>
+      <p>${!words.length ? `${fmt.format(cs.length)} courses in this sector, soonest class first.`
+        : matched ? `${fmt.format(matched)} of ${fmt.format(cs.length)} courses in this sector have a title that shares a word with the SSIC activity (${words.map(esc).join(', ')}). They come first; then the soonest class.`
+        : `No course title among the ${fmt.format(cs.length)} in this sector shares a word with the SSIC activity (${words.map(esc).join(', ')}), so these are the soonest classes.`} ${fmt.format(dated)} have a class date from today. Each opens on MySkillsFuture.</p>
+      <ol>${pick.map(row).join('')}</ol>`;
+  }, () => {
+    if (id !== courseRun) return;
+    box.innerHTML = `<p>Could not load the course list. ${a(FINDER + '?sector=' + encodeURIComponent(S.key), 'Open the Course Finder →')}</p>`;
+  });
 }
 
 function renderQuestions(rec, sector, S, P, yrs, live){
@@ -626,8 +724,8 @@ function renderFooter(){
   const now = Date.now();
   $('foot').innerHTML = `
     <div class="foot-actions"><span>Generated on ${fmtStamp(now)} (Singapore time)</span><button class="btn noprint" type="button" id="printBtn">Print or save as PDF</button></div>
-    <p>Contains information from ${links}, accessed from data.gov.sg and made available under the terms of the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence version 1.0</a>. Company records: Accounting and Corporate Regulatory Authority (ACRA), looked up live. Vacancies and retrenchments: Labour Market Survey, Manpower Research &amp; Statistics Department, Ministry of Manpower (baked in on ${fmtDate(D.asof.built)}). Courses: MySkillsFuture Course Directory, Skills and Workforce Development Agency (SWDA/SSG). SME AI adoption: Infocomm Media Development Authority (IMDA) survey. Industry codes: Singapore Standard Industrial Classification 2025, Department of Statistics Singapore (SingStat).</p>
-    <p>This is an unofficial teaching example, not a product of ACRA, MOM, SWDA, IMDA or any government agency, and it is not advice. It shows entity-level public data only. Only the company lookup is live; sector and course figures are snapshots and may be out of date.</p>`;
+    <p>Contains information from ${links}, accessed from data.gov.sg and made available under the terms of the <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence version 1.0</a>. Company records: Accounting and Corporate Regulatory Authority (ACRA), looked up live. Vacancies and retrenchments: Labour Market Survey, Manpower Research &amp; Statistics Department, Ministry of Manpower (baked in on ${fmtDate(D.asof.built)}). Courses: MySkillsFuture Course Directory and Course Run, Skills and Workforce Development Agency (SWDA). SME AI adoption: Infocomm Media Development Authority (IMDA) survey. Industry codes: Singapore Standard Industrial Classification 2025, Department of Statistics Singapore (SingStat).</p>
+    <p>This is an unofficial teaching example, not a product of ACRA, MOM, SWDA, IMDA or any government agency, and it is not advice. It shows entity-level public data only. The company lookup is live. The course list comes from the Course Finder, refreshed monthly; sector figures and course totals are snapshots and may be out of date.</p>`;
   $('printBtn').onclick = () => window.print();
 }
 
@@ -645,7 +743,7 @@ async function lookupUen(uen){
     if (id !== run) return;
     if (rec.notFound) {
       $('sheet').hidden = true; $('empty').hidden = false;
-      $('empty').textContent = 'Not in the ACRA register. Statutory boards, schools and ministries are not listed.';
+      $('empty').textContent = 'Not found in the ACRA register or in the list of entities registered with other issuers on data.gov.sg. Check the UEN on ACRA Bizfile.';
       setStatus(`No record found for ${uen}.`); busy(false); return;
     }
     cacheSet(uen, rec);
