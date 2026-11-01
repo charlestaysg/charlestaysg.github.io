@@ -80,10 +80,13 @@
       </div>
       <div class="chips" role="group" aria-label="Show only" hidden>
         <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span>52</span></button>
-        <button type="button" class="chip" data-filter="sme" aria-pressed="false">For SME owners <span>9</span></button>
-        <button type="button" class="chip" data-filter="haze" aria-pressed="false">Live haze <span>2</span></button>
+        <button type="button" class="chip" data-filter="sme" aria-pressed="false">For SME owners <span>8</span></button>
+        <button type="button" class="chip" data-filter="live" aria-pressed="false">Live data <span>3</span></button>
         <button type="button" class="chip" data-filter="explainers" aria-pressed="false">Explainers <span>5</span></button>
-        <button type="button" class="chip" data-filter="experiments" aria-pressed="false">Experiments <span>36</span></button>
+        <button type="button" class="chip" data-filter="songs-work" aria-pressed="false">Songs about work <span>12</span></button>
+        <button type="button" class="chip" data-filter="songs-life" aria-pressed="false">Songs from my life <span>14</span></button>
+        <button type="button" class="chip" data-filter="stories" aria-pressed="false">Stories <span>6</span></button>
+        <button type="button" class="chip" data-filter="fun" aria-pressed="false">Just for fun <span>4</span></button>
       </div>
       <div class="cards">
         <article class="card" id="uen-sheet" data-group="sme">
@@ -131,18 +134,6 @@
           <div class="links"><a href="projects/course-finder/">Open the finder →</a><a href="https://www.myskillsfuture.gov.sg" rel="noopener">MySkillsFuture ↗</a></div>
             <details class="more-info"><summary>More about this</summary>
               <p>The course-by-course companion to the Skills Training Landscape. Choose a sector, then filter by provider type, length, study mode, full fee or AI-related titles, or search by keyword. Each card shows the next class date where the source lists one, and links to the course page on MySkillsFuture. Built from MySkillsFuture open data; no login needed. Unofficial; MySkillsFuture is the official source.</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="workplace-conditions" data-group="sme">
-          <a class="thumb" href="projects/workplace-conditions/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/workplace-conditions.jpg" alt="" loading="lazy"></a>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">For SME owners</span> <span class="spec">live · NEA WBGT, 30 stations</span></span>
-            <h3>Live Workplace Conditions</h3>
-            <p>For people who work outdoors: NEA&rsquo;s heat-stress reading for the nearest station, turned into MOM&rsquo;s rest and water guidance.</p>
-          <div class="links"><a href="projects/workplace-conditions/">Open the page →</a><a href="https://www.mom.gov.sg/heat-stress-measures-for-outdoor-work" rel="noopener">MOM heat stress ↗</a></div>
-            <details class="more-info"><summary>More about this</summary>
-              <p>For people who work outdoors, in construction, delivery, cleaning, landscaping or security. NEA's heat-stress reading for the station nearest where you work, turned into MOM's rest and water guidance, with a one-tap WhatsApp message to your supervisor, water and rest-break reminders, a heat-illness check and today's heat chart. Settings stay on your phone. Unofficial; MOM and NEA are the official sources.</p>
             </details>
           </div>
         </article>
@@ -194,10 +185,22 @@
             </details>
           </div>
         </article>
-        <article class="card" id="sg-haze" data-group="haze">
+        <article class="card" id="workplace-conditions" data-group="live">
+          <a class="thumb" href="projects/workplace-conditions/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/workplace-conditions.jpg" alt="" loading="lazy"></a>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Live data</span> <span class="spec">live · NEA WBGT, 30 stations</span></span>
+            <h3>Live Workplace Conditions</h3>
+            <p>For people who work outdoors: NEA&rsquo;s heat-stress reading for the nearest station, turned into MOM&rsquo;s rest and water guidance.</p>
+          <div class="links"><a href="projects/workplace-conditions/">Open the page →</a><a href="https://www.mom.gov.sg/heat-stress-measures-for-outdoor-work" rel="noopener">MOM heat stress ↗</a></div>
+            <details class="more-info"><summary>More about this</summary>
+              <p>For people who work outdoors, in construction, delivery, cleaning, landscaping or security. NEA's heat-stress reading for the station nearest where you work, turned into MOM's rest and water guidance, with a one-tap WhatsApp message to your supervisor, water and rest-break reminders, a heat-illness check and today's heat chart. Settings stay on your phone. Unofficial; MOM and NEA are the official sources.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="sg-haze" data-group="live">
           <a class="thumb" href="projects/sg-haze/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/sg-haze.jpg" alt="" loading="lazy"></a>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Live haze</span> <span class="spec">live · NEA hourly PM2.5 · US AQI</span></span>
+            <span class="card-meta"><span class="tag">Live data</span> <span class="spec">live · NEA hourly PM2.5 · US AQI</span></span>
             <h3>Singapore Haze, Hourly</h3>
             <p>One page instead of two: NEA&rsquo;s 1-hour PM2.5 next to the US AQI for each region, with wind, rain, haze news and a GP finder.</p>
           <div class="links"><a href="projects/sg-haze/">Open the haze page →</a><a href="https://www.haze.gov.sg" rel="noopener">NEA haze.gov.sg ↗</a></div>
@@ -213,10 +216,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="jb-haze" data-group="haze">
+        <article class="card" id="jb-haze" data-group="live">
           <a class="thumb" href="projects/jb-haze/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/jb-haze.jpg" alt="" loading="lazy"></a>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Live haze</span> <span class="spec">live · DOE APIMS hourly · EN/BM</span></span>
+            <span class="card-meta"><span class="tag">Live data</span> <span class="spec">live · DOE APIMS hourly · EN/BM</span></span>
             <h3>Johor Bahru Haze, Hourly</h3>
             <p>The Johor side of the haze: DOE Malaysia&rsquo;s hourly reading for each station on a map, in English and Bahasa Melayu.</p>
           <div class="links"><a href="projects/jb-haze/">Open the JB haze page →</a><a href="https://eqms.doe.gov.my/APIMS/main" rel="noopener">APIMS (official) ↗</a></div>
@@ -294,22 +297,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="the-smile-of-those-days" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="_-uW-E4CVco" aria-label="Play The Smile of Those Days on YouTube"><img src="projects/the-smile-of-those-days/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">song + music video &middot; 4 min 13 s &middot; archive film, black and white to colour</span></span>
-            <h3>The Smile of Those Days</h3>
-            <p>A song for Audrey Hepburn. An old cinema, the projector starts to turn, and there she is again: Rome on a Vespa, a Paris afternoon on the water. On one line, the whole picture turns to colour.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>Every shot is archive film marked public domain on the Internet Archive: trailers for <i>Roman Holiday</i>, <i>Love in the Afternoon</i> and <i>The Unforgiven</i>, <i>Charade</i> (shown without its original soundtrack) and a 1963 newsreel of the <i>Charade</i> premiere. The song stays in black and white until &ldquo;The world turned into colour&rdquo;, and the first colour frame lands on that line.</p>
-              <p class="credit">Lyrics by Claude &middot; AI-generated music and voice (Suno) &middot; Archive footage: Internet Archive (Public Domain Mark) &middot; Edited with ffmpeg</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="level-four-block-w6" data-group="experiments">
+        <article class="card" id="level-four-block-w6" data-group="songs-work">
           <div class="player"><button type="button" class="yt" data-yt="G-4GEj7rZo4" aria-label="Play Level Four, Block W6 on YouTube"><img src="projects/level-four-block-w6/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">song + storybook video · 5 min 43 s · English</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">song + storybook video · 5 min 43 s · English</span></span>
             <h3>Level Four, Block W6</h3>
             <p>A thank-you song to the lecturers who taught me AI in 2025, and the team behind them. It ends with a note to anyone starting late: you&rsquo;re not discarded, and you won&rsquo;t be alone.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -319,35 +310,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="zhang-da-jiu-dong" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="fTqK1_LONZc" aria-label="Play 长大就懂 (You'll Understand When You're Older) on YouTube"><img src="projects/zhang-da-jiu-dong/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">xinyao-style song + storybook video · 3 min 19 s · 中文, English subtitles</span></span>
-            <h3>长大就懂 (You&rsquo;ll Understand When You&rsquo;re Older)</h3>
-            <p>A song made of the things Singapore parents used to say: be home before dark, don&rsquo;t sit so close to the TV, off the fan, you think this is a hotel? Years later, you hear the same words coming out of your own mouth.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>It started from a poster of things every parent said. I swapped in the lines Singapore parents say, then followed them from an HDB flat in the 1980s to leaving home, to phone calls that only ever asked 吃饭了没有, to coming home late and finding one light still on. The pictures are drawn like a children&rsquo;s storybook.</p>
-              <p class="credit">Created by Charles Tay &middot; Lyrics written with Claude &middot; AI-generated music and pictures (ChatCut, Qwen-Image in ComfyUI) &middot; Video: HyperFrames</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="where-the-trees-are" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="ogsqQjtB9fI" aria-label="Play 有树的地方 (Where the Trees Are) on YouTube"><img src="projects/where-the-trees-are/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">song + music video · 4 min 30 s · 中文, English subtitles · piano</span></span>
-            <h3>有树的地方 (Where the Trees Are)</h3>
-            <p>A song for Xia Jinhe (夏瑾禾), Miracle Xiaxia, who died in Shanghai on 27 October, aged 23. At 19 she signed her own consent form to lose her leg. She ran a street stall on a prosthetic leg, turned down crowdfunding, and asked to be buried where there are trees.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>I read about her on 30 October and kept thinking about the empty chair beside her hospital bed. The song is sung by a stranger, the way thousands of strangers left her the same words: 夏夏，晚安. There is no picture of her and no voice pretending to be hers, only the things and places from her story.</p>
-              <p><a href="projects/where-the-trees-are/">Her story in English and 中文, and the lyrics &rarr;</a></p>
-              <p class="credit">Song and lyrics by Charles Tay &middot; AI-generated music, voice and pictures (ChatCut, Google Flow, ComfyUI) &middot; Video: HyperFrames</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="so-far-so-good" data-group="experiments">
+        <article class="card" id="so-far-so-good" data-group="songs-work">
           <div class="player"><button type="button" class="yt" data-yt="w-EqJEDLzbM" aria-label="Play So Far, So Good on YouTube"><img src="projects/so-far-so-good/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">song + music video · 4 min 41 s · watercolour + a hand-drawn meter</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">song + music video · 4 min 41 s · watercolour + a hand-drawn meter</span></span>
             <h3>So Far, So Good</h3>
             <p>A song about moving from teaching into a role where the work never quite closes. One hand-drawn meter carries the story: its needle creeps from green to red, then eases back with a little help.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -356,72 +322,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="night-the-lights-stayed-on" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="bTGrbiCHoBQ" aria-label="Play The Night the Lights Stayed On on YouTube"><img src="projects/the-night-the-lights-stayed-on/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">my first docudrama · 7 min 39 s · EN, 中文 subtitles · watercolour + archive film</span></span>
-            <h3>The Night the Lights Stayed On</h3>
-            <p>On Chinese New Year&rsquo;s eve, 93-year-old Ah Ma puts her granddaughter to bed and tells her a real war story: the first Japanese air raid on Singapore, 4 am, 8 December 1941.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>My first docudrama. Ah Ma and her family are made up; the air raid is real. 17 bombers came while the street lights were still on, 61 people died, and some who phoned for help were told it was only practice. The watercolours show what Ah Ma remembers, and the black-and-white film is real footage from December 1941. Her last line is the reason I made it: &ldquo;That Sunday, everybody also said, nobody can touch us. Same sky. Same lights. Don&rsquo;t take it for granted.&rdquo;</p>
-              <p><a href="projects/the-night-the-lights-stayed-on/">How it was made &rarr;</a></p>
-              <p class="credit">A film by Charles Tay &middot; Story and script by Charles Tay, written with Claude &middot; AI-generated voices, music and pictures &middot; Archive film: Australian War Memorial, US National Archives</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="song-across-the-water" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="CNuTToPRndY" aria-label="Play The Song Across the Water on YouTube"><img src="projects/the-song-across-the-water/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">my second docudrama · 9 min 11 s · Malay &amp; English, EN subtitles · watercolour</span></span>
-            <h3>The Song Across the Water</h3>
-            <p>On the night before National Day, a grandmother tells her grandson why Singapore has tanks. At 3.07 pm on 10 March 1965, a bomb went off in MacDonald House, where she worked.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>My second docudrama. Nenek and her family are made up; the bombing is real. Elizabeth Choo, Juliet Goh and Mohammed Yasin Kesit died and 33 people were hurt, in one of 37 bombings in Singapore during Konfrontasi. The bombers hoped Malays and Chinese would turn on each other. The bomb killed two Chinese women and a Malay man. The facts come from the 1965 Straits Times on NewspaperSG.</p>
-              <p class="credit">A film by Charles Tay &middot; Story and script by Charles Tay, written with Claude &middot; AI-generated voices and pictures &middot; Music: &ldquo;Rasa Sayang&rdquo; (traditional)</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="cut-off-times" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="tJzIly-IK5Y" aria-label="Play Cut-off Times on YouTube"><img src="projects/cut-off-times/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">my third docudrama · 13 min 6 s · English, captions · watercolour</span></span>
-            <h3>Cut-off Times</h3>
-            <p>Boon Hock, 52, has planned freight routes for a small family firm in Ubi for 23 years. When the founder retires and the firm closes, the office laptop goes back. His own handwritten notebook goes home with him.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>My third docudrama, and the first about work. Boon Hock, his family and the firm are made up. The figures the narrator gives are real, with sources in the YouTube description: sea freight up about a quarter in three months, fewer than three in ten firms with a succession plan, and fewer retrenched workers in their 50s back at work within six months. The notebook he kept for himself is what gets him his next job: rostering home-care nurses in Sengkang.</p>
-              <p class="credit">A film by Charles Tay &middot; Story and script by Charles Tay, written with Claude &middot; AI-generated voices and pictures (Fish Audio, Google Flow, Qwen-Image) &middot; Video: HyperFrames</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="hold-my-hand" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="7ha7EH3vJAM" aria-label="Play Hold My Hand on YouTube"><img src="projects/the-night-the-lights-stayed-on/song-poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 40 s · duet lullaby · EN, 华语 bridge · watercolour</span></span>
-            <h3>Hold My Hand 牵着我的手</h3>
-            <p>The song from the film. Ah Ma sings her granddaughter to sleep, and her father sings back from the night of the first air raid in 1941.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>A slow lullaby duet in three-four time. Ah Ma tells the story of the biscuit tin; Pa is the one who phoned for help and was told it was only practice. In the Mandarin bridge he comforts his little girl, and she passes the same words on to Mei. The pictures are the film&rsquo;s watercolours. I sampled three pairs of voices before picking this one.</p>
-              <p><a href="projects/the-night-the-lights-stayed-on/#song">About the song &rarr;</a></p>
-              <p class="credit">Song and lyrics by Charles Tay, written with Claude &middot; AI-generated voices, music and pictures &middot; Made with ChatCut and Google Flow</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="lampu-suluh" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="5oaufsNSQWY" aria-label="Play Lampu Suluh on YouTube"><img src="projects/the-song-across-the-water/song-poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">4 min 49 s · lullaby · Malay, EN subtitles · watercolour</span></span>
-            <h3>Lampu Suluh (The Torch)</h3>
-            <p>The song from the film. Nenek sings her grandson to sleep on the eve of National Day: the bomb at MacDonald House, and the ordinary people who kept watch with a torch before Singapore had tanks.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>A slow keroncong lullaby in Malay. At 3.07 pm the music stops and only rain is heard, then it carries on with the three who never came home. The pictures are the film&rsquo;s watercolours. I made three takes and kept the one where every Malay line came through clearly.</p>
-              <p class="credit">Song and lyrics by Charles Tay, written with Claude &middot; AI-generated voice, music and pictures &middot; Made with ChatCut and Google Flow</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="reset-tomorrow" data-group="experiments">
+        <article class="card" id="reset-tomorrow" data-group="songs-work">
           <div class="player"><button type="button" class="yt" data-yt="JGh76LDNGgU" aria-label="Play Reset Tomorrow on YouTube"><img src="projects/reset-tomorrow/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 6 s &middot; city-pop &middot; English &middot; meme slideshow</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min 6 s &middot; city-pop &middot; English &middot; meme slideshow</span></span>
             <h3>Reset Tomorrow</h3>
             <p>11.47 pm, the AI helper is locked out and the report is due at nine. Out come a pen and an old note pad.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -430,34 +334,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="day-the-ai-went-quiet" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="osRsEEoHeyI" aria-label="Play The Day the AI Went Quiet on YouTube"><img src="projects/day-the-ai-went-quiet/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">2 min 52 s &middot; narrated story &middot; four voices &middot; illustrated</span></span>
-            <h3>The Day the AI Went Quiet</h3>
-            <p>A fourteen-person signage firm loses every AI tool on tender day. A pencilled ring binder, and the estimator everyone had stopped asking, get them through.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>A made-up story for small businesses that now run on AI. It ends with one question, does your team have a Plan B?, and five things to write on one page: where your templates and rates live, who can do it by hand, who is learning, who to call, and the first fifteen minutes.</p>
-              <p class="credit">Story by Charles Tay, written with Claude &middot; AI-generated voices, music and pictures &middot; Made with Fish Audio, ChatCut, Google Flow and HyperFrames</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="railway-promise" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="MdbAfePhKS4" aria-label="Play The Promise by the Railway on YouTube"><img src="projects/railway-promise/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 24 s &middot; xinyao folk &middot; Mandarin, EN subtitles &middot; watercolour</span></span>
-            <h3>铁道旁的约定 (The Promise by the Railway)</h3>
-            <p>Two schoolboys by the railway in 1986 promise to meet there when they are old. Forty years later, a message: &ldquo;是我啊，还记得铁道吗？&rdquo;</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>A campus-folk song in the spirit of the xinyao songs I grew up with. The station closed in 2011 and the tracks became the Rail Corridor. The song ends with a smaller promise: same place, next year.</p>
-              <p class="credit">Song and lyrics by Charles Tay, written with Claude &middot; AI-generated voices, music and pictures &middot; Made with ChatCut, Google Flow and HyperFrames</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="still-searching" data-group="experiments">
+        <article class="card" id="still-searching" data-group="songs-work">
           <div class="player"><button type="button" class="yt" data-yt="7xhVA9sB9IY" aria-label="Play Still Searching on YouTube"><img src="projects/still-searching/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">2 min 50 s · ballad · EN · notebook sketches</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">2 min 50 s · ballad · EN · notebook sketches</span></span>
             <h3>Still Searching</h3>
             <p>A song for anyone still looking for work, sung by an AI voice that isn&rsquo;t a singer yet and tries anyway. Her lyrics and pencil sketches fill a notebook as she sings.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -467,10 +347,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="iron-rice-bowl" data-group="experiments">
+        <article class="card" id="iron-rice-bowl" data-group="songs-work">
           <div class="player"><button type="button" class="yt" data-yt="uVWMerjlr-E" aria-label="Play Iron Rice Bowl on YouTube"><img src="projects/iron-rice-bowl/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">4 min 8 s · folk-pop · EN, 中文 · watercolour</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">4 min 8 s · folk-pop · EN, 中文 · watercolour</span></span>
             <h3>Iron Rice Bowl 铁饭碗</h3>
             <p>A man spends twenty years between the vendor and the users. Then a polite letter arrives, strangers online call his job jiak liao bee, and he has to start again at 52.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -479,10 +359,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="pending-concurrence" data-group="experiments">
+        <article class="card" id="pending-concurrence" data-group="songs-work">
           <div class="player"><button type="button" class="yt" data-yt="83TwTMDb7tU" aria-label="Play Pending Concurrence on YouTube"><img src="projects/pending-concurrence/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 9 s · pop jingle · EN</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min 9 s · pop jingle · EN</span></span>
             <h3>Pending Concurrence</h3>
             <p>A love song filed through the proper channels: a circular, an annex, a shortlist and three months&rsquo; probation.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -491,34 +371,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="dont-knock-it-till-you-try-lah" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="46e6mDbteiw" aria-label="Play Don&rsquo;t Knock It Till You Try Lah on YouTube"><img src="projects/dont-knock-it-till-you-try-lah/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">2 min 50 s · Short · Singlish · hawker food</span></span>
-            <h3>Don&rsquo;t Knock It Till You Try Lah</h3>
-            <p>A hawker-centre singalong about the strangest food combos in Singapore: kaya toast in laksa, satay sauce on chendol, chilli crab on ice cream.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>It started with a comedian&rsquo;s reel about gross food combos. I wrote new lyrics around local food instead, sang a rough draft with an AI model on my own laptop, then made the final song in ChatCut. The pictures come from one cast sheet of five cartoon characters, so the uncle, the auntie and the cousin look the same in every shot. Which one would you actually try?</p>
-              <p class="credit">Song and lyrics by Charles Tay · AI-generated music, voice and visuals · Made with Claude, ChatCut, Google Flow and HyperFrames</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="where-it-still-hurts" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="eQOCBG5Drqg" aria-label="Play 哪里还痛 (Where It Still Hurts) on YouTube"><img src="projects/where-it-still-hurts/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">4 min 9 s · duet · EN, 中文 · guzheng</span></span>
-            <h3>哪里还痛 (Where It Still Hurts)</h3>
-            <p>A song for Karen Nie (聂), our friend and physiotherapist for over ten years, who died suddenly this year.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>My wife, my friend Charlie and I saw Nie every month for ten years. It started with a haircut while I waited for my laptop to be fixed. She came from a village in China, trained as a physiotherapist here, and always opened with the same question: which part is sore today, shoulder, leg or back? The song turns that question around. The pictures are watercolours, and she is only ever seen from behind. A guzheng plays her out over the credits.</p>
-              <p class="credit">Song and lyrics by Charles Tay · AI-generated music, voice and visuals · Made with ChatCut, Logic Pro, Google Flow and HyperFrames</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="three-thousand-years" data-group="experiments">
+        <article class="card" id="three-thousand-years" data-group="songs-work">
           <div class="player"><button type="button" class="yt" data-yt="pYWEQCw0dwg" aria-label="Play Three Thousand Years (The Intern&rsquo;s Lament) on YouTube"><img src="projects/three-thousand-years/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 14 s · piano ballad · EN</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min 14 s · piano ballad · EN</span></span>
             <h3>Three Thousand Years (The Intern&rsquo;s Lament)</h3>
             <p>A very serious ballad about an intern who signed for &ldquo;three thousand&rdquo; and never asked the unit.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -527,36 +383,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="every-sound-came-from-a-mac" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="pnZVzHIEs_Q" aria-label="Play Every Sound Came From a Mac on YouTube"><img src="projects/every-sound-came-from-a-mac/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">1 min 29 s · instrumental · GarageBand</span></span>
-            <h3>Every Sound Came From a Mac</h3>
-            <p>A beat made only from the alert sounds already on my Mac and iPhone. No instruments, no sample packs.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>I saw a film where a producer builds a track out of the sounds Apple devices make, and wanted to try it with what was already on my laptop. The Glass alert became the chords, Bottle pitched down became the kick, the screenshot shutter became the snare, and Submarine became the bass. Each sound comes in one at a time, then they all play together, and it ends on a long chord. The stems sit in a 12-track GarageBand project. In the video, every flash and lane lands on the note it belongs to.</p>
-              <p class="credit">Music and video by Charles Tay · AI-assisted music and visuals · Made with GarageBand, Claude and HyperFrames</p>
-              <p><a href="projects/every-sound-came-from-a-mac/">How it was made, and the tools used →</a></p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="beijing-winter" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="MKLCrVj_Qmg" aria-label="Play 北京的冬天 (Beijing, Winter) on YouTube"><img src="projects/beijing-winter/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 35 s · duet · EN, 中文</span></span>
-            <h3>北京的冬天 (Beijing, Winter)</h3>
-            <p>A song about my first trip to Beijing: two weeks in winter while I was between jobs.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>My first time in Beijing, and my first real winter. The first week was visits to tech companies, seeing how far automation and AI have gone on the factory floor. I went with my teacher, someone familiar, and met a lot of new people. The second week I was on my own: a cold two-hour queue, record shops, and good food. It was a break from the worry of not having a job. I came home still unsure, but with a different picture of China.</p>
-              <p class="credit">Song and video by Charles Tay · AI-generated music, voice and visuals · Made with ChatCut, Google Flow and HyperFrames</p>
-              <p><a href="projects/beijing-winter/">How it was made, and the tools used →</a></p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="one-question-at-a-time" data-group="experiments">
+        <article class="card" id="one-question-at-a-time" data-group="songs-work">
           <div class="player"><button type="button" class="yt" data-yt="GHEfsfCIgeQ" aria-label="Play One Question at a Time on YouTube"><img src="projects/one-question-at-a-time/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 48 s · duet · lyric video</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min 48 s · duet · lyric video</span></span>
             <h3>One Question at a Time</h3>
             <p>My 2025 told through the 5,301 questions I asked an AI search engine that year. AI sang it. I lived it. Every line happened.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -566,10 +396,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="pull-up-a-chair" data-group="experiments">
+        <article class="card" id="pull-up-a-chair" data-group="songs-work">
           <div class="player"><button type="button" class="yt" data-yt="haHE7PoE5OM" aria-label="Play Pull Up a Chair on YouTube"><img src="projects/pull-up-a-chair/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 44 s · sing-along · EN, 中文, BM, Singlish</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min 44 s · sing-along · EN, 中文, BM, Singlish</span></span>
             <h3>Pull Up a Chair</h3>
             <p>A sing-along about six generations at work: see people, not labels, then slow down and listen.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -578,10 +408,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="pull-up-a-chair-at-work" data-group="experiments">
+        <article class="card" id="pull-up-a-chair-at-work" data-group="songs-work">
           <div class="player"><button type="button" class="yt" data-yt="0GiUjNy4o2g" aria-label="Play Pull Up a Chair (at work) on YouTube"><img src="projects/pull-up-a-chair-at-work/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 23 s · sing-along · workplace learning</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min 23 s · sing-along · workplace learning</span></span>
             <h3>Pull Up a Chair (at work)</h3>
             <p>The workplace-learning version: everyone at the bench has something to learn and something to teach.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -590,22 +420,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="same-sky" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="lkkhDWUn-MY" aria-label="Play Same Sky, Different Name on YouTube"><img src="projects/same-sky/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">4 min 11 s · English and Malay</span></span>
-            <h3>Same Sky, Different Name</h3>
-            <p>A folk-pop song about the Sep–Oct 2026 haze, sung in English and Malay. It sits well next to the haze pages.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>Singapore and its neighbours breathe the same smoke and wait for the same rain. The lyric video moves from a grey skyline and a climbing PSI reading to clear sky.</p>
-              <p class="credit">Lyrics by Charles Tay, with AI assistance. Music and vocals AI-generated with Mureka in ChatCut. Made with Claude and HyperFrames.</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="nace-feelings" data-group="experiments">
+        <article class="card" id="nace-feelings" data-group="songs-work">
           <div class="player"><button type="button" class="yt" data-yt="XCR3jK8IGYQ" aria-label="Play NACE Feelings on YouTube"><img src="projects/nace-feelings/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">4 min 57 s · duet</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">4 min 57 s · duet</span></span>
             <h3>NACE Feelings</h3>
             <p>A 70s-style duet about what it feels like when someone finally helps your team learn. It started as a colleague&rsquo;s joke.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -614,10 +432,133 @@
             </details>
           </div>
         </article>
-        <article class="card" id="sunny-side" data-group="experiments" data-switch>
+        <article class="card" id="not-waiting-alone" data-group="songs-work">
+          <div class="player"><button type="button" class="yt" data-yt="Eu8Yx9KPTq4" aria-label="Play Not Waiting Alone on YouTube"><img src="projects/not-waiting-alone/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min 58 s &middot; lyric video</span></span>
+            <h3>Not Waiting Alone</h3>
+            <p>A duet for anyone in between jobs, or stuck waiting for a door to open. It says one thing: you are not forgotten, and you are not alone.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>The words come from a year of quiet trips: three weeks in the highlands, then a train and a flight to two old churches. Each lyric is coloured for who is singing, amber for him, blue for her, white when they sing together.</p>
+              <p class="credit">Words by Charles Tay. Music and vocals AI-generated with Mureka in ChatCut. Lyric video built with Claude Code and HyperFrames. Backgrounds are Pixabay stock (Iconikmg, Nils_Vega). The candle is an AI-generated image (Higgsfield), animated in Google Flow.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="the-smile-of-those-days" data-group="songs-life">
+          <div class="player"><button type="button" class="yt" data-yt="_-uW-E4CVco" aria-label="Play The Smile of Those Days on YouTube"><img src="projects/the-smile-of-those-days/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">song + music video &middot; 4 min 13 s &middot; archive film, black and white to colour</span></span>
+            <h3>The Smile of Those Days</h3>
+            <p>A song for Audrey Hepburn. An old cinema, the projector starts to turn, and there she is again: Rome on a Vespa, a Paris afternoon on the water. On one line, the whole picture turns to colour.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>Every shot is archive film marked public domain on the Internet Archive: trailers for <i>Roman Holiday</i>, <i>Love in the Afternoon</i> and <i>The Unforgiven</i>, <i>Charade</i> (shown without its original soundtrack) and a 1963 newsreel of the <i>Charade</i> premiere. The song stays in black and white until &ldquo;The world turned into colour&rdquo;, and the first colour frame lands on that line.</p>
+              <p class="credit">Lyrics by Claude &middot; AI-generated music and voice (Suno) &middot; Archive footage: Internet Archive (Public Domain Mark) &middot; Edited with ffmpeg</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="zhang-da-jiu-dong" data-group="songs-life">
+          <div class="player"><button type="button" class="yt" data-yt="fTqK1_LONZc" aria-label="Play 长大就懂 (You'll Understand When You're Older) on YouTube"><img src="projects/zhang-da-jiu-dong/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">xinyao-style song + storybook video · 3 min 19 s · 中文, English subtitles</span></span>
+            <h3>长大就懂 (You&rsquo;ll Understand When You&rsquo;re Older)</h3>
+            <p>A song made of the things Singapore parents used to say: be home before dark, don&rsquo;t sit so close to the TV, off the fan, you think this is a hotel? Years later, you hear the same words coming out of your own mouth.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>It started from a poster of things every parent said. I swapped in the lines Singapore parents say, then followed them from an HDB flat in the 1980s to leaving home, to phone calls that only ever asked 吃饭了没有, to coming home late and finding one light still on. The pictures are drawn like a children&rsquo;s storybook.</p>
+              <p class="credit">Created by Charles Tay &middot; Lyrics written with Claude &middot; AI-generated music and pictures (ChatCut, Qwen-Image in ComfyUI) &middot; Video: HyperFrames</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="where-the-trees-are" data-group="songs-life">
+          <div class="player"><button type="button" class="yt" data-yt="ogsqQjtB9fI" aria-label="Play 有树的地方 (Where the Trees Are) on YouTube"><img src="projects/where-the-trees-are/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">song + music video · 4 min 30 s · 中文, English subtitles · piano</span></span>
+            <h3>有树的地方 (Where the Trees Are)</h3>
+            <p>A song for Xia Jinhe (夏瑾禾), Miracle Xiaxia, who died in Shanghai on 27 October, aged 23. At 19 she signed her own consent form to lose her leg. She ran a street stall on a prosthetic leg, turned down crowdfunding, and asked to be buried where there are trees.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>I read about her on 30 October and kept thinking about the empty chair beside her hospital bed. The song is sung by a stranger, the way thousands of strangers left her the same words: 夏夏，晚安. There is no picture of her and no voice pretending to be hers, only the things and places from her story.</p>
+              <p><a href="projects/where-the-trees-are/">Her story in English and 中文, and the lyrics &rarr;</a></p>
+              <p class="credit">Song and lyrics by Charles Tay &middot; AI-generated music, voice and pictures (ChatCut, Google Flow, ComfyUI) &middot; Video: HyperFrames</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="railway-promise" data-group="songs-life">
+          <div class="player"><button type="button" class="yt" data-yt="MdbAfePhKS4" aria-label="Play The Promise by the Railway on YouTube"><img src="projects/railway-promise/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min 24 s &middot; xinyao folk &middot; Mandarin, EN subtitles &middot; watercolour</span></span>
+            <h3>铁道旁的约定 (The Promise by the Railway)</h3>
+            <p>Two schoolboys by the railway in 1986 promise to meet there when they are old. Forty years later, a message: &ldquo;是我啊，还记得铁道吗？&rdquo;</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>A campus-folk song in the spirit of the xinyao songs I grew up with. The station closed in 2011 and the tracks became the Rail Corridor. The song ends with a smaller promise: same place, next year.</p>
+              <p class="credit">Song and lyrics by Charles Tay, written with Claude &middot; AI-generated voices, music and pictures &middot; Made with ChatCut, Google Flow and HyperFrames</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="dont-knock-it-till-you-try-lah" data-group="songs-life">
+          <div class="player"><button type="button" class="yt" data-yt="46e6mDbteiw" aria-label="Play Don&rsquo;t Knock It Till You Try Lah on YouTube"><img src="projects/dont-knock-it-till-you-try-lah/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">2 min 50 s · Short · Singlish · hawker food</span></span>
+            <h3>Don&rsquo;t Knock It Till You Try Lah</h3>
+            <p>A hawker-centre singalong about the strangest food combos in Singapore: kaya toast in laksa, satay sauce on chendol, chilli crab on ice cream.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>It started with a comedian&rsquo;s reel about gross food combos. I wrote new lyrics around local food instead, sang a rough draft with an AI model on my own laptop, then made the final song in ChatCut. The pictures come from one cast sheet of five cartoon characters, so the uncle, the auntie and the cousin look the same in every shot. Which one would you actually try?</p>
+              <p class="credit">Song and lyrics by Charles Tay · AI-generated music, voice and visuals · Made with Claude, ChatCut, Google Flow and HyperFrames</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="where-it-still-hurts" data-group="songs-life">
+          <div class="player"><button type="button" class="yt" data-yt="eQOCBG5Drqg" aria-label="Play 哪里还痛 (Where It Still Hurts) on YouTube"><img src="projects/where-it-still-hurts/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">4 min 9 s · duet · EN, 中文 · guzheng</span></span>
+            <h3>哪里还痛 (Where It Still Hurts)</h3>
+            <p>A song for Karen Nie (聂), our friend and physiotherapist for over ten years, who died suddenly this year.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>My wife, my friend Charlie and I saw Nie every month for ten years. It started with a haircut while I waited for my laptop to be fixed. She came from a village in China, trained as a physiotherapist here, and always opened with the same question: which part is sore today, shoulder, leg or back? The song turns that question around. The pictures are watercolours, and she is only ever seen from behind. A guzheng plays her out over the credits.</p>
+              <p class="credit">Song and lyrics by Charles Tay · AI-generated music, voice and visuals · Made with ChatCut, Logic Pro, Google Flow and HyperFrames</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="every-sound-came-from-a-mac" data-group="songs-life">
+          <div class="player"><button type="button" class="yt" data-yt="pnZVzHIEs_Q" aria-label="Play Every Sound Came From a Mac on YouTube"><img src="projects/every-sound-came-from-a-mac/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">1 min 29 s · instrumental · GarageBand</span></span>
+            <h3>Every Sound Came From a Mac</h3>
+            <p>A beat made only from the alert sounds already on my Mac and iPhone. No instruments, no sample packs.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>I saw a film where a producer builds a track out of the sounds Apple devices make, and wanted to try it with what was already on my laptop. The Glass alert became the chords, Bottle pitched down became the kick, the screenshot shutter became the snare, and Submarine became the bass. Each sound comes in one at a time, then they all play together, and it ends on a long chord. The stems sit in a 12-track GarageBand project. In the video, every flash and lane lands on the note it belongs to.</p>
+              <p class="credit">Music and video by Charles Tay · AI-assisted music and visuals · Made with GarageBand, Claude and HyperFrames</p>
+              <p><a href="projects/every-sound-came-from-a-mac/">How it was made, and the tools used →</a></p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="beijing-winter" data-group="songs-life">
+          <div class="player"><button type="button" class="yt" data-yt="MKLCrVj_Qmg" aria-label="Play 北京的冬天 (Beijing, Winter) on YouTube"><img src="projects/beijing-winter/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min 35 s · duet · EN, 中文</span></span>
+            <h3>北京的冬天 (Beijing, Winter)</h3>
+            <p>A song about my first trip to Beijing: two weeks in winter while I was between jobs.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>My first time in Beijing, and my first real winter. The first week was visits to tech companies, seeing how far automation and AI have gone on the factory floor. I went with my teacher, someone familiar, and met a lot of new people. The second week I was on my own: a cold two-hour queue, record shops, and good food. It was a break from the worry of not having a job. I came home still unsure, but with a different picture of China.</p>
+              <p class="credit">Song and video by Charles Tay · AI-generated music, voice and visuals · Made with ChatCut, Google Flow and HyperFrames</p>
+              <p><a href="projects/beijing-winter/">How it was made, and the tools used →</a></p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="same-sky" data-group="songs-life">
+          <div class="player"><button type="button" class="yt" data-yt="lkkhDWUn-MY" aria-label="Play Same Sky, Different Name on YouTube"><img src="projects/same-sky/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">4 min 11 s · English and Malay</span></span>
+            <h3>Same Sky, Different Name</h3>
+            <p>A folk-pop song about the Sep–Oct 2026 haze, sung in English and Malay. It sits well next to the haze pages.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>Singapore and its neighbours breathe the same smoke and wait for the same rain. The lyric video moves from a grey skyline and a climbing PSI reading to clear sky.</p>
+              <p class="credit">Lyrics by Charles Tay, with AI assistance. Music and vocals AI-generated with Mureka in ChatCut. Made with Claude and HyperFrames.</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="sunny-side" data-group="songs-life" data-switch>
           <div class="player"><button type="button" class="yt" data-yt="hCY1CcRLJj0" aria-label="Play Sunny Side on YouTube"><img src="projects/sunny-side/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec" data-spec>75 s · 1920×1080 · 5 sections · sing-along lyrics</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec" data-spec>75 s · 1920×1080 · 5 sections · sing-along lyrics</span></span>
             <h3>Sunny Side</h3>
             <p>A happy little song. The Chinese and Japanese versions are new songs, written to be sung, not translated line by line.</p>
           <div class="links" role="group" aria-label="Choose a language">
@@ -631,10 +572,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="home-is-you" data-group="experiments">
+        <article class="card" id="home-is-you" data-group="songs-life">
           <div class="player"><button type="button" class="yt" data-yt="4yYU3Wo48vU" aria-label="Play 家就是你 Home Is You on YouTube"><img src="projects/home-is-you/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min · Mandarin duet</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min · Mandarin duet</span></span>
             <h3><span lang="zh-Hans">家就是你</span> Home Is You</h3>
             <p>A duet about family that follows one day at home, from the kitchen at sunrise to the walk home under lanterns.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -643,10 +584,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="carve-her-a-heart" data-group="experiments">
+        <article class="card" id="carve-her-a-heart" data-group="songs-life">
           <div class="player"><button type="button" class="yt" data-yt="TkkY8mPAoeQ" aria-label="Play Carve Her a Heart on YouTube"><img src="projects/carve-her-a-heart/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 51 s · 3D animation</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min 51 s · 3D animation</span></span>
             <h3>Carve Her a Heart</h3>
             <p>A folk song with a 3D story: his wife&rsquo;s last wish is to hold something he made, so he carves her a small wooden heart.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -655,22 +596,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="not-waiting-alone" data-group="experiments">
-          <div class="player"><button type="button" class="yt" data-yt="Eu8Yx9KPTq4" aria-label="Play Not Waiting Alone on YouTube"><img src="projects/not-waiting-alone/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
-          <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 58 s &middot; lyric video</span></span>
-            <h3>Not Waiting Alone</h3>
-            <p>A duet for anyone in between jobs, or stuck waiting for a door to open. It says one thing: you are not forgotten, and you are not alone.</p>
-            <details class="more-info"><summary>More about this</summary>
-              <p>The words come from a year of quiet trips: three weeks in the highlands, then a train and a flight to two old churches. Each lyric is coloured for who is singing, amber for him, blue for her, white when they sing together.</p>
-              <p class="credit">Words by Charles Tay. Music and vocals AI-generated with Mureka in ChatCut. Lyric video built with Claude Code and HyperFrames. Backgrounds are Pixabay stock (Iconikmg, Nils_Vega). The candle is an AI-generated image (Higgsfield), animated in Google Flow.</p>
-            </details>
-          </div>
-        </article>
-        <article class="card" id="light-left-on" data-group="experiments">
+        <article class="card" id="light-left-on" data-group="songs-life">
           <div class="player"><button type="button" class="yt" data-yt="MkrzM7rBBZ0" aria-label="Play Light Left On on YouTube"><img src="projects/light-left-on/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">4 min 7 s &middot; lyric video</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">4 min 7 s &middot; lyric video</span></span>
             <h3>Light Left On</h3>
             <p>My teenage years in one song. Fantasy books and PC games kept me steady while both parents worked. My grandmother left the light on.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -680,10 +609,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="dont-play-play" data-group="experiments">
+        <article class="card" id="dont-play-play" data-group="songs-life">
           <div class="player"><button type="button" class="yt" data-yt="gF_6dBvVxrs" aria-label="Play Don't Play Play on YouTube"><img src="projects/dont-play-play/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">3 min 18 s &middot; vertical &middot; sing-along</span></span>
+            <span class="card-meta"><span class="tag">Song</span> <span class="spec">3 min 18 s &middot; vertical &middot; sing-along</span></span>
             <h3>Don't Play Play (With the Haze)</h3>
             <p>A Singapore song for the friends who say "I feel fine" and skip the mask. Fine doesn't mean the air is fine. One air cleaner at home, in the room where the family sleeps.</p>
             <details class="more-info"><summary>More about this</summary>
@@ -692,10 +621,84 @@
             </details>
           </div>
         </article>
-        <article class="card" id="sausage-dog-password" data-group="experiments">
+        <article class="card" id="night-the-lights-stayed-on" data-group="stories">
+          <div class="player"><button type="button" class="yt" data-yt="bTGrbiCHoBQ" aria-label="Play The Night the Lights Stayed On on YouTube"><img src="projects/the-night-the-lights-stayed-on/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Story</span> <span class="spec">my first docudrama · 7 min 39 s · EN, 中文 subtitles · watercolour + archive film</span></span>
+            <h3>The Night the Lights Stayed On</h3>
+            <p>On Chinese New Year&rsquo;s eve, 93-year-old Ah Ma puts her granddaughter to bed and tells her a real war story: the first Japanese air raid on Singapore, 4 am, 8 December 1941.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>My first docudrama. Ah Ma and her family are made up; the air raid is real. 17 bombers came while the street lights were still on, 61 people died, and some who phoned for help were told it was only practice. The watercolours show what Ah Ma remembers, and the black-and-white film is real footage from December 1941. Her last line is the reason I made it: &ldquo;That Sunday, everybody also said, nobody can touch us. Same sky. Same lights. Don&rsquo;t take it for granted.&rdquo;</p>
+              <p><a href="projects/the-night-the-lights-stayed-on/">How it was made &rarr;</a></p>
+              <p class="credit">A film by Charles Tay &middot; Story and script by Charles Tay, written with Claude &middot; AI-generated voices, music and pictures &middot; Archive film: Australian War Memorial, US National Archives</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="song-across-the-water" data-group="stories">
+          <div class="player"><button type="button" class="yt" data-yt="CNuTToPRndY" aria-label="Play The Song Across the Water on YouTube"><img src="projects/the-song-across-the-water/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Story</span> <span class="spec">my second docudrama · 9 min 11 s · Malay &amp; English, EN subtitles · watercolour</span></span>
+            <h3>The Song Across the Water</h3>
+            <p>On the night before National Day, a grandmother tells her grandson why Singapore has tanks. At 3.07 pm on 10 March 1965, a bomb went off in MacDonald House, where she worked.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>My second docudrama. Nenek and her family are made up; the bombing is real. Elizabeth Choo, Juliet Goh and Mohammed Yasin Kesit died and 33 people were hurt, in one of 37 bombings in Singapore during Konfrontasi. The bombers hoped Malays and Chinese would turn on each other. The bomb killed two Chinese women and a Malay man. The facts come from the 1965 Straits Times on NewspaperSG.</p>
+              <p class="credit">A film by Charles Tay &middot; Story and script by Charles Tay, written with Claude &middot; AI-generated voices and pictures &middot; Music: &ldquo;Rasa Sayang&rdquo; (traditional)</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="cut-off-times" data-group="stories">
+          <div class="player"><button type="button" class="yt" data-yt="tJzIly-IK5Y" aria-label="Play Cut-off Times on YouTube"><img src="projects/cut-off-times/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Story</span> <span class="spec">my third docudrama · 13 min 6 s · English, captions · watercolour</span></span>
+            <h3>Cut-off Times</h3>
+            <p>Boon Hock, 52, has planned freight routes for a small family firm in Ubi for 23 years. When the founder retires and the firm closes, the office laptop goes back. His own handwritten notebook goes home with him.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>My third docudrama, and the first about work. Boon Hock, his family and the firm are made up. The figures the narrator gives are real, with sources in the YouTube description: sea freight up about a quarter in three months, fewer than three in ten firms with a succession plan, and fewer retrenched workers in their 50s back at work within six months. The notebook he kept for himself is what gets him his next job: rostering home-care nurses in Sengkang.</p>
+              <p class="credit">A film by Charles Tay &middot; Story and script by Charles Tay, written with Claude &middot; AI-generated voices and pictures (Fish Audio, Google Flow, Qwen-Image) &middot; Video: HyperFrames</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="hold-my-hand" data-group="stories">
+          <div class="player"><button type="button" class="yt" data-yt="7ha7EH3vJAM" aria-label="Play Hold My Hand on YouTube"><img src="projects/the-night-the-lights-stayed-on/song-poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Story</span> <span class="spec">3 min 40 s · duet lullaby · EN, 华语 bridge · watercolour</span></span>
+            <h3>Hold My Hand 牵着我的手</h3>
+            <p>The song from the film. Ah Ma sings her granddaughter to sleep, and her father sings back from the night of the first air raid in 1941.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>A slow lullaby duet in three-four time. Ah Ma tells the story of the biscuit tin; Pa is the one who phoned for help and was told it was only practice. In the Mandarin bridge he comforts his little girl, and she passes the same words on to Mei. The pictures are the film&rsquo;s watercolours. I sampled three pairs of voices before picking this one.</p>
+              <p><a href="projects/the-night-the-lights-stayed-on/#song">About the song &rarr;</a></p>
+              <p class="credit">Song and lyrics by Charles Tay, written with Claude &middot; AI-generated voices, music and pictures &middot; Made with ChatCut and Google Flow</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="lampu-suluh" data-group="stories">
+          <div class="player"><button type="button" class="yt" data-yt="5oaufsNSQWY" aria-label="Play Lampu Suluh on YouTube"><img src="projects/the-song-across-the-water/song-poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Story</span> <span class="spec">4 min 49 s · lullaby · Malay, EN subtitles · watercolour</span></span>
+            <h3>Lampu Suluh (The Torch)</h3>
+            <p>The song from the film. Nenek sings her grandson to sleep on the eve of National Day: the bomb at MacDonald House, and the ordinary people who kept watch with a torch before Singapore had tanks.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>A slow keroncong lullaby in Malay. At 3.07 pm the music stops and only rain is heard, then it carries on with the three who never came home. The pictures are the film&rsquo;s watercolours. I made three takes and kept the one where every Malay line came through clearly.</p>
+              <p class="credit">Song and lyrics by Charles Tay, written with Claude &middot; AI-generated voice, music and pictures &middot; Made with ChatCut and Google Flow</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="day-the-ai-went-quiet" data-group="stories">
+          <div class="player"><button type="button" class="yt" data-yt="osRsEEoHeyI" aria-label="Play The Day the AI Went Quiet on YouTube"><img src="projects/day-the-ai-went-quiet/poster.jpg" alt="" loading="lazy"><span class="yt-play" aria-hidden="true"></span></button></div>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">Story</span> <span class="spec">2 min 52 s &middot; narrated story &middot; four voices &middot; illustrated</span></span>
+            <h3>The Day the AI Went Quiet</h3>
+            <p>A fourteen-person signage firm loses every AI tool on tender day. A pencilled ring binder, and the estimator everyone had stopped asking, get them through.</p>
+            <details class="more-info"><summary>More about this</summary>
+              <p>A made-up story for small businesses that now run on AI. It ends with one question, does your team have a Plan B?, and five things to write on one page: where your templates and rates live, who can do it by hand, who is learning, who to call, and the first fifteen minutes.</p>
+              <p class="credit">Story by Charles Tay, written with Claude &middot; AI-generated voices, music and pictures &middot; Made with Fish Audio, ChatCut, Google Flow and HyperFrames</p>
+            </details>
+          </div>
+        </article>
+        <article class="card" id="sausage-dog-password" data-group="fun">
           <a class="thumb" href="projects/sausage-dog-password/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/sausage-dog-password.jpg" alt="" loading="lazy"></a>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">interactive · one HTML file</span></span>
+            <span class="card-meta"><span class="tag">Just for fun</span> <span class="spec">interactive · one HTML file</span></span>
             <h3>Sausage Dog Password</h3>
             <p>A password field where a dachshund stretches with every character you type. Long passwords are the hardest to guess, so keep going until he&rsquo;s proud of you.</p>
           <div class="links"><a href="projects/sausage-dog-password/">Try it →</a><a href="projects/sausage-dog-password/momo/">Meet MoMo (3D) →</a></div>
@@ -705,10 +708,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="resistance-is-useful" data-group="experiments">
+        <article class="card" id="resistance-is-useful" data-group="fun">
           <a class="thumb" href="notes/resistance-is-useful/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/resistance-is-useful.jpg" alt="" loading="lazy"></a>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">interactive &middot; sound on &middot; 20 s</span></span>
+            <span class="card-meta"><span class="tag">Just for fun</span> <span class="spec">interactive &middot; sound on &middot; 20 s</span></span>
             <h3>Resistance Is Useful</h3>
             <p>My AI notes system works like the Borg from Star Trek. Press play to receive the collective&rsquo;s hail, then see the one thing the Borg get wrong about learning.</p>
           <div class="links"><a href="notes/resistance-is-useful/">Receive transmission →</a></div>
@@ -718,10 +721,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="i-will-check-you" data-group="experiments">
+        <article class="card" id="i-will-check-you" data-group="fun">
           <a class="thumb" href="notes/i-will-check-you/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/i-will-check-you.jpg" alt="" loading="lazy"></a>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">interactive &middot; sound on &middot; 35 s</span></span>
+            <span class="card-meta"><span class="tag">Just for fun</span> <span class="spec">interactive &middot; sound on &middot; 35 s</span></span>
             <h3>I Will Check You</h3>
             <p>An AI phones you to brag about its very particular set of skills: summarising, guessing, sounding completely sure. Answer the call, then make the same speech for your own job.</p>
           <div class="links"><a href="notes/i-will-check-you/">Answer the call →</a><a href="notes/i-will-check-you/#maker">Make your speech →</a></div>
@@ -731,10 +734,10 @@
             </details>
           </div>
         </article>
-        <article class="card" id="same-number-much-shorter" data-group="experiments">
+        <article class="card" id="same-number-much-shorter" data-group="fun">
           <a class="thumb" href="assets/cv-max-20x.png" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/cv-max-20x.jpg" alt="" loading="lazy"></a>
           <div class="card-body">
-            <span class="card-meta"><span class="tag">Experiment</span> <span class="spec">one image</span></span>
+            <span class="card-meta"><span class="tag">Just for fun</span> <span class="spec">one image</span></span>
             <h3>Same Number, Much Shorter</h3>
             <p>A friend sent me a &ldquo;Hire me, I have Claude Max&rdquo; poster. This is my reply. A subscription isn&rsquo;t a skill: the twenty years are what make the Max 20x worth anything.</p>
           <div class="links"><a href="assets/cv-max-20x.png">See it full size &rarr;</a><a href="toolkit/">What I actually use &rarr;</a></div>
