@@ -107,6 +107,9 @@ fieldset.field{border:0;margin:0;padding:0;min-width:0}
 .twin a,.ref a{color:var(--accent)}
 .step{margin:auto 0 0;padding-top:4px;font-size:12px;display:flex;flex-wrap:wrap;gap:2px 14px;color:var(--muted)}
 .step a{color:var(--accent)}
+.copy{font:inherit;font-size:12px;color:var(--accent);background:none;border:1px solid var(--border);border-radius:999px;padding:1px 9px;cursor:pointer;min-height:24px}
+.copy:hover{border-color:var(--axis)}
+.copy.done{color:var(--c-sup);border-color:var(--c-sup)}
 .more{display:block;margin:16px auto 0;font:inherit;font-size:14px;border:1px solid var(--border);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 22px;cursor:pointer;min-height:40px}
 .more:hover{border-color:var(--axis)}
 .notes{margin-top:20px}
@@ -286,8 +289,9 @@ function cardHtml(c, showSector){
   const others = (twins.get(twinKey(c)) || []).filter(r => r !== c.ref);
   const twin = others.length
     ? `<p class="twin">Also listed as ${others.map(r => `<a href="${COURSE_URL}${encodeURIComponent(r)}" target="_blank" rel="noopener">${esc(r)}</a>`).join(', ')}. Funding can differ between listings, so compare them.</p>` : '';
+  // STEP allows home-page links only, so the card offers the exact title to paste into STEP's own search
   const stepLink = c.type === 'ihl'
-    ? `<a href="${STEP_URL}" target="_blank" rel="noopener" aria-label="Also on STEP (home page, opens in a new tab)">Also on STEP ↗</a>` : '';
+    ? `<a href="${STEP_URL}" target="_blank" rel="noopener" aria-label="Also on STEP (home page, opens in a new tab)">Also on STEP ↗</a><button type="button" class="copy" data-copy="${esc(c.title)}" aria-label="Copy the course title to search for it on STEP">Copy title</button>` : '';
   return `<li class="course"><h3><a href="${COURSE_URL}${encodeURIComponent(c.ref)}" target="_blank" rel="noopener">${esc(c.title)}<span class="sr"> (opens MySkillsFuture in a new tab)</span></a></h3>
 <p class="pv"><i style="background:var(${TYPE_DOT[c.type]})" aria-hidden="true"></i>${esc(p.name)} <span class="tag">${esc(D.type_labels[c.type])}</span>${showSector ? ` <span class="tag">${esc(SECTOR[c.sector].label)}</span>` : ''}</p>
 ${when}
@@ -428,6 +432,16 @@ function buildControls(){
   opts('fee', 'Any full fee', D.fee_bands.map(b => b[1]));
   for (const id of ['hours', 'mode', 'fee']) document.getElementById(id).onchange = e => { state[id] = e.target.value; render(); };
   for (const id of ['dated', 'ai']) document.getElementById(id).onchange = e => { state[id] = e.target.checked; render(); };
+  document.getElementById('out').addEventListener('click', e => {
+    const b = e.target.closest('.copy'); if (!b) return;
+    const text = b.dataset.copy;
+    const done = ok => { b.textContent = ok ? 'Copied' : 'Copy failed'; b.classList.toggle('done', ok); setTimeout(() => { b.textContent = 'Copy title'; b.classList.remove('done'); }, 2000); };
+    const fallback = () => {   // older browsers, or a page not served over https
+      const t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (err) {} t.remove(); done(ok);
+    };
+    navigator.clipboard && window.isSecureContext ? navigator.clipboard.writeText(text).then(() => done(true), fallback) : fallback();
+  });
   let t; document.getElementById('q').oninput = e => { clearTimeout(t); t = setTimeout(() => { state.q = e.target.value; render(); }, 220); };
   document.getElementById('reset').onclick = () => {
     Object.assign(state, {q:'', types:new Set(['ihl']), dated:false, ai:false, hours:'', mode:'', fee:''});
