@@ -396,3 +396,5 @@ table.tk-table .new { display: block; margin-top: 4px; font-family: var(--font-m
   .tk-when { grid-template-columns: 1fr; gap: 2px; }
   .tk-when dd { margin-bottom: 8px; }
 }
+.chip.show-all { display: block; margin: 24px auto 0; }
+.chip.show-all[hidden] { display: none; }
