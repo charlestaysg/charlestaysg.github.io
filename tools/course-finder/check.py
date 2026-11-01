@@ -150,13 +150,14 @@ check("sector keys and labels match the Landscape",
 # --- links ---
 ok_ref = all(re.fullmatch(r"[A-Za-z]+-\d{6,14}", r) for r in refs)
 check("every course link would match https://courses.myskillsfuture.gov.sg/courses/<ref>", ok_ref)
-allowed = [r"https://courses\.myskillsfuture\.gov\.sg/courses/", r"https://step\.polite\.edu\.sg/",
+allowed = [r"https://courses\.myskillsfuture\.gov\.sg/courses/", r"https://stms\.polite\.edu\.sg/",
            r"https://data\.gov\.sg/datasets/(d_[0-9a-f]{32}/view|\$\{[A-Za-z_.]+\}/view)", r"https://data\.gov\.sg/open-data-licence",
            r"https://www\.linkedin\.com/in/charlestay"]
 urls = set(re.findall(r"https?://[^\s\"'`<>)]+", html))
 stray = sorted(u for u in urls if not any(re.fullmatch(a + r".*" if a.endswith("/courses/") else a, u) for a in allowed))
 check("every URL in the page is on the allowed list (STEP is the home page only)", not stray, str(stray))
-check("STEP link is exactly https://step.polite.edu.sg/", "https://step.polite.edu.sg/" in html and "www.step" not in html)
+# step.polite.edu.sg now redirects to stms.polite.edu.sg (308), so the page links to the home page there
+check("STEP link is exactly https://stms.polite.edu.sg/", "https://stms.polite.edu.sg/" in html and "step.polite.edu.sg" not in html)
 
 print(f"\n{len(fails)} failure(s)" if fails else "\nall checks passed")
 sys.exit(1 if fails else 0)

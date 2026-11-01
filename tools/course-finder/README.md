@@ -13,7 +13,9 @@ Lists individual SkillsFuture-listed courses by sector, so an SME owner can pick
 - `data/meta.json`: the metadata the page inlines (build date, check date, dataset ids, sector counts, open PMET roles). Committed; it is small.
 
 ## What is kept per course
-Reference number, title, provider name and type, hours, study mode, full fee before subsidies, rating stars and number of respondents, AI flag, up to 3 upcoming run start dates plus the count of upcoming runs. No description, "what you learn", entry requirements or contact details. Each course links to `https://courses.myskillsfuture.gov.sg/courses/<reference>`. Polytechnic and ITE cards also link to the STEP home page `https://step.polite.edu.sg/` and nothing deeper (STEP's terms do not allow links to inner pages).
+Reference number, title, provider name and type, hours, study mode, full fee before subsidies, rating stars and number of respondents, AI flag, up to 3 upcoming run start dates plus the count of upcoming runs. No description, "what you learn", entry requirements or contact details. Each course links to `https://courses.myskillsfuture.gov.sg/courses/<reference>`. Polytechnic and ITE cards also link to the STEP home page `https://stms.polite.edu.sg/` (the old `step.polite.edu.sg` address redirects there) and nothing deeper (STEP's terms do not allow links to inner pages). Each card shows its reference number. When SWDA lists the same course twice (same title, provider, hours, mode and fee under two references), each card names the other listing, because the funding behind them can differ.
+
+Links into the page: `?sector=<key>` picks a sector and `?q=<words>` runs a keyword search across every sector. The page keeps both in the address bar as you use it.
 
 Each sector file is `{"f": field names, "t": type names, "p": {provider id: [name, type index]}, "c": [rows]}`. A row is `[ref, title, provider id, hours, mode index, full fee, stars, respondents, ai, dates, upcoming runs]`.
 

@@ -1,8 +1,9 @@
 """Keyword rules that map a course to one of the Pulse's 14 MOM sectors, or 'general'.
 
 Conventions follow the hand tags in the Pulse's sctp.json: facilities management -> admin;
-media, video and photography -> ICT; aircraft maintenance -> transport; food safety/science ->
-manufacturing; tourism and attractions -> food & accommodation; data analytics, HR, digital
+media, video and photography -> ICT; aircraft maintenance -> transport; food science and
+technology -> manufacturing, but food-handler courses (Food Safety Course Level 1-4, food
+hygiene) -> food; tourism and attractions -> food & accommodation; data analytics, HR, digital
 marketing, leadership, generic AI -> general (cross-sector).
 
 Matching: title first. If the title names no sector, the course text (what_you_learn + about)
@@ -22,7 +23,7 @@ KEYWORDS = {
               r"|ophthalm|optometr|radiograph|phlebotom|allied health|disabilit|special needs|youth work|gerontolog|\bpdecce|\becce\b|young children",
     "food": r"food (and|&) beverage|\bf ?& ?b\b|culinary|\bchef|\bcook(ing)?\b|pastry|baking|bakery|barista|coffee|bartend"
             r"|mixolog|\bwine|sommelier|hotel|hospitality|front office|housekeeping|kitchen|restaurant|catering|banquet"
-            r"|food service|food handl|tourism|tourist|attraction|\bresort|guest (service|relation)|dim sum|hawker",
+            r"|food service|food handl|food safety course|food hygiene|tourism|tourist|attraction|\bresort|guest (service|relation)|dim sum|hawker",
     "construction": r"construction|\bbim\b|building information model|scaffold|formwork|rebar|crane|civil engineer|structural"
                     r"|green mark|green building|plumb|tiling|\bbuilding (works|control|services)|excavat|piling|demolition"
                     r"|tower crane|lifting (operation|supervisor)|rigger|signalman|work at height|confined space|geotechnical"
@@ -36,11 +37,11 @@ KEYWORDS = {
                r"|trade finance|in finance\b|finance (industry|sector|professional)|asset management|private equity|fund management|securities|derivative|digital asset"
                r"|blockchain|payment (system|service)|\bcmfas|actuar|underwrit|claims (handl|management)",
     "realestate": r"real estate|property (management|agent|valuation|investment|market)|estate agent|realtor"
-                  r"|\bcea\b|condominium|strata|leasing agent|valuation",
+                  r"|\bcea\b|condominium|\bstrata\b|leasing agent|(land|statutory) valuation",
     "retail": r"retail|merchandis|wholesale|e-?commerce|\bstore (operation|manag)|shop ?floor|cashier|point of sale"
               r"|omni-?channel|beauty advisor|cosmetic|fashion|jewel|luxury|sales associate|trading (company|business)",
-    "arts": r"\barts\b(?! management)|fine art|visual art|\bartist|music|dance|theatre|theater|performing|\bsports?\b|fitness|\bgym\b|personal train|coach(ing)? (athlet|sport)"
-            r"|recreation|museum|heritage|\bcraft|pottery|ceramic|painting|drawing|calligraph|floral|florist"
+    "arts": r"\barts\b(?! management)|fine art|visual art|\bartist|music|\bdanc(e|ing)\b|theatre|theater|performing|\bsports?\b|fitness|\bgym\b|personal train|coach(ing)? (athlet|sport)"
+            r"|recreation|museum|heritage|\bcrafts?\b|craftsman|handicraft|pottery|ceramic|painting|(?<!technical )(?<!engineering )(?<!architecture )(?<!of )drawing(?=s?\b)|calligraph|floral|florist"
             r"|yoga|pilates|swim|golf|esports|arts management",
     "publicedu": r"adult educat|\bacta\b|\bacld?p?\b|educator|teach(er|ing)|lecturer|tutor|curriculum|instructional design"
                  r"|learning design|facilitat(e|ion|ing) learning|training (and|&) development|\bassessor|\btrainer"
@@ -50,7 +51,7 @@ KEYWORDS = {
                     r"|corporate secretar|company secretar|architectural|architect(ure)? (practice|firm|design)|landscape architect|interior design|advertising|public relations"
                     r"|management consult|engineering consult|quantity survey|\bxbrl|bookkeep|payroll|\bifrs|\bacra\b"
                     r"|patent|intellectual property|forensic account",
-    "admin": r"facilit(y|ies) (management|operation|manager|service)|environmental service|cleaning|cleaner|landscap"
+    "admin": r"facilit(y|ies) (management|operation|manager|service)|environmental service|(?<!data )cleaning|cleaner|landscaping|landscape (maintenance|design|management|horticult|technician|operation|works|services)|pwm-? ?landscape|pruning"
              r"|horticultur|arborist|pest (control|management)|\bpest\b|waste management|recycl|janitor|travel agen"
              r"|tour guide|event management|events? (planning|operation)|\bmice\b|call cent|contact cent|outsourc"
              r"|employment agen|recruitment agen|security screening|car park|building maintenance|urban greenery",

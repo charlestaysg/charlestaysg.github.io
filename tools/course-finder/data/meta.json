@@ -1,6 +1,6 @@
 {
  "built": "2026-11-01",
- "checked": "2026-10-21",
+ "checked": "2026-11-01",
  "datasets": {
   "directory": {
    "id": "d_b5802b76f409764c16dde4bf2feb19cd",
@@ -93,106 +93,106 @@
    "key": "manufacturing",
    "label": "Manufacturing",
    "pmet_open": 5000.0,
-   "n": 1073,
-   "dated": 153
+   "n": 919,
+   "dated": 119
   },
   {
    "key": "construction",
    "label": "Construction",
    "pmet_open": 3000.0,
-   "n": 616,
-   "dated": 114
+   "n": 620,
+   "dated": 116
   },
   {
    "key": "transport",
    "label": "Transport & storage",
    "pmet_open": 700.0,
-   "n": 943,
-   "dated": 136
+   "n": 955,
+   "dated": 137
   },
   {
    "key": "food",
    "label": "Food & accommodation",
    "pmet_open": 900.0,
-   "n": 749,
-   "dated": 160
+   "n": 912,
+   "dated": 198
   },
   {
    "key": "health",
    "label": "Health & social",
    "pmet_open": 3200.0,
-   "n": 1950,
-   "dated": 245
+   "n": 1968,
+   "dated": 251
   },
   {
    "key": "admin",
    "label": "Admin & support",
    "pmet_open": 400.0,
-   "n": 544,
-   "dated": 71
+   "n": 521,
+   "dated": 67
   },
   {
    "key": "security",
    "label": "Security",
    "pmet_open": null,
-   "n": 450,
-   "dated": 101
+   "n": 454,
+   "dated": 102
   },
   {
    "key": "retail",
    "label": "Wholesale & retail",
    "pmet_open": 2500.0,
-   "n": 372,
-   "dated": 59
+   "n": 378,
+   "dated": 60
   },
   {
    "key": "ict",
    "label": "Info & comms",
    "pmet_open": 3900.0,
-   "n": 3317,
-   "dated": 561
+   "n": 3362,
+   "dated": 572
   },
   {
    "key": "finance",
    "label": "Finance & insurance",
    "pmet_open": 4500.0,
-   "n": 604,
-   "dated": 62
+   "n": 623,
+   "dated": 67
   },
   {
    "key": "realestate",
    "label": "Real estate",
    "pmet_open": 800.0,
-   "n": 94,
-   "dated": 9
+   "n": 33,
+   "dated": 3
   },
   {
    "key": "professional",
    "label": "Professional services",
    "pmet_open": 4700.0,
-   "n": 854,
-   "dated": 139
+   "n": 898,
+   "dated": 148
   },
   {
    "key": "publicedu",
    "label": "Public admin & education",
    "pmet_open": 8400.0,
-   "n": 446,
-   "dated": 65
+   "n": 462,
+   "dated": 71
   },
   {
    "key": "arts",
    "label": "Arts & recreation",
    "pmet_open": 200.0,
-   "n": 570,
-   "dated": 83
+   "n": 502,
+   "dated": 60
   },
   {
    "key": "general",
    "label": "Cross-sector",
    "pmet_open": null,
-   "n": 13517,
-   "dated": 2135
+   "n": 13492,
+   "dated": 2122
   }
  ],
  "pulse_url": "../sme-pulse/",
