@@ -133,9 +133,11 @@ footer p{margin:0 0 8px}
 .clist h3,.sc h3{font-size:13px;margin:0 0 4px;font-weight:600}
 .clist ol,.sc ul{margin:0;padding-left:18px;font-size:13px;color:var(--ink-2)}
 .clist li{padding:2px 0}
-.clist li a{color:var(--ink);text-decoration:none}
-.clist li a:hover{color:var(--accent);text-decoration:underline}
-.clist li span{display:block;color:var(--muted);font-size:12px}
+.clist li a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.clist li a:hover{color:var(--ink)}
+.clist li > span a{color:var(--muted);text-decoration:underline}
+.clist li > span a:hover{color:var(--accent)}
+.clist li > span{display:block;color:var(--muted);font-size:12px}
 .clist p{font-size:13px;color:var(--ink-2);margin:0}
 .cflinks{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px}
 .sc{font-size:13px;margin-top:12px}
@@ -683,11 +685,11 @@ function renderCourses(S, sector){
       if (pick.length === SHOW_COURSES) continue;
       const p = {...x, more: 0}; seen.set(k, p); pick.push(p);
     }
-    const row = ({c, h, more}) => `<li><a href="${COURSE_URL}${encodeURIComponent(c.ref)}" target="_blank" rel="noopener">${esc(c.title)}</a><span>${esc(c.pv)}${more ? ` (+${more} other provider${more === 1 ? '' : 's'})` : ''} · ${c.next ? 'next class ' + fmtDate(c.next) : 'no date listed'}${c.hours != null ? ' · ' + (Math.round(c.hours * 10) / 10) + ' h' : ''}${c.fee != null ? ' · full fee $' + fmt.format(c.fee) : ''}${h.length ? ' · matches: ' + h.map(s => esc(words[wstems.indexOf(s)])).join(', ') : ''}</span></li>`;
+    const row = ({c, h, more}) => `<li><a href="${COURSE_URL}${encodeURIComponent(c.ref)}" target="_blank" rel="noopener">${esc(c.title)} ↗</a><span>${esc(c.pv)}${more ? ` (+<a href="${FINDER}?sector=${encodeURIComponent(S.key)}&q=${encodeURIComponent(c.title)}" rel="noopener">${more} other provider${more === 1 ? '' : 's'}</a>)` : ''} · ${c.next ? 'next class ' + fmtDate(c.next) : 'no date listed'}${c.hours != null ? ' · ' + (Math.round(c.hours * 10) / 10) + ' h' : ''}${c.fee != null ? ' · full fee $' + fmt.format(c.fee) : ''}${h.length ? ' · matches: ' + h.map(s => esc(words[wstems.indexOf(s)])).join(', ') : ''} · <a href="${COURSE_URL}${encodeURIComponent(c.ref)}" target="_blank" rel="noopener">${esc(c.ref)} on MySkillsFuture ↗</a></span></li>`;
     const codeText = codes.map(i => esc(i.code)).join(' and ');
     const wordText = words.map(esc).join(', ');
     box.innerHTML = `<h3>Courses for SSIC ${codeText || '–'} → ${esc(S.label)}</h3>` + (matched
-      ? `<p>${fmt.format(matched)} of the ${fmt.format(cs.length)} courses in this sector have a title with a word from the SSIC activity (${wordText}). Closest match first, then the soonest class. Each opens on MySkillsFuture.</p>
+      ? `<p>${fmt.format(matched)} of the ${fmt.format(cs.length)} courses in this sector have a title with a word from the SSIC activity (${wordText}). Closest match first, then the soonest class. Click a title to open its MySkillsFuture page.</p>
          <ol>${pick.map(row).join('')}</ol>`
       : `<p>None of the ${fmt.format(cs.length)} course titles in this sector has a word from the SSIC activity${words.length ? ` (${wordText})` : ''}, so no list is shown. Browse the sector in the Course Finder below.</p>`);
   }, () => {
