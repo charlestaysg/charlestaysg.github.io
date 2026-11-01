@@ -1,6 +1,6 @@
 """Keyword rules that map a course to one of the Pulse's 14 MOM sectors, or 'general'.
 
-Conventions follow the hand tags in the Pulse's sctp.json: facilities management -> admin;
+Conventions follow the sector tags in the Pulse's sctp.json: facilities management -> admin;
 media, video and photography -> ICT; aircraft maintenance -> transport; food science and
 technology -> manufacturing, but food-handler courses (Food Safety Course Level 1-4, food
 hygiene) -> food; tourism and attractions -> food & accommodation; data analytics, HR, digital

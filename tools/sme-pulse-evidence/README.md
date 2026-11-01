@@ -36,7 +36,8 @@ Links to other pages on the site (`/`, `/#work`, `/disclaimer/`, `/projects/uen-
 
 ```
 ../sme-pulse/fetch.py (data.gov.sg)  ─> ../sme-pulse/data/{raw/*.json, snapshot.json}
-../sme-pulse/data/{sctp,manual,last-checked}.json (hand-kept)
+../sme-pulse/sctp_build.py (Course Finder data) ─> ../sme-pulse/data/sctp.json
+../sme-pulse/data/{manual,last-checked}.json (manual.json hand-kept)
                           └─> scripts/prep_data.py ─> sources/pulse/*.csv ─> evidence sources ─> pages
 ```
 
@@ -47,7 +48,7 @@ Links to other pages on the site (`/`, `/#work`, `/disclaimer/`, `/projects/uen-
 | `series.csv` | One row per scope (`all` or a sector key), measure (`vac`, `rate`, `ret`, and `vu` for all of Singapore) and quarter. Blank value = not published. `rate` is a number like 2.9 |
 | `sectors.csv` | The 14 sectors with PMET retrenched (last 4 quarters), PMET open roles, quarters not published, and SCTP programme count |
 | `pmet_total.csv` | The PMET window and the three totals |
-| `sctp_programmes.csv`, `sctp_institutions.csv` | The 81 SCTP programmes and the six institutions, exactly as in `sctp.json` |
+| `sctp_programmes.csv`, `sctp_institutions.csv` | The SCTP programmes (with the first course reference, which the page links to) and the six institutions, exactly as in `sctp.json` |
 | `datasets.csv` | The nine data.gov.sg datasets (id, title, link) used for every source line |
 | `meta.csv` | One row: latest quarter, check and fetch dates, the advance estimate, SCTP and IMDA figures, and the freshness line |
 | `connection.yaml` | `type: csv`, so Evidence reads the folder |
@@ -95,9 +96,9 @@ Same sections, wording, logic and links. Where Evidence works differently:
 The monthly refresh (fetch, keep the snapshot only if MOM data changed, record the check date, check, build, replace the live folder, commit) is in `.github/workflows/sme-pulse-refresh.yml` at the repo root. By hand, from the site repo root:
 
 ```bash
-cd tools/sme-pulse && python3 fetch.py && cd ../sme-pulse-evidence
+cd tools/sme-pulse && python3 fetch.py && python3 sctp_build.py && cd ../sme-pulse-evidence
 npm run refresh && npm run check && npm run build:strict
 rm -rf ../../projects/sme-pulse && cp -R build ../../projects/sme-pulse
 ```
 
-`data/manual.json` (IMDA figures, MOM advance estimate) and `data/sctp.json` are still updated by hand, as described in `../sme-pulse/README.md`. The advance estimate line hides itself once data.gov.sg has that quarter.
+`data/manual.json` (IMDA figures, MOM advance estimate) is still updated by hand, as described in `../sme-pulse/README.md`. `data/sctp.json` is rebuilt by `../sme-pulse/sctp_build.py` from the Course Finder's data (the workflow runs it before the check); run it first if you refresh by hand. The advance estimate line hides itself once data.gov.sg has that quarter.

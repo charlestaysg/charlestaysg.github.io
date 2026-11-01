@@ -1,7 +1,8 @@
 # Monthly refresh of the SME Workforce Pulse page, Evidence version.
 # Same data chain as the hand-built page: tools/sme-pulse/fetch.py pulls MOM data from
 # data.gov.sg; if the data changed the new snapshot is kept, if not the old one is restored;
-# either way the check date goes into data/last-checked.json. Then the Evidence project
+# either way the check date goes into data/last-checked.json. tools/sme-pulse/sctp_build.py
+# then rebuilds the SCTP list from the Course Finder's published data. Then the Evidence project
 # (tools/sme-pulse-evidence) turns that data into CSVs, checks them against the raw files
 # and builds the static site. The built site replaces the live folder only after every
 # earlier step has passed, so a failed fetch, check or build leaves the live page as it was.
@@ -75,7 +76,14 @@ jobs:
           result=$([ "${{ steps.diff.outputs.changed }}" = "true" ] && echo updated || echo unchanged)
           printf '{"checked": "%s", "result": "%s"}\n' "$(TZ=Asia/Singapore date +%F)" "$result" > data/last-checked.json
 
-      # ---- 2. the existing independent check, on the raw files and the old page's own build.
+      # ---- 2. the SCTP list, rebuilt from the Course Finder's published data (the file is committed
+      # with tools/sme-pulse/data below; if the Course Finder data is missing or looks wrong the
+      # script warns and keeps the old list), then the existing independent check on the raw files
+      # and the old page's own build.
+      - name: Build the SCTP list from Course Finder data
+        working-directory: tools/sme-pulse
+        run: python sctp_build.py
+
       # check.py reads index.html, so build the old page into a temporary file first.
       - name: Existing check (build.py + check.py, output discarded)
         working-directory: tools/sme-pulse

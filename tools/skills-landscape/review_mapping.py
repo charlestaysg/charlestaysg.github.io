@@ -1,4 +1,4 @@
-"""Step 2 review: run the sector rules over every course and the Pulse's 81 SCTPs.
+"""Step 2 review: run the sector rules over every course and the Pulse's SCTP programmes.
 
 Run:  python3 review_mapping.py  -> prints a summary and writes mapping-review.md
 """
@@ -39,11 +39,11 @@ out = [f"# Sector mapping review ({stats['courses']:,} courses)", "",
        f"- **Mapped to a sector:** {mapped:,} ({mapped / n:.0%}). From the title {basis['title']:,}; "
        f"from course text {basis['text']:,}.",
        f"- **General / cross-sector:** {by['general']:,} ({by['general'] / n:.0%})",
-       f"- **Agreement with your SCTP tags:** {agree} of {len(sctp)} ({agree / len(sctp):.0%})", "",
+       f"- **Agreement with the SCTP list's sector tags:** {agree} of {len(sctp)} ({agree / len(sctp):.0%})", "",
        "## Courses per sector", "", "| Sector | Courses | Share |", "|---|---:|---:|"]
 for k in PRIORITY + ["general"]:
     out.append(f"| {LABEL[k]} | {by[k]:,} | {by[k] / n:.1%} |")
-out += ["", "## SCTPs where the rules disagree with your tag", "", "| Programme | Your tag | Rules say |", "|---|---|---|"] + rows
+out += ["", "## SCTPs where the rules disagree with the list's tag", "", "| Programme | List tag | Rules say |", "|---|---|---|"] + rows
 out += ["", "## Ten random courses per sector", "",
         "Mark any that are wrong. (T) = matched on title, (X) = matched on course text.", ""]
 for k in sorted(PRIORITY, key=lambda k: LABEL[k]) + ["general"]:

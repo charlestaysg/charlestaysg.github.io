@@ -593,7 +593,7 @@ function renderTraining(S, sector){
     const progs = S.sctp, insts = D.sctpInst;
     sc.innerHTML = progs.length
       ? `<h3>Career-switch programmes (SCTP) tagged to this sector: ${progs.length}</h3><p>${progs.map(p => `${esc(p[1])} <span style="color:var(--muted)">(${esc(p[0])})</span>`).join('; ')}</p>`
-      : `<h3>Career-switch programmes (SCTP)</h3><p>None found on the polytechnic and ITE pages for this sector on ${fmtDate(D.sctpCollected)}.</p>`;
+      : `<h3>Career-switch programmes (SCTP)</h3><p>None from the polytechnics or ITE are listed in SkillsFuture's course directory for this sector as of ${fmtDate(D.sctpCollected)}.</p>`;
     const list = SKILLS[S.key];
     const a = (href, title, sub) => `<a href="${href}" rel="noopener">${title} ↗<small>${sub}</small></a>`;
     let h = '';
@@ -609,7 +609,7 @@ function renderTraining(S, sector){
     sk.innerHTML = `<a href="${SFW_INDEX}" rel="noopener">Skills Frameworks for 38 sectors ↗<small>SWDA Jobs-Skills Portal</small></a>`;
     $('landLink').href = LANDSCAPE;
   }
-  $('srcTrain').innerHTML = `Source: MySkillsFuture Course Directory and Course Run (SWDA) via data.gov.sg, published ${q}; sector placement by keyword rules (Skills Training Landscape). Totals baked into this page; the course list is read from the <a href="${FINDER}">Course Finder</a>, which refreshes monthly. SCTP lists collected by hand ${fmtDate(D.sctpCollected)} from public pages of ${D.sctpInst.map(i => esc(i)).join(', ')}.`;
+  $('srcTrain').innerHTML = `Source: MySkillsFuture Course Directory and Course Run (SWDA) via data.gov.sg, published ${q}; sector placement by keyword rules (Skills Training Landscape). Totals baked into this page; the course list is read from the <a href="${FINDER}">Course Finder</a>, which refreshes monthly. SCTP lists are the ${D.sctpInst.map(i => esc(i)).join(', ')} courses in the same directory, as of ${fmtDate(D.sctpCollected)}.`;
 }
 
 /* ---------- courses for the sector, from the Course Finder's files ---------- */

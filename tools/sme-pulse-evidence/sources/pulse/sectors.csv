@@ -1,15 +1,15 @@
 sector,label,mom_industry,sort,pmet_retrenched,pmet_missing_quarters,pmet_vacancies,sctp_programmes
-manufacturing,Manufacturing,manufacturing,1,2060,0,5000,6
+manufacturing,Manufacturing,manufacturing,1,2060,0,5000,7
 construction,Construction,construction,2,330,0,3000,0
-transport,Transport & storage,transportation and storage,3,720,0,700,3
-food,Food & accommodation,accommodation and food services,4,190,0,900,8
+transport,Transport & storage,transportation and storage,3,720,0,700,6
+food,Food & accommodation,accommodation and food services,4,190,0,900,18
 health,Health & social,health and social services,5,140,0,3200,5
-admin,Admin & support,administrative and support services,6,520,0,400,8
-security,Security,security and investigation,7,,4,,3
-retail,Wholesale & retail,wholesale and retail trade,8,2330,0,2500,2
-ict,Info & comms,information and communications,9,2250,0,3900,17
+admin,Admin & support,administrative and support services,6,520,0,400,9
+security,Security,security and investigation,7,,4,,4
+retail,Wholesale & retail,wholesale and retail trade,8,2330,0,2500,3
+ict,Info & comms,information and communications,9,2250,0,3900,26
 finance,Finance & insurance,financial and insurance services,10,2590,0,4500,1
 realestate,Real estate,real estate services,11,100,0,800,0
-professional,Professional services,professional services,12,1990,0,4700,1
+professional,Professional services,professional services,12,1990,0,4700,2
 publicedu,Public admin & education,public administration and education,13,50,1,8400,0
 arts,Arts & recreation,"arts, entertainment and recreation",14,30,1,200,0

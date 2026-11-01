@@ -486,7 +486,7 @@ function renderSctp(){
   const col = fmtDate(S.collected);
   // admin & support includes security programmes, as MOM's industry grouping does
   const inSector = (p, key) => p.sector === key || (key === 'admin' && p.sector === 'security');
-  document.getElementById('scHint').textContent = `SCTP programmes listed on the public course pages of the five polytechnics and ITE, collected on ${col}. This counts programmes, not class places or intakes, so it shows where courses exist rather than how many people they train. The sector for each programme is our judgement from its title and listed job roles.`;
+  document.getElementById('scHint').textContent = `SCTP courses from the five polytechnics and ITE that are listed in SkillsFuture's course directory, as of ${col}. This counts programmes, not class places or intakes, so it shows where courses exist rather than how many people they train. Each programme's sector comes from the same keyword rules as the Course Finder.`;
   const cross = progs.filter(p=>p.sector==='cross').length;
   document.getElementById('scSum').innerHTML = `
     <div><div class="big">${progs.length}</div><div class="what">SCTP programmes across ${S.institutions.length} institutions</div></div>
@@ -505,7 +505,7 @@ function renderSctp(){
   const box = document.getElementById('scList');
   if (state.sector === 'all') { box.innerHTML = `<p class="hint" style="margin-top:12px">Pick a sector above to list its SCTP programmes. Sources: ${S.institutions.map(i=>`<a href="${i.url}" rel="noopener">${i.code}</a>`).join(', ')}.</p>` + landscapeLink(); return; }
   const sel = sectorObj(state.sector), mine = progs.filter(p=>inSector(p,state.sector));
-  if (!mine.length) { box.innerHTML = `<div class="sclist"><p class="pm-sel">${sel.label}: no SCTP programme found on the six institutions' public pages on ${col}. Other training providers also run SCTPs; check MySkillsFuture.</p></div>` + landscapeLink(); return; }
+  if (!mine.length) { box.innerHTML = `<div class="sclist"><p class="pm-sel">${sel.label}: no SCTP programme from the six institutions is listed in SkillsFuture's course directory as of ${col}. Other training providers also run SCTPs; check MySkillsFuture.</p></div>` + landscapeLink(); return; }
   box.innerHTML = `<div class="sclist"><p class="pm-sel" style="margin:12px 0 0">${sel.label}: ${mine.length} SCTP programme${mine.length>1?'s':''} found.</p>` +
     S.institutions.filter(i=>mine.some(p=>p.inst===i.code)).map(i=>`<h3><a href="${i.url}" rel="noopener">${i.name} ↗</a></h3><ul>${mine.filter(p=>p.inst===i.code).map(p=>`<li>${p.title}</li>`).join('')}</ul>`).join('') + '</div>' + landscapeLink();
 }

@@ -72,10 +72,10 @@ check("sector counts add up to all courses", sum(G[k]["n"] for k in PRIORITY + [
 mapped = n - by["general"]
 check("sector found for at least 40% of courses", mapped / n >= 0.40, f"{mapped / n:.0%}")
 
-# rules vs the Pulse's hand-tagged SCTPs
+# the sector tags on the Pulse's SCTP list (made by sctp_build.py from the Course Finder's rules) agree with these rules
 sctp = json.loads((PULSE / "data" / "sctp.json").read_text())["programmes"]
 agree = sum(classify(p["title"])[0] == ("general" if p["sector"] in ("cross", "other") else p["sector"]) for p in sctp)
-check("rules agree with hand-tagged SCTPs (90%+)", agree / len(sctp) >= 0.90, f"{agree}/{len(sctp)}")
+check("rules agree with the SCTP list's sector tags (90%+)", agree / len(sctp) >= 0.90, f"{agree}/{len(sctp)}")
 
 # --- runs, counted independently ---
 runs = sheet("runs")

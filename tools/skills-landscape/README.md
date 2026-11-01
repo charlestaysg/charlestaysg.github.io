@@ -14,7 +14,7 @@ The supply side of the SME Workforce Pulse. It shows what SkillsFuture-listed tr
   - The title is checked first.
   - The course text counts only when it points clearly to one sector.
   - Delivery-mode notes in titles are ignored.
-  - The rules follow the Pulse's hand-tagged SCTPs; for example, facilities management goes under admin and media under Info & comms.
+  - The rules follow the sector tags in the Pulse's SCTP list; for example, facilities management goes under admin and media under Info & comms.
 - `ai.py`: the AI-related test, a regular expression on the title.
 - `build.py`: classifies every course, then aggregates by sector into `data/snapshots/<data-month>.json` and `data/latest.json` (about 18 KB, no course rows). It reads open PMET roles from `../sme-pulse/data/snapshot.json` and inlines everything into `template.html` → `index.html`. `--page-only` re-inlines `latest.json` after a template change.
 - `check.py`: recounts courses, providers, fees, AI courses, provider types and runs straight from the XLSX files, without `clean.py`. It also:

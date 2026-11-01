@@ -1,7 +1,8 @@
 """Turn the SME Workforce Pulse data files into tidy CSVs for Evidence.
 
 Reads  ../sme-pulse/data/   snapshot.json, sctp.json, manual.json, last-checked.json
-       (made by ../sme-pulse/fetch.py and kept by hand; this script never fetches)
+       (fetch.py makes snapshot.json, sctp_build.py makes sctp.json, manual.json and last-checked.json
+       are kept by hand; this script never fetches)
 Writes sources/pulse/*.csv  (Evidence reads the folder through connection.yaml, type: csv)
 
 Run:  python3 scripts/prep_data.py [path/to/sme-pulse/data]
@@ -130,10 +131,10 @@ def main():
           "ret_all": sum(r["v"] or 0 for r in ds["retrenched_total"]["data"] if r["q"] in last4)}
     pmet_rows = [[last4[0], last4[-1], qlabel(last4[0]), qlabel(last4[-1]), num(pm["ret"]), num(pm["vac"]), num(pm["ret_all"])]]
 
-    sctp_rows = [[n + 1, p["inst"], inst[p["inst"]]["name"], inst[p["inst"]]["url"], p["title"], p["sector"]] for n, p in enumerate(progs)]
+    sctp_rows = [[n + 1, p["inst"], inst[p["inst"]]["name"], inst[p["inst"]]["url"], p["title"], p["sector"], (p.get("refs") or [""])[0]]
+                 for n, p in enumerate(progs)]
     inst_rows = [[i["code"], i["name"], i["url"], sum(1 for p in progs if p["inst"] == i["code"])] for i in sctp["institutions"]]
     cross = sum(1 for p in progs if p["sector"] == "cross")
-    other = sum(1 for p in progs if p["sector"] == "other")
 
     dataset_rows = [[k, d["id"], d["title"], f"https://data.gov.sg/datasets/{d['id']}/view"] for k, d in ds.items()]
 
@@ -156,7 +157,8 @@ def main():
         "advance_url": adv["url"] if adv else "", "advance_source": adv["source"] if adv else "",
         "advance_full_report_due": adv["full_report_due"] if adv else "",
         "sctp_collected": sctp["collected"], "sctp_collected_label": nice_date(sctp["collected"]),
-        "sctp_total": len(progs), "sctp_institutions": len(inst_rows), "sctp_cross": cross, "sctp_other": other,
+        "sctp_dataset_url": f"https://data.gov.sg/datasets/{sctp['source']['id']}/view" if sctp.get("source") else "",
+        "sctp_total": len(progs), "sctp_institutions": len(inst_rows), "sctp_cross": cross,
         "imda_source": manual["source"], "imda_url": manual["url"], "imda_retrieved": manual["retrieved"],
         "imda_retrieved_label": nice_date(manual["retrieved"]),
         "imda_year_a": imda[0]["year"], "imda_pct_a": imda[0]["pct"],
@@ -171,7 +173,7 @@ def main():
         write(tmp, "series.csv", ["scope", "scope_label", "measure", "quarter", "quarter_label", "q_idx", "period_start", "value", "published_since_start"], rows)
         write(tmp, "sectors.csv", ["sector", "label", "mom_industry", "sort", "pmet_retrenched", "pmet_missing_quarters", "pmet_vacancies", "sctp_programmes"], sector_rows)
         write(tmp, "pmet_total.csv", ["from_quarter", "to_quarter", "from_label", "to_label", "retrenched", "vacancies", "all_retrenched"], pmet_rows)
-        write(tmp, "sctp_programmes.csv", ["seq", "inst", "inst_name", "inst_url", "title", "sector"], sctp_rows)
+        write(tmp, "sctp_programmes.csv", ["seq", "inst", "inst_name", "inst_url", "title", "sector", "ref"], sctp_rows)
         write(tmp, "sctp_institutions.csv", ["code", "name", "url", "programmes"], inst_rows)
         write(tmp, "datasets.csv", ["key", "id", "title", "url"], dataset_rows)
         write(tmp, "meta.csv", list(meta), [list(meta.values())])

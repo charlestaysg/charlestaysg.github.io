@@ -97,6 +97,7 @@ sctp = json.loads((DATA / "sctp.json").read_text())
 same("SCTP programme count", float(len(sctp["programmes"])), float(len(sctp_csv)))
 same("SCTP institution count", float(len(sctp["institutions"])), float(meta["sctp_institutions"]))
 same("SCTP titles unchanged", 1.0 if [p["title"] for p in sctp["programmes"]] == [r["title"] for r in sctp_csv] else 0.0, 1.0)
+same("SCTP first course reference unchanged", 1.0 if [(p.get("refs") or [""])[0] for p in sctp["programmes"]] == [r["ref"] for r in sctp_csv] else 0.0, 1.0)
 known = set(SECTORS) | {"cross", "other"}
 bad = [p["title"] for p in sctp["programmes"] if p["sector"] not in known]
 fails += bool(bad)

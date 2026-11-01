@@ -1,13 +1,16 @@
 <script>
 	// SCTP programmes for the chosen sector, grouped by institution, plus the landscape link.
-	// programmes: rows of {inst, title}; institutions: rows of {code, name, url}.
+	// programmes: rows of {inst, title, ref}; institutions: rows of {code, name, url}.
+	// ref is the first course reference number; the title links to that course on MySkillsFuture.
 	export let sector = 'all';
 	export let label = '';
 	export let programmes = [];
 	export let institutions = [];
 	export let collected = '';
+	export let datasetUrl = '';
 
 	const LANDSCAPE = '/projects/skills-landscape/';
+	const COURSE_URL = 'https://courses.myskillsfuture.gov.sg/courses/';
 	$: mine = Array.from(programmes ?? []);
 	$: groups = Array.from(institutions ?? [])
 		.filter((i) => mine.some((p) => p.inst === i.code))
@@ -21,13 +24,14 @@
 
 {#if sector === 'all'}
 	<p class="sc-hint">
-		Pick a sector above to list its SCTP programmes. Sources: {#each Array.from(institutions ?? []) as i, n}{#if n > 0},
+		Pick a sector above to list its SCTP programmes. List from {#if datasetUrl}<a href={datasetUrl} rel="noopener">SkillsFuture's course directory</a>{:else}SkillsFuture's course directory{/if}
+		(SWDA, data.gov.sg); institution pages: {#each Array.from(institutions ?? []) as i, n}{#if n > 0},
 			{/if}<a href={i.url} rel="noopener">{i.code}</a>{/each}.
 	</p>
 {:else if mine.length === 0}
 	<p class="sc-sel">
-		{label}: no SCTP programme found on the six institutions' public pages on {collected}. Other
-		training providers also run SCTPs; check MySkillsFuture.
+		{label}: no SCTP programme from the six institutions is listed in SkillsFuture's course directory
+		as of {collected}. Other training providers also run SCTPs; check MySkillsFuture.
 	</p>
 {:else}
 	<p class="sc-sel">
@@ -36,7 +40,7 @@
 	{#each groups as g}
 		<h3 class="sc-h"><a href={g.url} rel="noopener">{g.name} ↗</a></h3>
 		<ul class="sc-ul">
-			{#each g.items as p}<li>{p.title}</li>{/each}
+			{#each g.items as p}<li>{#if p.ref}<a href={COURSE_URL + p.ref} rel="noopener">{p.title}</a>{:else}{p.title}{/if}</li>{/each}
 		</ul>
 	{/each}
 {/if}
@@ -49,7 +53,8 @@
 		margin: 12px 0 0;
 	}
 	.sc-hint a,
-	.sc-h a {
+	.sc-h a,
+	.sc-ul a {
 		text-decoration: underline;
 		text-underline-offset: 2px;
 	}

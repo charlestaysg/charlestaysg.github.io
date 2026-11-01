@@ -214,13 +214,11 @@ select label || case when sector = 'security' then ' (part of admin & support)' 
 from pulse.sectors
 union all
 select 'Any sector (cross-industry skills)', (select sctp_cross from pulse.meta), null, -1
-union all
-select 'Other', (select sctp_other from pulse.meta), null, -2
 order by ord desc
 ```
 
 ```sql sc_list
-select inst, title from pulse.sctp_programmes
+select inst, title, ref from pulse.sctp_programmes
 where sector = '${inputs.sector.value}' or ('${inputs.sector.value}' = 'admin' and sector = 'security')
 order by seq
 ```
@@ -418,7 +416,7 @@ select title, url from pulse.datasets
 
 <h2 class="pulse-h2">Career-switch courses (SCTP) by sector</h2>
 
-<div class="pulse-hint">SCTP programmes listed on the public course pages of the five polytechnics and ITE, collected on {meta[0].sctp_collected_label}. This counts programmes, not class places or intakes, so it shows where courses exist rather than how many people they train. The sector for each programme is our judgement from its title and listed job roles.</div>
+<div class="pulse-hint">SCTP courses from the five polytechnics and ITE that are listed in SkillsFuture's course directory, as of {meta[0].sctp_collected_label}. This counts programmes, not class places or intakes, so it shows where courses exist rather than how many people they train. Each programme's sector comes from the same keyword rules as the Course Finder.</div>
 
 <div class="pulse-two">
 <div>
@@ -436,7 +434,7 @@ select title, url from pulse.datasets
     <Column id=pmet_open title="PMET roles open" fmt=num0 />
 </DataTable>
 
-<SctpList sector={chosen[0].sector} label={chosen[0].label} programmes={sc_list} institutions={sc_inst} collected={meta[0].sctp_collected_label} />
+<SctpList sector={chosen[0].sector} label={chosen[0].label} programmes={sc_list} institutions={sc_inst} collected={meta[0].sctp_collected_label} datasetUrl={meta[0].sctp_dataset_url} />
 
 </div>
 
