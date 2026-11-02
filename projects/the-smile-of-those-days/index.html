@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Smile of Those Days: how it was made · Charles Tay</title>
+<meta name="description" content="A song for Audrey Hepburn, made only from public-domain archive film. How the footage was found, how the song was made and how the video was built with code.">
+<link rel="canonical" href="https://charlestaysg.com/projects/the-smile-of-those-days/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Smile of Those Days: how it was made">
+<meta property="og:description" content="A song for Audrey Hepburn from public-domain archive film, black and white until one line turns it to colour.">
+<meta property="og:url" content="https://charlestaysg.com/projects/the-smile-of-those-days/">
+<meta property="og:image" content="https://charlestaysg.com/projects/the-smile-of-those-days/poster.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261102a">
+<style>
+  .prose { max-width: 64ch; }
+  .steps { list-style: none; padding: 0; margin: 0; }
+  .steps li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .steps li:last-child { border-bottom: 1px solid var(--line); }
+  .steps b.n { font-family: var(--font-mono); color: var(--green); font-weight: 500; padding-top: 2px; }
+  .steps p { margin: 0; max-width: 64ch; }
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#the-smile-of-those-days">← Charles Tay</a>
+    <span class="label">How it was made · <time datetime="2026-11-01">Nov 2026</time></span>
+    <h1>The Smile of Those Days</h1>
+    <p class="dek">A song for Audrey Hepburn, made only from public-domain archive film. Black and white, until one line turns it to colour.</p>
+  </div>
+</header>
+
+<main>
+  <section id="watch">
+    <div class="wrap">
+      <div class="sec-head"><h2>the video</h2></div>
+      <div class="player"><button type="button" class="yt" data-yt="_-uW-E4CVco" aria-label="Play The Smile of Those Days on YouTube"><img src="poster.jpg" alt=""><span class="yt-play" aria-hidden="true"></span></button></div>
+      <p style="margin-top:10px"><a href="https://www.youtube.com/watch?v=_-uW-E4CVco" rel="noopener">Watch on YouTube ↗</a></p>
+      <dl class="spec-list" style="margin-top:20px">
+        <dt>length</dt><dd>4:13</dd>
+        <dt>footage</dt><dd>36 shots from 44 archive clips, 1953 to 1963</dd>
+        <dt>song</dt><dd>English, a film waltz in 3/4 time</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="idea">
+    <div class="wrap">
+      <div class="sec-head"><h2>where the idea came from</h2></div>
+      <p class="prose">Most of her films are still under copyright. What is free to use covers her first ten years as a star, 1953 to 1963. It is mostly black and white, and the colour only comes near the end. That gave the song its shape: someone remembering her films in black and white, until one line turns everything to colour.</p>
+    </div>
+  </section>
+
+  <section id="steps">
+    <div class="wrap">
+      <div class="sec-head"><h2>how it came together</h2></div>
+      <ol class="steps">
+        <li><b class="n">1</b><p><strong>Public-domain film only.</strong> I searched the Internet Archive for everything with her in it and kept only items marked Public Domain Mark: three trailers (<i>Roman Holiday</i>, <i>Love in the Afternoon</i>, <i>The Unforgiven</i>), <i>Charade</i> and a 1963 newsreel of its premiere. Full uploads of <i>Roman Holiday</i>, <i>Breakfast at Tiffany&rsquo;s</i> and others were there too, but without that mark, so they stayed out.</p></li>
+        <li><b class="n">2</b><p><strong>44 silent clips.</strong> Each clip was checked frame by frame and logged by what is on screen and its mood. <i>Charade</i> plays without sound because its score is still under copyright. So is Moon River, the song most tied to her, so the new song only borrows its mood.</p></li>
+        <li><b class="n">3</b><p><strong>Story before song.</strong> The lyrics go from an empty cinema to the projector starting, then Rome on a Vespa, a Paris afternoon on the water, and finally colour.</p></li>
+        <li><b class="n">4</b><p><strong>The song.</strong> Made in Suno as a 1960s film waltz at 84 beats a minute, with strings, harmonica, nylon guitar, celesta and a key change for the last chorus. Of four takes, two English and two Japanese, the English one made it.</p></li>
+        <li><b class="n">5</b><p><strong>Edited with code, not a timeline.</strong> The 36 shots are listed in one file, and a script runs ffmpeg to build the video: half-second dissolves, light film grain on the black and white, and a hard cut to colour at 3:06.8, on the line itself. Subtitles are timed from Suno&rsquo;s word timings.</p></li>
+        <li><b class="n">6</b><p><strong>Unlisted first.</strong> YouTube&rsquo;s copyright check came back clean, then it went public.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="wrap">
+      <div class="sec-head"><h2>the tools, and what each one did</h2></div>
+      <dl class="spec-list">
+        <dt>the footage</dt><dd>Internet Archive: trailers, <i>Charade</i> and a newsreel, all marked Public Domain Mark</dd>
+        <dt>the plan</dt><dd>Claude: the search, the clip log, lyrics, shot list and build script</dd>
+        <dt>the music</dt><dd>Suno: music and voice</dd>
+        <dt>the video</dt><dd>FFmpeg: cuts, black and white, dissolves, subtitles and loudness</dd>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. Music and voice are AI-generated. Archive film from the Internet Archive, marked Public Domain Mark. A non-commercial tribute.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies unless you play the YouTube video. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+<script>
+document.addEventListener('click', e => {
+  const b = e.target.closest('button.yt');
+  if (b) b.parentElement.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1&rel=0" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+});
+</script>
+</body>
+</html>
