@@ -35,7 +35,7 @@
 <header class="page-head">
   <div class="wrap">
     <a class="back" href="../../">← Charles Tay</a>
-    <span class="label">Picked by Hacker News readers · <time datetime="2026-11-03">list as of 3 Nov 2026</time></span>
+    <span class="label">Picked by Hacker News readers · last refreshed <time id="tube-refreshed" datetime="2026-11-03">3 Nov 2026</time></span>
     <h1>Worth watching</h1>
     <p class="dek">167 talks and explainers that Hacker News readers keep recommending to each other, kept to what a trainer can use.</p>
   </div>
@@ -90,7 +90,7 @@
   </div>
 </footer>
 
-<script src="picks.js?v=20261103"></script>
+<script src="picks.js?v=2026110302"></script>
 <script>
 (() => {
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -115,6 +115,8 @@
       + `<span class="lbl">Where it was recommended</span><p class="tmeta">${(v.p.hn || []).map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">HN comment ${i + 1} ↗</a>`).join(" · ")}${v.p.first_seen ? ` · first ${v.p.first_seen.slice(0, 4)}, last ${(v.p.last_seen || "").slice(0, 4)}` : ""}</p>`,
   };
   document.getElementById("method-text").innerHTML = window.METHOD_HTML || "";
+  const r = window.REFRESHED, t = document.getElementById("tube-refreshed");
+  if (r && t) { t.dateTime = r; t.textContent = new Date(r + "T00:00:00").toLocaleDateString("en-SG", { day: "numeric", month: "short", year: "numeric" }); }
 })();
 </script>
 <script src="tube.js?v=1"></script>
