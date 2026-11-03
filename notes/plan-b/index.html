@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>If It Stopped Tonight · Charles Tay</title>
+<meta name="description" content="Hackers switched off supermarket freezers across Europe. A plan B for Singapore SME owners: what to list, what to ask, who needs to know what, and whether a spare laptop helps.">
+<link rel="canonical" href="https://charlestaysg.com/notes/plan-b/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="If It Stopped Tonight · Charles Tay">
+<meta property="og:description" content="A plan B for small businesses, starting with one page and 30 minutes.">
+<meta property="og:url" content="https://charlestaysg.com/notes/plan-b/">
+<meta property="og:image" content="https://charlestaysg.com/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  /* do this / why rows (same grid as the other notes) */
+  .steps { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px 16px; margin: 12px 0 0; }
+  .steps dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .steps dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .steps dd.out { font-weight: 700; }
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  .body-text { max-width: 64ch; font-size: 17px; line-height: 1.55; }
+  .body-text + .body-text { margin-top: 12px; }
+  ol.test { max-width: 64ch; margin: 0; padding-left: 22px; display: grid; gap: 10px; font-size: 17px; line-height: 1.5; }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; gap: 2px; } .steps dd { margin-bottom: 8px; } }
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/projects/worth-watching/">Worth watching</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#news">← Charles Tay</a>
+    <span class="label">For SME owners · <time datetime="2026-11-04">4 Nov 2026</time></span>
+    <h1>If it stopped tonight</h1>
+    <p class="dek">This week someone switched off supermarket freezers across Europe from far away. Most small firms have no plan for a night like that. Here is how to start one.</p>
+  </div>
+</header>
+
+<main>
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <ul class="short">
+        <li>Butchers and small shops were hit, not just big chains. Attackers went looking for equipment left open on the internet. Size had nothing to do with it.</li>
+        <li>Spend 30 minutes listing what you can&rsquo;t trade without, how long you&rsquo;d last without each one, and who you&rsquo;d call.</li>
+        <li>Put it on one printed page, and keep a copy somewhere other than the office computers.</li>
+        <li>Backups you have tried restoring matter more than any spare machine.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="happened">
+    <div class="wrap">
+      <div class="sec-head"><h2>what happened</h2></div>
+      <ul class="tools">
+        <li><span class="job">2 November</span><div><h3>More than 100 shops in one night</h3><p>Fridges and freezers in supermarkets and butchers were switched to defrost or heated up remotely. Shops in Belgium, Luxembourg, Sweden, Estonia, Finland, Ireland, the Netherlands, Portugal and Italy threw out spoilt food. One Belgian butcher&rsquo;s fridges reached 18&deg;C, and about &euro;15,000 of meat was lost. Hundreds of French supermarkets were hit the same way in October.</p></div></li>
+        <li><span class="job">the way in</span><div><h3>An open door, not a clever hack</h3><p>The fridge controllers could be reached from the internet so that contractors could check them from afar. The maker said some of the Dutch systems still had their factory passwords, and many units were older models that no longer get security updates.</p></div></li>
+        <li><span class="job">who</span><div><h3>Nobody knows yet</h3><p>No group has claimed it. Belgian prosecutors have opened a criminal case. Belgium&rsquo;s cyber centre says the culprit may never be found.</p></div></li>
+      </ul>
+      <p class="body-text" style="margin-top:20px">The lesson for Singapore isn&rsquo;t about fridges. Cold rooms, CCTV, aircon, door locks, tills and booking systems are often looked after by a contractor through the internet. If they can reach it, others might too.</p>
+    </div>
+  </section>
+
+  <section id="start">
+    <div class="wrap">
+      <div class="sec-head"><h2>a 30-minute start</h2></div>
+      <p class="body-text" style="margin-bottom:20px">Sit down with whoever runs the place day to day. For each of these four, write how long you&rsquo;d last without it, and who you&rsquo;d call first.</p>
+      <ul class="tools">
+        <li><span class="job">money in</span><div><p>Till, payment terminal, online orders, invoicing. Could you take payment some other way tomorrow morning?</p></div></li>
+        <li><span class="job">stock</span><div><p>Cold room, warehouse, stock list. How many hours before you start throwing things away?</p></div></li>
+        <li><span class="job">people paid</span><div><p>Payroll, CPF, supplier payments. Who can log in to the bank if the usual computer is locked?</p></div></li>
+        <li><span class="job">customers</span><div><p>Email, WhatsApp, the customer list. How would you tell them what&rsquo;s going on, and from where?</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="this-week">
+    <div class="wrap">
+      <div class="sec-head"><h2>five questions for this week</h2></div>
+      <ul class="tools">
+        <li>
+          <span class="job">1 · contractors</span>
+          <div>
+            <h3>What do they reach from outside?</h3>
+            <dl class="steps">
+              <dt>ask</dt><dd>Can this be reached from the open internet? Has the factory password been changed? Does it still get updates?</dd>
+              <dt>why</dt><dd class="out">Those three answers were the whole story in Europe.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">2 · backups</span>
+          <div>
+            <h3>When did you last restore one?</h3>
+            <dl class="steps">
+              <dt>ask</dt><dd>Is there a copy that is offline, or that can&rsquo;t be changed or deleted? Has anyone tried bringing a file back from it?</dd>
+              <dt>why</dt><dd>Ransomware locks the copies it can reach. A backup nobody has tested is a hope, not a plan.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">3 · passwords</span>
+          <div>
+            <h3>Who holds the keys?</h3>
+            <dl class="steps">
+              <dt>ask</dt><dd>Who has the admin passwords for email, the bank, the website and the accounting system? What if that person is away or has left?</dd>
+              <dt>why</dt><dd>Many small firms find out mid-crisis that only a former staff member or an old vendor can log in.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">4 · paper</span>
+          <div>
+            <h3>What would you need on paper?</h3>
+            <dl class="steps">
+              <dt>ask</dt><dd>Staff phone numbers, key customers and suppliers, the bank&rsquo;s fraud line, your IT contractor, your insurer.</dd>
+              <dt>why</dt><dd>If the computers are locked, the contact list on them is locked too.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">5 · insurance</span>
+          <div>
+            <h3>What does your policy cover?</h3>
+            <dl class="steps">
+              <dt>ask</dt><dd>Does it cover spoilt stock, lost trading days or a cyber incident? What does the insurer need you to do, and how fast?</dd>
+              <dt>why</dt><dd>France&rsquo;s cyber agency told shops to check their insurance terms before cutting a contractor&rsquo;s connection. Some policies ask for steps in a set order.</dd>
+            </dl>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="one-page">
+    <div class="wrap">
+      <div class="sec-head"><h2>the one page</h2></div>
+      <ul class="short">
+        <li><strong>Who decides.</strong> One name, and one backup name.</li>
+        <li><strong>Who calls whom.</strong> Staff, IT contractor, bank, insurer, key customers.</li>
+        <li><strong>The first hour.</strong> Unplug the affected machines from the network and leave them switched on. Don&rsquo;t pay anyone. Don&rsquo;t wipe anything until someone has looked.</li>
+        <li><strong>How you keep trading.</strong> Manual receipts, a phone for payments, where the offline copies are.</li>
+        <li><strong>Who to report to.</strong> SingCERT for cyber incidents. PDPC if personal data may have leaked: once you decide a breach must be reported, you have three calendar days.</li>
+      </ul>
+      <p class="body-text" style="margin-top:16px">Print it. Keep one copy at the shop and one at home.</p>
+    </div>
+  </section>
+
+  <section id="who-knows-what">
+    <div class="wrap">
+      <div class="sec-head"><h2>who needs to know what</h2></div>
+      <p class="body-text" style="margin-bottom:20px">The PDPA covers personal data: names, NRIC numbers, phone numbers, salaries. Tender prices and company accounts usually aren&rsquo;t personal data, so they are a security matter, not a PDPA one. People who handle both need some of each. PDPC&rsquo;s own <a href="https://www.pdpc.gov.sg/DP-Competency" rel="noopener">competency levels for data protection staff ↗</a> are a fair guide to how deep each person should go.</p>
+      <ul class="tools">
+        <li><span class="job">everyone</span><div><h3>Anyone with a company login</h3><p>Spots a fake email or invoice and reports it the same day. Uses two-step login and a password manager. Locks the screen. Shares files through company links, not personal email or WhatsApp. Knows which AI tools are allowed and what stays out of them.</p></div></li>
+        <li><span class="job">sensitive files</span><div><h3>Tenders, finance, payroll, HR</h3><p>All of the above, plus: sets who can open each file and removes people when they leave. Sends tenders only through the buyer&rsquo;s portal. Never changes a supplier&rsquo;s bank details because an email said so, and calls back on a known number first. Removes NRICs and salaries before forwarding anything.</p></div></li>
+        <li><span class="job">your DPO</span><div><h3>The person named for data protection</h3><p>Every organisation must name one, and it can be the owner. Keeps a list of what personal data you hold, checks vendors, decides whether a breach must be reported, and trains the others. A common course for this role is the Practitioner Certificate in Personal Data Protection. <a href="https://courses.myskillsfuture.gov.sg/search?q=Practitioner+Certificate+in+Personal+Data+Protection" rel="noopener">Find a class on MySkillsFuture ↗</a></p></div></li>
+        <li><span class="job">the owner</span><div><h3>Four answers, no jargon</h3><p>What data do we hold? Who can see it? What would we do if it leaked or got locked? Who is our DPO?</p></div></li>
+      </ul>
+      <p class="body-text" style="margin-top:20px">A quick way to check: ask each person to show you how they&rsquo;d share a tender file, what they&rsquo;d do with an email giving new bank details, where they&rsquo;d report a suspicious email, and how they&rsquo;d remove a leaver&rsquo;s access. If they can do all four, that matters more than a certificate.</p>
+    </div>
+  </section>
+
+  <section id="spare-laptop">
+    <div class="wrap">
+      <div class="sec-head"><h2>should you keep a spare laptop, maybe a Mac?</h2></div>
+      <p class="body-text" style="margin-bottom:20px">If the office runs on Windows, a Mac on standby sounds like a neat plan B. It helps a little, if you set it up right.</p>
+      <ul class="tools">
+        <li><span class="job">helps</span><div><p>Most office ransomware is built for Windows and spreads through shared Windows logins. A Mac kept outside all that will probably still start up.</p></div></li>
+        <li><span class="job">doesn&rsquo;t help</span><div><p>If it syncs the same shared folders, it downloads the locked files too. If attackers have the email password, they have it on every machine. Some ransomware gangs make Mac versions as well.</p></div></li>
+        <li><span class="job">set it up so</span><div><p>It has its own login and admin password. It isn&rsquo;t syncing the shared folders all the time. It gets updated every month. Someone switches it on and tries it every quarter. It holds the one-page plan and the contact list, and can reach the bank with its own two-step login device.</p></div></li>
+      </ul>
+      <p class="body-text" style="margin-top:20px">A spare laptop of any kind, Windows or Mac, is worth having to keep invoicing and paying staff. It doesn&rsquo;t replace a backup you have tested. Do the backup first.</p>
+    </div>
+  </section>
+
+  <section id="drill">
+    <div class="wrap">
+      <div class="sec-head"><h2>a 15-minute drill</h2></div>
+      <ol class="test">
+        <li>Pick a morning. Say out loud: &ldquo;The main computer is locked and there&rsquo;s a ransom note on the screen.&rdquo;</li>
+        <li>Without touching the computer, find the one page, call the first name on it, and take one sale or one payment the backup way.</li>
+        <li>Write down what was missing. Fix one thing this week.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="help">
+    <div class="wrap">
+      <div class="sec-head"><h2>help in Singapore</h2></div>
+      <ul class="tools">
+        <li><span class="job">a checklist</span><div><p>CSA&rsquo;s <a href="https://www.csa.gov.sg/our-programmes/support-for-enterprises/sg-cyber-safe-programme/cybersecurity-certification-for-organisations/cyber-essentials/" rel="noopener">Cyber Essentials ↗</a> mark is a short set of basic measures sized for small firms. Even if you never apply for the mark, its list is a good place to start.</p></div></li>
+        <li><span class="job">someone to look</span><div><p>Under CSA&rsquo;s <a href="https://www.csa.gov.sg/our-programmes/support-for-enterprises/sg-cyber-safe-programme/cybersecurity-certification-for-organisations/ciso-as-a-service-to-develop-cybersecurity-health-plan/" rel="noopener">CISO-as-a-Service ↗</a> scheme, a listed consultant checks your setup and writes a plan. Eligible SMEs can get co-funding; check CSA&rsquo;s page for the current terms.</p></div></li>
+        <li><span class="job">reporting</span><div><p><a href="https://www.csa.gov.sg/singcert/reporting" rel="noopener">SingCERT ↗</a> for cyber incidents, and <a href="https://www.pdpc.gov.sg/report-data-breach" rel="noopener">PDPC ↗</a> for a data breach.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="limits">
+    <div class="wrap">
+      <div class="sec-head"><h2>what to doubt</h2></div>
+      <ul class="short">
+        <li>Store counts and country lists differ between reports, and some chains only said &ldquo;IT incident&rdquo;. Treat the numbers as early.</li>
+        <li>How the attackers got in is still being worked out. Default passwords and old software are what the maker and France&rsquo;s cyber agency pointed to, not a final finding.</li>
+        <li>No Singapore shops have been reported hit. The point is the kind of weakness, which is common everywhere.</li>
+      </ul>
+      <p class="body-text" style="margin-top:24px">Sources: <a href="https://www.channelnewsasia.com/world/fridge-cyberattack-hits-supermarkets-across-europe-6513981" rel="noopener">CNA ↗</a> (with AFP), <a href="https://www.aljazeera.com/news/2026/11/3/very-cold-war-whos-attacking-europes-supermarket-freezers" rel="noopener">Al Jazeera ↗</a>, <a href="https://thehackernews.com/2026/11/second-wave-of-cyberattacks-hits.html" rel="noopener">The Hacker News ↗</a>, and <a href="https://cert.cyber.gouv.fr/alerte/CERTFR-2026-ALE-012/" rel="noopener">France&rsquo;s CERT-FR alert ↗</a> (in French, last updated 16 Oct 2026).</p>
+      <p class="credit" style="margin-top:12px">Written 4 Nov 2026. My own view. I&rsquo;m not a security specialist or a lawyer, and I shaped this page with Claude. Not affiliated with or endorsed by CNA, AFP, CSA or PDPC.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+
+</body>
+</html>
