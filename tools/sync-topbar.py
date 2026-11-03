@@ -26,8 +26,9 @@ PAGE_CSS = {
     "projects/sausage-dog-password/momo/index.html": ".sitebar{margin-top:-48px;margin-bottom:24px}",
 }
 
-# (label, home-page section). Order follows the sections on the home page.
-LINKS = [("Work", "work"), ("News", "news"), ("About", "about"), ("Toolkit", "toolkit"), ("Contact", "contact")]
+# (label, home-page section, or a page path starting with "/"). Order follows the sections on the home page.
+LINKS = [("Work", "work"), ("News", "news"), ("About", "about"), ("Toolkit", "toolkit"),
+         ("Worth watching", "/projects/worth-watching/"), ("Contact", "contact")]
 LINKEDIN = "https://www.linkedin.com/in/charlestay"
 
 SOLO_CSS = """<style>
@@ -66,7 +67,7 @@ def uses_shared_css(path, html):
 
 def bar(home, shared, extra=""):
     pre = "" if home else "/"
-    links = "".join(f'<a href="{pre}#{a}">{label}</a>' for label, a in LINKS)
+    links = "".join(f'<a href="{a if a.startswith("/") else pre + "#" + a}">{label}</a>' for label, a in LINKS)
     me = '<a class="me" href="#top">Charles Tay</a>' if home else '<a class="me" href="/">Charles Tay</a>'
     cls, inner = ("topbar", "wrap") if shared else ("sitebar", "sb-in")
     nav = (f'<nav class="{cls}" aria-label="Site">\n  <div class="{inner}">\n    {me}\n    {links}\n'
