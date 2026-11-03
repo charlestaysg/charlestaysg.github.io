@@ -1,6 +1,6 @@
 {
- "built": "2026-11-01",
- "checked": "2026-11-01",
+ "built": "2026-11-03",
+ "checked": "2026-11-03",
  "datasets": {
   "directory": {
    "id": "d_b5802b76f409764c16dde4bf2feb19cd",
@@ -87,7 +87,7 @@
  "runs_total": 44984,
  "runs_undated": 19492,
  "courses_total": 26099,
- "courses_dated": 4093,
+ "courses_dated": 3968,
  "sectors": [
   {
    "key": "manufacturing",
@@ -101,63 +101,63 @@
    "label": "Construction",
    "pmet_open": 3000.0,
    "n": 620,
-   "dated": 116
+   "dated": 113
   },
   {
    "key": "transport",
    "label": "Transport & storage",
    "pmet_open": 700.0,
    "n": 955,
-   "dated": 137
+   "dated": 136
   },
   {
    "key": "food",
    "label": "Food & accommodation",
    "pmet_open": 900.0,
    "n": 912,
-   "dated": 198
+   "dated": 197
   },
   {
    "key": "health",
    "label": "Health & social",
    "pmet_open": 3200.0,
    "n": 1968,
-   "dated": 251
+   "dated": 234
   },
   {
    "key": "admin",
    "label": "Admin & support",
    "pmet_open": 400.0,
    "n": 521,
-   "dated": 67
+   "dated": 64
   },
   {
    "key": "security",
    "label": "Security",
    "pmet_open": null,
    "n": 454,
-   "dated": 102
+   "dated": 100
   },
   {
    "key": "retail",
    "label": "Wholesale & retail",
    "pmet_open": 2500.0,
    "n": 378,
-   "dated": 60
+   "dated": 57
   },
   {
    "key": "ict",
    "label": "Info & comms",
    "pmet_open": 3900.0,
    "n": 3362,
-   "dated": 572
+   "dated": 555
   },
   {
    "key": "finance",
    "label": "Finance & insurance",
    "pmet_open": 4500.0,
    "n": 623,
-   "dated": 67
+   "dated": 65
   },
   {
    "key": "realestate",
@@ -171,28 +171,28 @@
    "label": "Professional services",
    "pmet_open": 4700.0,
    "n": 898,
-   "dated": 148
+   "dated": 143
   },
   {
    "key": "publicedu",
    "label": "Public admin & education",
    "pmet_open": 8400.0,
    "n": 462,
-   "dated": 71
+   "dated": 70
   },
   {
    "key": "arts",
    "label": "Arts & recreation",
    "pmet_open": 200.0,
    "n": 502,
-   "dated": 60
+   "dated": 59
   },
   {
    "key": "general",
    "label": "Cross-sector",
    "pmet_open": null,
    "n": 13492,
-   "dated": 2122
+   "dated": 2053
   }
  ],
  "pulse_url": "../sme-pulse/",
