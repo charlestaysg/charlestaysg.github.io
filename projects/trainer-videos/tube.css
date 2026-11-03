@@ -1,0 +1,90 @@
+/* Video wall for this page (see tube.js). Written for the tokens in the site stylesheet; the block at the end adds what that stylesheet lacks. */
+[hidden] { display: none !important; }
+.tube-lede { color: var(--muted); max-width: 72ch; }
+.tube-how { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 14px 0 0; padding: 0; list-style: none; font: 13px var(--font-mono); color: var(--muted); }
+.tube-how li::before { content: "· "; color: var(--green); }
+
+.tube-bar { display: flex; flex-direction: column; gap: 14px; margin: 28px 0 8px; }
+.tube-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.tube-row select { font: 14px var(--font-mono); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; }
+.tube-row label { font: 14px var(--font-mono); color: var(--muted); display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.tube-row input[type="checkbox"] { accent-color: var(--green); width: 16px; height: 16px; }
+.tube-count { font: 13px var(--font-mono); color: var(--muted); margin: 6px 0 0; }
+.linkbtn { font: 13px var(--font-mono); color: var(--muted); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.linkbtn:hover { color: var(--green); }
+
+/* recently opened */
+.tube-recent { margin: 18px 0 0; }
+.tube-recent-list { display: flex; gap: 10px; overflow-x: auto; padding: 8px 0 4px; scrollbar-width: thin; }
+.rchip { flex: 0 0 210px; display: flex; gap: 10px; align-items: center; text-align: left; font: 13px/1.3 var(--font-display); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 6px; cursor: pointer; }
+.rchip:hover { border-color: var(--green); }
+.rchip img { width: 64px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 5px; flex: none; }
+.rchip span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* player */
+.tube-player { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 22px; margin: 22px 0 8px; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); scroll-margin-top: 70px; }
+.pframe { aspect-ratio: 16 / 9; background: #000; border-radius: 8px; overflow: hidden; }
+.pframe.vertical { aspect-ratio: 9 / 16; max-height: 78vh; margin: 0 auto; width: auto; height: 78vh; max-width: 100%; }
+.pframe iframe { width: 100%; height: 100%; border: 0; display: block; }
+.pside h2 { font-weight: 900; font-size: 24px; line-height: 1.12; letter-spacing: -.015em; margin: 6px 0 6px; }
+.pblurb { font-size: 15.5px; line-height: 1.5; margin: 8px 0 0; }
+.pside .lbl { display: block; font: 500 11.5px var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: 10px; }
+.pact { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+.pact .chip { padding: 8px 12px; text-decoration: none; }
+.pnext-h { margin-top: 18px; }
+.pnext { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.pnext button { width: 100%; display: flex; gap: 10px; align-items: center; text-align: left; background: none; border: 1px solid transparent; border-radius: 8px; padding: 4px; color: var(--ink); cursor: pointer; font: inherit; }
+.pnext button:hover { border-color: var(--line); background: var(--bg); }
+.pnext img { width: 96px; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 5px; flex: none; }
+.pnext b { display: block; font-size: 14.5px; line-height: 1.25; font-weight: 700; }
+.pnext small { display: block; font: 12px var(--font-mono); color: var(--muted); margin-top: 2px; }
+
+/* grid */
+.tube-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 30px 20px; margin: 22px 0 0; }
+.tcard { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.tthumb { position: relative; display: block; padding: 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--panel); cursor: pointer; aspect-ratio: 16 / 9; transition: transform .2s, border-color .2s; }
+.tthumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tcard:hover .tthumb { transform: translateY(-3px); border-color: var(--green); }
+.tcard.seen .tthumb img { opacity: .55; filter: grayscale(.6); }
+.tdur, .tseen { position: absolute; bottom: 7px; font: 500 11.5px/1 var(--font-mono); padding: 5px 7px; border-radius: 5px; background: rgba(11, 19, 36, .82); color: #fff; }
+.tdur { right: 7px; }
+.tseen { left: 7px; background: var(--green); color: #0B1324; }
+.tbody h3 { margin: 0; font-size: 17px; line-height: 1.2; font-weight: 700; letter-spacing: -.005em; }
+.tplay { all: unset; cursor: pointer; }
+.tplay:hover { color: var(--green); }
+.tplay:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.tmeta { font: 12.5px/1.45 var(--font-mono); color: var(--muted); margin: 4px 0 0; }
+.tblurb { font-size: 14.5px; line-height: 1.45; color: var(--muted); margin: 6px 0 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.tuse { font-size: 14.5px; line-height: 1.45; margin: 6px 0 0; }
+.tuse b { font: 500 11px var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--green); }
+.tempty { color: var(--muted); grid-column: 1 / -1; }
+.tube-method { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 15.5px; max-width: 78ch; }
+.tube-method h2 { font-size: 22px; color: var(--ink); margin: 0 0 8px; }
+
+@media (max-width: 820px) { .tube-player { grid-template-columns: 1fr; padding: 12px; } }
+@media (prefers-reduced-motion: reduce) { .tthumb { transition: none; } .tcard:hover .tthumb { transform: none; } }
+
+/* ---- added for the public site: classes and resets that styles.css does not have ---- */
+.tube-page { padding-block: 40px 24px; }
+/* styles.css gives every "main section" 64px padding and a bottom rule; the wall's own sections set their own spacing */
+.tube-page section { padding-block: 0; border-bottom: 0; }
+.tube-page .tube-player { padding: 18px; border-bottom: 1px solid var(--line); }
+.tube-page .tube-method { padding-top: 18px; border-top: 1px solid var(--line); }
+.tube-page .kicker { font: 500 12px var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--green); display: flex; align-items: center; gap: 8px; }
+.tube-page .search { flex: 1 1 260px; position: relative; }
+.tube-page .search input { width: 100%; font: 16px var(--font-display); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 11px 16px 11px 42px; }
+.tube-page .search input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 20%, transparent); }
+.tube-page .search svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 17px; height: 17px; color: var(--muted); }
+.tube-page .chips { margin: 0; }
+.tube-page .chip { text-decoration: none; }
+/* styles.css lowercases and enlarges every h2 */
+.tube-page h2 { text-transform: none; letter-spacing: -.015em; }
+.tube-page .tube-method h2 { font-size: 22px; line-height: 1.2; }
+.tube-page .pside h2 { line-height: 1.12; }
+.tube-page .tube-method p, .tube-page .tube-method ul { margin: 0 0 10px; }
+.tube-page .tube-method ul { padding-left: 20px; }
+.tube-page .tube-method b { color: var(--ink); }
+.tube-page .tube-lede { margin: 0; font-size: 17px; line-height: 1.55; }
+.tube-page .tube-how { margin-top: 16px; }
+.tube-page .pside .tmeta { margin-top: 2px; }
+.tube-page .pnext button:hover { background: var(--bg); }

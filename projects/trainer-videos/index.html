@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Videos trainers can use · Charles Tay</title>
+<meta name="description" content="167 talks and explainers that many different Hacker News readers keep recommending, kept to what a trainer can use: how people learn, teaching, coaching, feedback, managing people, giving talks and how AI works. Each has a tip on how to use it in class.">
+<link rel="canonical" href="https://charlestaysg.com/projects/trainer-videos/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Videos trainers can use">
+<meta property="og:description" content="167 talks and explainers that Hacker News readers keep recommending, kept to what a trainer can use, each with a tip on how to use it in class.">
+<meta property="og:url" content="https://charlestaysg.com/projects/trainer-videos/">
+<meta property="og:image" content="https://charlestaysg.com/assets/thumbs/trainer-videos.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261102a">
+<link rel="stylesheet" href="tube.css?v=1">
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../">← Charles Tay</a>
+    <span class="label">For trainers · <time datetime="2026-11-03">list as of 3 Nov 2026</time></span>
+    <h1>Videos trainers can use</h1>
+    <p class="dek">167 talks and explainers that Hacker News readers keep recommending to each other, kept to what a trainer can use.</p>
+  </div>
+</header>
+
+<main class="tube-page">
+  <div class="wrap">
+    <p class="tube-lede">YouTube suggests what keeps people watching. This list starts somewhere else: the videos that many different people on <a href="https://news.ycombinator.com/" rel="noopener">Hacker News</a>, a large forum for engineers and founders, keep recommending to each other in comments, sometimes for fifteen years. I kept the ones a trainer could use: how people learn, explaining things well, running a room, coaching, feedback, managing people, careers, and plain explainers of how AI works. Each one has a line on how you might use it in a session.</p>
+    <ul class="tube-how">
+      <li>Ranked by how many different people recommended it</li>
+      <li>Each picture is a frame from the middle of the video</li>
+      <li>Your watched list stays in this browser</li>
+      <li>Watch before you show: these are other people's videos</li>
+    </ul>
+
+    <div class="tube-bar">
+      <div class="tube-row">
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="tube-q" type="search" placeholder="Search titles, speakers and notes" aria-label="Search videos">
+        </div>
+        <select id="tube-sort" aria-label="Sort"></select>
+        <label><input id="tube-hide" type="checkbox"> Hide watched</label>
+        <button class="chip" id="tube-surprise" type="button">Surprise me</button>
+      </div>
+      <div class="chips" id="tube-shelves" aria-label="Topics"></div>
+      <p class="tube-count"><span id="tube-count"></span> · <button class="linkbtn" id="tube-forget" type="button">Forget my watched list</button></p>
+    </div>
+
+    <section class="tube-recent" id="tube-recent" hidden aria-labelledby="recent-h">
+      <div class="kicker" id="recent-h">Opened recently in this browser</div>
+      <div class="tube-recent-list" id="tube-recent-list"></div>
+    </section>
+
+    <section class="tube-player" id="tube-player" hidden aria-label="Player"></section>
+    <section class="tube-grid" id="tube-grid" aria-label="Videos"></section>
+
+    <section class="tube-method" id="method">
+      <h2>How this list was made</h2>
+      <div id="method-text"></div>
+      <p>The idea comes from <a href="https://hackertube.org/" rel="noopener">HackerTube</a>, which built a YouTube front page from 20 years of Hacker News comments. This is a smaller version, cut down to topics for trainers.</p>
+      <p>These are other people's videos on YouTube. Check a video before showing it in class, and show it from YouTube (or Insert → Video → Online Video in PowerPoint). Don't download or re-upload it.</p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. The videos belong to their creators on YouTube, and I&rsquo;m not affiliated with any of them, with Hacker News or with HackerTube. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. List collected 3 November 2026.</span>
+    <span><a href="../../">Home</a> &middot; <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> &middot; No cookies unless you play a YouTube video; your watched list stays in this browser.</span>
+  </div>
+</footer>
+
+<script src="picks.js"></script>
+<script>
+(() => {
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const dur = (s) => !s ? "" : s >= 3600 ? `${Math.floor(s / 3600)} h ${Math.round(s / 60) % 60} min` : `${Math.max(1, Math.round(s / 60))} min`;
+  const P = window.PICKS || [];
+  const topics = window.TOPICS || [];
+  // Rank within each topic so "Up next" follows the topic's own order.
+  const pos = {};
+  window.TUBE = {
+    key: "tube-hn-picks",
+    shelves: topics,
+    videos: P.map((p) => {
+      pos[p.topic] = (pos[p.topic] || 0) + 1;
+      return { id: p.id, title: p.title, secs: p.duration, date: p.uploaded, short: false, shelves: [[p.topic, pos[p.topic]]],
+        blurb: p.why, rank: p.authors * 1000 + p.comments, extra: `${p.channel} ${p.use_in_class || ""}`, p };
+    }),
+    sorts: [["rank", "Most recommended"], ["shortest", "Shortest first"], ["newest", "Newest upload"], ["oldest", "Oldest upload"], ["random", "Shuffle"]],
+    meta: (v) => esc([`${v.p.authors} people recommended it`, v.p.channel, dur(v.secs), v.date && v.date.slice(0, 4)].filter(Boolean).join(" · ")),
+    cardExtra: (v) => v.p.use_in_class ? `<p class="tuse"><b>Use in class</b> ${esc(v.p.use_in_class)}</p>` : "",
+    detail: (v) => `<p class="pblurb">${esc(v.p.why)}</p>`
+      + (v.p.use_in_class ? `<p class="tuse"><b>Use in class</b><br>${esc(v.p.use_in_class)}</p>` : "")
+      + `<span class="lbl">Where it was recommended</span><p class="tmeta">${(v.p.hn || []).map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">HN comment ${i + 1} ↗</a>`).join(" · ")}${v.p.first_seen ? ` · first ${v.p.first_seen.slice(0, 4)}, last ${(v.p.last_seen || "").slice(0, 4)}` : ""}</p>`,
+  };
+  document.getElementById("method-text").innerHTML = window.METHOD_HTML || "";
+})();
+</script>
+<script src="tube.js?v=1"></script>
+</body>
+</html>
