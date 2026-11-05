@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Remake or Reverse? · Charles Tay</title>
+<meta name="description" content="ChatCut's video remake and HyperFrames' Reverse side by side: what each one changes, what you get back, what it costs, and when to use which.">
+<link rel="canonical" href="https://charlestaysg.com/notes/remake-or-reverse/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Remake or Reverse? · Charles Tay">
+<meta property="og:description" content="Change who is in a clip, or get an editable copy of a video. Two tools, two different jobs.">
+<meta property="og:url" content="https://charlestaysg.com/notes/remake-or-reverse/">
+<meta property="og:image" content="https://charlestaysg.com/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  .compare-wrap { overflow-x: auto; margin-top: 8px; }
+  table.compare { width: 100%; min-width: 620px; border-collapse: collapse; font-size: 15px; line-height: 1.45; }
+  table.compare th, table.compare td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line, rgba(127,127,127,.25)); }
+  table.compare thead th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  table.compare tbody th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; width: 130px; }
+  .steps { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 8px 16px; margin: 12px 0 0; max-width: 72ch; }
+  .steps dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .steps dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .credit { max-width: 64ch; margin-top: 24px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  code { font-family: var(--font-mono); font-size: .9em; }
+  @media (max-width: 640px) {
+    table.compare { min-width: 0; }
+    table.compare thead { display: none; }
+    table.compare tr, table.compare tbody th, table.compare td { display: block; width: auto; }
+    table.compare tbody th { padding: 16px 0 4px; border-bottom: 0; color: var(--ink, inherit); }
+    table.compare td { padding: 4px 0 10px; border-bottom: 0; }
+    table.compare td::before { content: attr(data-label); display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+    table.compare tr { border-bottom: 1px solid var(--line, rgba(127,127,127,.25)); }
+  }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; gap: 2px; } .steps dd { margin-bottom: 8px; } }
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/projects/worth-watching/">Worth watching</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../toolkit/#using">← Toolkit</a>
+    <span class="label">Toolkit · <time datetime="2026-11-05">5 Nov 2026</time></span>
+    <h1>Remake or reverse?</h1>
+    <p class="dek">ChatCut remakes a clip with new people or a new look. HyperFrames rebuilds a video as a project you can edit. Two different jobs.</p>
+  </div>
+</header>
+
+<main>
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <ul class="short">
+        <li><a href="https://chatcut.io" rel="noopener">ChatCut</a>&rsquo;s <b>remake</b> keeps a clip&rsquo;s motion, camera moves and shot timing, and draws it again with new people, products, clothes, a new place or a new look. You get back a new video clip.</li>
+        <li><a href="https://github.com/heygen-com/hyperframes" rel="noopener">HyperFrames</a>&rsquo; <b>Reverse</b> watches a video and rebuilds every layer (text, graphics, layout and timing) as a HyperFrames project. You get back a project you can change line by line and render again.</li>
+        <li>I use ChatCut and HyperFrames for my videos, but I haven&rsquo;t used either of these two features on a real project yet. This page comes from each tool&rsquo;s own description, checked on 5 Nov 2026.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="wrap">
+      <div class="sec-head"><h2>side by side</h2></div>
+      <div class="compare-wrap">
+        <table class="compare">
+          <thead>
+            <tr><th></th><th>ChatCut remake</th><th>HyperFrames Reverse</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>what you get</th><td data-label="ChatCut">A new video clip in your ChatCut project</td><td data-label="HyperFrames">An editable HyperFrames project (scenes written as web pages), and a render of it</td></tr>
+            <tr><th>what changes</th><td data-label="ChatCut">The people, products, clothes, place or look you name. Reference images set the new look</td><td data-label="HyperFrames">Nothing at first: it rebuilds the video as it is. Then you change the words, colours, branding or data</td></tr>
+            <tr><th>length</th><td data-label="ChatCut">4&ndash;30 seconds of the source, in whole seconds</td><td data-label="HyperFrames">The whole video. A rebuild takes about 20&ndash;50 minutes</td></tr>
+            <tr><th>people on screen</th><td data-label="ChatCut">Recast from your photos</td><td data-label="HyperFrames">Re-shot with HeyGen, following the original&rsquo;s body and camera movement, with the original voice moving the lips</td></tr>
+            <tr><th>text on screen</th><td data-label="ChatCut">Object-swap keeps it. Motion-transfer turns large text into garbled letters</td><td data-label="HyperFrames">Rebuilt as real text you can edit</td></tr>
+            <tr><th>sound</th><td data-label="ChatCut">Keeps the source audio</td><td data-label="HyperFrames">Keeps the original soundtrack</td></tr>
+            <tr><th>checking</th><td data-label="ChatCut">You watch the result</td><td data-label="HyperFrames">Compares its render with the original frame by frame, and lists missed cuts and the worst moments</td></tr>
+            <tr><th>cost</th><td data-label="ChatCut">ChatCut credits. 720p by default; 1080p costs about 2.5 times as much</td><td data-label="HyperFrames">Needs a paid HyperFrames Pro plan</td></tr>
+            <tr><th>where it runs</th><td data-label="ChatCut">Generated in ChatCut&rsquo;s cloud with Seedance 2.5. Motion-transfer reads the motion on your own computer first</td><td data-label="HyperFrames">Built on your computer by an AI agent with the HyperFrames skills. Renders in HyperFrames&rsquo; cloud by default, or on your computer. HeyGen makes the re-shot people</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="modes">
+    <div class="wrap">
+      <div class="sec-head"><h2>the two remake modes</h2></div>
+      <dl class="steps">
+        <dt>object-swap</dt><dd>Changes only the people, products or clothes you name. Everything else stays, including other people and text on screen. It can keep a little of the original face.</dd>
+        <dt>motion-transfer</dt><dd>Draws the whole frame again in a new place or style, keeping the motion and camera. Recast people match their photos better, but large text burned into the video comes out garbled.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="when">
+    <div class="wrap">
+      <div class="sec-head"><h2>use this when</h2></div>
+      <dl class="steps">
+        <dt>ChatCut</dt><dd>You want to change who or what is in the footage. Recast a role play, put your own product in, or restyle a scene.</dd>
+        <dt>HyperFrames</dt><dd>You want an editable copy of a video&rsquo;s design and motion. Remake an explainer you like with your own words, colours, branding or data, or get back a project for an old video whose source files are lost.</dd>
+        <dt>neither</dt><dd>The video belongs to someone else and you don&rsquo;t have the rights to it.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="check">
+    <div class="wrap">
+      <div class="sec-head"><h2>things I&rsquo;d check</h2></div>
+      <ul class="short">
+        <li><b>Your rights to the video.</b> Use both on your own videos, or ones you have the rights to. Closely rebuilding someone else&rsquo;s video can be copying.</li>
+        <li><b>The cost before it starts.</b> In ChatCut&rsquo;s own chat, a card shows the settings and the cost before anything runs. If an AI agent starts the remake from outside the app, the credits go at once, so ask it for the length and cost first.</li>
+        <li><b>Very different shapes.</b> Both ChatCut modes keep the source&rsquo;s poses, outlines and sizes. Swap a small bottle for a big box and it can look wrong.</li>
+        <li><b>The people in the video.</b> Reverse re-shoots everyone on screen with HeyGen, from the original clip and voice. Check the people in it are happy with that, or ask for them to be cut from the original instead.</li>
+      </ul>
+      <p class="credit">Based on ChatCut&rsquo;s and HyperFrames&rsquo; own tool descriptions, checked 5 Nov 2026. Both change often, so check before relying on this. Related: <a href="../../#chatcut-vs-hyperframes">ChatCut or HyperFrames Studio?</a> and <a href="../hyperframes-two-ways/">HyperFrames two ways</a>.</p>
+      <p style="max-width:64ch;margin-top:12px;color:var(--muted)">Back to the <a href="../../toolkit/">toolkit</a>, or see what I&rsquo;ve <a href="../../toolkit/#trying">been trying</a>.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+
+</body>
+</html>
