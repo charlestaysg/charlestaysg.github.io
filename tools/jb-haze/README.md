@@ -23,6 +23,12 @@ History PM2.5 cannot be rebuilt live, so the Worker merges in the data-branch `h
 Hotspots are not served by the Worker. Page order: Worker (6 s timeout) -> data branch -> seed files; the status line says
 "backup copy" only when it used a fallback. Test the fallback with `?noworker=1`. Localhost uses the Worker too, unless `?local=1`.
 
+**When the current-reading service is down (added 7 Nov 2026).** If the APIMS current-reading query fails, `fetch.py` builds
+`latest.json` from the hourly trend chart instead (`latest_from_trend`): the newest API for each station, within 3 hours of the
+newest hour, with the class worked out from the API. The trend has no PM2.5, PM10, gases, wind or weather, so those fields are
+null, and the file carries `"fallback": "trend"`. It is saved only if it is newer than the kept reading. The Worker does not
+have this fallback, so during an outage the page shows the data-branch copy.
+
 **Backup path.**
 
 `.github/workflows/jb-haze-refresh.yml` runs at :17 every hour (GitHub sometimes skips scheduled runs), builds the four JSON files and

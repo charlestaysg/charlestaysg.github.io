@@ -128,6 +128,25 @@ class History(unittest.TestCase):
         self.assertIsNone(s["api"][10])
 
 
+class TrendFallback(unittest.TestCase):
+    META = [{"id": "A", "name": "A", "lat": 1.5, "lng": 103.7, "jb": True},
+            {"id": "B", "name": "B", "lat": 1.6, "lng": 103.8},
+            {"id": "C", "name": "C", "lat": 1.7, "lng": 103.9}]
+
+    def test_newest_hour_per_station_and_stale_dropped(self):
+        t = lambda h: datetime(2026, 11, 7, h, tzinfo=fetch.MYT)
+        rows = [("A", t(6), 40.0), ("A", t(7), 52.0), ("B", t(7), None), ("B", t(6), 30.0), ("C", t(2), 20.0)]
+        lat = fetch.latest_from_trend(rows, self.META)
+        st = {s["id"]: s for s in lat["stations"]}
+        self.assertEqual(len(st), 3)
+        self.assertEqual(lat["readingTime"], "2026-11-07T07:00:00+08:00")
+        self.assertEqual((st["A"]["api"], st["A"]["cls"]), (52.0, "Moderate"))
+        self.assertEqual(st["B"]["api"], 30.0)
+        self.assertIsNone(st["C"]["api"])  # 5 h older than the newest hour
+        self.assertIsNone(st["A"]["pm25_24h"])
+        self.assertEqual(lat["fallback"], "trend")
+
+
 class Parse(unittest.TestCase):
     def test_rh_zero_is_missing_and_no_personal_fields(self):
         meta = [{"id": "CA29J", "name": "Segamat", "lat": 2.49, "lng": 102.86, "category": "Sub Urban", "jb": False}]

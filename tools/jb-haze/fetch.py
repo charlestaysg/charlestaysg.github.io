@@ -201,6 +201,55 @@ def carry_forward(latest, prev, max_hours=3):
                 latest["stations"][i] = p
 
 
+def api_class(api):
+    """APIMS's own class words for an API value (used only when the class itself is not available)."""
+    if api is None:
+        return None
+    for top, word in ((50, "Good"), (100, "Moderate"), (200, "Unhealthy"), (300, "Very Unhealthy")):
+        if api <= top:
+            return word
+    return "Hazardous"
+
+
+def latest_from_trend(rows, stations_meta, max_hours=3):
+    """Fallback latest.json built from the hourly trend chart, for when the current-reading service is down.
+    The trend gives the API only, so the pollutant, wind and weather fields are left empty (null)."""
+    newest = {}
+    for sid, dt, api in rows:
+        if api is not None and (sid not in newest or dt > newest[sid][0]):
+            newest[sid] = (dt, api)
+    if not newest:
+        raise RuntimeError("trend has no readings")
+    top = max(dt for dt, _ in newest.values())
+    out = []
+    for m in stations_meta:
+        dt, api = newest.get(m["id"], (None, None))
+        if dt is not None and (top - dt).total_seconds() / 3600.0 > max_hours:
+            dt, api = None, None
+        out.append({
+            "id": m["id"], "name": m["name"], "lat": m["lat"], "lng": m["lng"], "category": m.get("category", ""),
+            "jb": bool(m.get("jb")), "ts": iso_myt(dt) if dt else None,
+            "api": api, "cls": api_class(api), "param": None,
+            "pm25": None, "pm25_24h": None, "pm10": None, "pm10_24h": None,
+            "o3": None, "no2": None, "so2": None, "co": None,
+            "windDir": None, "windSpeed": None, "temp": None, "rh": None, "status": None,
+        })
+    out.sort(key=lambda s: s["id"])
+    return {"generated": iso_utc_now(), "source": "DOE Malaysia APIMS (hourly trend)", "fallback": "trend",
+            "readingTime": iso_myt(top), "stations": out}
+
+
+def stage_latest_fallback(out_dir, stations_meta):
+    """Used only after stage_latest fails. Saves the trend-based reading if it is newer than the kept one."""
+    rows = fetch_trend(hour_floor(datetime.now(MYT)))
+    latest = latest_from_trend(rows, stations_meta)
+    prev = load_json(os.path.join(out_dir, "latest.json"))
+    if prev and prev.get("readingTime") and prev["readingTime"][:19] >= latest["readingTime"][:19]:
+        raise RuntimeError("trend is not newer than the kept reading")
+    save_json(os.path.join(out_dir, "latest.json"), latest)
+    return latest
+
+
 # ------------------------------------------------------------------ stage: history
 def hour_floor(dt):
     return dt.replace(minute=0, second=0, microsecond=0)
@@ -419,9 +468,14 @@ def main(argv=None):
         latest = stage_latest(args.out, stations_meta)
         print("latest: %d stations, reading %s" % (len(latest["stations"]), latest["readingTime"]))
     except Exception as e:
-        failures.append("latest")
         print("latest FAILED: %s" % e)
-        latest = load_json(os.path.join(args.out, "latest.json"))
+        try:
+            latest = stage_latest_fallback(args.out, stations_meta)
+            print("latest: fallback from the hourly trend, reading %s" % latest["readingTime"])
+        except Exception as e2:
+            failures.append("latest")
+            print("latest fallback FAILED: %s" % e2)
+            latest = load_json(os.path.join(args.out, "latest.json"))
     if latest and latest.get("readingTime"):
         try:
             stage_history(args.out, latest)
