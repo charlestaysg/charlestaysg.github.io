@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Office PC, One Evening · Charles Tay</title>
+<meta name="description" content="I tuned my own Windows desktop in one evening and found a missing chip fix, a clock that never synced and leftovers from apps long gone. Ten checks for an SME owner's PC, and what is enough to buy.">
+<link rel="canonical" href="https://charlestaysg.com/notes/sme-windows-pc/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Your Office PC, One Evening · Charles Tay">
+<meta property="og:description" content="Ten checks for a small business Windows PC, from one evening tuning my own.">
+<meta property="og:url" content="https://charlestaysg.com/notes/sme-windows-pc/">
+<meta property="og:image" content="https://charlestaysg.com/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261018e">
+<style>
+  /* do / why rows (same grid as the other notes) */
+  .steps { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px 16px; margin: 12px 0 0; }
+  .steps dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .steps dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .steps dd.out { font-weight: 700; }
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  .body-text { max-width: 64ch; font-size: 17px; line-height: 1.55; }
+  .body-text + .body-text { margin-top: 12px; }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; gap: 2px; } .steps dd { margin-bottom: 8px; } }
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/projects/worth-watching/">Worth watching</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#work">← Charles Tay</a>
+    <span class="label">For SME owners · <time datetime="2026-11-08">8 Nov 2026</time></span>
+    <h1>Your office PC, one evening</h1>
+    <p class="dek">I spent one evening going through my own Windows desktop. It looked fine and worked fine. It still had a missing chip fix, a clock that had never set itself, and leftovers from apps I removed long ago. Here is what to check on a small business PC.</p>
+  </div>
+</header>
+
+<main>
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <ul class="short">
+        <li>Most owners don&rsquo;t need a powerful PC. Cloud tools and online AI run fine on an ordinary one. Spend the money on backups and security.</li>
+        <li>If the PC has an Intel 13th or 14th generation chip, check that its BIOS has Intel&rsquo;s fix. Mine didn&rsquo;t.</li>
+        <li>Updated, encrypted, backed up, with little installed: that beats an expensive PC.</li>
+        <li>Write one page on which AI tools staff may use and what never goes into them.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="found">
+    <div class="wrap">
+      <div class="sec-head"><h2>what my own PC had</h2></div>
+      <p class="body-text" style="margin-bottom:20px">A desktop built in 2023, used every day, with nothing obviously wrong. None of this showed up in daily use.</p>
+      <ul class="tools">
+        <li><span class="job">chip</span><div><h3>A BIOS from January 2023</h3><p>Intel&rsquo;s 13th and 14th generation desktop chips can wear out from asking for too much voltage. The fix comes in a BIOS update. Mine had never had one, so the fix was missing.</p></div></li>
+        <li><span class="job">clock</span><div><h3>Time never synced</h3><p>Windows was running on the board&rsquo;s own clock and had never checked the time online. Wrong times confuse logs, file syncing and some logins.</p></div></li>
+        <li><span class="job">startup</span><div><h3>22 apps at every sign-in</h3><p>Game launchers, writing helpers, updaters, two antivirus programs. After the clean-up, 9.</p></div></li>
+        <li><span class="job">leftovers</span><div><h3>Doors left open by apps I&rsquo;d removed</h3><p>About 40 firewall openings and a few admin tasks from programs no longer installed, plus a proxy address nobody could explain. Each one is a small way in.</p></div></li>
+        <li><span class="job">data</span><div><h3>No disk encryption</h3><p>Anyone who took the PC, or the drive inside it, could read every file.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="enough">
+    <div class="wrap">
+      <div class="sec-head"><h2>what&rsquo;s enough to buy</h2></div>
+      <ul class="tools">
+        <li><span class="job">most owners</span><div><h3>Office work, accounting, Canva, online AI</h3><p>A recent Core i5 or Ryzen 5, 16 to 32 GB of memory, a 1 TB SSD. No special graphics card. ChatGPT, Copilot and Claude run in the cloud, so they need nothing extra.</p></div></li>
+        <li><span class="job">some</span><div><h3>Small AI models kept in the office, transcription</h3><p>32 to 64 GB of memory and an NVIDIA graphics card with 12 to 16 GB of its own memory.</p></div></li>
+        <li><span class="job">a few</span><div><h3>Video, design, 3D, AI images</h3><p>64 GB of memory and an NVIDIA card with 24 GB. This is the only group where a big graphics card pays off.</p></div></li>
+      </ul>
+      <p class="body-text" style="margin-top:20px">Wondering whether a spare laptop helps as a plan B? See <a href="../plan-b/#spare-laptop">should you keep a spare laptop →</a></p>
+    </div>
+  </section>
+
+  <section id="checks">
+    <div class="wrap">
+      <div class="sec-head"><h2>ten checks</h2></div>
+      <ul class="tools">
+        <li><span class="job">1 · BIOS</span><div><h3>Update it once</h3><dl class="steps">
+          <dt>do</dt><dd>Find the PC or motherboard model, get the latest BIOS from the maker&rsquo;s own website, and follow the maker&rsquo;s steps. Intel 13th or 14th generation chips (model numbers like i7-13700 or i5-14400) need microcode 0x12B or later.</dd>
+          <dt>why</dt><dd class="out">The chip fix lives in the BIOS. Windows Update didn&rsquo;t deliver it, and neither did the maker&rsquo;s Windows app.</dd>
+        </dl></div></li>
+        <li><span class="job">2 · updates</span><div><h3>Automatic, and a weekly restart</h3><dl class="steps">
+          <dt>do</dt><dd>Leave Windows Update and Microsoft Defender on automatic. Restart once a week.</dd>
+          <dt>why</dt><dd>Most attacks use flaws that already have a fix.</dd>
+        </dl></div></li>
+        <li><span class="job">3 · encryption</span><div><h3>Lock the drive</h3><dl class="steps">
+          <dt>do</dt><dd>Turn on BitLocker or Device Encryption. Keep the recovery key on paper or in a password manager, not on the same PC.</dd>
+          <dt>why</dt><dd>A stolen PC with customer data on it is a PDPA problem, not just a lost PC.</dd>
+        </dl></div></li>
+        <li><span class="job">4 · accounts</span><div><h3>A proper password, not only a PIN</h3><dl class="steps">
+          <dt>do</dt><dd>Do daily work on a standard account and keep a separate admin account for installing things. At the very least, give the account a strong password.</dd>
+          <dt>why</dt><dd>Anything that runs as admin can change everything.</dd>
+        </dl></div></li>
+        <li><span class="job">5 · clear out</span><div><h3>Remove what nobody uses</h3><dl class="steps">
+          <dt>do</dt><dd>Uninstall trial antivirus, old updaters, game launchers and unused browser extensions. Turn off apps that start with Windows but aren&rsquo;t needed.</dd>
+          <dt>why</dt><dd>Fewer programs, fewer ways in, and a faster start.</dd>
+        </dl></div></li>
+        <li><span class="job">6 · antivirus</span><div><h3>One is enough</h3><dl class="steps">
+          <dt>do</dt><dd>Microsoft Defender is built in and enough for most small firms. Remove any second scanner.</dd>
+          <dt>why</dt><dd>Two scanners slow the PC down and can get in each other&rsquo;s way.</dd>
+        </dl></div></li>
+        <li><span class="job">7 · firewall</span><div><h3>On, with the right network type</h3><dl class="steps">
+          <dt>do</dt><dd>Keep the firewall on. Set the office network to Private and café Wi-Fi to Public.</dd>
+          <dt>why</dt><dd>Public tells Windows to trust nobody nearby.</dd>
+        </dl></div></li>
+        <li><span class="job">8 · odd settings</span><div><h3>Look once for things nobody set</h3><dl class="steps">
+          <dt>do</dt><dd>Check for a proxy address under network settings, remote access left switched on, and firewall rules for programs no longer installed. Ask whoever set up the PC if anything looks strange.</dd>
+          <dt>why</dt><dd>These sit quietly for years. Mine had all three.</dd>
+        </dl></div></li>
+        <li><span class="job">9 · backups</span><div><h3>Three copies, one tested</h3><dl class="steps">
+          <dt>do</dt><dd>Three copies of what matters, on two kinds of storage, one kept away from the office. Restore one file from it, once.</dd>
+          <dt>why</dt><dd>A backup nobody has restored is a hope. More in <a href="../plan-b/">If it stopped tonight →</a></dd>
+        </dl></div></li>
+        <li><span class="job">10 · changes</span><div><h3>A restore point first, a note after</h3><dl class="steps">
+          <dt>do</dt><dd>Before any big change, create a Windows restore point. Afterwards, write one line: what changed and how to undo it.</dd>
+          <dt>why</dt><dd>When something breaks a week later, that line saves the day.</dd>
+        </dl></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="ai-rules">
+    <div class="wrap">
+      <div class="sec-head"><h2>four ai rules for the business</h2></div>
+      <ul class="tools">
+        <li><span class="job">one page</span><div><p>Which AI tools staff may use, and what never goes into them: NRIC numbers, customer lists, salaries, contracts.</p></div></li>
+        <li><span class="job">test first</span><div><p>Send any AI-written mailing to two of your own inboxes before it goes out. In 2026 PDPC dealt with a case where a mailing script put about 95,000 members&rsquo; email addresses in one To line. <a href="https://www.pdpc.gov.sg/organisations/regulations-decisions/enforcement-decisions/voluntary-undertaking-by-bee-cheng-hiang-marketing-pte-ltd" rel="noopener">PDPC&rsquo;s decision ↗</a></p></div></li>
+        <li><span class="job">private files</span><div><p>Use business plans of AI tools that don&rsquo;t train on your data. Running AI on your own machine is for later, and only if you really need it.</p></div></li>
+        <li><span class="job">second pair</span><div><p>Someone else checks any AI-written script or setting that touches customer data.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head"><h2>how this was done</h2></div>
+      <p class="body-text">I didn&rsquo;t click through all this by hand. Claude ran on the PC and I steered it from my Mac. It read everything first and changed nothing, then gave me a table: what it found, what to change, the risk and how to undo it. I approved each batch, it made a restore point before the first one, and it logged every change with an undo line.</p>
+      <p class="body-text">The BIOS update I did myself, at the PC, from a USB stick, with the maker&rsquo;s own file checked against the maker&rsquo;s published checksum. Afterwards Claude ran a stability test for half an hour. No errors.</p>
+      <p class="body-text">If you try something like this, keep the approvals on and use it on your own or a shared business PC, never on a staff member&rsquo;s computer without telling them.</p>
+    </div>
+  </section>
+
+  <section id="help">
+    <div class="wrap">
+      <div class="sec-head"><h2>help in Singapore</h2></div>
+      <ul class="tools">
+        <li><span class="job">a checklist</span><div><p>CSA&rsquo;s <a href="https://www.csa.gov.sg/our-programmes/support-for-enterprises/sg-cyber-safe-programme/cybersecurity-certification-for-organisations/cyber-essentials/" rel="noopener">Cyber Essentials ↗</a> mark is a short list of basic measures sized for small firms, and now covers cloud and AI use too. Its list is a good place to start even if you never apply.</p></div></li>
+        <li><span class="job">someone to look</span><div><p>Under CSA&rsquo;s <a href="https://www.csa.gov.sg/our-programmes/support-for-enterprises/sg-cyber-safe-programme/cybersecurity-certification-for-organisations/ciso-as-a-service-to-develop-cybersecurity-health-plan/" rel="noopener">CISO-as-a-Service ↗</a>, a listed consultant checks your setup and writes a plan. Check CSA&rsquo;s page for current terms.</p></div></li>
+        <li><span class="job">going digital</span><div><p>IMDA&rsquo;s <a href="https://www.imda.gov.sg/programme-listing/smes-go-digital/CTOaaS" rel="noopener">CTO-as-a-Service ↗</a> has a free digital health check, advisers and lists of ready-made solutions.</p></div></li>
+        <li><span class="job">AI and data</span><div><p>PDPC&rsquo;s <a href="https://www.pdpc.gov.sg/organisations/regulations-decisions/regulatory-guidance/advisory-guidelines-on-use-of-personal-data-in-generative-ai" rel="noopener">guidelines on personal data in generative AI ↗</a>.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="limits">
+    <div class="wrap">
+      <div class="sec-head"><h2>what to doubt</h2></div>
+      <ul class="short">
+        <li>This is one PC, mine. Yours will have different leftovers, and maybe none.</li>
+        <li>BIOS updates carry a small risk: a power cut halfway can stop a board from starting. Follow the maker&rsquo;s steps, and if you&rsquo;re unsure, ask the shop that built the PC.</li>
+        <li>Prices, schemes and their terms change. Check the official pages before you act.</li>
+      </ul>
+      <p class="credit" style="margin-top:24px">Written 8 Nov 2026 from my own PC&rsquo;s logs. My own view. I&rsquo;m not a security specialist, and I shaped this page with Claude. Not affiliated with or endorsed by Intel, Microsoft, CSA, IMDA or PDPC.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+
+</body>
+</html>
