@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Keys: how it was made · Charles Tay</title>
+<meta name="description" content="A two-minute watercolour story about one HDB flat, made on a Windows desktop that I ran entirely from my Mac. How the instructions and files moved, the tools and what went wrong.">
+<link rel="canonical" href="https://charlestaysg.com/projects/the-keys/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Keys: how it was made">
+<meta property="og:description" content="A two-minute HDB story, made on a Windows desktop run entirely from a Mac.">
+<meta property="og:url" content="https://charlestaysg.com/projects/the-keys/">
+<meta property="og:image" content="https://charlestaysg.com/projects/the-keys/poster.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261102a">
+<style>
+  :root { --blue: #2563C9; --grey: #6B7486; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --blue: #7EA8F5; --grey: #9AA5B8; } }
+  :root[data-theme="dark"] { --blue: #7EA8F5; --grey: #9AA5B8; }
+  .prose { max-width: 64ch; }
+  .steps { list-style: none; padding: 0; margin: 20px 0 0; }
+  .steps li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .steps li:last-child { border-bottom: 1px solid var(--line); }
+  .steps b.n { font-family: var(--font-mono); color: var(--green); font-weight: 500; padding-top: 2px; }
+  .steps p { margin: 0; max-width: 64ch; }
+  .cmp-wrap { overflow-x: auto; }
+  .cmp { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 16px; }
+  .cmp th, .cmp td { text-align: left; padding: 8px 14px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .cmp th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .cmp td:first-child { font-weight: 700; }
+  code { font-family: var(--font-mono); font-size: .9em; background: var(--panel); border: 1px solid var(--line); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+  figure.diagram { margin: 24px 0 0; max-width: 900px; }
+  figure.diagram svg { display: block; width: 100%; height: auto; font-family: var(--font-display); }
+  figure.diagram .dg-tall { display: none; }
+  figure.diagram figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
+  .dg-mac { fill: color-mix(in srgb, var(--blue) 10%, var(--panel)); stroke: var(--blue); stroke-width: 2; }
+  .dg-pc { fill: color-mix(in srgb, var(--green) 10%, var(--panel)); stroke: var(--green); stroke-width: 2; }
+  .dg-row { fill: var(--panel); stroke: var(--line); stroke-width: 1; }
+  .dg-bee { fill: color-mix(in srgb, var(--muted) 8%, var(--panel)); stroke: var(--muted); stroke-width: 2; }
+  .dg-h { font-weight: 700; font-size: 20px; fill: var(--ink); }
+  .dg-hc { font-size: 18px; }
+  .dg-s { font-size: 14px; fill: var(--muted); }
+  .dg-b { font-size: 16px; fill: var(--ink); }
+  .dg-bt { font-weight: 700; }
+  .dg-l { font-size: 14px; font-weight: 500; fill: var(--ink); }
+  .dg-n { font-size: 13px; fill: var(--muted); }
+  .dg-ctl { fill: none; stroke: var(--ink); stroke-width: 2.2; }
+  .dg-file { fill: none; stroke: var(--muted); stroke-width: 2.2; stroke-dasharray: 7 5; }
+  .dg-ah-ctl { fill: var(--ink); }
+  .dg-ah-file { fill: var(--muted); }
+  .tl-gpu { fill: var(--green); }
+  .tl-cpu { fill: color-mix(in srgb, var(--green) 35%, var(--panel)); stroke: var(--green); stroke-width: 1; }
+  .tl-mac { fill: var(--blue); }
+  .tl-grid { fill: none; stroke: var(--line); stroke-width: 1; }
+  .strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 18px 0 8px; max-width: 900px; }
+  .strip figure { margin: 0; }
+  .strip img { width: 100%; height: auto; display: block; border-radius: 6px; border: 1px solid var(--line); }
+  .strip figcaption { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  @media (max-width: 639px) {
+    figure.diagram .dg-wide { display: none; }
+    figure.diagram .dg-tall { display: block; }
+    .strip { grid-template-columns: repeat(2, 1fr); }
+    .dg-h { font-size: 19px; } .dg-s, .dg-l { font-size: 13px; } .dg-n { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/projects/worth-watching/">Worth watching</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#the-keys">← Charles Tay</a>
+    <span class="label">How it was made · <time datetime="2026-11-08">Nov 2026</time></span>
+    <h1>The Keys</h1>
+    <p class="dek">A two-minute watercolour story about one HDB flat, made on a Windows desktop that I ran entirely from my Mac.</p>
+  </div>
+</header>
+
+<main>
+  <section id="watch">
+    <div class="wrap">
+      <div class="sec-head"><h2>the video</h2></div>
+      <div class="player"><button type="button" class="yt" data-yt="gua1-36Ep5o" aria-label="Play The Keys on YouTube"><img src="poster.jpg" alt=""><span class="yt-play" aria-hidden="true"></span></button></div>
+      <p class="prose">An old man sits alone in the flat he has lived in for 41 years, and remembers. The people and the flat are made up.</p>
+    </div>
+  </section>
+  <section id="flow">
+    <div class="wrap">
+      <div class="sec-head"><h2>how the instructions and files moved</h2></div>
+      <p class="prose">I never sat at the PC. I talked to Claude on my MacBook, and that Claude sent instructions to a second Claude on the Windows desktop. Instructions and files took different routes: instructions through Claude, using Remote Control, and files directly between the machines over Syncthing, on my home network only.</p>
+      <figure class="diagram">
+        <svg class="dg-wide" viewBox="0 0 900 668" role="img" aria-labelledby="f1w-t f1w-d" xmlns="http://www.w3.org/2000/svg"><title id="f1w-t">How instructions and files moved between the Mac and the PC</title><desc id="f1w-d">You chat with Claude on the Mac and approve installs on the PC. Claude on the Mac sends instructions to Claude on the PC over Remote Control, and writes the job files to the To PC folder. Syncthing copies the job files to the PC's Inbox. Claude on the PC runs the tools, which write pictures, audio, the video and status files to the Outbox. Syncthing copies those back to the Mac's PC Outbox folder, and the video goes to YouTube from the Mac.</desc><defs>
+<marker id="f1w-ctl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" class="dg-ah-ctl"/></marker>
+<marker id="f1w-file" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" class="dg-ah-file"/></marker>
+</defs><rect class="dg-mac" x="20" y="44" width="270" height="478" rx="14"/><rect class="dg-pc" x="350" y="44" width="530" height="478" rx="14"/><text class="dg-h dg-hc" x="155" y="32" text-anchor="middle">MacBook Pro</text><text class="dg-h dg-hc" x="615" y="32" text-anchor="middle">Desktop PC</text><rect class="dg-row" x="40" y="60" width="230" height="54" rx="10"/><text class="dg-b dg-bt" x="155.0" y="93.0" text-anchor="middle">You</text><rect class="dg-row" x="40" y="150" width="230" height="70" rx="10"/><text class="dg-b dg-bt" x="155.0" y="180.0" text-anchor="middle">Claude on the Mac</text><text class="dg-s" x="155.0" y="200.0" text-anchor="middle">plans, writes the job, reviews</text><rect class="dg-row" x="620" y="150" width="240" height="70" rx="10"/><text class="dg-b dg-bt" x="740.0" y="180.0" text-anchor="middle">Claude on the PC</text><text class="dg-s" x="740.0" y="200.0" text-anchor="middle">runs each step, then stops</text><rect class="dg-row" x="40" y="280" width="230" height="70" rx="10"/><text class="dg-b dg-bt" x="155.0" y="310.0" text-anchor="middle">~/To PC</text><text class="dg-s" x="155.0" y="330.0" text-anchor="middle">job files and prompts</text><rect class="dg-row" x="380" y="280" width="190" height="70" rx="10"/><text class="dg-b dg-bt" x="475.0" y="310.0" text-anchor="middle">D:\Inbox</text><text class="dg-s" x="475.0" y="330.0" text-anchor="middle">job files arrive</text><rect class="dg-row" x="620" y="280" width="240" height="130" rx="10"/><text class="dg-b dg-bt" x="740" y="306" text-anchor="middle">Tools on the PC</text><text class="dg-s" x="740" y="330" text-anchor="middle">ComfyUI + Qwen-Image: pictures</text><text class="dg-s" x="740" y="351" text-anchor="middle">ACE-Step: music</text><text class="dg-s" x="740" y="372" text-anchor="middle">Kokoro: narration</text><text class="dg-s" x="740" y="393" text-anchor="middle">HyperFrames: video</text><rect class="dg-row" x="380" y="430" width="190" height="70" rx="10"/><text class="dg-b dg-bt" x="475.0" y="460.0" text-anchor="middle">D:\Outbox</text><text class="dg-s" x="475.0" y="480.0" text-anchor="middle">pictures, audio, video, status</text><rect class="dg-row" x="40" y="430" width="230" height="70" rx="10"/><text class="dg-b dg-bt" x="155.0" y="460.0" text-anchor="middle">~/PC Outbox</text><text class="dg-s" x="155.0" y="480.0" text-anchor="middle">results land on the Mac</text><rect class="dg-bee" x="40" y="558" width="230" height="60" rx="10"/><text class="dg-b dg-bt" x="155.0" y="583.0" text-anchor="middle">YouTube</text><text class="dg-s" x="155.0" y="603.0" text-anchor="middle">uploaded from the Mac</text><path class="dg-ctl" d="M155 114V147" marker-end="url(#f1w-ctl)"/><path class="dg-ctl" d="M270 87H740V147" marker-end="url(#f1w-ctl)"/><text class="dg-l" x="505" y="78" text-anchor="middle">approves installs</text><path class="dg-ctl" d="M270 185H617" marker-end="url(#f1w-ctl)"/><text class="dg-l" x="444" y="173" text-anchor="middle">instructions (SendMessage over Remote Control)</text><path class="dg-ctl" d="M740 220V277" marker-end="url(#f1w-ctl)"/><text class="dg-l" x="750" y="254" text-anchor="start">runs</text><path class="dg-file" d="M155 220V277" marker-end="url(#f1w-file)"/><text class="dg-l" x="165" y="254" text-anchor="start">writes</text><path class="dg-file" d="M270 315H377" marker-end="url(#f1w-file)"/><text class="dg-l" x="324" y="303" text-anchor="middle">Syncthing</text><path class="dg-file" d="M570 315H617" marker-end="url(#f1w-file)"/><path class="dg-file" d="M740 410V465H573" marker-end="url(#f1w-file)"/><path class="dg-file" d="M380 465H273" marker-end="url(#f1w-file)"/><text class="dg-l" x="326" y="453" text-anchor="middle">Syncthing</text><path class="dg-file" d="M155 500V555" marker-end="url(#f1w-file)"/><text class="dg-l" x="165" y="533" text-anchor="start">upload in Chrome</text><path class="dg-ctl" d="M560 590H600"/><text class="dg-n" x="608" y="595" text-anchor="start">instructions</text><path class="dg-file" d="M710 590H750"/><text class="dg-n" x="758" y="595" text-anchor="start">files</text><text class="dg-n" x="615" y="620" text-anchor="middle">Syncthing stays on the home network</text></svg>
+        <svg class="dg-tall" viewBox="0 0 400 1060" role="img" aria-labelledby="f1t-t f1t-d" xmlns="http://www.w3.org/2000/svg"><title id="f1t-t">How instructions and files moved between the Mac and the PC</title><desc id="f1t-d">You chat with Claude on the Mac and approve installs on the PC. Claude on the Mac sends instructions to Claude on the PC over Remote Control, and writes the job files to the To PC folder. Syncthing copies the job files to the PC's Inbox. Claude on the PC runs the tools, which write pictures, audio, the video and status files to the Outbox. Syncthing copies those back to the Mac's PC Outbox folder, and the video goes to YouTube from the Mac.</desc><defs>
+<marker id="f1t-ctl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" class="dg-ah-ctl"/></marker>
+<marker id="f1t-file" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" class="dg-ah-file"/></marker>
+</defs><rect class="dg-mac" x="10" y="38" width="380" height="268" rx="14"/><text class="dg-h dg-hc" x="200" y="26" text-anchor="middle">MacBook Pro</text><rect class="dg-row" x="30" y="50" width="320" height="54" rx="10"/><text class="dg-b dg-bt" x="190.0" y="83.0" text-anchor="middle">You</text><rect class="dg-row" x="30" y="130" width="320" height="66" rx="10"/><text class="dg-b dg-bt" x="190.0" y="158.0" text-anchor="middle">Claude on the Mac</text><text class="dg-s" x="190.0" y="178.0" text-anchor="middle">plans, writes the job, reviews</text><rect class="dg-row" x="30" y="224" width="320" height="66" rx="10"/><text class="dg-b dg-bt" x="190.0" y="252.0" text-anchor="middle">~/To PC</text><text class="dg-s" x="190.0" y="272.0" text-anchor="middle">job files and prompts</text><rect class="dg-pc" x="10" y="374" width="380" height="430" rx="14"/><text class="dg-h dg-hc" x="300" y="362" text-anchor="middle">Desktop PC</text><rect class="dg-row" x="30" y="386" width="320" height="66" rx="10"/><text class="dg-b dg-bt" x="190.0" y="414.0" text-anchor="middle">D:\Inbox</text><text class="dg-s" x="190.0" y="434.0" text-anchor="middle">job files arrive</text><rect class="dg-row" x="30" y="480" width="320" height="66" rx="10"/><text class="dg-b dg-bt" x="190.0" y="508.0" text-anchor="middle">Claude on the PC</text><text class="dg-s" x="190.0" y="528.0" text-anchor="middle">runs each step, you approve installs</text><rect class="dg-row" x="30" y="574" width="320" height="122" rx="10"/><text class="dg-b dg-bt" x="190" y="600" text-anchor="middle">Tools on the PC</text><text class="dg-s" x="190" y="622" text-anchor="middle">ComfyUI + Qwen-Image: pictures</text><text class="dg-s" x="190" y="642" text-anchor="middle">ACE-Step: music</text><text class="dg-s" x="190" y="662" text-anchor="middle">Kokoro: narration</text><text class="dg-s" x="190" y="682" text-anchor="middle">HyperFrames: video</text><rect class="dg-row" x="30" y="724" width="320" height="66" rx="10"/><text class="dg-b dg-bt" x="190.0" y="752.0" text-anchor="middle">D:\Outbox</text><text class="dg-s" x="190.0" y="772.0" text-anchor="middle">pictures, audio, video, status</text><rect class="dg-mac" x="10" y="872" width="380" height="96" rx="14"/><text class="dg-h dg-hc" x="300" y="860" text-anchor="middle">Back on the Mac</text><rect class="dg-row" x="30" y="886" width="320" height="66" rx="10"/><text class="dg-b dg-bt" x="190.0" y="914.0" text-anchor="middle">~/PC Outbox</text><text class="dg-s" x="190.0" y="934.0" text-anchor="middle">results land on the Mac</text><rect class="dg-bee" x="30" y="990" width="320" height="50" rx="10"/><text class="dg-b dg-bt" x="190.0" y="1021.0" text-anchor="middle">YouTube</text><path class="dg-ctl" d="M190 104V127" marker-end="url(#f1t-ctl)"/><path class="dg-ctl" d="M350 163H374V513H353" marker-end="url(#f1t-ctl)"/><text class="dg-l" x="366" y="340" text-anchor="end">instructions</text><path class="dg-file" d="M190 196V221" marker-end="url(#f1t-file)"/><path class="dg-file" d="M190 290V383" marker-end="url(#f1t-file)"/><text class="dg-l" x="200" y="328" text-anchor="start">Syncthing</text><path class="dg-file" d="M190 452V477" marker-end="url(#f1t-file)"/><path class="dg-ctl" d="M190 546V571" marker-end="url(#f1t-ctl)"/><path class="dg-file" d="M190 696V721" marker-end="url(#f1t-file)"/><path class="dg-file" d="M190 790V883" marker-end="url(#f1t-file)"/><text class="dg-l" x="200" y="834" text-anchor="start">Syncthing</text><path class="dg-file" d="M190 952V987" marker-end="url(#f1t-file)"/></svg>
+        <figcaption>Solid lines are instructions. Dashed lines are files. The PC's Claude reports by writing status files to the Outbox, and the Mac watches for them.</figcaption>
+      </figure>
+      <ol class="steps">
+        <li><b class="n">1</b><p><b>Instructions.</b> The Mac's Claude sends short messages to the PC's Claude: "do Step 1 only, then stop".</p></li>
+        <li><b class="n">2</b><p><b>Job files.</b> The Mac's Claude writes the job into <code>~/To PC</code>. Syncthing copies it to <code>D:\Inbox</code> on the PC.</p></li>
+        <li><b class="n">3</b><p><b>Results.</b> The PC writes everything to <code>D:\Outbox</code>. Syncthing copies it to <code>~/PC Outbox</code> on the Mac, where a small loop waits for a named file and tells the Mac's Claude it has arrived.</p></li>
+        <li><b class="n">4</b><p><b>Approvals.</b> Every install or setting change on the PC needs my OK, and the PC logs it in an audit file.</p></li>
+      </ol>
+    </div>
+  </section>
+  <section id="pictures">
+    <div class="wrap">
+      <div class="sec-head"><h2>the ten pictures</h2></div>
+      <p class="prose">A loss at the start, memories in the middle, the neighbours' knock as the turn, and a granddaughter's own keys at the end. People are shown from behind or as hands, so no one has to look the same from picture to picture.</p>
+      <div class="strip"><figure><img src="s01-quiet-flat.jpg" alt="An old man sits alone at a round table with two cups of tea." loading="lazy" width="720" height="402"><figcaption>The quiet flat</figcaption></figure><figure><img src="s02-the-keys.jpg" alt="Young hands take a set of keys and a brown envelope." loading="lazy" width="720" height="402"><figcaption>The keys</figcaption></figure><figure><img src="s03-empty-flat.jpg" alt="A young couple stand in a bare new flat." loading="lazy" width="720" height="402"><figcaption>An empty flat</figcaption></figure><figure><img src="s04-first-meal.jpg" alt="Char kway teow on newspaper, kopi in plastic bags." loading="lazy" width="720" height="402"><figcaption>First dinner</figcaption></figure><figure><img src="s05-kopitiam.jpg" alt="Kopi, kaya toast and eggs on a marble table." loading="lazy" width="720" height="402"><figcaption>The coffee shop</figcaption></figure><figure><img src="s06-void-deck.jpg" alt="Old men at chess while children cycle." loading="lazy" width="720" height="402"><figcaption>The void deck</figcaption></figure><figure><img src="s07-festival-corridor.jpg" alt="Couplets, pelita lamps and a kolam on one corridor." loading="lazy" width="720" height="402"><figcaption>Festivals</figcaption></figure><figure><img src="s08-rain.jpg" alt="Monsoon rain and one pair of slippers." loading="lazy" width="720" height="402"><figcaption>Rain</figcaption></figure><figure><img src="s09-the-knock.jpg" alt="Neighbours hold out a tingkat and a tin of murukku." loading="lazy" width="720" height="402"><figcaption>The knock</figcaption></figure><figure><img src="s10-new-keys.jpg" alt="A granddaughter holds up her keys beside him." loading="lazy" width="720" height="402"><figcaption>New keys</figcaption></figure></div>
+    </div>
+  </section>
+  <section id="timeline">
+    <div class="wrap">
+      <div class="sec-head"><h2>the morning, step by step</h2></div>
+      <p class="prose">The PC stopped after each step and waited for me.</p>
+      <figure class="diagram">
+        <svg class="dg-wide" viewBox="0 0 900 426" role="img" aria-labelledby="f2w-t f2w-d" xmlns="http://www.w3.org/2000/svg"><title id="f2w-t">The morning as a timeline</title><desc id="f2w-d">A timeline from 07:45 to 09:50 on 8 November 2026. Test picture: 2 minutes; 10 pictures: 14 minutes; Scene 7 again: 3 minutes; Install music, voice tools: 24 minutes; 3 music options: 13 minutes; Narration, 10 lines: 3 minutes; Video render: 3 minutes; Upload and YouTube checks: 9 minutes. Charles made a decision after the test picture, the pictures, the scene 7 fix, the music options and the render.</desc><path class="tl-grid" d="M325.0 40V360"/><text class="dg-n" x="325.0" y="34" text-anchor="middle">08:00</text><path class="tl-grid" d="M475.0 40V360"/><text class="dg-n" x="475.0" y="34" text-anchor="middle">08:30</text><path class="tl-grid" d="M625.0 40V360"/><text class="dg-n" x="625.0" y="34" text-anchor="middle">09:00</text><path class="tl-grid" d="M775.0 40V360"/><text class="dg-n" x="775.0" y="34" text-anchor="middle">09:30</text><text class="dg-l" x="234" y="76" text-anchor="end">Test picture</text><rect class="tl-gpu" x="255.0" y="61" width="10.0" height="22" rx="4"/><text class="dg-n" x="275.0" y="77" text-anchor="start">you: "run all 10"</text><text class="dg-l" x="234" y="114" text-anchor="end">10 pictures</text><rect class="tl-gpu" x="315.0" y="99" width="70.0" height="22" rx="4"/><text class="dg-n" x="395.0" y="115" text-anchor="start">you: "photos look good"</text><text class="dg-l" x="234" y="152" text-anchor="end">Scene 7 again</text><rect class="tl-gpu" x="445.0" y="137" width="15.0" height="22" rx="4"/><text class="dg-n" x="470.0" y="153" text-anchor="start">you: OK to install</text><text class="dg-l" x="234" y="190" text-anchor="end">Install music, voice tools</text><rect class="tl-cpu" x="460.0" y="175" width="120.0" height="22" rx="4"/><text class="dg-l" x="234" y="228" text-anchor="end">3 music options</text><rect class="tl-gpu" x="590.0" y="213" width="65.0" height="22" rx="4"/><text class="dg-n" x="665.0" y="229" text-anchor="start">you pick C + af_heart</text><text class="dg-l" x="234" y="266" text-anchor="end">Narration, 10 lines</text><rect class="tl-cpu" x="725.0" y="251" width="15.0" height="22" rx="4"/><text class="dg-l" x="234" y="304" text-anchor="end">Video render</text><rect class="tl-gpu" x="770.0" y="289" width="15.0" height="22" rx="4"/><text class="dg-n" x="795.0" y="305" text-anchor="start">you: "it's good"</text><text class="dg-l" x="234" y="342" text-anchor="end">Upload and YouTube checks</text><rect class="tl-mac" x="810.0" y="327" width="45.0" height="22" rx="4"/><rect class="tl-gpu" x="40" y="382" width="24" height="14" rx="3"/><text class="dg-n" x="72" y="394" text-anchor="start">this job on the graphics card</text><rect class="tl-cpu" x="302.1" y="382" width="24" height="14" rx="3"/><text class="dg-n" x="334.1" y="394" text-anchor="start">this job, no graphics card</text><rect class="tl-mac" x="543.5" y="382" width="24" height="14" rx="3"/><text class="dg-n" x="575.5" y="394" text-anchor="start">on the Mac</text></svg>
+        <svg class="dg-tall" viewBox="0 0 400 666" role="img" aria-labelledby="f2t-t f2t-d" xmlns="http://www.w3.org/2000/svg"><title id="f2t-t">The morning as a timeline</title><desc id="f2t-d">A timeline from 07:45 to 09:50 on 8 November 2026. Test picture: 2 minutes; 10 pictures: 14 minutes; Scene 7 again: 3 minutes; Install music, voice tools: 24 minutes; 3 music options: 13 minutes; Narration, 10 lines: 3 minutes; Video render: 3 minutes; Upload and YouTube checks: 9 minutes. Charles made a decision after the test picture, the pictures, the scene 7 fix, the music options and the render.</desc><path class="tl-grid" d="M66.24 34V556"/><text class="dg-n" x="66.24" y="28" text-anchor="middle">08:00</text><path class="tl-grid" d="M150.72 34V556"/><text class="dg-n" x="150.72" y="28" text-anchor="middle">08:30</text><path class="tl-grid" d="M235.2 34V556"/><text class="dg-n" x="235.2" y="28" text-anchor="middle">09:00</text><path class="tl-grid" d="M319.68 34V556"/><text class="dg-n" x="319.68" y="28" text-anchor="middle">09:30</text><text class="dg-l" x="24" y="60" text-anchor="start">Test picture</text><rect class="tl-gpu" x="26.816" y="68" width="6" height="14" rx="3"/><text class="dg-n" x="24" y="98" text-anchor="start">you: "run all 10"</text><text class="dg-l" x="24" y="124" text-anchor="start">10 pictures</text><rect class="tl-gpu" x="60.608" y="132" width="39.424" height="14" rx="3"/><text class="dg-n" x="24" y="162" text-anchor="start">you: "photos look good"</text><text class="dg-l" x="24" y="188" text-anchor="start">Scene 7 again</text><rect class="tl-gpu" x="133.824" y="196" width="8.448" height="14" rx="3"/><text class="dg-n" x="24" y="226" text-anchor="start">you: OK to install</text><text class="dg-l" x="24" y="252" text-anchor="start">Install music, voice tools</text><rect class="tl-cpu" x="142.272" y="260" width="67.584" height="14" rx="3"/><text class="dg-l" x="24" y="316" text-anchor="start">3 music options</text><rect class="tl-gpu" x="215.488" y="324" width="36.608" height="14" rx="3"/><text class="dg-n" x="24" y="354" text-anchor="start">you pick C + af_heart</text><text class="dg-l" x="24" y="380" text-anchor="start">Narration, 10 lines</text><rect class="tl-cpu" x="291.52" y="388" width="8.448" height="14" rx="3"/><text class="dg-l" x="24" y="444" text-anchor="start">Video render</text><rect class="tl-gpu" x="316.864" y="452" width="8.448" height="14" rx="3"/><text class="dg-n" x="24" y="482" text-anchor="start">you: "it's good"</text><text class="dg-l" x="24" y="508" text-anchor="start">Upload and YouTube checks</text><rect class="tl-mac" x="339.392" y="516" width="25.343999999999998" height="14" rx="3"/><rect class="tl-gpu" x="24" y="571" width="24" height="14" rx="3"/><text class="dg-n" x="56" y="582" text-anchor="start">this job on the graphics card</text><rect class="tl-cpu" x="24" y="593" width="24" height="14" rx="3"/><text class="dg-n" x="56" y="604" text-anchor="start">this job, no graphics card</text><rect class="tl-mac" x="24" y="615" width="24" height="14" rx="3"/><text class="dg-n" x="56" y="626" text-anchor="start">on the Mac</text></svg>
+        <figcaption>8 November 2026, to the nearest minute or two. The gaps are other jobs sharing the same graphics card, and me deciding.</figcaption>
+      </figure>
+    </div>
+  </section>
+  <section id="tools">
+    <div class="wrap">
+      <div class="sec-head"><h2>what ran on the PC</h2></div>
+      <div class="cmp-wrap"><table class="cmp">
+        <thead><tr><th>Step</th><th>Tool</th><th>Settings</th><th>Time</th></tr></thead>
+        <tbody>
+          <tr><td>Pictures</td><td>ComfyUI, Qwen-Image 2.1 Q8 GGUF</td><td>1664x928, 25 steps</td><td>About 47 s each on an RTX 4070 Ti</td></tr>
+          <tr><td>Music</td><td>ACE-Step 1.5 turbo</td><td>Instrumental, 175 s, 72 BPM, three versions</td><td>About 3.3 min each</td></tr>
+          <tr><td>Narration</td><td>Kokoro-82M, on the CPU</td><td>Voice af_heart, speed 0.92</td><td>About 1 min</td></tr>
+          <tr><td>Video</td><td>HyperFrames, Chrome, FFmpeg</td><td>1920x1080, 30 fps, slow pans, captions</td><td>Render 2 min 52 s</td></tr>
+        </tbody>
+      </table></div>
+      <p class="prose">The music ducks under the voice, dips a further 6 dB across the rain scene, and rises back for the knock and the new keys. The final mix is −16 LUFS.</p>
+    </div>
+  </section>
+  <section id="problems">
+    <div class="wrap">
+      <div class="sec-head"><h2>what went wrong</h2></div>
+      <div class="cmp-wrap"><table class="cmp">
+        <thead><tr><th>Problem</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>Fake Chinese on the couplets, even when told "plain red paper, no writing"</td><td>Ask for the real phrases: 岁岁平安, 年年有余, 福. One of three seeds got every character right, and that one was kept.</td></tr>
+          <tr><td>Clock faces always came out with numbers</td><td>Left as they are.</td></tr>
+          <tr><td>Kokoro misread "kopi" and "kolam"</td><td>Respelled them for the voice. "Tingkat" still comes out as "tinkat".</td></tr>
+          <tr><td>The music generator treats a timed arc as a hint, so no version dropped for the rain</td><td>Made the drop in the mix.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+  <section id="licences">
+    <div class="wrap">
+      <div class="sec-head"><h2>licences and credits</h2></div>
+      <p class="prose">The pictures come from Qwen-Image 2.1, under the Qwen Research Licence, which is non-commercial ("research or evaluation purposes only"). So this video can't be monetised unless the pictures are remade with another model. ACE-Step 1.5 is MIT and Kokoro-82M is Apache 2.0.</p>
+      <p class="credit">Idea and direction by Charles Tay. Story and narration written by Claude. AI-generated pictures, voice and music. Video: HyperFrames.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. Pictures, voice and music are AI-generated. The people and the flat are fictional.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies unless you play the YouTube video. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+<script>
+document.addEventListener('click', e => {
+  const b = e.target.closest('button.yt');
+  if (b) b.parentElement.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1&rel=0" title="YouTube video player" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+});
+</script>
+</body>
+</html>
