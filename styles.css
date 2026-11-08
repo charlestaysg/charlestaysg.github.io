@@ -398,3 +398,25 @@ table.tk-table .new { display: block; margin-top: 4px; font-family: var(--font-m
 }
 .chip.show-all { display: block; margin: 24px auto 0; }
 .chip.show-all[hidden] { display: none; }
+
+/* two-lane diagram: story (left) vs staged test (right). Stacks under 640px. */
+.lanes { margin: 20px 0; padding: 0; max-width: 760px; }
+.lanes-head, .lane-row { display: grid; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr); align-items: stretch; }
+.lanes-head { margin-bottom: 8px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.lanes-head span:last-child { color: var(--green); }
+.lanes-rows { display: grid; gap: 8px; }
+.lane-box { display: flex; flex-direction: column; gap: 3px; min-width: 0; padding: 9px 11px; background: var(--panel); border: 1px solid var(--line); color: var(--ink); font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
+.lane-box strong { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+.lane-box.is-test { border-color: var(--green); }
+.lane-box.is-gap { border-style: dashed; color: var(--muted); }
+.lane-tag { display: none; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.lane-box.is-test .lane-tag { color: var(--green); }
+.lane-arrow { align-self: center; text-align: center; color: var(--muted); font-family: var(--font-mono); font-size: 16px; line-height: 1; }
+.lanes figcaption { margin-top: 10px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; color: var(--muted); }
+@media (max-width: 640px) {
+  .lanes-head { display: none; }
+  .lanes-rows { gap: 18px; }
+  .lane-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .lane-tag { display: block; }
+  .lane-arrow { transform: rotate(90deg); }
+}

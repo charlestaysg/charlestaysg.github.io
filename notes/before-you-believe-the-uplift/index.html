@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Before You Believe the Uplift &middot; Charles Tay</title>
+<meta name="description" content="A story I read about a website change that went badly, and what a Singapore owner can do when a vendor promises more sales.">
+<link rel="canonical" href="https://charlestaysg.com/notes/before-you-believe-the-uplift/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Before You Believe the Uplift &middot; Charles Tay">
+<meta property="og:description" content="What a Singapore owner can do when a vendor promises more sales.">
+<meta property="og:url" content="https://charlestaysg.com/notes/before-you-believe-the-uplift/">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261109a">
+<style>
+  /* same row grid as the other notes */
+  .steps { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px 16px; margin: 12px 0 0; }
+  .steps dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .steps dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .steps dd.out { font-weight: 700; }
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  .prose { max-width: 64ch; font-size: 17px; line-height: 1.6; }
+  .src { max-width: 64ch; margin: 8px 0 0; padding-left: 18px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .credit { max-width: 64ch; margin-top: 24px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; gap: 2px; } .steps dd { margin-bottom: 8px; } }
+  /* mistakes use .tools + .steps; stages are stacked cards so nothing scrolls sideways */
+  .tools .job { white-space: nowrap; }
+  .tools .prose { margin: 6px 0 0; }
+  .stages { list-style: none; padding: 0; margin: 20px 0; display: grid; gap: 14px; }
+  .stages li { border: 1px solid var(--line); background: var(--panel); padding: 14px 16px; min-width: 0; }
+  .stages h3 { margin: 0 0 8px; font-size: 19px; font-weight: 700; }
+  .stages dl { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 6px 16px; margin: 0; }
+  .stages dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .stages dd { margin: 0; font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }
+  .stages dd.story { color: var(--muted); }
+  .src li { overflow-wrap: anywhere; }
+  @media (max-width: 640px) { .stages dl { grid-template-columns: 1fr; gap: 2px; } .stages dd { margin-bottom: 8px; } }
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/projects/worth-watching/">Worth watching</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#work">← Charles Tay</a>
+    <span class="label">For SME owners · <time datetime="2026-11-09">9 Nov 2026</time></span>
+    <h1>Before you believe the uplift</h1>
+    <p class="dek">A story I read about a website change that went badly, and what a Singapore owner can do when a vendor promises more sales.</p>
+  </div>
+</header>
+
+<main>
+  <section id="figure">
+    <div class="wrap">
+      <figure class="lanes" aria-label="Six steps from the reported story, each paired with a staged way to test it. Two steps are marked as not described in the story.">
+       <div class="lanes-head" aria-hidden="true"><span>As reported by a news agency</span><span></span><span>A staged way to test it</span></div>
+       <div class="lanes-rows">
+        <div class="lane-row">
+         <div class="lane-box"><span class="lane-tag">As reported by a news agency</span><strong>The promise</strong><span>Owner: a large rise in revenue</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>Check the promise</strong><span>Basis in writing, sums at zero uplift</span></div>
+        </div>
+        <div class="lane-row">
+         <div class="lane-box is-gap"><span class="lane-tag">As reported by a news agency</span><strong>Signing</strong><span>The story doesn&rsquo;t say</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>Contract by stages</strong><span>Pay and exit tied to each stage</span></div>
+        </div>
+        <div class="lane-row">
+         <div class="lane-box is-gap"><span class="lane-tag">As reported by a news agency</span><strong>Testing before launch</strong><span>The story doesn&rsquo;t say</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>Test copy with staff (UAT)</strong><span>Written pass or fail: orders, URLs, ads</span></div>
+        </div>
+        <div class="lane-row">
+         <div class="lane-box"><span class="lane-tag">As reported by a news agency</span><strong>Launch</strong><span>Owner: sales dropped</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>Small share first</strong><span>Old site keeps trading alongside</span></div>
+        </div>
+        <div class="lane-row">
+         <div class="lane-box"><span class="lane-tag">As reported by a news agency</span><strong>Paid ads</strong><span>Owner: ads did not reach the site</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>Step up only if measures hold</strong><span>Conversion and sales against the old site</span></div>
+        </div>
+        <div class="lane-row">
+         <div class="lane-box"><span class="lane-tag">As reported by a news agency</span><strong>Getting out</strong><span>Owner: the contract could not be ended</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>A rehearsed way back</strong><span>Old site ready until the new one proves itself</span></div>
+        </div>
+       </div>
+       <figcaption>Dashed: the story gives no detail. One side&rsquo;s account, now in dispute.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="story">
+    <div class="wrap">
+      <div class="sec-head"><h2>the story, and its limits</h2></div>
+      <p class="prose">A small online retailer overseas replaced a website that was working. The owner says the vendor promised a large rise in revenue and that a local agency did the work. By the owner&rsquo;s account, sales dropped at launch, paid ads stopped leading to the site, the contract could not be ended, and the business did not recover.</p>
+      <p class="prose">It has since become a legal dispute and the vendor has not given its side. This is one person&rsquo;s account, as reported, and I have left out who, where and the figures. The story doesn&rsquo;t give the contract terms, the launch date, what was tested, who was responsible for the ad links, or how much moved at once. Other causes haven&rsquo;t been ruled out.</p>
+      <p class="prose">I don&rsquo;t know who is right, and I make no claim about any company. The rest of this page is what any owner can do, whoever is right in that case.</p>
+    </div>
+  </section>
+
+  <section id="mistakes">
+    <div class="wrap">
+      <div class="sec-head"><h2>how not to handle a business promise</h2></div>
+      <ul class="tools">
+        <li>
+          <span class="job">Mistake 1</span>
+          <div>
+            <h3>Treating a percentage as a result.</h3>
+            <dl class="steps">
+              <dt>ask in writing</dt><dd>Where does the number come from? How many businesses, of what size, moving from what system, measured over what period, and compared with what?</dd>
+              <dt>do instead</dt><dd>Run your sums at zero uplift, with every cost counted: licence, build, staff time, sales lost during the switch and the cost of leaving. If the case only works with the uplift, don&rsquo;t sign yet.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Mistake 2</span>
+          <div>
+            <h3>Letting the vendor be the only one who assesses the vendor.</h3>
+            <dl class="steps">
+              <dt>ask in writing</dt><dd>Three customers of your size who moved from the system you use now. Then call them yourself and ask what went wrong.</dd>
+              <dt>do instead</dt><dd>Get a second opinion first. SME Centres give free one-to-one advice, including on digital solutions. IMDA&rsquo;s SMEs Go Digital offers digital advisory help, free for first use if you qualify. Check the current terms.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Mistake 3</span>
+          <div>
+            <h3>Leaving the promise in the sales deck.</h3>
+            <dl class="steps">
+              <dt>ask in writing</dt><dd>Will you put this figure in the contract, and what happens if we don&rsquo;t reach it?</dd>
+              <dt>do instead</dt><dd>If it matters, make it a term with a remedy. Under Singapore&rsquo;s Misrepresentation Act 1967 a false statement of fact that led you to sign can give you damages, and a clause excluding that liability must be reasonable. A forecast is harder. Statements of opinion or intention usually don&rsquo;t count, unless the opinion wasn&rsquo;t honestly held or came from someone claiming special skill. If the vendor won&rsquo;t write it down, treat it as marketing.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Mistake 4</span>
+          <div>
+            <h3>Buying a bigger fix than the problem.</h3>
+            <p class="prose">If the worry is security or an ageing system, there may be smaller answers than a new platform.</p>
+            <dl class="steps">
+              <dt>ask in writing</dt><dd>What exactly is wrong with what we have, and what would it cost to fix only that?</dd>
+              <dt>do instead</dt><dd>Price the smallest fix first. CSA&rsquo;s Cyber Essentials mark is a local yardstick for basic security.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Mistake 5</span>
+          <div>
+            <h3>Signing without knowing the price of leaving.</h3>
+            <dl class="steps">
+              <dt>ask in writing</dt><dd>The length of the term, the cost of ending early, refunds if a stage fails, how you get your data and designs out, and who holds the domain and the ad accounts.</dd>
+              <dt>do instead</dt><dd>Pay by stage, and write the right to walk away at each stage into the contract. Check which country&rsquo;s law governs. Singapore&rsquo;s Unfair Contract Terms Act 1977 lets a court test limits on liability in a supplier&rsquo;s written standard terms for reasonableness. It controls those clauses only. It is no general fairness rule, and its main protections don&rsquo;t apply if Singapore law governs only because the parties chose it.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Mistake 6</span>
+          <div>
+            <h3>Assuming someone owns the gaps.</h3>
+            <p class="prose">With a platform, an implementer and whoever runs your ads, a job like updating ad links can belong to nobody.</p>
+            <dl class="steps">
+              <dt>ask in writing</dt><dd>Who owns the redirect list, the ad links and the sales tracking?</dd>
+              <dt>do instead</dt><dd>Put one named person against each.</dd>
+            </dl>
+          </div>
+        </li>
+      </ul>
+      <p class="prose" style="margin-top:20px"><strong>A grant doesn&rsquo;t check the promise.</strong> EnterpriseSG&rsquo;s PSG ended on 29 September 2026 and its EDGE Grant started on 30 September. Digital solutions under EDGE go through IMDA&rsquo;s pre-approval. Pre-approval looks at the solution in general and says nothing about how it will do in your shop. Check the grant rules before you sign or pay anything, on BizSG.</p>
+    </div>
+  </section>
+
+  <section id="stages">
+    <div class="wrap">
+      <div class="sec-head"><h2>how to run the change in stages</h2></div>
+      <p class="prose">Written for an owner with no IT team. The percentages are starting points. Agree your own numbers in writing before go-live.</p>
+      <ol class="stages">
+        <li>
+          <h3>1. Promise</h3>
+          <dl>
+            <dt>Do this</dt><dd>Get the basis of the number in writing. Run the sums at zero uplift</dd>
+            <dt>Who</dt><dd>Owner</dd>
+            <dt>Pass before moving on</dt><dd>The case works without the uplift</dd>
+            <dt>What the story says</dt><dd class="story">A large rise was promised. Basis not given</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>2. Contract</h3>
+          <dl>
+            <dt>Do this</dt><dd>Payments and exit rights tied to stages 4 to 7. One named owner for redirects, ads and tracking</dd>
+            <dt>Who</dt><dd>Owner, lawyer</dd>
+            <dt>Pass before moving on</dt><dd>Those terms are signed</dd>
+            <dt>What the story says</dt><dd class="story">Owner says the contract couldn&rsquo;t be ended. Terms not given</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>3. Baseline</h3>
+          <dl>
+            <dt>Do this</dt><dd>Record 8 weeks of visits, conversion and sales by channel. List every old URL and every live ad</dd>
+            <dt>Who</dt><dd>Whoever runs marketing</dd>
+            <dt>Pass before moving on</dt><dd>Both lists are complete</dd>
+            <dt>What the story says</dt><dd class="story">Not given</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>4. Test copy (UAT)</h3>
+          <dl>
+            <dt>Do this</dt><dd>Staff place real orders on a private copy: new buyer, repeat buyer, discount, refund, phone, delivery email. Use made-up customers and the payment provider&rsquo;s test mode</dd>
+            <dt>Who</dt><dd>Sales, finance and packing staff, not the builder</dd>
+            <dt>Pass before moving on</dt><dd>Every item on the written list passes. Every old URL lands on the right page. Every ad lands on the right page. A test order shows up in your tracking</dd>
+            <dt>What the story says</dt><dd class="story">Owner says ads stopped leading to the site. Testing not given</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>5. Side by side</h3>
+          <dl>
+            <dt>Do this</dt><dd>Old site keeps trading. New site stays hidden from search and takes only staff and a few friendly customers&rsquo; orders. Stock is counted in both</dd>
+            <dt>Who</dt><dd>Owner, packing staff</dd>
+            <dt>Pass before moving on</dt><dd>Two weeks of orders reconcile with no lost order</dd>
+            <dt>What the story says</dt><dd class="story">Not given</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>6. Small share</h3>
+          <dl>
+            <dt>Do this</dt><dd>One product line, or about 10% of ad budget, goes to the new site</dd>
+            <dt>Who</dt><dd>Whoever runs marketing</dd>
+            <dt>Pass before moving on</dt><dd>Two full weeks: conversion and sales per visit within 10% of the old site for the same products</dd>
+            <dt>What the story says</dt><dd class="story">Owner says sales dropped at launch. How much moved at once isn&rsquo;t given</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>7. Step up</h3>
+          <dl>
+            <dt>Do this</dt><dd>25%, 50%, then all traffic. Same test at each step. A fall past the line means back to the last step</dd>
+            <dt>Who</dt><dd>Owner decides</dd>
+            <dt>Pass before moving on</dt><dd>Measure holds at every step</dd>
+            <dt>What the story says</dt><dd class="story">Not given</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>8. Close</h3>
+          <dl>
+            <dt>Do this</dt><dd>Switch search to the new site with permanent redirects. Keep the old site ready to return to until the new one has proved itself. Final payment only now</dd>
+            <dt>Who</dt><dd>Owner, implementer</dd>
+            <dt>Pass before moving on</dt><dd>A rehearsed return to the old site worked</dd>
+            <dt>What the story says</dt><dd class="story">Not given</dd>
+          </dl>
+        </li>
+      </ol>
+      <p class="prose"><strong>Way back.</strong> Practise it at stage 5. Write down who does it, how long it takes and what happens to orders taken during the switch.</p>
+      <p class="prose"><strong>About search.</strong> Google&rsquo;s site-move guidance says small and medium sites should move all URLs at once and expect a temporary ranking dip, and that redirects should stay at least a year. So use ads and product lines for the staged part, and do the search move once, at stage 8. A short dip in search alone isn&rsquo;t a fail. Ads are the part you can test straight away.</p>
+    </div>
+  </section>
+
+  <section id="singapore">
+    <div class="wrap">
+      <div class="sec-head"><h2>what is different in Singapore</h2></div>
+      <p class="prose"><strong>Don&rsquo;t assume a general fairness rule.</strong> Singapore&rsquo;s Consumer Protection (Fair Trading) Act covers business-to-consumer dealings only, so a business buyer&rsquo;s routes are the contract, the Misrepresentation Act and the Unfair Contract Terms Act.</p>
+      <p class="prose"><strong>Customer data moves too.</strong> The PDPA still applies during a migration, in the version current at 9 November 2026. Protect the data while it moves (s 24). Stop keeping the old copy once it is no longer needed for legal or business purposes (s 25). If the new platform sends data overseas, it must get protection comparable to the PDPA (s 26). A vendor processing data for you must protect it and tell you of a breach without undue delay, and you stay responsible. If a breach affects 500 or more people or is likely to cause significant harm, you have three calendar days after deciding it is notifiable to tell PDPC. PDPC publishes sample contract clauses.</p>
+      <p class="prose"><strong>If it goes wrong.</strong> Small Claims Tribunals take claims up to S$20,000, or S$30,000 if both sides agree, which won&rsquo;t cover a large loss. Singapore Mediation Centre handles commercial disputes, with fees that depend on the amount at stake. If the company itself is in trouble, MinLaw&rsquo;s Simplified Insolvency Programme 2.0 (from 29 January 2026) is open to companies with liabilities of up to S$2 million. Get advice early.</p>
+
+      <p class="credit">Singapore sources, checked 9 Nov 2026</p>
+      <ul class="src">
+        <li><a href="https://sso.agc.gov.sg/Act/MA1967" rel="noopener">Misrepresentation Act 1967</a></li>
+        <li><a href="https://sso.agc.gov.sg/Act/UCTA1977" rel="noopener">Unfair Contract Terms Act 1977</a></li>
+        <li><a href="https://sso.agc.gov.sg/Act/PDPA2012" rel="noopener">Personal Data Protection Act 2012</a></li>
+        <li><a href="https://www.singaporelawwatch.sg/About-Singapore-Law/Commercial-Law/ch-08-the-law-of-contract" rel="noopener">Singapore Law Watch, The Law of Contract</a></li>
+        <li><a href="https://www.ccs.gov.sg/resources/faqs/consumer-protection/" rel="noopener">CCS, consumer protection FAQ</a></li>
+        <li><a href="https://www.pdpc.gov.sg/-/media/files/pdpc/pdf-files/resource-for-organisation/guide-on-data-protection-clauses-for-agreements-relating-to-the-processing-of-personal-data-1-feb-2021.pdf" rel="noopener">PDPC, guide on data protection clauses (1 Feb 2021)</a></li>
+        <li><a href="https://www.pdpc.gov.sg/report-data-breach/before-you-report-a-data-breach-2/info" rel="noopener">PDPC, report a data breach</a></li>
+        <li><a href="https://grants.gobusiness.gov.sg/faq/psg" rel="noopener">GoBusiness, EDGE and PSG FAQ</a></li>
+        <li><a href="https://www.bizsg.gov.sg/grants" rel="noopener">BizSG grants</a></li>
+        <li><a href="https://www.imda.gov.sg/programme-listing/smes-go-digital/CTOaaS/" rel="noopener">IMDA, SMEs Go Digital</a></li>
+        <li><a href="https://smecentre-sccci.sg/" rel="noopener">SME Centre@SCCCI</a></li>
+        <li><a href="https://www.csa.gov.sg/our-programmes/support-for-enterprises/sg-cyber-safe-programme/cybersecurity-certification-for-organisations/cyber-essentials/" rel="noopener">CSA Cyber Essentials</a></li>
+        <li><a href="https://www.judiciary.gov.sg/civil/small-claims" rel="noopener">State Courts, small claims</a></li>
+        <li><a href="https://mediation.com.sg/resources/faqs/" rel="noopener">Singapore Mediation Centre FAQ</a></li>
+        <li><a href="https://www.mlaw.gov.sg/launch-of-revamped-sip/" rel="noopener">MinLaw, SIP 2.0</a></li>
+        <li><a href="https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes" rel="noopener">Google Search Central, site moves</a></li>
+      </ul>
+      <p class="credit" style="margin-top:8px">Written 9 Nov 2026. Prompted by a news story I read, which gave one side&rsquo;s account. Names and details are left out, and I make no claim about any company. The lessons are my own view. I&rsquo;m not a lawyer and this isn&rsquo;t legal advice. Not affiliated with any agency or organisation mentioned.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional or legal advice. Try any tool at your own risk, and back up your data first. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+
+</body>
+</html>

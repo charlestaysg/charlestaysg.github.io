@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261102a">
+<link rel="stylesheet" href="styles.css?v=20261109a">
 </head>
 <body>
 <!-- topbar:start -->
@@ -79,8 +79,8 @@
         <p style="margin:8px 0 0">AI makes the voice. The story is mine. <a href="projects/one-question-at-a-time/">See one song, line by line →</a></p>
       </div>
       <div class="chips" role="group" aria-label="Show only" hidden>
-        <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span>58</span></button>
-        <button type="button" class="chip" data-filter="sme" aria-pressed="false">For SME owners <span>10</span></button>
+        <button type="button" class="chip" data-filter="all" aria-pressed="true">All <span>59</span></button>
+        <button type="button" class="chip" data-filter="sme" aria-pressed="false">For SME owners <span>11</span></button>
         <button type="button" class="chip" data-filter="live" aria-pressed="false">Live data <span>3</span></button>
         <button type="button" class="chip" data-filter="explainers" aria-pressed="false">Explainers <span>6</span></button>
         <button type="button" class="chip" data-filter="songs-work" aria-pressed="false">Songs about work <span>12</span></button>
@@ -135,6 +135,15 @@
             <details class="more-info"><summary>More about this</summary>
               <p>The course-by-course companion to the Skills Training Landscape. Choose a sector, then filter by provider type, length, study mode, full fee or AI-related titles, or search by keyword. Each card shows the next class date where the source lists one, and links to the course page on MySkillsFuture. Built from MySkillsFuture open data; no login needed. Unofficial; MySkillsFuture is the official source.</p>
             </details>
+          </div>
+        </article>
+        <article class="card" id="before-you-believe-the-uplift-card" data-group="sme">
+          <a class="thumb" href="notes/before-you-believe-the-uplift/" tabindex="-1" aria-hidden="true"><img src="assets/thumbs/before-you-believe-the-uplift.jpg" alt="" loading="lazy"></a>
+          <div class="card-body">
+            <span class="card-meta"><span class="tag">For SME owners</span> <span class="spec">guide · 8 stages</span></span>
+            <h3>Before You Believe the Uplift</h3>
+            <p>A story I read about a website change that went badly, and what a Singapore owner can do when a vendor promises more sales.</p>
+          <div class="links"><a href="notes/before-you-believe-the-uplift/">Open the guide →</a></div>
           </div>
         </article>
         <article class="card" id="show-what-you-can-do" data-group="sme">
@@ -845,6 +854,62 @@
         <ul class="list hd-list" id="hd-list" aria-live="polite"><li class="hd-empty">Loading headlines…</li></ul>
         <p class="hd-foot">Headlines and links belong to their publishers. Not affiliated with any of them.</p>
       </div>
+      <article class="news-item" id="vendor-promise">
+        <div class="player wide"><a class="yt yt-text" href="notes/before-you-believe-the-uplift/" aria-label="Read Before you believe the uplift, on testing a vendor&rsquo;s promise of more sales"><span class="yt-caption">When a vendor promises more sales<br>How to test it first →</span></a></div>
+        <div class="project-body">
+          <span class="spec"><time datetime="2026-11-09">9 Nov 2026</time> · worth thinking about · SME systems</span>
+          <h3>When a vendor promises more sales</h3>
+          <p>I recently read about a small online retailer overseas that replaced a website that was working. The owner says the vendor promised a large rise in revenue. By the owner&rsquo;s account, sales dropped at launch, paid ads stopped leading to the site, there was no way out of the contract, and the business did not recover.</p>
+          <p>It has since become a legal dispute and the vendor has not given its side, so I&rsquo;ve left out who, where and the figures. I don&rsquo;t know who is right, and I make no claim about any company. The story got me thinking about how a Singapore owner can handle a promise like that, and change a working system without staking the shop on launch day.</p>
+          <figure class="lanes" aria-label="Six steps from the reported story, each paired with a staged way to test it. Two steps are marked as not described in the story.">
+           <div class="lanes-head" aria-hidden="true"><span>As reported by a news agency</span><span></span><span>A staged way to test it</span></div>
+           <div class="lanes-rows">
+            <div class="lane-row">
+             <div class="lane-box"><span class="lane-tag">As reported by a news agency</span><strong>The promise</strong><span>Owner: a large rise in revenue</span></div>
+             <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+             <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>Check the promise</strong><span>Basis in writing, sums at zero uplift</span></div>
+            </div>
+            <div class="lane-row">
+             <div class="lane-box is-gap"><span class="lane-tag">As reported by a news agency</span><strong>Signing</strong><span>The story doesn&rsquo;t say</span></div>
+             <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+             <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>Contract by stages</strong><span>Pay and exit tied to each stage</span></div>
+            </div>
+            <div class="lane-row">
+             <div class="lane-box is-gap"><span class="lane-tag">As reported by a news agency</span><strong>Testing before launch</strong><span>The story doesn&rsquo;t say</span></div>
+             <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+             <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>Test copy with staff (UAT)</strong><span>Written pass or fail: orders, URLs, ads</span></div>
+            </div>
+            <div class="lane-row">
+             <div class="lane-box"><span class="lane-tag">As reported by a news agency</span><strong>Launch</strong><span>Owner: sales dropped</span></div>
+             <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+             <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>Small share first</strong><span>Old site keeps trading alongside</span></div>
+            </div>
+            <div class="lane-row">
+             <div class="lane-box"><span class="lane-tag">As reported by a news agency</span><strong>Paid ads</strong><span>Owner: ads did not reach the site</span></div>
+             <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+             <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>Step up only if measures hold</strong><span>Conversion and sales against the old site</span></div>
+            </div>
+            <div class="lane-row">
+             <div class="lane-box"><span class="lane-tag">As reported by a news agency</span><strong>Getting out</strong><span>Owner: the contract could not be ended</span></div>
+             <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+             <div class="lane-box is-test"><span class="lane-tag">A staged way to test it</span><strong>A rehearsed way back</strong><span>Old site ready until the new one proves itself</span></div>
+            </div>
+           </div>
+           <figcaption>Dashed: the story gives no detail. One side&rsquo;s account, now in dispute.</figcaption>
+          </figure>
+          <dl class="spec-list">
+            <dt>promise</dt><dd>ask where the number comes from, for which businesses of your size, over what period. Then run your own sums at zero uplift.</dd>
+            <dt>in writing</dt><dd>a forecast is usually treated as opinion, so it is hard to rely on later. If it matters, make it a contract term with a remedy.</dd>
+            <dt>exit</dt><dd>before signing, find out what you pay and what you keep if a stage fails, and which country&rsquo;s law governs.</dd>
+            <dt>test</dt><dd>staff place real orders on a test copy. Every old URL and every ad must land on the right page.</dd>
+            <dt>step up</dt><dd>keep the old site trading. Start with one product line or a small part of the ad budget, and move up only when sales hold.</dd>
+            <dt>way back</dt><dd>practise returning to the old site before you need to.</dd>
+            <dt>help</dt><dd>SME Centres give free one-to-one advice. IMDA&rsquo;s SMEs Go Digital can help you choose.</dd>
+          </dl>
+          <p><a href="notes/before-you-believe-the-uplift/">The questions to ask, the stages and the Singapore rules →</a></p>
+          <p class="credit">Written 9 Nov 2026. Prompted by a news story I read, which gave one side&rsquo;s account. Names and details are left out. The lessons are my own view. I&rsquo;m not a lawyer.</p>
+        </div>
+      </article>
       <article class="news-item" id="freezer-attack">
         <div class="player wide"><a class="yt yt-text" href="notes/plan-b/" aria-label="Read If it stopped tonight, a plan B for small businesses"><span class="yt-caption">If it stopped tonight<br>A plan B for small businesses →</span></a></div>
         <div class="project-body">
