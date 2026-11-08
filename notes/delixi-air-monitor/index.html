@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reading the DELIXI air monitor · Charles Tay</title>
+<meta name="description" content="An unofficial English guide to the DELIXI DLX-FTJ0506 air quality monitor: every number on the screen, what the ranges mean, every term defined, and what to do about a bad reading.">
+<link rel="canonical" href="https://charlestaysg.com/notes/delixi-air-monitor/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reading the DELIXI air monitor · Charles Tay">
+<meta property="og:description" content="The manual is in Chinese. This is what every number on the screen means, and what to do about it.">
+<meta property="og:url" content="https://charlestaysg.com/notes/delixi-air-monitor/">
+<meta property="og:image" content="https://charlestaysg.com/assets/og.jpg">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261102a">
+<style>
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  .prose { max-width: 64ch; font-size: 17px; line-height: 1.55; margin: 0 0 14px; }
+  .credit { max-width: 64ch; margin-top: 16px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .jump { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0; padding: 0; list-style: none; font-size: 15px; }
+  h3.sub { font-family: var(--font-body); font-size: 20px; font-weight: 700; margin: 30px 0 4px; }
+  h3.sub small { font-family: var(--font-mono); font-size: 12px; font-weight: 400; color: var(--muted); margin-left: 6px; letter-spacing: .04em; }
+
+  /* the screen, drawn to match the unit in every colour scheme */
+  .screen-layout { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 28px; align-items: start; }
+  .device { background: #F2F1EC; border-radius: 18px; padding: 20px 20px 16px; box-shadow: 0 0 0 1px rgba(0,0,0,.12); }
+  .lcd { background: #05060C; color: #BFD6FF; border-radius: 3px; padding: 12px 14px; font-family: var(--font-mono); position: relative; }
+  .lcd .row { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; }
+  .lcd .rule { height: 2px; background: #8FB8EE; margin: 8px 0; }
+  .lcd .cap { font-family: var(--font-body); font-size: 12px; line-height: 1.1; color: #DCE7FA; display: block; margin-bottom: 2px; }
+  .lcd .cap em { font-style: normal; font-size: 10px; color: #A9BBD8; margin-left: 3px; }
+  .lcd .num { font-weight: 500; line-height: 1; display: block; }
+  .lcd .cell { position: relative; }
+  .blue { color: #33A9FF; } .red { color: #FF3B30; } .lime { color: #C8FF1F; } .pink { color: #F4A9E6; }
+  .n { display: inline-flex; align-items: center; justify-content: center; width: 17px; height: 17px; border-radius: 50%; background: #fff; color: #05060C; font: 500 10px/1 var(--font-mono); flex: none; margin-right: 3px; vertical-align: 1px; }
+  .aqi { display: flex; align-items: center; gap: 8px; }
+  .aqi .faces { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; flex: 1; }
+  .aqi .bar { height: 7px; display: block; }
+  .aqi .face { display: block; width: 18px; height: 18px; margin: 3px auto 0; fill: none; stroke: #6C86B8; stroke-width: 1.3; stroke-linecap: round; opacity: .55; }
+  .aqi .face .e { fill: #6C86B8; stroke: none; }
+  .aqi .face.on { opacity: 1; stroke: #fff; }
+  .aqi .face.on .e { fill: #fff; }
+  .brand { text-align: center; font: 900 19px/1 var(--font-body); color: #C8102E; margin: 13px 0 11px; letter-spacing: .02em; }
+  .keys { display: flex; justify-content: space-between; align-items: center; color: #55585F; font: 500 15px/1 var(--font-mono); padding: 0 8px; }
+  .keys span { display: inline-flex; align-items: center; }
+  .keys .n { background: #05060C; color: #fff; }
+  .legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 16px; line-height: 1.4; }
+  .legend li { display: grid; grid-template-columns: 24px minmax(0, 1fr); }
+  .legend .n { background: var(--ink); color: var(--bg); margin-top: 2px; }
+  .legend .n.letter { background: var(--green); color: #fff; }
+
+  /* tables stack into cards on phones */
+  .rt { width: 100%; max-width: 800px; border-collapse: collapse; font-size: 16px; line-height: 1.4; margin-top: 6px; }
+  .rt th, .rt td { text-align: left; vertical-align: top; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line); }
+  .rt thead th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .rt td.v { font-family: var(--font-mono); font-size: 15px; white-space: nowrap; }
+  .rt tr.now td { background: color-mix(in srgb, var(--green) 11%, transparent); }
+  .rt tr.now td:first-child { box-shadow: inset 3px 0 0 var(--green); padding-left: 10px; }
+  .tag { display: block; font-family: var(--font-mono); font-size: 11px; color: var(--green); letter-spacing: .04em; margin-top: 3px; white-space: normal; }
+  .pip { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; vertical-align: 0; }
+  .g { background: #1FA45B; } .y { background: #D9B200; } .o { background: #E8801A; } .r { background: #D92D20; } .p { background: #7A1FA2; } .k { background: #5B1A1A; }
+
+  .terms { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 0; margin: 6px 0 0; max-width: 800px; }
+  .terms dt, .terms dd { padding: 9px 0; border-bottom: 1px solid var(--line); margin: 0; font-size: 16px; line-height: 1.45; }
+  .terms dt { font-weight: 700; padding-right: 14px; }
+  .terms dt span { display: block; font-weight: 400; font-size: 14px; color: var(--muted); }
+  .src { max-width: 64ch; margin: 8px 0 0; padding-left: 18px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .notice { max-width: 64ch; border-left: 3px solid var(--green); padding: 2px 0 2px 14px; font-size: 16px; line-height: 1.5; margin: 0 0 18px; }
+
+  @media (max-width: 760px) { .screen-layout { grid-template-columns: minmax(0, 1fr); } .device { max-width: 360px; } }
+  @media (max-width: 640px) {
+    .rt thead { display: none; }
+    .rt, .rt tbody, .rt tr, .rt td { display: block; width: auto; }
+    .rt tr { border-bottom: 1px solid var(--line); padding: 8px 0; }
+    .rt td { border: 0; padding: 3px 0; white-space: normal !important; }
+    .rt td::before { content: attr(data-label); display: block; font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .rt tr.now { background: color-mix(in srgb, var(--green) 11%, transparent); box-shadow: inset 3px 0 0 var(--green); padding-left: 10px; }
+    .rt tr.now td, .rt tr.now td:first-child { background: none; box-shadow: none; padding-left: 0; }
+    .terms { grid-template-columns: minmax(0, 1fr); }
+    .terms dt { border-bottom: 0; padding-bottom: 0; }
+    .terms dd { padding-top: 2px; }
+  }
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/projects/worth-watching/">Worth watching</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../">← Charles Tay</a>
+    <span class="label">Home gear · <time datetime="2026-11-08">8 Nov 2026</time></span>
+    <h1>Reading the DELIXI air monitor</h1>
+    <p class="dek">An English guide to the DLX-FTJ0506, whose manual is only in Chinese. What each number means, when to worry, and what to do.</p>
+  </div>
+</header>
+
+<main>
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <p class="notice">Unofficial. I wrote this from the printed manual and my own unit. DELIXI did not make, check or endorse it.</p>
+      <ul class="short">
+        <li><b>Worry numbers:</b> formaldehyde at 0.1 or more, TVOC at 0.6 or more, PM2.5 above 75.</li>
+        <li><b>The digit colours mean nothing.</b> PM2.5 shows in red even at a clean reading of 4. Read the number, or the row of faces.</li>
+        <li><b>One high reading proves little.</b> Perfume, alcohol wipes, smoke and cooking can all send it up falsely. Remove the cause, air the room and read again.</li>
+        <li><b>Daily readings and the proper test are different things.</b> The manual's test needs a room shut for 12 hours with the air-con off.</li>
+        <li><b>Give it 180 seconds after switching on</b>, and 5 to 10 minutes after moving to a new room.</li>
+      </ul>
+      <ul class="jump" style="margin-top:20px">
+        <li><a href="#screen">The screen</a></li>
+        <li><a href="#ranges">Ranges</a></li>
+        <li><a href="#buttons">Buttons</a></li>
+        <li><a href="#test">A fair test</a></li>
+        <li><a href="#suggest">What to do</a></li>
+        <li><a href="#terms">Every term</a></li>
+        <li><a href="#specs">Specs</a></li>
+        <li><a href="#gaps">Manual gaps</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="screen">
+    <div class="wrap">
+      <div class="sec-head"><h2>the screen</h2></div>
+      <p class="prose">The drawing shows the reading from my photo. Numbers match the list beside it.</p>
+      <div class="screen-layout">
+        <div class="device" role="img" aria-label="Drawing of the monitor screen showing formaldehyde 0.008, average 0.006, PM2.5 4, TVOC 0.328, PM1.0 1, PM10 3, 29 degrees, 72 percent humidity, and the first of four faces lit. The numbered list beside it explains each part.">
+          <div class="lcd">
+            <div class="row" style="align-items:center">
+              <span style="font-size:14px"><span class="n">1</span>▮▮▮</span>
+              <span style="font-size:14px"><span class="n">2</span>2026-03-19</span>
+              <span style="font-size:24px;line-height:1"><span class="n">3</span>9:38</span>
+            </div>
+            <div class="row" style="margin-top:10px">
+              <div class="cell"><span class="cap"><span class="n">4</span>甲醛 <em>mg/m³</em></span><span class="num blue" style="font-size:42px">0.008</span></div>
+              <div class="cell"><span class="cap"><span class="n">5</span>甲醛均值 <em>mg/m³</em></span><span class="num blue" style="font-size:26px">0.006</span></div>
+            </div>
+            <div class="rule"></div>
+            <div class="row">
+              <div class="cell"><span class="cap"><span class="n">6</span>PM2.5 <em>ug/m³</em></span><span class="num red" style="font-size:38px">4</span></div>
+              <div class="cell"><span class="cap"><span class="n">7</span>TVOC <em>mg/m³</em></span><span class="num lime" style="font-size:42px">0.328</span></div>
+            </div>
+            <div class="rule"></div>
+            <div class="row">
+              <div class="cell"><span class="cap"><span class="n">8</span>PM1.0</span><span class="num pink" style="font-size:24px">1</span></div>
+              <div class="cell"><span class="cap"><span class="n">9</span>PM10</span><span class="num pink" style="font-size:24px">3</span></div>
+              <div class="cell"><span class="cap"><span class="n">10</span>温度</span><span class="num lime" style="font-size:24px">29<small style="font-size:12px">°C</small></span></div>
+              <div class="cell"><span class="cap"><span class="n">11</span>湿度</span><span class="num lime" style="font-size:24px">72<small style="font-size:12px">%</small></span></div>
+            </div>
+            <div class="rule"></div>
+            <div class="aqi">
+              <span class="cap" style="margin:0"><span class="n">12</span>AQI</span>
+              <div class="faces">
+                <span><span class="bar" style="background:#1FA8F2"></span><svg class="face on" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5"/><circle class="e" cx="7" cy="8" r="1.1"/><circle class="e" cx="13" cy="8" r="1.1"/><path d="M6 12c1.2 2.4 6.8 2.4 8 0"/></svg></span>
+                <span><span class="bar" style="background:#C8FF1F"></span><svg class="face" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5"/><circle class="e" cx="7" cy="8" r="1.1"/><circle class="e" cx="13" cy="8" r="1.1"/><path d="M6.5 13h7"/></svg></span>
+                <span><span class="bar" style="background:#8E1A5E"></span><svg class="face" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5"/><circle class="e" cx="7" cy="8" r="1.1"/><circle class="e" cx="13" cy="8" r="1.1"/><path d="M6 14.5c1.2-2.4 6.8-2.4 8 0"/></svg></span>
+                <span><span class="bar" style="background:#1F45E0"></span><svg class="face" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5"/><circle class="e" cx="7" cy="8" r="1.1"/><circle class="e" cx="13" cy="8" r="1.1"/><path d="M6 14.5c1.2-2.4 6.8-2.4 8 0"/></svg></span>
+              </div>
+            </div>
+          </div>
+          <div class="brand">DELIXI</div>
+          <div class="keys">
+            <span><span class="n">A</span>▲</span>
+            <span><span class="n">B</span>⏻</span>
+            <span><span class="n">C</span>▼</span>
+          </div>
+        </div>
+        <ol class="legend">
+          <li><span class="n">1</span><span><b>Battery.</b> Three bars is full. Bars chase each other while charging.</span></li>
+          <li><span class="n">2</span><span><b>Date</b>, year-month-day. Set it yourself.</span></li>
+          <li><span class="n">3</span><span><b>Time</b>, 24-hour clock.</span></li>
+          <li><span class="n">4</span><span><b>Formaldehyde now</b> (甲醛), in mg/m³. The biggest number on the screen.</span></li>
+          <li><span class="n">5</span><span><b>Formaldehyde average</b> (甲醛均值). The manual does not say over how long.</span></li>
+          <li><span class="n">6</span><span><b>PM2.5</b>, fine particles, in µg/m³.</span></li>
+          <li><span class="n">7</span><span><b>TVOC</b>, mixed chemical gases, in mg/m³.</span></li>
+          <li><span class="n">8</span><span><b>PM1.0</b>, the finest particles, in µg/m³.</span></li>
+          <li><span class="n">9</span><span><b>PM10</b>, all particles up to 10 micrometres, in µg/m³.</span></li>
+          <li><span class="n">10</span><span><b>Temperature</b> (温度), °C.</span></li>
+          <li><span class="n">11</span><span><b>Relative humidity</b> (湿度), %.</span></li>
+          <li><span class="n">12</span><span><b>Overall air rating.</b> The lit face is the rating. All four colour bars stay on, so ignore them.</span></li>
+          <li><span class="n letter">A</span><span><b>▲</b> Brightness (tap). TVOC zero (hold 5 seconds).</span></li>
+          <li><span class="n letter">B</span><span><b>Power.</b> Hold to switch on. Press twice to set the clock.</span></li>
+          <li><span class="n letter">C</span><span><b>▼</b> Hold to turn the alarm sound on or off.</span></li>
+        </ol>
+      </div>
+      <p class="credit">Two things you may notice on your own unit. The dim 8-shaped marks behind the numbers are unlit parts of the display, and are normal. My unit also has faint Wi-Fi and Bluetooth symbols at the bottom right. The manual never mentions wireless features.</p>
+    </div>
+  </section>
+
+  <section id="ranges">
+    <div class="wrap">
+      <div class="sec-head"><h2>what the numbers mean</h2></div>
+      <p class="prose">The first three tables are the manual's own bands. Green rows hold the reading from my photo. Treat it as an everyday reading, not the 12-hour test described further down.</p>
+
+      <h3 class="sub">Formaldehyde <small>甲醛 · mg/m³</small></h3>
+      <table class="rt">
+        <thead><tr><th>Reading</th><th>Manual says</th><th>In plain words</th></tr></thead>
+        <tbody>
+          <tr class="now"><td class="v" data-label="Reading">below 0.1<span class="tag">my photo: 0.008</span></td><td data-label="Manual says"><span class="pip g"></span>Safe range</td><td data-label="In plain words">Nothing to do.</td></tr>
+          <tr><td class="v" data-label="Reading">0.1 to 0.5</td><td data-label="Manual says"><span class="pip y"></span>Odd smell, discomfort. Towards 0.5, can sting eyes and cause tears</td><td data-label="In plain words">Air the room, then retest properly.</td></tr>
+          <tr><td class="v" data-label="Reading">over 0.5 to 0.6</td><td data-label="Manual says"><span class="pip o"></span>Throat discomfort or pain</td><td data-label="In plain words">Leave the room and air it.</td></tr>
+          <tr><td class="v" data-label="Reading">above 0.6</td><td data-label="Manual says"><span class="pip r"></span>Nausea, vomiting, coughing, chest tightness</td><td data-label="In plain words">Get out. See a doctor if you have symptoms.</td></tr>
+        </tbody>
+      </table>
+      <p class="credit">The manual's bands overlap (≥0.1, ≤0.5, ≤0.6). I have turned them into separate steps.</p>
+
+      <h3 class="sub">TVOC <small>mg/m³</small></h3>
+      <table class="rt">
+        <thead><tr><th>Reading</th><th>Manual says</th><th>In plain words</th></tr></thead>
+        <tbody>
+          <tr class="now"><td class="v" data-label="Reading">below 0.6<span class="tag">my photo: 0.328</span></td><td data-label="Manual says"><span class="pip g"></span>Safe range</td><td data-label="In plain words">Fine. Mine is past the halfway mark, so it is the one to watch.</td></tr>
+          <tr><td class="v" data-label="Reading">0.6 or more</td><td data-label="Manual says"><span class="pip r"></span>Over the limit, may affect breathing</td><td data-label="In plain words">Look for a cause first. This sensor reacts to many everyday smells.</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub">PM2.5 <small>µg/m³</small></h3>
+      <table class="rt">
+        <thead><tr><th>Reading</th><th>Manual says</th><th>In plain words</th></tr></thead>
+        <tbody>
+          <tr class="now"><td class="v" data-label="Reading">0 to 35<span class="tag">my photo: 4</span></td><td data-label="Manual says"><span class="pip g"></span>Excellent</td><td data-label="In plain words">Good, but read the note below. WHO's daily guide is 15.</td></tr>
+          <tr><td class="v" data-label="Reading">36 to 75</td><td data-label="Manual says"><span class="pip y"></span>Good</td><td data-label="In plain words">Generous label. I would treat this as worth fixing if it lasts all day.</td></tr>
+          <tr><td class="v" data-label="Reading">76 to 115</td><td data-label="Manual says"><span class="pip o"></span>Light pollution</td><td data-label="In plain words">Close windows if it is outside air. Run a purifier.</td></tr>
+          <tr><td class="v" data-label="Reading">116 to 150</td><td data-label="Manual says"><span class="pip r"></span>Moderate pollution</td><td data-label="In plain words">Purifier on high. Find the source.</td></tr>
+          <tr><td class="v" data-label="Reading">151 to 250</td><td data-label="Manual says"><span class="pip p"></span>Heavy pollution</td><td data-label="In plain words">Stay out of that room if you can.</td></tr>
+          <tr><td class="v" data-label="Reading">251 to 500</td><td data-label="Manual says"><span class="pip k"></span>Severe pollution</td><td data-label="In plain words">Stay out. Check for smoke or fire.</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub">The readings the manual gives no bands for</h3>
+      <table class="rt">
+        <thead><tr><th>Item</th><th>My photo</th><th>How to judge it</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Item">PM1.0</td><td class="v" data-label="My photo">1</td><td data-label="How to judge it">No limit in the manual. It moves with PM2.5, so watch that instead.</td></tr>
+          <tr><td data-label="Item">PM10</td><td class="v" data-label="My photo">3</td><td data-label="How to judge it">WHO's daily guide is 45 µg/m³. China's indoor standard is 100.</td></tr>
+          <tr><td data-label="Item">Temperature</td><td class="v" data-label="My photo">29 °C</td><td data-label="How to judge it">Comfort is personal. Warmth can raise what furniture gives off, so compare readings taken in similar conditions.</td></tr>
+          <tr class="now"><td data-label="Item">Humidity</td><td class="v" data-label="My photo">72 %</td><td data-label="How to judge it">The one reading on my screen worth acting on. The US EPA advises staying below 60%, ideally 30 to 50%, to keep mould away.</td></tr>
+          <tr><td data-label="Item">Faces</td><td class="v" data-label="My photo">first lit</td><td data-label="How to judge it">Further right looks worse. The manual does not say which readings drive it.</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="sub">How far to trust a number</h3>
+      <p class="prose">The makers' stated error, applied to my photo. Small particle readings are mostly noise.</p>
+      <table class="rt">
+        <thead><tr><th>Item</th><th>Shown</th><th>True value could be</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Item">Formaldehyde (±15%)</td><td class="v" data-label="Shown">0.008</td><td class="v" data-label="True value could be">0.007 to 0.009</td></tr>
+          <tr><td data-label="Item">TVOC (±15%)</td><td class="v" data-label="Shown">0.328</td><td class="v" data-label="True value could be">0.279 to 0.377</td></tr>
+          <tr><td data-label="Item">PM2.5 (±10 µg/m³ below 100)</td><td class="v" data-label="Shown">4</td><td class="v" data-label="True value could be">0 to 14</td></tr>
+          <tr><td data-label="Item">Temperature (±1 °C)</td><td class="v" data-label="Shown">29</td><td class="v" data-label="True value could be">28 to 30</td></tr>
+          <tr><td data-label="Item">Humidity (±5%)</td><td class="v" data-label="Shown">72</td><td class="v" data-label="True value could be">67 to 77</td></tr>
+        </tbody>
+      </table>
+      <p class="credit">My photo shows PM2.5 at 4 and PM10 at 3. PM10 includes everything in PM2.5, so it cannot truly be lower. A gap that small sits inside the stated error, and is a good reminder not to read single digits too closely.</p>
+
+      <h3 class="sub">How the manual compares with outside limits</h3>
+      <table class="rt">
+        <thead><tr><th>Item</th><th>This manual</th><th>China GB/T 18883-2022</th><th>WHO</th><th>Singapore SS 554</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Item">Formaldehyde, mg/m³</td><td class="v" data-label="This manual">under 0.1</td><td class="v" data-label="China GB/T 18883-2022">0.08 (1 hr)</td><td class="v" data-label="WHO">0.1 (30 min)</td><td class="v" data-label="Singapore SS 554">0.1 (30 min)</td></tr>
+          <tr><td data-label="Item">TVOC, mg/m³</td><td class="v" data-label="This manual">under 0.6</td><td class="v" data-label="China GB/T 18883-2022">0.6 (8 hr)</td><td class="v" data-label="WHO">none listed</td><td class="v" data-label="Singapore SS 554">2.3 (8 hr)</td></tr>
+          <tr><td data-label="Item">PM2.5, µg/m³</td><td class="v" data-label="This manual">0–35 "excellent"</td><td class="v" data-label="China GB/T 18883-2022">50 (24 hr)</td><td class="v" data-label="WHO">15 (24 hr)</td><td class="v" data-label="Singapore SS 554">37.5 (24 hr)</td></tr>
+          <tr><td data-label="Item">PM10, µg/m³</td><td class="v" data-label="This manual">none</td><td class="v" data-label="China GB/T 18883-2022">100 (24 hr)</td><td class="v" data-label="WHO">45 (24 hr)</td><td class="v" data-label="Singapore SS 554">not found</td></tr>
+        </tbody>
+      </table>
+      <p class="credit">These limits are averages over the times shown, so a single glance at the screen is not a direct comparison. All figures come from RESET's published comparison tables, not the standards themselves. SS 554 covers air-conditioned non-residential buildings. RESET's numbers appear to be from the 2021 edition, and SS 554:2026 has since replaced it; I could not see the new limits. A TVOC figure also depends on the reference gas used, so numbers from different systems may not line up.</p>
+    </div>
+  </section>
+
+  <section id="buttons">
+    <div class="wrap">
+      <div class="sec-head"><h2>buttons and setup</h2></div>
+      <table class="rt">
+        <thead><tr><th>To do this</th><th>Press</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr><td data-label="To do this">Switch on</td><td data-label="Press">Hold ⏻</td><td data-label="What happens">Runs on 5V USB or its own battery. Wait 180 seconds for it to warm up.</td></tr>
+          <tr><td data-label="To do this">Change brightness</td><td data-label="Press">Tap ▲</td><td data-label="What happens">Screen brightness steps.</td></tr>
+          <tr><td data-label="To do this">Alarm sound on or off</td><td data-label="Press">Hold ▼</td><td data-label="What happens">Hold once for on, again for off. Not while setting the clock.</td></tr>
+          <tr><td data-label="To do this">Reset TVOC to zero</td><td data-label="Press">Hold ▲ 5 seconds</td><td data-label="What happens">One beep means done. Do this in clean air only (see below).</td></tr>
+          <tr><td data-label="To do this">Set the clock</td><td data-label="Press">⏻ twice</td><td data-label="What happens">Year flashes. ▲ or ▼ changes it. ⏻ moves on to month, hour, minute. Keep pressing ⏻ and it saves and exits.</td></tr>
+          <tr><td data-label="To do this">Charge</td><td data-label="Press">Plug in USB</td><td data-label="What happens">Battery bars run in sequence, then three bars when full. It can stay plugged in for long-term use without harming the battery, says the manual.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="test">
+    <div class="wrap">
+      <div class="sec-head"><h2>a fair test</h2></div>
+      <h3 class="sub" style="margin-top:0">First time out of the box</h3>
+      <p class="prose">Switch it on somewhere well ventilated for 30 to 60 minutes. This wakes the sensors up. Ignore every number during this time.</p>
+      <h3 class="sub">The manual's proper test</h3>
+      <ol class="src" style="color:var(--ink);font-size:17px">
+        <li>Keep the room shut for 12 hours at normal temperature and humidity.</li>
+        <li>Turn off anything that moves air: purifier, air-con, fan, humidifier.</li>
+        <li>Put the unit in the middle of the room, 80 to 150 cm off the floor.</li>
+        <li>Don't breathe on the vents or block them.</li>
+        <li>Keep perfume, paint, cigarettes and alcohol away.</li>
+        <li>Moving to another room? Wait 5 to 10 minutes for the numbers to settle.</li>
+      </ol>
+      <h3 class="sub">What makes it read falsely high</h3>
+      <p class="prose">The manual warns that these can send readings shooting up:</p>
+      <ul class="short">
+        <li>Breweries and other places thick with alcohol vapour</li>
+        <li>Make-up rooms and anywhere with strong alcohol-based scents</li>
+        <li>Heavy perfume, toner or skincare on the person testing</li>
+        <li>Alcohol-based cleaners being used nearby</li>
+        <li>Smoking rooms, and kitchens during stir-frying</li>
+        <li>Smoking or exhaling straight at the unit</li>
+        <li>Holding it over a stirred tin of paint or anything strong-smelling</li>
+      </ul>
+      <p class="prose" style="margin-top:14px">Temperature, humidity, alcohol, smoke and sharp smells all affect the formaldehyde reading. Small ups and downs between times of day or parts of a room are normal.</p>
+    </div>
+  </section>
+
+  <section id="suggest">
+    <div class="wrap">
+      <div class="sec-head"><h2>what to do</h2></div>
+      <p class="prose">These are my suggestions, not the manual's.</p>
+      <table class="rt">
+        <thead><tr><th>If you see</th><th>Check first</th><th>Then</th></tr></thead>
+        <tbody>
+          <tr><td data-label="If you see"><b>TVOC 0.6 or more</b></td><td data-label="Check first">Perfume, wipes, cooking, new paint or furniture nearby</td><td data-label="Then">Open windows for 30 minutes and read again. If it stays high with the obvious causes gone, hunt for a hidden source.</td></tr>
+          <tr><td data-label="If you see"><b>Formaldehyde 0.1 or more</b></td><td data-label="Check first">Any item on the false-high list above</td><td data-label="Then">Run the 12-hour test on two different days. If both are high, air the room hard and pay for a lab test before spending on any treatment.</td></tr>
+          <tr><td data-label="If you see"><b>Formaldehyde above 0.5, or sore eyes or throat</b></td><td data-label="Check first">Don't stop to check</td><td data-label="Then">Leave the room and open it up. See a doctor if symptoms carry on.</td></tr>
+          <tr><td data-label="If you see"><b>PM2.5 above 35</b></td><td data-label="Check first">Cooking, incense, candles, <a href="../../projects/sg-haze/">haze outside</a></td><td data-label="Then">Cooker hood during cooking. In haze, shut windows and run a HEPA purifier.</td></tr>
+          <tr><td data-label="If you see"><b>Humidity above 60%</b></td><td data-label="Check first">Damp walls, wet laundry, windows open in the rain</td><td data-label="Then">Air-con dry mode or a dehumidifier, more so in rooms with cupboards and books.</td></tr>
+          <tr><td data-label="If you see"><b>A sudden spike that fades</b></td><td data-label="Check first">Someone walked past in perfume, or sprayed something</td><td data-label="Then">Usually nothing. Only sustained readings matter.</td></tr>
+        </tbody>
+      </table>
+      <h3 class="sub">Habits that make it more useful</h3>
+      <ul class="short">
+        <li><b>Watch the trend.</b> Same spot, same time of day. A change matters more than one exact figure.</li>
+        <li><b>Place it away from</b> the stove, windows and a purifier's airflow, at about breathing height.</li>
+        <li><b>Zero TVOC only in clean air</b>, after airing the room well. Zeroing in stale air sets a false baseline, and later readings will come out too low.</li>
+        <li><b>Use the 12-hour test sparingly,</b> say after renovation or new furniture. In Singapore, a shut room with the air-con off soon stops being "normal" conditions, so test in the cooler hours.</li>
+        <li><b>Match the filter to the problem.</b> HEPA catches particles. It does nothing for gases, which need activated carbon. Notes on <a href="../air-purifier/">how I chose a purifier</a>.</li>
+        <li><b>Don't use it as the final word.</b> Home sensors lose sensitivity with age, and TVOC sensors in particular react to alcohol more than to many other gases. Before paying for treatment or arguing with a contractor, get a proper lab test.</li>
+        <li><b>Check the clock</b> if the date looks wrong. It only matters if you log your readings.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="terms">
+    <div class="wrap">
+      <div class="sec-head"><h2>every term</h2></div>
+
+      <h3 class="sub" style="margin-top:0">On the screen</h3>
+      <dl class="terms">
+        <dt>Formaldehyde<span>甲醛 · HCHO</span></dt><dd>A colourless, sharp-smelling gas. Pressed-wood furniture, glues, some paints and cigarette smoke give it off.</dd>
+        <dt>Formaldehyde average<span>甲醛均值</span></dt><dd>A running average of the formaldehyde reading. Steadier than the live figure. The averaging period isn't stated.</dd>
+        <dt>PM2.5 average<span>PM2.5 均值</span></dt><dd>Listed in the manual's features and drawn on its cover, but not visible on my unit's main screen.</dd>
+        <dt>TVOC<span>Total volatile organic compounds</span></dt><dd>One combined signal for many carbon-based gases that evaporate from paint, cleaners, perfume, cooking and more. It cannot tell you which gas it is seeing.</dd>
+        <dt>PM<span>Particulate matter</span></dt><dd>Solid or liquid specks floating in air: dust, smoke, soot, pollen.</dd>
+        <dt>PM1.0</dt><dd>Particles up to 1 micrometre across. A human hair is roughly 70 micrometres.</dd>
+        <dt>PM2.5</dt><dd>Particles up to 2.5 micrometres. Small enough to reach deep into the lungs. The main haze measure.</dd>
+        <dt>PM10</dt><dd>Particles up to 10 micrometres. Includes all of PM2.5 and PM1.0.</dd>
+        <dt>Temperature<span>温度</span></dt><dd>Air temperature at the unit, in degrees Celsius.</dd>
+        <dt>Relative humidity<span>湿度</span></dt><dd>How much water vapour the air holds, as a percentage of the most it could hold at that temperature.</dd>
+        <dt>AQI<span>Air quality index · 空气综合质量</span></dt><dd>Here, the unit's overall rating shown as four faces. It is not the same scale as Singapore's PSI or the US AQI number.</dd>
+        <dt>mg/m³<span>Milligrams per cubic metre</span></dt><dd>Mass of gas in one cubic metre of air. 1 mg = 1,000 µg, so 0.328 mg/m³ equals 328 µg/m³.</dd>
+        <dt>µg/m³<span>Printed "ug/m³" on the screen</span></dt><dd>Micrograms per cubic metre. A thousand times smaller than mg/m³.</dd>
+      </dl>
+
+      <h3 class="sub">Air quality labels</h3>
+      <dl class="terms">
+        <dt>优<span>Excellent</span></dt><dd>PM2.5 from 0 to 35.</dd>
+        <dt>良<span>Good</span></dt><dd>PM2.5 from 36 to 75.</dd>
+        <dt>轻度污染<span>Light pollution</span></dt><dd>PM2.5 from 76 to 115.</dd>
+        <dt>中度污染<span>Moderate pollution</span></dt><dd>PM2.5 from 116 to 150.</dd>
+        <dt>重度污染<span>Heavy pollution</span></dt><dd>PM2.5 from 151 to 250.</dd>
+        <dt>严重污染<span>Severe pollution</span></dt><dd>PM2.5 from 251 to 500.</dd>
+        <dt>安全范围<span>Safe range</span></dt><dd>The manual's label for formaldehyde below 0.1 and TVOC below 0.6.</dd>
+        <dt>超标<span>Over the limit</span></dt><dd>The manual's label for TVOC at 0.6 or more.</dd>
+        <dt>爆表<span>Off the scale</span></dt><dd>The manual's word for a reading that suddenly shoots up falsely.</dd>
+      </dl>
+
+      <h3 class="sub">Buttons and actions</h3>
+      <dl class="terms">
+        <dt>Calibration key<span>校准键 · ▲</span></dt><dd>Its printed name. Used for TVOC zero and brightness.</dd>
+        <dt>Power key<span>电源键 · ⏻</span></dt><dd>Switches on and steps through clock setting.</dd>
+        <dt>Mute key<span>静音键 · ▼</span></dt><dd>Turns the alarm sound on and off.</dd>
+        <dt>USB port<span>USB 口</span></dt><dd>On the side of the unit. For charging and power.</dd>
+        <dt>Warm-up<span>预热</span></dt><dd>The 180 seconds the sensors need after switch-on before numbers count.</dd>
+        <dt>Zeroing<span>清零</span></dt><dd>Telling the sensor that the current air counts as zero TVOC.</dd>
+        <dt>Calibration<span>校准</span></dt><dd>Adjusting a sensor against a known reference. This unit only offers TVOC zeroing to the user.</dd>
+        <dt>Alarm sound<span>报警声</span></dt><dd>A warning beep you can switch on. The trigger level isn't stated.</dd>
+        <dt>Running-light charging<span>跑马灯</span></dt><dd>The battery bars lighting up one after another, like a marquee.</dd>
+      </dl>
+
+      <h3 class="sub">Specification words</h3>
+      <dl class="terms">
+        <dt>Measuring range<span>测量范围</span></dt><dd>The lowest to highest value the unit can report.</dd>
+        <dt>Resolution<span>分辨率</span></dt><dd>The smallest step on the display. It says nothing about how correct the value is.</dd>
+        <dt>Accuracy<span>测量精度</span></dt><dd>How far the reading may be from the true value, written with ±.</dd>
+        <dt>Measuring principle<span>测量原理</span></dt><dd>The physical method the sensor uses.</dd>
+        <dt>Electrochemical<span>电化学 · formaldehyde sensor</span></dt><dd>The gas reacts at an electrode and produces a tiny current that rises with the amount of gas.</dd>
+        <dt>Semiconductor<span>半导体 · TVOC sensor</span></dt><dd>Gases change the electrical resistance of a heated metal-oxide layer. It reacts to many gases, and alcohol strongly. Better for spotting changes than for exact figures.</dd>
+        <dt>Laser scattering<span>激光散射 · PM sensors</span></dt><dd>A laser shines through the air. Particles scatter the light, and the sensor turns that into an estimated mass.</dd>
+        <dt>18650 lithium cell<span>18650 锂电池</span></dt><dd>A standard cylindrical rechargeable cell, 18 mm wide and 65 mm long.</dd>
+        <dt>3.7V / 1200mAh</dt><dd>The cell's voltage and its capacity. Good for 6 to 8 hours here.</dd>
+        <dt>DC5V, 5V/1A</dt><dd>The power it needs: 5 volts direct current, up to 1 amp. Any ordinary USB charger.</dd>
+        <dt>LCD</dt><dd>Liquid crystal display, the screen type.</dd>
+        <dt>Q/LDL021-2021<span>执行标准 · standard applied</span></dt><dd>The product standard printed on the manual. The "Q/" prefix marks a company's own standard in China, so it is not an air-quality limit.</dd>
+        <dt>Certificate / warranty card<span>合格证 / 保修卡</span></dt><dd>The pass slip and the warranty card in the box.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="specs">
+    <div class="wrap">
+      <div class="sec-head"><h2>specs</h2></div>
+      <table class="rt">
+        <thead><tr><th>Measure</th><th>Range</th><th>Step</th><th>Accuracy</th><th>Sensor type</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Measure">Formaldehyde</td><td class="v" data-label="Range">0.000–1.999 mg/m³</td><td class="v" data-label="Step">0.001</td><td class="v" data-label="Accuracy">±15%</td><td data-label="Sensor type">Electrochemical</td></tr>
+          <tr><td data-label="Measure">TVOC</td><td class="v" data-label="Range">0.000–9.999 mg/m³</td><td class="v" data-label="Step">0.001</td><td class="v" data-label="Accuracy">±15%</td><td data-label="Sensor type">Semiconductor</td></tr>
+          <tr><td data-label="Measure">PM1.0, PM2.5, PM10</td><td class="v" data-label="Range">0–999 µg/m³</td><td class="v" data-label="Step">1</td><td class="v" data-label="Accuracy">±10%*</td><td data-label="Sensor type">Laser scattering</td></tr>
+          <tr><td data-label="Measure">Temperature</td><td class="v" data-label="Range">−10 to 50 °C</td><td class="v" data-label="Step">1</td><td class="v" data-label="Accuracy">±1 °C</td><td data-label="Sensor type">Not stated</td></tr>
+          <tr><td data-label="Measure">Humidity</td><td class="v" data-label="Range">20–90 %</td><td class="v" data-label="Step">1</td><td class="v" data-label="Accuracy">±5%</td><td data-label="Sensor type">Not stated</td></tr>
+        </tbody>
+      </table>
+      <p class="credit">*From 0 to 100 µg/m³ the error is ±10 µg/m³. The display step for temperature and humidity is what my screen shows; the manual doesn't state it.</p>
+      <p class="prose" style="margin-top:14px"><b>Other details.</b> Model DLX-FTJ0506. LCD screen. Battery 3.7V, 1200mAh, 18650 lithium, 6 to 8 hours. USB power, 5V/1A. Time in hours and minutes, 24-hour format. Rated for homes, offices, cars, hotels, schools and public places.</p>
+      <p class="prose"><b>In the box.</b> The unit, a USB cable, the manual, and a certificate with warranty card.</p>
+      <p class="prose"><b>Maker.</b> Delixi Electric Ltd, Delixi High-Tech Industrial Park, Liushi Town, Yueqing, Zhejiang, China. <a href="https://www.delixi-electric.com" rel="noopener">delixi-electric.com</a>. Customer hotline in China: 400-7566-777, extension 1718.</p>
+    </div>
+  </section>
+
+  <section id="gaps">
+    <div class="wrap">
+      <div class="sec-head"><h2>what the manual leaves out</h2></div>
+      <ul class="short">
+        <li>How the four faces map to its five or six pollution levels</li>
+        <li>Which readings feed the faces</li>
+        <li>What reading sets off the alarm</li>
+        <li>How long the formaldehyde average runs</li>
+        <li>How to switch the unit off</li>
+        <li>Whether the clock has a day step. It lists year, month, hour and minute only. If the day flashes, set it the same way.</li>
+        <li>Limits for PM1.0, PM10, temperature or humidity</li>
+        <li>How long the sensors last</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="wrap">
+      <div class="sec-head"><h2>sources</h2></div>
+      <ul class="src">
+        <li>DELIXI DLX-FTJ0506 printed instruction manual (Chinese). Rewritten in my own words.</li>
+        <li><a href="https://www.epa.gov/mold/brief-guide-mold-moisture-and-your-home" rel="noopener">US EPA: A Brief Guide to Mold, Moisture and Your Home</a></li>
+        <li><a href="https://reset.build/newsroom/501" rel="noopener">RESET: comparing PM2.5 and PM10 targets around the world</a> (July 2026)</li>
+        <li><a href="https://reset.build/newsroom/505" rel="noopener">RESET: comparing TVOC and formaldehyde targets around the world</a> (Aug 2026)</li>
+        <li><a href="https://www.singaporestandardseshop.sg/Product/SSPdtDetail/08fafd34-2263-4df1-b097-3bbe5e115867" rel="noopener">Singapore Standards eShop: SS 554:2026</a></li>
+        <li><a href="https://atmotube.com/blog/understanding-the-tvoc-sensor" rel="noopener">Atmotube: TVOC sensors, what they can and can't do</a></li>
+      </ul>
+      <p class="credit">Checked 8 Nov 2026. Sensor explanations are general knowledge about each type, not tests of this unit.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional advice. Install and try any tool at your own risk: back up your data first and watch out for malware. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+
+</body>
+</html>
