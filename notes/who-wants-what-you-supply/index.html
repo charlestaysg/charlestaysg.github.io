@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who Wants What You Supply? &middot; Charles Tay</title>
+<meta name="description" content="For Singapore SME owners who supply defence, government or critical industries: what you can see, what to do, and who to call.">
+<link rel="canonical" href="https://charlestaysg.com/notes/who-wants-what-you-supply/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Who Wants What You Supply? &middot; Charles Tay">
+<meta property="og:description" content="What you can see, what to do, and who to call.">
+<meta property="og:url" content="https://charlestaysg.com/notes/who-wants-what-you-supply/">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261109a">
+<style>
+  /* same row grid as the other notes */
+  .steps { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 8px 16px; margin: 12px 0 0; }
+  .steps dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .steps dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .steps dd.out { font-weight: 700; }
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  .prose { max-width: 64ch; font-size: 17px; line-height: 1.6; }
+  .src { max-width: 64ch; margin: 8px 0 0; padding-left: 18px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .credit { max-width: 64ch; margin-top: 24px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  @media (max-width: 640px) { .steps { grid-template-columns: 1fr; gap: 2px; } .steps dd { margin-bottom: 8px; } }
+  /* mistakes use .tools + .steps; stages are stacked cards so nothing scrolls sideways */
+  .tools .job { white-space: nowrap; }
+  .tools .prose { margin: 6px 0 0; }
+  .stages { list-style: none; padding: 0; margin: 20px 0; display: grid; gap: 14px; }
+  .stages li { border: 1px solid var(--line); background: var(--panel); padding: 14px 16px; min-width: 0; }
+  .stages h3 { margin: 0 0 8px; font-size: 19px; font-weight: 700; }
+  .stages dl { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 6px 16px; margin: 0; }
+  .stages dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .stages dd { margin: 0; font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }
+  .stages dd.story { color: var(--muted); }
+  .src li { overflow-wrap: anywhere; }
+  @media (max-width: 640px) { .stages dl { grid-template-columns: 1fr; gap: 2px; } .stages dd { margin-bottom: 8px; } }
+
+  /* page-local: jump list, case cards, calls */
+  .jump { display: flex; flex-wrap: wrap; gap: 8px 16px; list-style: none; padding: 0; margin: 0; font-family: var(--font-mono); font-size: 13px; letter-spacing: .06em; }
+  .jump a { color: var(--green); }
+  .cases { list-style: none; padding: 0; margin: 14px 0 26px; display: grid; gap: 14px; }
+  .cases li { border: 1px solid var(--line); background: var(--panel); padding: 14px 16px; min-width: 0; }
+  .cases h4 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
+  .cases .meta { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+  .cases .meta .st { color: var(--green); font-weight: 500; }
+  .cases dl { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 6px 16px; margin: 0; }
+  .cases dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .cases dd { margin: 0; font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }
+  .calls { list-style: none; padding: 0; margin: 14px 0; display: grid; gap: 10px; max-width: 72ch; }
+  .calls li { border: 1px solid var(--line); background: var(--panel); padding: 12px 16px; min-width: 0; }
+  .calls h3 { margin: 0 0 6px; font-size: 17px; font-weight: 700; }
+  .calls p { margin: 0; font-size: 16px; line-height: 1.5; overflow-wrap: anywhere; }
+  .tools .steps a, .cases a, .calls a, .prose a, .src a { overflow-wrap: anywhere; }
+  .para { max-width: 64ch; font-size: 17px; line-height: 1.6; margin: 12px 0 0; }
+  .prose + .prose { margin-top: 12px; }
+  h3.grp { margin: 26px 0 0; font-size: 20px; font-weight: 700; }
+  @media (max-width: 640px) { .cases dl { grid-template-columns: 1fr; gap: 2px; } .cases dd { margin-bottom: 8px; } }
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/projects/worth-watching/">Worth watching</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#work">← Charles Tay</a>
+    <span class="label">For SME owners · <time datetime="2026-11-09">9 Nov 2026</time></span>
+    <h1>Who wants what you supply?</h1>
+    <p class="dek">For Singapore SME owners who supply defence, government or critical industries: what you can see, what to do, and who to call.</p>
+  </div>
+</header>
+
+<main>
+  <section id="top">
+    <div class="wrap">
+      <ul class="jump" aria-label="On this page">
+        <li><a href="#signs">Warning signs</a></li>
+        <li><a href="#plan">30-day plan</a></li>
+        <li><a href="#approached">If someone was approached</a></li>
+        <li><a href="#isd">When to call ISD</a></li>
+        <li><a href="#cases">Real cases</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="figure">
+    <div class="wrap">
+      <figure class="lanes" aria-label="Six steps in how an approach can build up, each paired with what to do.">
+       <div class="lanes-head" aria-hidden="true"><span>What it can look like</span><span></span><span>What to do</span></div>
+       <div class="lanes-rows">
+        <div class="lane-row">
+         <div class="lane-box"><span class="lane-tag">What it can look like</span><strong>Friendly contact</strong><span>A flattering message about your work</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">What to do</span><strong>Check who they are</strong><span>Find the firm yourself</span></div>
+        </div>
+        <div class="lane-row">
+         <div class="lane-box"><span class="lane-tag">What it can look like</span><strong>Small paid favour</strong><span>A short report or talk, good fee</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">What to do</span><strong>Tell your named person</strong><span>Before saying yes</span></div>
+        </div>
+        <div class="lane-row">
+         <div class="lane-box"><span class="lane-tag">What it can look like</span><strong>More specific ask</strong><span>Public facts turn into client detail</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">What to do</span><strong>Stop</strong><span>Client information stays inside</span></div>
+        </div>
+        <div class="lane-row">
+         <div class="lane-box"><span class="lane-tag">What it can look like</span><strong>Moves to a private app</strong><span>&ldquo;Easier on chat&rdquo;</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">What to do</span><strong>Keep every message</strong><span>Screenshots, dates, profile links</span></div>
+        </div>
+        <div class="lane-row">
+         <div class="lane-box"><span class="lane-tag">What it can look like</span><strong>&ldquo;Keep this between us&rdquo;</strong><span>Asks you not to tell your boss</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">What to do</span><strong>Report it that day</strong><span>To your named person</span></div>
+        </div>
+        <div class="lane-row">
+         <div class="lane-box"><span class="lane-tag">What it can look like</span><strong>Client information</strong><span>Files, drawings, names, schedules</span></div>
+         <span class="lane-arrow" aria-hidden="true">&rarr;</span>
+         <div class="lane-box is-test"><span class="lane-tag">What to do</span><strong>Don&rsquo;t send</strong><span>Tell the client&rsquo;s security contact and ISD</span></div>
+        </div>
+       </div>
+       <figcaption>My own summary of the pattern in the cases below. Most friendly messages are exactly what they look like.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short answer</h2></div>
+      <p class="prose"><strong>How do I know my clients are being targeted?</strong> Usually you can&rsquo;t. Your client and the security agencies see that, and you don&rsquo;t. What you can see is an approach reaching your own people or systems. One odd message means little. A pattern means more. I found no public Singapore figure on how often SMEs are approached.</p>
+      <p class="prose"><strong>How do I keep myself and my staff clear of it?</strong> Know what you hold, limit who holds it, make it easy and safe to speak up, and know who to call. Owners get approached too.</p>
+      <p class="prose">Recent overseas reports about alleged spying around a large technology company prompted this page. The claims are unproven and I make no claim about any person or company.</p>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="wrap">
+      <div class="sec-head"><h2>why suppliers</h2></div>
+      <ul class="short">
+        <li>MHA said in December 2021 that social media has made it easier for foreign intelligence services to talent-spot and groom people, and that individuals in the private sector with access to sensitive information have been approached. <a href="https://www.mha.gov.sg/media-room/newsroom/dickson-yeo-14-december/" rel="noopener">MHA</a></li>
+        <li>In a written reply on 8 September 2026 the Minister said there was no rise in Singapore-registered firms offering jobs as cover, but an uptick in websites posing as Singapore-based entities to recruit people for sensitive information, mostly set up overseas. People with sensitive access should &ldquo;report suspicious approaches to the relevant authorities&rdquo; and verify an entity before giving more. <a href="https://sprs.parl.gov.sg/search/#/sprs3topic?reportid=written-answer-na-24422" rel="noopener">Hansard</a> (Vol 96, Sitting 35, 8 Sep 2026)</li>
+        <li>On 6 July 2021 the Minister said organisations more exposed by their work need to be even more aware. <a href="https://sprs.parl.gov.sg/search/#/sprs3topic?reportid=written-answer-8110" rel="noopener">Hansard</a> (Vol 95, Sitting 32, 6 Jul 2021)</li>
+        <li>My count from the open GeBIZ dataset, April 2021 to March 2026: 957 named suppliers appear in 1,467 published award records from defence (MINDEF, DSTA), home affairs (MHA, HTX), the National Security Co-ordination Secretariat, MFA, CPIB and the Istana. The work included IT, building works, security, training and transport, so a caterer or bus firm may be in scope. <a href="https://data.gov.sg/datasets/d_acde1106003906a75c3fa052592f2fcb/view" rel="noopener">data.gov.sg</a></li>
+      </ul>
+      <p class="prose" style="margin-top:14px"><strong>Limits of that count.</strong> Company size is not in the data. An award does not mean access to sensitive information. Which agencies count is my own choice. Job types are keyword matches. Defence has only 178 of those records, so much of its buying may sit outside this dataset.</p>
+    </div>
+  </section>
+
+  <section id="signs">
+    <div class="wrap">
+      <div class="sec-head"><h2>warning signs</h2></div>
+      <ul class="tools">
+        <li>
+          <span class="job">Sign 1</span>
+          <div>
+            <h3>An approach out of the blue on LinkedIn or by email</h3>
+            <dl class="steps">
+              <dt>you may see</dt><dd>A role that looks too good, from someone you don&rsquo;t know. In 2020 the FBI urged caution about &ldquo;implausible career opportunities&rdquo;. In 2022 the UK government said MI5 had seen over 10,000 disguised approaches on professional networking sites.</dd>
+              <dt>could also be</dt><dd>A real recruiter.</dd>
+              <dt>do this</dt><dd>Find the firm yourself and call its listed number. Don&rsquo;t accept an unknown contact because they know people you know. The UK&rsquo;s <a href="https://www.gov.uk/government/news/new-app-to-counter-malicious-approaches-online" rel="noopener">Think Before You Link app</a> helps check a profile.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Sign 2</span>
+          <div>
+            <h3>Paid reports or consulting for your staff</h3>
+            <dl class="steps">
+              <dt>you may see</dt><dd>In the Yeo case below, people were paid to write reports said to be for clients in Asia.</dd>
+              <dt>could also be</dt><dd>A genuine expert network.</dd>
+              <dt>do this</dt><dd>Staff declare paid outside work to the named person. No client facts go into any paid work.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Sign 3</span>
+          <div>
+            <h3>Questions about your client or its end users</h3>
+            <dl class="steps">
+              <dt>you may see</dt><dd>A new contact asks who you work for, what you build for them, or who uses it.</dd>
+              <dt>could also be</dt><dd>A sales rep being nosy.</dd>
+              <dt>do this</dt><dd>Say &ldquo;I can&rsquo;t discuss clients.&rdquo; Write down who asked and when.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Sign 4</span>
+          <div>
+            <h3>A customer who is odd about end use</h3>
+            <dl class="steps">
+              <dt>you may see</dt><dd>Singapore Customs lists these red flags: unclear identity, reluctance to declare end use, unfamiliarity with product specifications but insisting on buying, declining installation or training, a vague delivery location, and a freight forwarder listed as final user.</dd>
+              <dt>could also be</dt><dd>A new buyer who is in a hurry.</dd>
+              <dt>do this</dt><dd>Know what it is for, where it goes and why it is needed. Check the <a href="https://www.customs.gov.sg/permits-and-licences/trade-controls-and-prohibitions/strategic-goods-control/sanctioned-lists-and-red-flags/" rel="noopener">Customs red-flag list</a>.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Sign 5</span>
+          <div>
+            <h3>Requests beyond the contract</h3>
+            <dl class="steps">
+              <dt>you may see</dt><dd>A client contact, or someone who says they speak for the client, asks for more than the contract covers.</dd>
+              <dt>could also be</dt><dd>Scope creep.</dd>
+              <dt>do this</dt><dd>Anything outside the contract goes through the named person.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Sign 6</span>
+          <div>
+            <h3>Gifts, trips and invitations to speak</h3>
+            <dl class="steps">
+              <dt>you may see</dt><dd>CPIB says gifts and entertainment that are too frequent or lavish, or meant to win an unfair advantage, can amount to corruption. In the Xu case below, an invitation to give a talk abroad, with travel and a stipend paid, was the start. Source: <a href="https://www.cpib.gov.sg/about-corruption/prevention-and-education/prevention-of-corruption/" rel="noopener">CPIB</a>.</dd>
+              <dt>could also be</dt><dd>A normal client courtesy.</dd>
+              <dt>do this</dt><dd>Write a rule, keep a register, and have the owner sign off paid trips.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Sign 7</span>
+          <div>
+            <h3>An investor or buyer who wants detail early</h3>
+            <dl class="steps">
+              <dt>you may see</dt><dd>Someone who is keen to see your client list, designs or schedules before any deal is signed.</dd>
+              <dt>could also be</dt><dd>A careful buyer doing due diligence.</dd>
+              <dt>do this</dt><dd>Share the minimum until a deal closes. Check where the money comes from. The US-led Secure Innovation guidance says to think about who you are working with, what you are sharing, and how you protect it. The <a href="https://archive.dni.gov/index.php/ncsc-what-we-do/secure-innovation" rel="noopener">page is now archived</a> but still readable.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Sign 8</span>
+          <div>
+            <h3>A website or firm that doesn&rsquo;t add up</h3>
+            <dl class="steps">
+              <dt>you may see</dt><dd>MHA&rsquo;s reply of 8 September 2026 reported an uptick in websites posing as Singapore-based entities to recruit people for sensitive information, mostly set up overseas.</dd>
+              <dt>could also be</dt><dd>A young firm with a thin website.</dd>
+              <dt>do this</dt><dd>Check ACRA BizFile registration, ask for a landline, and ask who the client is.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Sign 9</span>
+          <div>
+            <h3>Old routers and open remote access</h3>
+            <dl class="steps">
+              <dt>you may see</dt><dd>A joint advisory from CISA and international partners (April 2026) says covert networks of compromised devices are made mostly of small office and home routers. A 2024 US court-authorised operation cleared malware from hundreds of such routers; most were end-of-life, and the FBI urged owners to replace them. Sources: <a href="https://www.cisa.gov/news-events/cybersecurity-advisories/aa26-113a" rel="noopener">CISA advisory</a>, <a href="https://www.justice.gov/archives/opa/pr/us-government-disrupts-botnet-peoples-republic-china-used-conceal-hacking-critical" rel="noopener">US Department of Justice</a>.</dd>
+              <dt>could also be</dt><dd>Kit that works fine and nobody has touched.</dd>
+              <dt>do this</dt><dd>Retire routers the maker no longer supports. Use multi-factor sign-in on remote access.</dd>
+            </dl>
+          </div>
+        </li>
+        <li>
+          <span class="job">Sign 10</span>
+          <div>
+            <h3>The same question reaching several staff</h3>
+            <dl class="steps">
+              <dt>you may see</dt><dd>Two or three people get near-identical questions in the same week.</dd>
+              <dt>could also be</dt><dd>A survey.</dd>
+              <dt>do this</dt><dd>Compare notes through the named person.</dd>
+            </dl>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="plan">
+    <div class="wrap">
+      <div class="sec-head"><h2>a 30-day plan for a firm with no security team</h2></div>
+      <ol class="stages">
+        <li>
+          <h3>1. One named person</h3>
+          <dl>
+            <dt>Do this</dt><dd>A director or trusted manager, plus a backup.</dd>
+            <dt>Who</dt><dd>Owner</dd>
+            <dt>Done when</dt><dd>Both are named and staff know who they are.</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>2. List what you hold</h3>
+          <dl>
+            <dt>Do this</dt><dd>Drawings, schedules, site access, staff names and passwords for each sensitive client.</dd>
+            <dt>Who</dt><dd>Named person</dd>
+            <dt>Done when</dt><dd>One page lists it, with who can see each item.</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>3. Need to know</h3>
+          <dl>
+            <dt>Do this</dt><dd>Cut access to those who need it. No client names on your website or LinkedIn unless the client agrees. Staff CVs shouldn&rsquo;t list project detail.</dd>
+            <dt>Who</dt><dd>Named person, HR</dd>
+            <dt>Done when</dt><dd>Access list trimmed. Website and CVs checked.</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>4. A 20-minute briefing</h3>
+          <dl>
+            <dt>Do this</dt><dd>What an approach looks like. The line to use: &ldquo;Thanks, I&rsquo;ll need to check with my company.&rdquo; Owners attend too.</dd>
+            <dt>Who</dt><dd>Owner, named person</dd>
+            <dt>Done when</dt><dd>Everyone has heard it once.</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>5. A no-blame reporting line</h3>
+          <dl>
+            <dt>Do this</dt><dd>Anyone who reports early is thanked, even if they already replied. CPIB advises a reporting channel where staff can raise concerns and be protected from being identified or retaliated against.</dd>
+            <dt>Who</dt><dd>Owner</dd>
+            <dt>Done when</dt><dd>Staff know how to report and that nobody is punished for it.</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>6. Gifts and travel rule</h3>
+          <dl>
+            <dt>Do this</dt><dd>When gifts may be accepted and what records are kept (the CPIB advice). A clean laptop and phone for sensitive trips. Know the export rules before carrying technical data.</dd>
+            <dt>Who</dt><dd>Owner, named person</dd>
+            <dt>Done when</dt><dd>Rule written, register started.</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>7. Contracts and vendors</h3>
+          <dl>
+            <dt>Do this</dt><dd>Ask each sensitive client who to tell and how fast. Check what your own suppliers can see. Add a security clause to contracts. Work out what happens if a supplier is compromised. The UK NCSC publishes <a href="https://www.ncsc.gov.uk/collection/supply-chain-security" rel="noopener">12 supply chain security principles</a>.</dd>
+            <dt>Who</dt><dd>Owner, named person</dd>
+            <dt>Done when</dt><dd>Each client has a named contact. Each supplier&rsquo;s access is listed.</dd>
+          </dl>
+        </li>
+        <li>
+          <h3>8. Accounts and equipment</h3>
+          <dl>
+            <dt>Do this</dt><dd>Multi-factor sign-in on email and remote access. Retire unsupported routers. Work towards <a href="https://www.csa.gov.sg/our-programmes/support-for-enterprises/sg-cyber-safe-programme/cybersecurity-certification-for-organisations/cyber-essentials/" rel="noopener">CSA Cyber Essentials</a>.</dd>
+            <dt>Who</dt><dd>Whoever looks after IT</dd>
+            <dt>Done when</dt><dd>Checklist signed off by the named person.</dd>
+          </dl>
+        </li>
+      </ol>
+      <p class="prose">In the Yeo case, the US Department of Justice says handlers looked for people with weak points: dissatisfaction with work or financial difficulties. So money trouble or unhappiness is a reason to help someone. It is not grounds for suspicion.</p>
+    </div>
+  </section>
+
+  <section id="fair">
+    <div class="wrap">
+      <div class="sec-head"><h2>judge the behaviour, not the background</h2></div>
+      <p class="prose">Nationality, race, religion, accent or where someone studied are not warning signs. Never treat staff or customers as suspects because of them. The best-documented case tied to Singapore involved a Singaporean, and several accused people below were later cleared.</p>
+      <p class="para">The Tripartite Guidelines tell employers to avoid using nationality or race as a selection criterion: <a href="https://www.tal.sg/tafep/getting-started/fair/tripartite-guidelines" rel="noopener">TAFEP</a>. On the Workplace Fairness Act, check MOM or Singapore Statutes Online for the current status. A law firm reported in December 2025 that it is expected to come into force at the end of 2027: <a href="https://www.hsfkramer.com/notes/employment/2025-posts/singapore-workplace-fairness-act-to-take-effect-end-of-2027" rel="noopener">HSF Kramer</a>.</p>
+      <p class="prose">Get legal advice before you monitor staff devices or messages. The PDPA applies.</p>
+    </div>
+  </section>
+
+  <section id="approached">
+    <div class="wrap">
+      <div class="sec-head"><h2>if someone has been approached</h2></div>
+      <dl class="steps">
+        <dt>do</dt><dd>Stop replying, without warning them. Keep messages, screenshots, dates and profile links. Tell the named person the same day.</dd>
+        <dt>don&rsquo;t</dt><dd>Confront anyone, run your own investigation, delete anything, send anything else, or punish the person who told you.</dd>
+        <dt>if something was handed over</dt><dd>Get a lawyer early, and report. I found no published promise of confidentiality or immunity.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="isd">
+    <div class="wrap">
+      <div class="sec-head"><h2>when to call ISD</h2></div>
+      <p class="prose">ISD lists &ldquo;guarding against foreign espionage, interference and influence&rdquo; among its functions and takes reports on threats to Singapore&rsquo;s security. It publishes no threshold for companies, so the list below is my own reading.</p>
+      <ul class="calls">
+        <li><h3>Possible foreign government link, or someone wants non-public detail on a government client, defence or critical infrastructure, or you can&rsquo;t tell</h3><p>ISD on 1800-2626-473 (24 hours) or isd@mha.gov.sg. Also tell your client&rsquo;s security contact.</p></li>
+        <li><h3>Someone inside the client may be involved</h3><p>ISD directly, not through the client.</p></li>
+        <li><h3>Danger right now</h3><p>999.</p></li>
+        <li><h3>Hacking or phishing</h3><p>SingCERT through <a href="https://www.csa.gov.sg/resources/singcert/cyber-aid/" rel="noopener">Cyber Aid</a>, and a police report if you may be a victim of crime.</p></li>
+        <li><h3>A scam</h3><p>ScamShield on 1799.</p></li>
+        <li><h3>Bribes or lavish gifts</h3><p>CPIB.</p></li>
+        <li><h3>A doubtful end user for controlled goods</h3><p>Singapore Customs.</p></li>
+        <li><h3>A competitor or ex-staff taking trade secrets, with no state link</h3><p>The police and your lawyer.</p></li>
+      </ul>
+      <p class="prose">You don&rsquo;t need proof. Reporting is not an accusation. Don&rsquo;t expect to be told the outcome.</p>
+      <p class="para">The Internal Security Act: MHA names espionage among the threats it covers, though since 2001 it has mainly been used for terrorism (<a href="https://www.mha.gov.sg/what-we-do/managing-security-threats/" rel="noopener">MHA</a>). In 2021 MHA told anyone who suspected an approach to contact ISD on 1800-2626-473. ISD pages: <a href="https://www.isd.gov.sg/our-functions/" rel="noopener">functions</a>, <a href="https://www.isd.gov.sg/report-a-threat/" rel="noopener">report a threat</a>, <a href="https://www.isd.gov.sg/contact-us/" rel="noopener">contact</a>.</p>
+    </div>
+  </section>
+
+  <section id="law">
+    <div class="wrap">
+      <div class="sec-head"><h2>the law, briefly</h2></div>
+      <ul class="short">
+        <li><strong>Official Secrets Act 1935.</strong> Section 5(1)(e) reaches information obtained by someone who holds a contract made on behalf of the Government or a specified organisation, and by people employed under them. Section 10 makes it a duty to give information on demand to a police officer about an offence or suspected offence under the Act. Section 16(3) can make directors and officers liable for a company&rsquo;s offence unless they prove it happened without their knowledge or consent. Under section 17(2), section 5 offences carry up to $2,000 and 2 years in a District Court. <a href="https://sso.agc.gov.sg/Act/OSA1935" rel="noopener">SSO</a></li>
+        <li><strong>Foreign Interference (Countermeasures) Act 2021.</strong> Aimed at interference in domestic politics and society, not trade secrets. <a href="https://www.mha.gov.sg/what-we-do/foreign-interference/fica/" rel="noopener">MHA</a></li>
+        <li><strong>Prevention of Corruption Act.</strong> Up to $100,000, 5 years, or both for each count, and up to 7 years where the matter concerns a contract with the Government. <a href="https://www.cpib.gov.sg/about-corruption/legislation-and-enforcement/prevention-of-corruption-act/" rel="noopener">CPIB</a></li>
+        <li><strong>Strategic goods.</strong> <a href="https://www.customs.gov.sg/permits-and-licences/trade-controls-and-prohibitions/strategic-goods-control/" rel="noopener">Singapore Customs</a></li>
+        <li><strong>When to get a lawyer.</strong> You have already shared something, a contract says how to report, you are monitoring staff, you are dismissing someone, or you have export licence questions.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="cases">
+    <div class="wrap">
+      <div class="sec-head"><h2>real cases</h2></div>
+      <p class="prose">These are the cases I found most useful for suppliers, from court records, government statements and news reports. It is not a full list. Status is as far as I could find on 9 Nov 2026. Allegations are marked. People are named only where they were convicted or pleaded guilty.</p>
+      <h3 class="grp">Singapore</h3>
+      <ul class="cases">
+        <li>
+          <h4>Dickson Yeo: paid reports for a foreign state</h4>
+          <p class="meta">2015 to 2021 &middot; <span class="st">Pleaded guilty</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>China, as named in the US court record. MHA did not name a state.</dd>
+            <dt>What happened</dt><dd>MHA says his handlers first contacted him in 2015 through an online professional networking site, then asked him to write reports, and he set up a front company and posted job ads to spot people with sensitive access. He pleaded guilty in a US court on 24 July 2020, and ISD released him on 14 December 2021 under a Suspension Direction, saying he did not pose a security threat that warranted continued detention.</dd>
+            <dt>For your firm</dt><dd>Treat a well-paid report on your client&rsquo;s work as a warning sign.</dd>
+            <dt>Source</dt><dd><a href="https://www.justice.gov/archives/opa/pr/singaporean-national-pleads-guilty-acting-united-states-illegal-agent-chinese-intelligence" rel="noopener">US Department of Justice</a> &middot; <a href="https://www.mha.gov.sg/media-room/newsroom/dickson-yeo-14-december/" rel="noopener">MHA, 14 Dec 2021</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>An academic and spouse lose Singapore residency</h4>
+          <p class="meta">2017 &middot; <span class="st">Government action</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>No state named.</dd>
+            <dt>What happened</dt><dd>MHA cancelled their permanent residence, saying he had been identified as an agent of influence of a foreign country. He denied it. Reuters reported that he then resigned as an independent director of a listed company&rsquo;s property arm.</dd>
+            <dt>For your firm</dt><dd>Look at board and adviser roles as well as staff.</dd>
+            <dt>Source</dt><dd><a href="https://geneva-wto.mfa.gov.sg/mission-updates/press-20170804-04-aug-2017/" rel="noopener">MHA statement</a> &middot; <a href="https://www.ksl.com/article/45285456" rel="noopener">His denial</a> &middot; <a href="https://sg.news.yahoo.com/singapores-keppel-group-says-academic-resigns-residency-cancelled-013742775--finance.html" rel="noopener">Reuters</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>A person designated under the foreign interference law</h4>
+          <p class="meta">Feb 2024 &middot; <span class="st">Government action</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>No state named.</dd>
+            <dt>What happened</dt><dd>MHA designated a person as a Politically Significant Person under FICA, citing activities directed towards a political end in Singapore. The release does not allege spying.</dd>
+            <dt>For your firm</dt><dd>That law is about influence in politics and society, not trade secrets.</dd>
+            <dt>Source</dt><dd><a href="https://www.mha.gov.sg/media-room/newsroom/designation-of-chan-man-ping-philip-as-a-politically-significant-person-under-the-foreign-interference-countermeasures-act-2021/" rel="noopener">MHA release</a> &middot; <a href="https://www.mha.gov.sg/what-we-do/foreign-interference/fica/" rel="noopener">MHA on FICA</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>Three men charged over servers</h4>
+          <p class="meta">Feb to Mar 2025 &middot; <span class="st">Charged</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>No state named.</dd>
+            <dt>What happened</dt><dd>Three men were charged over alleged false statements to server makers about where the servers would end up. It is part of a police investigation into 22 people and companies, and I could not find an outcome.</dd>
+            <dt>For your firm</dt><dd>Ask for the end user in writing and check it.</dd>
+            <dt>Source</dt><dd><a href="https://www.techpartner.news/news/singapore-charges-men-with-defrauding-dell-super-micro-615497" rel="noopener">techpartner.news</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>Leonard Glenn Francis: a ship supplier who bribed Navy officers</h4>
+          <p class="meta">2015 to 2024 &middot; <span class="st">Pleaded guilty</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>None. This was corruption, not foreign spying.</dd>
+            <dt>What happened</dt><dd>The owner of a Singapore-based ship-servicing firm pleaded guilty in 2015 to bribing US Navy officers, who passed him classified information. He was sentenced to 15 years in November 2024.</dd>
+            <dt>For your firm</dt><dd>A supplier can be the one offering the gifts, so a gifts rule works both ways.</dd>
+            <dt>Source</dt><dd><a href="https://www.defensenews.com/news/your-navy/2024/11/05/fat-leonard-navy-scandal-mastermind-sentenced-to-15-years/" rel="noopener">Defense News (AP)</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>UNC3886 and the telcos</h4>
+          <p class="meta">Jul 2025 and Feb 2026 &middot; <span class="st">Government action</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>No state named.</dd>
+            <dt>What happened</dt><dd>The Minister said in July 2025 that an advanced threat actor, UNC3886, had attacked critical infrastructure. CSA and IMDA said in February 2026 that all four major telcos were targets and that the actor got into some parts of telco networks.</dd>
+            <dt>For your firm</dt><dd>If you supply a telco or critical operator, tell them fast if your own systems are hit.</dd>
+            <dt>Source</dt><dd><a href="https://www.csa.gov.sg/news-events/press-releases/largest-multi-agency-cyber-operation-mounted-to-counter-threat-posed-by-advanced-persistent-threat--apt--actor-unc3886-to-singapore-s-telecommunications-sector/" rel="noopener">CSA, 9 Feb 2026</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>A think-tank website blocked</h4>
+          <p class="meta">2026 &middot; <span class="st">Government action</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>No state named.</dd>
+            <dt>What happened</dt><dd>MHA said it issued an Access Blocking Direction under the Online Criminal Harms Act against a think-tank website, after a police report by MFA. In the same reply it reported an uptick in websites posing as Singapore-based entities to recruit people for sensitive information.</dd>
+            <dt>For your firm</dt><dd>Check a firm&rsquo;s registration before you share anything.</dd>
+            <dt>Source</dt><dd><a href="https://www.mha.gov.sg/media-room/newsroom/safeguards-to-prevent-foreign-actors-from-using-singapore-based-institutions-and-recruiting-former-public-officers-for-covert-intelligence-gathering/" rel="noopener">MHA reply, 8 Sep 2026</a> &middot; <a href="https://sprs.parl.gov.sg/search/#/sprs3topic?reportid=written-answer-na-24422" rel="noopener">Hansard</a></dd>
+          </dl>
+        </li>
+      </ul>
+      <h3 class="grp">Staff approached and insiders</h3>
+      <ul class="cases">
+        <li>
+          <h4>Yanjun Xu: an invitation to speak in China</h4>
+          <p class="meta">2017 to 2022 &middot; <span class="st">Convicted</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>China, as the court record said: an officer of its Ministry of State Security.</dd>
+            <dt>What happened</dt><dd>In March 2017 a GE Aviation employee was asked to give a report at a university in China, with travel and a stipend paid. In 2018 the officer asked for system specification and design process material. He was convicted in November 2021 and sentenced to 20 years in November 2022.</dd>
+            <dt>For your firm</dt><dd>A paid talk abroad can be the start. Staff declare paid outside work.</dd>
+            <dt>Source</dt><dd><a href="https://www.justice.gov/archives/opa/pr/chinese-government-intelligence-officer-sentenced-20-years-prison-espionage-crimes-attempting" rel="noopener">US Department of Justice</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>Linwei Ding: files copied from Google</h4>
+          <p class="meta">2022 to 2026 &middot; <span class="st">Convicted</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>China, as the US Department of Justice said.</dd>
+            <dt>What happened</dt><dd>A jury convicted a former Google software engineer on seven counts of economic espionage and seven of theft of trade secrets. The Department says he uploaded more than two thousand pages of confidential AI information to a personal cloud account.</dd>
+            <dt>For your firm</dt><dd>Watch for bulk copying to personal accounts.</dd>
+            <dt>Source</dt><dd><a href="https://www.justice.gov/opa/pr/former-google-engineer-found-guilty-economic-espionage-and-theft-confidential-ai-technology" rel="noopener">US Department of Justice</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>A chip engineer who moved to a supplier</h4>
+          <p class="meta">Apr 2026 &middot; <span class="st">Convicted</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>No state reported.</dd>
+            <dt>What happened</dt><dd>A former TSMC engineer who joined the equipment supplier Tokyo Electron&rsquo;s Taiwan unit asked former colleagues for confidential 2-nanometre etching information, to help win supply positions. In April 2026 a Taiwan court gave him 10 years and three TSMC staff 2 to 6 years. The supplier was fined NT$150 million, reported as the first company penalised under the National Security Act. The ruling was open to appeal when reported.</dd>
+            <dt>For your firm</dt><dd>A supplier can answer in court for what a new hire brings in. Ask what they may not share.</dd>
+            <dt>Source</dt><dd><a href="https://taipeitimes.com/News/front/archives/2026/04/28/2003856358" rel="noopener">Taipei Times</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>Six people jailed in the UK for spying</h4>
+          <p class="meta">2020 to 2025 &middot; <span class="st">Convicted</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>Russia, as prosecutors said.</dd>
+            <dt>What happened</dt><dd>Six people were convicted or pleaded guilty in the UK of spying, and the ringleader got over 10 years. In one operation a member tried to lure a journalist into a romance honeytrap.</dd>
+            <dt>For your firm</dt><dd>A friendly personal approach can be the lure, not only a job offer.</dd>
+            <dt>Source</dt><dd><a href="https://www.euronews.com/2025/05/12/bulgarian-head-of-russian-spy-ring-gets-more-than-10-years-in-prison-uk-judge-says" rel="noopener">Euronews (AP)</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>A fake photographer on LinkedIn</h4>
+          <p class="meta">2017 &middot; <span class="st">Attribution</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>Iran, as SecureWorks researchers said. No court case.</dd>
+            <dt>What happened</dt><dd>In January 2017 an employee at a targeted organisation was contacted on LinkedIn by a fake London photographer, who moved the chat to Facebook, email and WhatsApp and then sent a spreadsheet that installed malware. The targets were in telecoms, government, defence, oil and finance in the Middle East and North Africa.</dd>
+            <dt>For your firm</dt><dd>Moving to private apps, then &ldquo;open this at work&rdquo;, is the pattern to stop.</dd>
+            <dt>Source</dt><dd><a href="https://www.securityweek.com/iran-linked-hackers-use-mia-ash-honey-trap-compromise-targets/" rel="noopener">SecurityWeek</a></dd>
+          </dl>
+        </li>
+      </ul>
+      <h3 class="grp">Hiring and end users</h3>
+      <ul class="cases">
+        <li>
+          <h4>Christina Chapman: remote IT staff who were not who they said</h4>
+          <p class="meta">Up to Jul 2025 &middot; <span class="st">Pleaded guilty</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>North Korea, as the US Department of Justice said.</dd>
+            <dt>What happened</dt><dd>She helped North Korean IT workers pose as US residents to get remote jobs at more than 300 US companies. She pleaded guilty on 11 February 2025 and was sentenced to 102 months on 24 July 2025.</dd>
+            <dt>For your firm</dt><dd>Verify remote hires and contractors.</dd>
+            <dt>Source</dt><dd><a href="https://www.justice.gov/opa/pr/arizona-woman-sentenced-17m-information-technology-worker-fraud-scheme-generated-revenue" rel="noopener">US Department of Justice</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>Nikolay Goltsev and Kristina Puzyreva: an export network</h4>
+          <p class="meta">2022 to 2025 &middot; <span class="st">Convicted</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>Russia, as the US Department of Justice said.</dd>
+            <dt>What happened</dt><dd>They used two Brooklyn companies to buy US electronics and ship them through front companies in other countries to Russia. Goltsev was sentenced to 40 months in January 2025 and Puzyreva to 24 months in July 2024.</dd>
+            <dt>For your firm</dt><dd>End-user paperwork can be false. Know where the goods go.</dd>
+            <dt>Source</dt><dd><a href="https://www.justice.gov/usao-edny/pr/canadian-national-sentenced-40-months-prison-multi-million-dollar-export-control" rel="noopener">US Attorney&rsquo;s Office, EDNY</a></dd>
+          </dl>
+        </li>
+      </ul>
+      <h3 class="grp">Supply chains and investors</h3>
+      <ul class="cases">
+        <li>
+          <h4>SolarWinds</h4>
+          <p class="meta">2020 to 2021 &middot; <span class="st">Attribution</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>Russia, as the US and UK governments said.</dd>
+            <dt>What happened</dt><dd>Hackers used software from a contractor to get into nine US agencies and 100 private firms. The White House said it had high confidence that Russia&rsquo;s SVR was responsible, and the UK NCSC said it was highly likely.</dd>
+            <dt>For your firm</dt><dd>The software and updates you install are someone else&rsquo;s way in.</dd>
+            <dt>Source</dt><dd><a href="https://cyberscoop.com/biden-russia-solarwinds-sanctions-white-house/" rel="noopener">CyberScoop</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>Crypto AG: an encryption supplier owned by spy agencies</h4>
+          <p class="meta">1970 to 2018 &middot; <span class="st">Attribution</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>The United States and Germany, as a Swiss parliamentary report said.</dd>
+            <dt>What happened</dt><dd>The Swiss encryption firm was owned by the CIA and Germany&rsquo;s BND, and its products were deliberately weakened so the West could read messages passing over them. The Swiss parliamentary oversight body reported on it in November 2020.</dd>
+            <dt>For your firm</dt><dd>Check who owns your suppliers. Spying is not only done by rivals.</dd>
+            <dt>Source</dt><dd><a href="https://www.theregister.com/2020/11/12/crypto_ag_swiss_parliament_report/" rel="noopener">The Register</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>A UK order on a chip plant purchase</h4>
+          <p class="meta">Nov 2022 &middot; <span class="st">Government action</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>No state named.</dd>
+            <dt>What happened</dt><dd>The UK ordered Nexperia BV to sell at least 86% of the former Newport Wafer Fab. The notice cites risks around technology and know-how, and the site&rsquo;s links to a local technology cluster. It does not allege spying.</dd>
+            <dt>For your firm</dt><dd>Ownership changes can draw a government review.</dd>
+            <dt>Source</dt><dd><a href="https://assets.publishing.service.gov.uk/media/6375ef068fa8f5771111bd60/NWF_Final_Order_Public_Notice_16112022.pdf" rel="noopener">UK government notice</a></dd>
+          </dl>
+        </li>
+      </ul>
+      <h3 class="grp">Accused, then cleared or collapsed</h3>
+      <ul class="cases">
+        <li>
+          <h4>A Japanese machinery maker</h4>
+          <p class="meta">2020 to 2025 &middot; <span class="st">Dropped</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>No state named.</dd>
+            <dt>What happened</dt><dd>Three executives were detained and indicted in March 2020 over exports of spray dryers, which they said were legal. The charges were later dropped, and in August 2025 police and prosecutors apologised for an illegal investigation.</dd>
+            <dt>For your firm</dt><dd>Keep export paperwork and get a lawyer early.</dd>
+            <dt>Source</dt><dd><a href="https://www.cbsnews.com/news/japan-police-apologize-grave-innocent-businessman-long-detention" rel="noopener">CBS News (AFP)</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>An MIT professor</h4>
+          <p class="meta">Jan 2022 &middot; <span class="st">Dropped</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>None alleged. The charges were about funding disclosure on grant forms.</dd>
+            <dt>What happened</dt><dd>Prosecutors recommended dismissing all three charges against the professor, who had pleaded not guilty.</dd>
+            <dt>For your firm</dt><dd>A charge is not a finding.</dd>
+            <dt>Source</dt><dd><a href="https://www.technologyreview.com/2022/01/15/1043319/china-initative-gang-chen-mit/" rel="noopener">MIT Technology Review</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>A BrahMos engineer in India</h4>
+          <p class="meta">2025 to 2026 &middot; <span class="st">Conviction overturned</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>Pakistan, as prosecutors alleged. Not proven.</dd>
+            <dt>What happened</dt><dd>The Bombay High Court acquitted a former engineer at the missile maker of charges including espionage. The Uttar Pradesh government appealed, and the Supreme Court issued notice on 13 July 2026.</dd>
+            <dt>For your firm</dt><dd>A first verdict can change on appeal.</dd>
+            <dt>Source</dt><dd><a href="https://www.livelaw.in/top-stories/supreme-court-notice-brahmos-espionage-leaking-info-to-pakistan-542170" rel="noopener">LiveLaw</a></dd>
+          </dl>
+        </li>
+        <li>
+          <h4>A UK parliamentary researcher and a teacher</h4>
+          <p class="meta">Apr 2024 to Sep 2025 &middot; <span class="st">Dropped</span></p>
+          <dl>
+            <dt>Linked to</dt><dd>China, as the alleged recipient.</dd>
+            <dt>What happened</dt><dd>Two men were charged with passing information to China. Both denied wrongdoing, and the prosecution offered no evidence in September 2025.</dd>
+            <dt>For your firm</dt><dd>Judge the behaviour you can see, not the background.</dd>
+            <dt>Source</dt><dd><a href="https://www.itv.com/news/2025-10-15/whats-behind-the-collapse-of-the-china-spy-case" rel="noopener">ITV News</a></dd>
+          </dl>
+        </li>
+      </ul>
+
+      <p class="credit">Sources, checked 9 Nov 2026 (cases carry their own links)</p>
+      <ul class="src">
+        <li><a href="https://www.mha.gov.sg/media-room/newsroom/dickson-yeo-14-december/" rel="noopener">MHA, 14 Dec 2021</a></li>
+        <li><a href="https://sprs.parl.gov.sg/search/#/sprs3topic?reportid=written-answer-na-24422" rel="noopener">Hansard, written reply, 8 Sep 2026</a></li>
+        <li><a href="https://sprs.parl.gov.sg/search/#/sprs3topic?reportid=written-answer-8110" rel="noopener">Hansard, written reply, 6 Jul 2021</a></li>
+        <li><a href="https://data.gov.sg/datasets/d_acde1106003906a75c3fa052592f2fcb/view" rel="noopener">data.gov.sg, Government Procurement via GeBIZ</a></li>
+        <li><a href="https://www.gov.uk/government/news/new-app-to-counter-malicious-approaches-online" rel="noopener">GOV.UK, Think Before You Link</a></li>
+        <li><a href="https://www.customs.gov.sg/permits-and-licences/trade-controls-and-prohibitions/strategic-goods-control/sanctioned-lists-and-red-flags/" rel="noopener">Singapore Customs, red flags</a></li>
+        <li><a href="https://www.cpib.gov.sg/about-corruption/prevention-and-education/prevention-of-corruption/" rel="noopener">CPIB, prevention of corruption</a></li>
+        <li><a href="https://archive.dni.gov/index.php/ncsc-what-we-do/secure-innovation" rel="noopener">US ODNI, Secure Innovation (archived)</a></li>
+        <li><a href="https://www.cisa.gov/news-events/cybersecurity-advisories/aa26-113a" rel="noopener">CISA advisory AA26-113A</a></li>
+        <li><a href="https://www.ncsc.gov.uk/collection/supply-chain-security" rel="noopener">UK NCSC, supply chain security</a></li>
+        <li><a href="https://www.csa.gov.sg/our-programmes/support-for-enterprises/sg-cyber-safe-programme/cybersecurity-certification-for-organisations/cyber-essentials/" rel="noopener">CSA Cyber Essentials</a></li>
+        <li><a href="https://www.csa.gov.sg/resources/singcert/cyber-aid/" rel="noopener">SingCERT Cyber Aid</a></li>
+        <li><a href="https://www.isd.gov.sg/report-a-threat/" rel="noopener">ISD, report a threat</a></li>
+        <li><a href="https://www.mha.gov.sg/what-we-do/managing-security-threats/" rel="noopener">MHA, managing security threats</a></li>
+        <li><a href="https://sso.agc.gov.sg/Act/OSA1935" rel="noopener">Official Secrets Act 1935</a></li>
+        <li><a href="https://www.mha.gov.sg/what-we-do/foreign-interference/fica/" rel="noopener">MHA, FICA</a></li>
+        <li><a href="https://www.tal.sg/tafep/getting-started/fair/tripartite-guidelines" rel="noopener">TAFEP, Tripartite Guidelines</a></li>
+      </ul>
+      <p class="credit" style="margin-top:8px">Written 9 Nov 2026. Prompted by recent news reports, whose claims are unproven. I make no claim about any person or company in those reports. Case summaries are from the linked sources and status may have changed. The lessons are my own view. I&rsquo;m not a lawyer and this isn&rsquo;t legal advice. Not affiliated with any agency or organisation mentioned.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional or legal advice. Try any tool at your own risk, and back up your data first. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+
+</body>
+</html>
