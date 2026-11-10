@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who Checks the AI? &middot; Charles Tay</title>
+<meta name="description" content="A made-up Singapore distributor works out who answers for the AI its staff and software agents use, with free government guides and a short course.">
+<link rel="canonical" href="https://charlestaysg.com/notes/who-checks-the-ai/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Who Checks the AI? &middot; Charles Tay">
+<meta property="og:description" content="One small firm, six weeks, and the free guides that helped.">
+<meta property="og:url" content="https://charlestaysg.com/notes/who-checks-the-ai/">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261109a">
+<style>
+  .steps { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 8px 16px; margin: 12px 0 0; max-width: 72ch; }
+  .steps dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .steps dd { margin: 0; font-size: 16px; line-height: 1.5; }
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  .prose { max-width: 64ch; font-size: 17px; line-height: 1.6; }
+  .prose + .prose { margin-top: 12px; }
+  .src { max-width: 64ch; margin: 8px 0 0; padding-left: 18px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .src li { overflow-wrap: anywhere; }
+  .credit { max-width: 64ch; margin-top: 24px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .jump { display: flex; flex-wrap: wrap; gap: 8px 16px; list-style: none; padding: 0; margin: 0; font-family: var(--font-mono); font-size: 13px; letter-spacing: .06em; }
+  .jump a { color: var(--green); }
+  h3.grp { margin: 30px 0 8px; font-size: 21px; font-weight: 700; }
+  .used { max-width: 64ch; margin: 12px 0 0; border-left: 3px solid var(--green); padding: 6px 0 6px 14px; font-size: 16px; line-height: 1.5; }
+  .used b { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--green); font-weight: 500; margin-right: 6px; }
+  .parts { list-style: none; padding: 0; margin: 14px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; max-width: 900px; }
+  .parts li { border: 1px solid var(--line); background: var(--panel); padding: 10px 14px; font-size: 15px; line-height: 1.45; }
+  .parts li strong { display: block; font-size: 16px; margin-bottom: 2px; }
+  .parts li.new { border-color: var(--green); }
+  .parts li.new strong::after { content: " · added May 2026"; font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--green); font-weight: 500; }
+  .courses-wrap { overflow-x: auto; margin-top: 12px; max-width: 900px; }
+  table.courses { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.45; }
+  table.courses th, table.courses td { text-align: left; vertical-align: top; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line); }
+  table.courses thead th { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  table.courses td a { overflow-wrap: anywhere; }
+  table.courses .also { display: block; font-size: 14px; color: var(--muted); margin-top: 2px; }
+  @media (max-width: 640px) {
+    .steps { grid-template-columns: 1fr; gap: 2px; } .steps dd { margin-bottom: 8px; }
+    table.courses thead { display: none; }
+    table.courses tr, table.courses td { display: block; }
+    table.courses td { border-bottom: 0; padding: 2px 0; }
+    table.courses tr { border-bottom: 1px solid var(--line); padding: 10px 0; }
+  }
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/projects/worth-watching/">Worth watching</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#work">← Charles Tay</a>
+    <span class="label">For SME owners · <time datetime="2026-11-11">11 Nov 2026</time></span>
+    <h1>Who checks the AI?</h1>
+    <p class="dek">A made-up distributor finds staff pasting price lists into a free chatbot, then gets offered an AI agent that can send quotes on its own. Six weeks later the owner has an answer. Here is how she got there, using free Singapore guides and one short course.</p>
+  </div>
+</header>
+
+<main>
+  <section id="top">
+    <div class="wrap">
+      <ul class="jump" aria-label="On this page">
+        <li><a href="#story">The story</a></li>
+        <li><a href="#questions">Four questions</a></li>
+        <li><a href="#guides">Free guides</a></li>
+        <li><a href="#courses">Short courses</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <ul class="short">
+        <li>Name one person who answers for how the firm uses AI. In a small firm that is usually the owner.</li>
+        <li>Before an AI tool can act on its own, list what it can touch and decide which actions need a person to say yes first.</li>
+        <li>Start small, keep a log, and check every month whether anyone is still reading what the AI does.</li>
+        <li>Tell customers when AI is involved and who to call when it gets something wrong.</li>
+        <li>Singapore&rsquo;s government publishes free guides for all of this. You don&rsquo;t need a consultant to start.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="story">
+    <div class="wrap">
+      <div class="sec-head"><h2>the story</h2></div>
+      <p class="prose">Siew Ling runs a building-supplies distributor in Kaki Bukit: 22 staff, four sales people, about 300 trade customers. She and her firm are made up. The problems are ones I hear about often.</p>
+
+      <h3 class="grp">Week 1: a price list in a chatbot</h3>
+      <p class="prose">A sales executive shows her a quote he wrote in two minutes. He had pasted the customer&rsquo;s past orders and the firm&rsquo;s trade price list into a free chatbot on his phone. Two others do the same. Nobody asked, because nobody had said anything.</p>
+      <p class="prose">She doesn&rsquo;t ban it. She writes one page: which AI tools staff may use, what never goes in (customer details, trade prices, anything under contract), and who to ask. She names herself and her operations manager as the two people who answer for AI use, and puts AI on the monthly management meeting.</p>
+      <p class="used"><b>Used</b>Section 2 of ISAGO, IMDA and PDPC&rsquo;s free self-check guide: who is responsible, and does everyone know the rules.</p>
+
+      <h3 class="grp">Week 2: the agent demo</h3>
+      <p class="prose">A software vendor demonstrates an AI agent. It reads email enquiries, checks stock, drafts quotes, sends them, and chases late payments. A chatbot only answers. An agent acts, in the firm&rsquo;s name.</p>
+      <p class="prose">She asks the vendor to walk her through what the agent is made of. IMDA&rsquo;s guide for agentic AI, updated in May 2026, lists eight parts. She writes the vendor&rsquo;s answer under each one.</p>
+      <ul class="parts" aria-label="Eight parts of an AI agent">
+        <li><strong>Model</strong>The AI that reads, plans and writes.</li>
+        <li><strong>Instructions</strong>What it is told to do and not do.</li>
+        <li><strong>Memory</strong>What it keeps between conversations, including customer details.</li>
+        <li><strong>Planning and reasoning</strong>How it breaks a job into steps.</li>
+        <li><strong>Tools</strong>What it can open and change: email, stock system, accounts.</li>
+        <li><strong>Protocols</strong>How it connects to other software and other agents.</li>
+        <li class="new"><strong>Controls</strong>Access limits, guardrails and human approvals.</li>
+        <li class="new"><strong>Logging and monitoring</strong>A record of what it did and why.</li>
+      </ul>
+      <p class="prose" style="margin-top:14px">Two answers worry her. The agent would get full access to the accounts system, and the vendor can&rsquo;t show her where its actions are recorded.</p>
+      <p class="used"><b>Used</b>Section 1 of IMDA&rsquo;s Model AI Governance Framework for Agentic AI (version 1.5).</p>
+
+      <h3 class="grp">Week 3: where a person says yes</h3>
+      <p class="prose">She sorts what the agent would do by two questions: how bad is a mistake, and can it be undone? Checking stock and drafting a quote: low harm, easy to undo, so the agent goes ahead. Sending a quote to a customer, giving a discount, writing off a payment or deleting a record: a person approves first. If the approver is away, the action waits. It doesn&rsquo;t go ahead by default.</p>
+      <p class="prose">She asks the vendor to give the agent read-only access to the accounts system, and to block the approval-needing actions in the software itself, not just tell the agent in its instructions. Instructions can be ignored or forgotten. A blocked button can&rsquo;t.</p>
+      <p class="used"><b>Used</b>Section 3 of ISAGO on the level of human involvement, and dimension 1 of IMDA&rsquo;s agentic guide on bounding the risks upfront.</p>
+
+      <h3 class="grp">Weeks 4 and 5: two people, one log</h3>
+      <p class="prose">The agent starts with two sales staff and one product range. Every action goes into a log nobody can edit. On Fridays the operations manager reads ten drafts at random.</p>
+      <p class="prose">At the end of the month she looks at one number: how often staff changed or rejected a draft before approving it. Early on it is about one in four. If it ever drops to zero, either the agent has become perfect or nobody is reading. IMDA&rsquo;s May 2026 update suggests tracking this override rate and how fast people approve.</p>
+      <p class="used"><b>Used</b>Section 4 of ISAGO on operations, and dimension 3 of IMDA&rsquo;s agentic guide on testing, gradual rollout and monitoring.</p>
+
+      <h3 class="grp">Week 6: telling customers</h3>
+      <p class="prose">Quotes now carry one line: drafted with AI, checked by a named staff member, with that person&rsquo;s number. Customers who reply get a person.</p>
+      <p class="prose">The vendor then asks to use the firm&rsquo;s customer emails to improve its model. She says no for now. PDPC&rsquo;s July 2026 guidelines on personal data in generative AI say that where a firm relies on consent to train AI on personal data, it must say so plainly. &ldquo;To improve our services&rdquo; is not enough. She would rather not start that conversation with 300 customers.</p>
+      <p class="used"><b>Used</b>Section 5 of ISAGO on stakeholder communication, and PDPC&rsquo;s advisory guidelines on personal data in generative AI.</p>
+
+      <h3 class="grp">And the junior staff</h3>
+      <p class="prose">Writing quotes was how new sales staff learned the products and the prices. If the agent writes them all, nobody learns. So each junior writes a few quotes a month by hand, and a senior checks them. If the agent stops working one day, someone still knows how.</p>
+      <p class="used"><b>Used</b>Dimension 4 of IMDA&rsquo;s agentic guide, on keeping skills and business continuity.</p>
+    </div>
+  </section>
+
+  <section id="questions">
+    <div class="wrap">
+      <div class="sec-head"><h2>four questions she now asks every quarter</h2></div>
+      <p class="prose">These follow the four areas in ISAGO. Shortened, in her words.</p>
+      <dl class="steps">
+        <dt>Who answers</dt><dd>Is it clear who is responsible for each AI tool we use, and do staff know the rules and who to ask?</dd>
+        <dt>Who approves</dt><dd>For each thing the AI does, could a mistake hurt a customer or cost us money? If so, does a person approve it first?</dd>
+        <dt>Is it working</dt><dd>Is our data clean and allowed to be used this way? Do we log what the AI does, and does anyone read the log?</dd>
+        <dt>Who knows</dt><dd>Do customers know when AI is involved, can we explain a decision, and is there a person they can complain to?</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="guides">
+    <div class="wrap">
+      <div class="sec-head"><h2>the free guides she used</h2></div>
+      <ul class="short">
+        <li><a href="https://www.pdpc.gov.sg/-/media/Files/PDPC/PDF-Files/Resource-for-Organisation/AI/SGIsago.pdf" rel="noopener">ISAGO (PDF)</a>: IMDA and PDPC&rsquo;s self-assessment guide, with the World Economic Forum, January 2020. Questions to ask yourself, with examples. It predates chatbots and agents, so pair it with the next one.</li>
+        <li><a href="https://www.imda.gov.sg/-/media/imda/files/about/emerging-tech-and-research/artificial-intelligence/mgf-for-agentic-ai.pdf" rel="noopener">Model AI Governance Framework for Agentic AI, version 1.5 (PDF)</a>: IMDA, May 2026. The eight parts of an agent, the risks, where people should approve, and case studies from real firms.</li>
+        <li><a href="https://aiverifyfoundation.sg/what-is-ai-verify/" rel="noopener">AI Verify</a>: process checks and a testing toolkit for checking an AI system against 11 principles. More than most small firms need to run themselves, but worth asking your vendor whether they have used it.</li>
+        <li><a href="https://www.csa.gov.sg/resources/publications/addendum-on-securing-ai-systems/" rel="noopener">CSA, Securing Agentic AI addendum</a>: the security side, for whoever sets up your systems.</li>
+        <li><a href="https://www.pdpc.gov.sg/ai" rel="noopener">PDPC on AI</a>: the personal data rules, including the July 2026 guidelines on generative AI.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="courses">
+    <div class="wrap">
+      <div class="sec-head"><h2>if you want a day or two of training</h2></div>
+      <p class="prose">Siew Ling&rsquo;s operations manager went on a one-day course before the agent went live. There are many to choose from. These seven are a sample from SWDA&rsquo;s public course list: AI governance in the title, one or two days, from polytechnic, university and private providers. Not a ranking. Check dates and funding on each course page.</p>
+      <div class="courses-wrap">
+        <table class="courses">
+          <thead><tr><th>course</th><th>provider</th><th>length</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://courses.myskillsfuture.gov.sg/courses/TGS-2025053488" rel="noopener">Principles of AI Ethics and Governance for Emerging Technologies</a></td><td>Adept Academy</td><td>1 day</td></tr>
+            <tr><td><a href="https://courses.myskillsfuture.gov.sg/courses/TGS-2026064756" rel="noopener">Data Ethics and Governance for Responsible AI</a></td><td>National University of Singapore</td><td>2 days</td></tr>
+            <tr><td><a href="https://courses.myskillsfuture.gov.sg/courses/TGS-2024042696" rel="noopener">Artificial Intelligence Ethics and Governance</a></td><td>NTUC LearningHub</td><td>1 day</td></tr>
+            <tr><td><a href="https://courses.myskillsfuture.gov.sg/courses/TGS-2026064970" rel="noopener">AI Governance Essentials</a><span class="also">Also on <a href="https://step.polite.edu.sg/" rel="noopener">STEP</a>, the polytechnics&rsquo; course portal</span></td><td>Republic Polytechnic</td><td>1 day</td></tr>
+            <tr><td><a href="https://courses.myskillsfuture.gov.sg/courses/TGS-2026063559" rel="noopener">Advanced Certificate in Agentic AI, Module 6: Governance, Safety, and Ethical Management of Agentic AI</a></td><td>Singapore Management University</td><td>1 day</td></tr>
+            <tr><td><a href="https://courses.myskillsfuture.gov.sg/courses/TGS-2023040745" rel="noopener">Mastering AI Ethics &amp; Governance</a></td><td>Singapore University of Technology and Design</td><td>2 days</td></tr>
+            <tr><td><a href="https://courses.myskillsfuture.gov.sg/courses/TGS-2026065377" rel="noopener">AI Governance for SMEs and Enterprise Adoption</a></td><td>Wong Fong Academy</td><td>2 days</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="prose" style="margin-top:14px">The one in this story is the polytechnic course. Its public description covers why AI governance matters, bias, transparency, accountability and human oversight, how to apply Singapore&rsquo;s guides, and governance for AI agents.</p>
+      <p class="prose">For more, open <a href="../../projects/course-finder/?sector=general&amp;q=governance">Course Finder</a>, search &ldquo;governance&rdquo; and set the provider type to all providers. The public list has more than 50 courses with AI and governance in the title.</p>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="wrap">
+      <div class="sec-head"><h2>sources</h2></div>
+      <ul class="src">
+        <li><a href="https://www.pdpc.gov.sg/-/media/Files/PDPC/PDF-Files/Resource-for-Organisation/AI/SGIsago.pdf" rel="noopener">Companion to the Model AI Governance Framework: Implementation and Self-Assessment Guide for Organizations (ISAGO), Jan 2020</a></li>
+        <li><a href="https://www.imda.gov.sg/-/media/imda/files/about/emerging-tech-and-research/artificial-intelligence/mgf-for-agentic-ai.pdf" rel="noopener">IMDA, Model AI Governance Framework for Agentic AI, version 1.5, 20 May 2026 (updated 5 Jun 2026)</a></li>
+        <li><a href="https://aiverifyfoundation.sg/what-is-ai-verify/" rel="noopener">AI Verify Foundation, AI Verify testing framework</a></li>
+        <li><a href="https://www.csa.gov.sg/resources/publications/addendum-on-securing-ai-systems/" rel="noopener">CSA, Securing Agentic AI addendum, Jun 2026</a></li>
+        <li><a href="https://www.bakermckenzie.com/en/insight/publications/2026/07/singapore-ai-specific-notification-requirement" rel="noopener">Baker McKenzie, summary of PDPC&rsquo;s Advisory Guidelines on Use of Personal Data in Generative AI, Jul 2026</a></li>
+        <li><a href="https://data.gov.sg/" rel="noopener">SWDA course directory via data.gov.sg</a>, read 11 Nov 2026</li>
+      </ul>
+      <p class="credit" style="margin-top:8px">Written 11 Nov 2026. Siew Ling and her firm are made up. The guidance is from the linked public documents, and the steps she takes are my own reading of them. The course list is a sample, not a recommendation of one provider over another. I&rsquo;m not a lawyer and this isn&rsquo;t legal advice. Not affiliated with any agency or organisation mentioned.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional or legal advice. Try any tool at your own risk, and back up your data first. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+
+</body>
+</html>
