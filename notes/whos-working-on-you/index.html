@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who&rsquo;s Working on You? &middot; Charles Tay</title>
+<meta name="description" content="The 2026 Nvidia and Megaspeed story as a case study for SME owners: the honey-trap playbook a former CIA officer and a former Russian operative described, where a small firm is exposed, and five checks to start this month.">
+<link rel="canonical" href="https://charlestaysg.com/notes/whos-working-on-you/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Who&rsquo;s Working on You? &middot; Charles Tay">
+<meta property="og:description" content="A spy&rsquo;s playbook, a chip-maker&rsquo;s CEO, and the people risk to small firms.">
+<meta property="og:url" content="https://charlestaysg.com/notes/whos-working-on-you/">
+<meta name="theme-color" content="#F3F6FA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1324" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../styles.css?v=20261109a">
+<style>
+  :root { --org: #C2410C; --pur: #6D45C9; --blue: #2563C9; --grey: #6B7486; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --org: #F08A5D; --pur: #A98BF0; --blue: #6EA8FF; --grey: #9AA4B6; } }
+  :root[data-theme="dark"] { --org: #F08A5D; --pur: #A98BF0; --blue: #6EA8FF; --grey: #9AA4B6; }
+  .short { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 64ch; }
+  .short li { padding-left: 18px; position: relative; font-size: 17px; line-height: 1.5; }
+  .short li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; background: var(--green); }
+  .prose { display: block; max-width: 64ch; font-size: 17px; line-height: 1.6; }
+  .prose + .prose { margin-top: 12px; }
+  .src { max-width: 64ch; margin: 8px 0 0; padding-left: 18px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .src li { overflow-wrap: anywhere; }
+  .credit { max-width: 64ch; margin-top: 24px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  .jump { display: flex; flex-wrap: wrap; gap: 8px 16px; list-style: none; padding: 0; margin: 0; font-family: var(--font-mono); font-size: 13px; letter-spacing: .06em; }
+  .jump a { color: var(--green); }
+  h3.grp { margin: 30px 0 8px; font-size: 21px; font-weight: 700; }
+  .mono { font-family: var(--font-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+  .key { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 4px 0 14px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  .key span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; background: var(--c); }
+  .k-rec { --c: var(--green); } .k-rep { --c: var(--blue); } .k-dis { --c: var(--org); }
+  .tl { list-style: none; padding: 0; margin: 0; max-width: 760px; position: relative; }
+  .tl::before { content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
+  .tl li { position: relative; padding: 0 0 18px 30px; }
+  .tl li::before { content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; background: var(--c); border: 3px solid var(--bg, #F3F6FA); box-sizing: border-box; }
+  .tl .when { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .tl .what { font-size: 16px; line-height: 1.5; margin-top: 2px; }
+  .tl .st { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--c); margin-left: 6px; }
+  .tl .rec { --c: var(--green); } .tl .rep { --c: var(--blue); } .tl .dis { --c: var(--org); }
+
+  .lessons { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; margin: 14px 0 0; max-width: 900px; padding: 0; list-style: none; }
+  .lessons li { border: 1px solid var(--line); border-top: 4px solid var(--org); background: var(--panel); padding: 12px 14px; font-size: 15px; line-height: 1.45; }
+  .lessons li strong { display: block; font-size: 17px; margin-bottom: 4px; }
+
+  .flow-wrap { overflow-x: auto; border: 1px solid var(--line); background: var(--panel); margin: 14px 0 6px; max-width: 900px; }
+  .flow { display: block; min-width: 640px; width: 100%; height: auto; font-family: var(--font-display); }
+  .flow .n { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; }
+  .flow .hook { fill: color-mix(in srgb, var(--pur) 10%, var(--panel)); stroke: var(--pur); }
+  .flow .cap { fill: color-mix(in srgb, var(--org) 10%, var(--panel)); stroke: var(--org); }
+  .flow .out { fill: color-mix(in srgb, var(--ink) 8%, var(--panel)); stroke: var(--ink); }
+  .flow .h { fill: var(--ink); font-size: 16px; font-weight: 700; }
+  .flow .s { fill: var(--muted); font-size: 12px; font-family: var(--font-mono); }
+  .flow .ph { fill: var(--muted); font-size: 12px; font-family: var(--font-mono); letter-spacing: .1em; }
+  .flow .a { stroke: var(--grey); stroke-width: 2; fill: none; marker-end: url(#arr); }
+  .flow #arr path { fill: var(--grey); }
+
+  .steps8 { list-style: none; padding: 0; margin: 16px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; max-width: 900px; counter-reset: s; }
+  .steps8 li { border: 1px solid var(--line); background: var(--panel); padding: 12px 14px; font-size: 15px; line-height: 1.45; counter-increment: s; border-left: 4px solid var(--c); }
+  .steps8 li.hk { --c: var(--pur); } .steps8 li.cp { --c: var(--org); }
+  .steps8 strong { display: block; font-size: 17px; }
+  .steps8 strong::before { content: counter(s) ". "; color: var(--c); }
+  .steps8 .sme { display: block; margin-top: 6px; }
+  .steps8 .flag { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--line); color: var(--org); }
+  .steps8 b { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; margin-right: 4px; color: var(--muted); }
+  .steps8 .flag b { color: var(--org); }
+
+  .ep { list-style: none; padding: 0; margin: 14px 0 0; max-width: 820px; }
+  .ep li { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 16px; line-height: 1.5; }
+  .ep li a.t { font-family: var(--font-mono); font-size: 14px; color: var(--green); padding-top: 1px; }
+  .ep li strong { display: block; }
+  .ep li .who { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-left: 6px; font-weight: 500; }
+  .ep li.part { display: block; border-bottom: 0; padding: 22px 0 4px; }
+  .ep li.part span { font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--pur); }
+
+  .expo { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin: 14px 0 0; max-width: 900px; padding: 0; list-style: none; }
+  .expo li { border: 1px solid var(--line); background: var(--panel); padding: 12px 14px; font-size: 15px; line-height: 1.45; }
+  .expo li strong { display: block; font-size: 17px; margin-bottom: 4px; }
+
+  .checks { list-style: none; padding: 0; margin: 14px 0 0; max-width: 72ch; display: grid; gap: 10px; }
+  .checks li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; font-size: 16px; line-height: 1.5; }
+  .checks li span.n { font-family: var(--font-display); font-weight: 900; font-size: 26px; line-height: 1; color: var(--green); }
+  .flags { columns: 2 260px; column-gap: 28px; max-width: 760px; padding-left: 18px; margin: 10px 0 0; font-size: 16px; line-height: 1.5; }
+  .flags li { margin: 0 0 8px; break-inside: avoid; }
+  @media (max-width: 640px) { .ep li { grid-template-columns: 60px minmax(0, 1fr); gap: 8px; } }
+</style>
+</head>
+<body>
+<!-- topbar:start -->
+<nav class="topbar" aria-label="Site">
+  <div class="wrap">
+    <a class="me" href="/">Charles Tay</a>
+    <a href="/#work">Work</a><a href="/#news">News</a><a href="/#about">About</a><a href="/#toolkit">Toolkit</a><a href="/projects/worth-watching/">Worth watching</a><a href="/#contact">Contact</a>
+    <a class="tb-ext" href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn ↗</a>
+  </div>
+</nav>
+<!-- topbar:end -->
+
+<header class="page-head">
+  <div class="wrap">
+    <a class="back" href="../../#work">← Charles Tay</a>
+    <span class="label">For SME owners · <time datetime="2026-11-16">16 Nov 2026</time></span>
+    <h1>Who&rsquo;s working on you?</h1>
+    <p class="dek">A Singapore-registered buyer, a chip-maker&rsquo;s CEO and a spy&rsquo;s playbook. The Nvidia story is about a giant, but the method works best on owners who decide alone. Here is how it works and what a small firm can check.</p>
+  </div>
+</header>
+
+<main>
+  <section id="top">
+    <div class="wrap">
+      <ul class="jump" aria-label="On this page">
+        <li><a href="#case">The case</a></li>
+        <li><a href="#playbook">The playbook</a></li>
+        <li><a href="#episode">Inside the episode</a></li>
+        <li><a href="#exposed">Where you&rsquo;re exposed</a></li>
+        <li><a href="#flags">Red flags</a></li>
+        <li><a href="#checks">Five checks</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="short">
+    <div class="wrap">
+      <div class="sec-head"><h2>the short version</h2></div>
+      <ul class="short">
+        <li>The weak point is rarely the computer system. It is one trusted person who can say yes on their own, and that is usually the owner.</li>
+        <li>The method is patient: study the person, arrange a &ldquo;chance&rdquo; meeting, flatter their work, become the one who understands them, then quietly push out anyone who doubts.</li>
+        <li>In the Nvidia case, the questions came after the orders. A big new buyer with thin substance behind it is the oldest warning sign there is.</li>
+        <li>Your gatekeepers (PA, driver, admin, IT person) hear everything. Spies go for them because they feel unseen and cost little.</li>
+        <li>Two cheap habits block most of this: nobody approves a big new customer or payment change alone, and when a trusted sceptic objects, you ask why before you act.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="case">
+    <div class="wrap">
+      <div class="sec-head"><h2>the case: Nvidia and Megaspeed</h2></div>
+      <p class="prose">I use this case because it is current, it involves a company registered in Singapore, and the lessons scale down. The allegations of spying are not proven. I have marked what is on the record, what is reported from unnamed sources, and what is disputed.</p>
+      <div class="key" aria-hidden="true"><span class="k-rec">On the record</span><span class="k-rep">Reported, unnamed sources</span><span class="k-dis">Disputed or denied</span></div>
+      <ol class="tl">
+        <li class="rep"><div class="when">2025<span class="st">reported</span></div><div class="what">The New York Times reports Megaspeed, a Singapore-based cloud company and Nvidia customer, is suspected of helping Chinese firms get around US export limits on AI chips. US officials visiting its Malaysia data centre reportedly found Nvidia equipment still in boxes.</div></li>
+        <li class="dis"><div class="when">2025 to now<span class="st">disputed</span></div><div class="what">Nvidia says the diversion allegations against Megaspeed were investigated and debunked, that Megaspeed is one of many regional cloud customers, and that meetings with its executives were routine.</div></li>
+        <li class="rep"><div class="when">Spring 2026<span class="st">reported</span></div><div class="what">According to the Times, a classified US memo warns officials about Jensen Huang&rsquo;s relationship with Alice Huang (no relation), a Megaspeed executive, based on about a year of surveillance.</div></li>
+        <li class="rep"><div class="when">29 Oct 2026<span class="st">reported</span></div><div class="what">The Times reports US officials believe Alice Huang was a Chinese intelligence asset passing commercial information to Beijing, and that Jensen Huang was not believed to know. A Times reporter later said the company she ran bought nearly US$5 billion of Nvidia chip technology.</div></li>
+        <li class="rec"><div class="when">8 Nov 2026<span class="st">on the record</span></div><div class="what">Jensen Huang tells staff by email that he had a relationship and will cooperate fully. Nvidia&rsquo;s board opens an independent inquiry and says it has no reason to believe trade secrets or national security were compromised.</div></li>
+        <li class="dis"><div class="when">9 Nov 2026<span class="st">denied</span></div><div class="what">Nvidia shares fall about 8% at the US open. China&rsquo;s foreign ministry rejects the spying claim. Megaspeed had not replied to press questions at the time of the reports.</div></li>
+      </ol>
+      <h3 class="grp">What an SME owner can take from it</h3>
+      <ul class="lessons">
+        <li><strong>The boss&rsquo;s yes skips the checks</strong>A former CIA officer on the podcast below argues nobody vetted the buyer because the order came from the top. In a 20-person firm, that is every order.</li>
+        <li><strong>Check what stands behind a buyer</strong>Reporting questioned what Megaspeed actually ran. Real customers have offices, staff and a history you can see.</li>
+        <li><strong>Pillow talk travels further than chips</strong>The bigger risk named on the podcast is not the product. It is what a trusted person hears about plans, prices and other clients.</li>
+        <li><strong>Security spend misses people</strong>A large company can guard its chief executive and still miss who is close to him. Small firms rarely guard either.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="playbook">
+    <div class="wrap">
+      <div class="sec-head"><h2>the playbook, in eight steps</h2></div>
+      <p class="prose">This is the sequence Aliia Roza, who says she was trained as a Russian &ldquo;honey trap&rdquo; operative, walked through on the podcast. It doesn&rsquo;t need romance: the same steps work for a &ldquo;mentor&rdquo;, a &ldquo;partner&rdquo; or a very keen new customer.</p>
+      <div class="flow-wrap">
+        <svg class="flow" viewBox="0 0 860 470" role="img" aria-labelledby="pbt pbd">
+          <title id="pbt">The eight-step playbook</title>
+          <desc id="pbd">Phase one, hook: recon, engineer the meeting, love bomb, mirror and anchor. Phase two, capture: information control, emotional dependency, isolation, gaslighting. Both lead to extraction.</desc>
+          <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9z"/></marker></defs>
+          <text class="ph" x="190" y="34" text-anchor="middle">PHASE 1 · HOOK</text>
+          <text class="ph" x="670" y="34" text-anchor="middle">PHASE 2 · CAPTURE</text>
+          <rect class="n hook" x="40" y="56" width="300" height="58" rx="6"/><text class="h" x="190" y="80" text-anchor="middle">Recon</text><text class="s" x="190" y="100" text-anchor="middle">habits, circle, weak spots</text>
+          <rect class="n hook" x="40" y="140" width="300" height="58" rx="6"/><text class="h" x="190" y="164" text-anchor="middle">Engineer the meeting</text><text class="s" x="190" y="184" text-anchor="middle">target thinks he chose you</text>
+          <rect class="n hook" x="40" y="224" width="300" height="58" rx="6"/><text class="h" x="190" y="248" text-anchor="middle">Love bomb</text><text class="s" x="190" y="268" text-anchor="middle">praise work, ask small favours</text>
+          <rect class="n hook" x="40" y="308" width="300" height="58" rx="6"/><text class="h" x="190" y="332" text-anchor="middle">Mirror and anchor</text><text class="s" x="190" y="352" text-anchor="middle">copy posture, words, breath</text>
+          <line class="a" x1="190" y1="114" x2="190" y2="136"/><line class="a" x1="190" y1="198" x2="190" y2="220"/><line class="a" x1="190" y1="282" x2="190" y2="304"/>
+          <rect class="n cap" x="520" y="56" width="300" height="58" rx="6"/><text class="h" x="670" y="80" text-anchor="middle">Information control</text><text class="s" x="670" y="100" text-anchor="middle">enter his circle and events</text>
+          <rect class="n cap" x="520" y="140" width="300" height="58" rx="6"/><text class="h" x="670" y="164" text-anchor="middle">Emotional dependency</text><text class="s" x="670" y="184" text-anchor="middle">&ldquo;best version of himself&rdquo;</text>
+          <rect class="n cap" x="520" y="224" width="300" height="58" rx="6"/><text class="h" x="670" y="248" text-anchor="middle">Isolation</text><text class="s" x="670" y="268" text-anchor="middle">seed doubt about sceptics</text>
+          <rect class="n cap" x="520" y="308" width="300" height="58" rx="6"/><text class="h" x="670" y="332" text-anchor="middle">Gaslighting</text><text class="s" x="670" y="352" text-anchor="middle">he stops trusting himself</text>
+          <line class="a" x1="670" y1="114" x2="670" y2="136"/><line class="a" x1="670" y1="198" x2="670" y2="220"/><line class="a" x1="670" y1="282" x2="670" y2="304"/>
+          <path class="a" d="M340 337 L430 337 L430 85 L514 85"/>
+          <path class="a" d="M670 366 L670 392 L560 392 L560 404"/>
+          <rect class="n out" x="290" y="406" width="300" height="52" rx="6"/><text class="h" x="440" y="428" text-anchor="middle">Extraction</text><text class="s" x="440" y="446" text-anchor="middle">plans, prices, approvals, access</text>
+        </svg>
+      </div>
+      <ol class="steps8">
+        <li class="hk"><strong>Recon</strong><span class="sme"><b>In an SME</b>Your LinkedIn, ACRA record, staff posts and trade-fair photos tell a stranger who decides, what you care about and who you trust.</span><span class="flag"><b>Flag</b>A new contact already knows your story, your hobbies and your schedule.</span></li>
+        <li class="hk"><strong>Engineer the meeting</strong><span class="sme"><b>In an SME</b>A warm introduction at an event, a friend of a friend, a buyer who &ldquo;happens&rdquo; to sit beside you. Roza&rsquo;s rule: never approach the target first.</span><span class="flag"><b>Flag</b>You can&rsquo;t say who arranged the first meeting, or it was too lucky.</span></li>
+        <li class="hk"><strong>Love bomb</strong><span class="sme"><b>In an SME</b>Praise for what you built, not how you look. Then a small favour (&ldquo;could you look at my plan?&rdquo;), which makes you invested and feel valued.</span><span class="flag"><b>Flag</b>Admiration that is specific, constant and arrives very early.</span></li>
+        <li class="hk"><strong>Mirror and anchor</strong><span class="sme"><b>In an SME</b>They copy your posture, words and pace, and tie good feelings to small cues: a phrase, a scent, a place.</span><span class="flag"><b>Flag</b>Too many &ldquo;me too&rdquo;s. Change your gesture and see if they follow.</span></li>
+        <li class="cp"><strong>Information control</strong><span class="sme"><b>In an SME</b>They turn up at your events, join your WhatsApp groups and get to know your key staff and clients.</span><span class="flag"><b>Flag</b>They are suddenly everywhere your business is.</span></li>
+        <li class="cp"><strong>Emotional dependency</strong><span class="sme"><b>In an SME</b>You feel sharper, younger, understood. You take their calls first. It feels like a great partnership.</span><span class="flag"><b>Flag</b>&ldquo;Only they really get what I&rsquo;m building.&rdquo;</span></li>
+        <li class="cp"><strong>Isolation</strong><span class="sme"><b>In an SME</b>Never a direct attack. Hints: &ldquo;I heard your accountant said&hellip;&rdquo; You push the sceptic away and think it was your idea.</span><span class="flag"><b>Flag</b>Your partner, spouse or longest-serving staff have gone quiet about them.</span></li>
+        <li class="cp"><strong>Gaslighting</strong><span class="sme"><b>In an SME</b>Your own checks start to feel like paranoia. Facts get re-told until you doubt what you remember.</span><span class="flag"><b>Flag</b>&ldquo;You&rsquo;re overthinking it&rdquo; whenever you ask a normal question.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="episode">
+    <div class="wrap">
+      <div class="sec-head"><h2>inside the episode: minutes 17 to 85</h2></div>
+      <p class="prose">The source is <a href="https://www.youtube.com/watch?v=1mDHHi398ig" rel="noopener">The Diary of a CEO</a> with John Kiriakou, a former CIA officer, and Aliia Roza, recorded 11 Nov 2026. The first 16 minutes are about the Nvidia story; the useful part is the tradecraft after that. My summary, with timestamps that open the video at that point. These are their accounts, not verified facts.</p>
+      <ol class="ep">
+        <li class="part"><span>Part 1 · who she was</span></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=1010s" rel="noopener">16:50</a><div><strong>Recruited at 18<span class="who">Roza</span></strong>Her father, a senior officer, enrolled her. From about 350 recruits, five young women were picked for a secret programme by height, age and a deliberately varied look, so each could suit different targets.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=1330s" rel="noopener">22:10</a><div><strong>The curriculum<span class="who">Roza</span></strong>Most of the training was the psychology of men; the rest was using intimacy to steer decisions. Step one is always research on the target.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=2000s" rel="noopener">33:20</a><div><strong>Cheap, patient and learnable<span class="who">both</span></strong>She was paid about US$100 a month and did it for duty. Kiriakou thinks China can afford to send many candidates at one target; the West can&rsquo;t. She calls herself an introvert: these are skills, not personality.</div></li>
+
+        <li class="part"><span>Part 2 · the hook, demonstrated</span></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=1390s" rel="noopener">23:10</a><div><strong>Love bombing, live<span class="who">Roza</span></strong>She greeted Kiriakou in Greek and mentioned their shared faith, both found in her research. Then she praised his career and courage. For successful older men, praise the work, not the looks. Age gap doesn&rsquo;t matter, she says.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=1540s" rel="noopener">25:40</a><div><strong>Ask a small favour<span class="who">Roza</span></strong>Asking him to read her draft makes him invest time in her, and people like those they help. Being asked also makes him feel valued. Remembering small details, like his next event, finishes the job.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=2200s" rel="noopener">36:40</a><div><strong>Social engineering, a real operation<span class="who">Roza</span></strong>Her target was a crime boss who had lost the love of his life while away on national service. For two months the team hired actors to play look-alike couples around him, at the gym and in the street, until he longed for that life. Then a colleague introduced her. She knew his drinks, jokes and schedule, and became exactly the woman he wanted.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=2580s" rel="noopener">43:00</a><div><strong>Eight months inside<span class="who">Roza</span></strong>She listened to his calls, planted bugs and left notes at hidden drop points, slipping out the back of a &ldquo;college&rdquo; she said she attended to brief her handler.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=2640s" rel="noopener">44:00</a><div><strong>Detach and anchor<span class="who">Roza</span></strong>Agents learn to separate body from feelings, and to tie a strong emotion to a cue, such as a keyword or a scent, so it fires on demand around the target. She still uses an anchor to calm her nerves before going on stage.</div></li>
+
+        <li class="part"><span>Part 3 · why people give in</span></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=3240s" rel="noopener">54:00</a><div><strong>Make them attached<span class="who">Kiriakou</span></strong>Two of his recruited sources cried when he handed them over to a successor. Whatever the stated motive, he says, people spy for you because they are attached to you.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=3700s" rel="noopener">61:40</a><div><strong>What moves people<span class="who">Kiriakou</span></strong>In his experience about 90% of sources were motivated by money. The rest: ideology, excitement, or revenge after being passed over. Roza adds a wish to leave a legacy.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=4030s" rel="noopener">67:10</a><div><strong>Who gets targeted<span class="who">Kiriakou</span></strong>Not the person with second-hand gossip. The best source is someone with direct access who is overlooked: his example is a White House valet who hears everything, feels unappreciated and is cheap to win.</div></li>
+
+        <li class="part"><span>Part 4 · locking it in</span></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=1830s" rel="noopener">30:30</a><div><strong>Information control<span class="who">Roza</span></strong>Map the target&rsquo;s inner circle, places and interests, then turn up in the same places. She points to the two Huangs meeting at one conference and then another.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=3840s" rel="noopener">64:00</a><div><strong>Emotional dependency<span class="who">Roza</span></strong>Seduction isn&rsquo;t about loving someone; it&rsquo;s about the state they feel with you. Make him feel like the best version of himself and he becomes hooked on that feeling.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=3940s" rel="noopener">65:40</a><div><strong>Isolation<span class="who">both</span></strong>Remove the people whose opinion he trusts, through hints rather than attacks, so pushing the sceptic away feels like his own idea.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=4120s" rel="noopener">68:40</a><div><strong>Gaslighting, live<span class="who">both</span></strong>She twisted something Kiriakou had said in an old interview until he started defending what he hadn&rsquo;t meant. Doubting yourself makes you easy to steer.</div></li>
+
+        <li class="part"><span>Part 5 · spotting it</span></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=4290s" rel="noopener">71:30</a><div><strong>Mirroring, and the test<span class="who">Roza</span></strong>Disguise, then copy the target&rsquo;s posture, words and even breathing. To test it, change your gesture: if they follow every time, it is technique, not chemistry.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=4500s" rel="noopener">75:00</a><div><strong>Too much in common, too soon<span class="who">Roza</span></strong>Same college, same team, same cousins, and talk of being soulmates at a first meeting. She admits she still uses that line.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=4780s" rel="noopener">79:40</a><div><strong>Body language of the approach<span class="who">both</span></strong>Open posture with nothing in between, eye contact that comes and goes, small signs of shyness. CIA training also covered reading who leans in and who pulls back.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=4990s" rel="noopener">83:10</a><div><strong>The &ldquo;milk&rdquo; test<span class="who">Roza</span></strong>Ask what the word &ldquo;milk&rdquo; brings to mind. Answers about childhood and mother point to a man who wants nurturing; other answers point to other roles. One question tells her which role to play.</div></li>
+        <li><a class="t" href="https://www.youtube.com/watch?v=1mDHHi398ig&amp;t=5100s" rel="noopener">85:00</a><div><strong>How common is this?<span class="who">Kiriakou</span></strong>Every day, he says, by many countries. He quotes an FBI estimate of 10,000 to 15,000 foreign intelligence officers in Washington alone.</div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="exposed">
+    <div class="wrap">
+      <div class="sec-head"><h2>where a small firm is exposed</h2></div>
+      <p class="prose">You don&rsquo;t need to make chips to be worth working on. Tender prices, customer lists, supplier terms, access to a bigger client or a government contract, and goods that are export-controlled are all worth the effort.</p>
+      <ul class="expo">
+        <li><strong>The owner</strong>Decides alone, signs fast, and is the person staff are least likely to question.</li>
+        <li><strong>The gatekeepers</strong>PA, driver, admin and the IT person see diaries, invoices and passwords, and are often the least thanked.</li>
+        <li><strong>The keen new buyer</strong>A big first order, an urgent timeline, and not much you can check behind the name.</li>
+        <li><strong>The quiet sceptic</strong>The partner, spouse, accountant or long-serving manager whose doubts slowly stop being heard.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="flags">
+    <div class="wrap">
+      <div class="sec-head"><h2>red flags</h2></div>
+      <ul class="flags">
+        <li>They already know a lot about you at the first meeting.</li>
+        <li>Everything you like, they like too.</li>
+        <li>Praise for your work that is constant and specific, early on.</li>
+        <li>They copy your posture and pace, and follow when you change it.</li>
+        <li>Small favours that grow into a mentor or partner role.</li>
+        <li>They appear at your events, groups and client meetings.</li>
+        <li>Your trusted people have gone quiet about them.</li>
+        <li>You feel foolish for asking basic questions.</li>
+        <li>A big order or deal that skips your usual checks because you said so.</li>
+        <li>Questions about other clients, prices or plans that have nothing to do with the deal.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="checks">
+    <div class="wrap">
+      <div class="sec-head"><h2>five checks to start this month</h2></div>
+      <ol class="checks">
+        <li><span class="n">1</span><div><strong>Look behind every big new buyer.</strong> Check the ACRA record, a real office, real staff and a history older than the deal. My <a href="../../projects/uen-sheet/">Pre-visit Fact Sheet</a> does the first part from a UEN. Visit if the order matters.</div></li>
+        <li><span class="n">2</span><div><strong>No one approves alone, including you.</strong> A big new customer, an unusual order or a change of bank details needs a second person to say yes. In the Nvidia story the checks reportedly fell away because the top said go.</div></li>
+        <li><span class="n">3</span><div><strong>Treat the sceptic as an alarm, not a nuisance.</strong> When your partner, accountant or a long-serving staff member doesn&rsquo;t like a new contact, ask what they noticed before you decide.</div></li>
+        <li><span class="n">4</span><div><strong>Look after your gatekeepers.</strong> Thank them, tell them what is sensitive, and make it easy to say &ldquo;someone was asking about&hellip;&rdquo; without feeling disloyal.</div></li>
+        <li><span class="n">5</span><div><strong>Know if what you supply is controlled.</strong> Electronics, chips and some industrial goods can need a permit to move on. Check with <a href="https://www.customs.gov.sg/" rel="noopener">Singapore Customs</a> on strategic goods, and see <a href="../who-wants-what-you-supply/">Who Wants What You Supply?</a> if you serve defence, government or critical industries.</div></li>
+      </ol>
+      <p class="prose" style="margin-top:18px">Related: <a href="../plan-b/">If It Stopped Tonight</a> for a one-page plan B, and <a href="../who-checks-the-ai/">Who Checks the AI?</a> for rules on tools that act in your name.</p>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="wrap">
+      <div class="sec-head"><h2>sources</h2></div>
+      <ul class="src">
+        <li><a href="https://www.youtube.com/watch?v=1mDHHi398ig" rel="noopener">The Diary of a CEO, &ldquo;Russian Honeypot&rdquo; with John Kiriakou and Aliia Roza</a>, recorded 11 Nov 2026, published 16 Nov 2026</li>
+        <li><a href="https://www.tweaktown.com/news/114387/nvidia-pushes-back-against-report-linking-ceo-jensen-huang-to-suspected-chinese-intelligence-asset/index.html" rel="noopener">TweakTown, Nvidia pushes back against report</a>, summarising the New York Times report of 29 Oct 2026 and Nvidia&rsquo;s response to CNBC</li>
+        <li><a href="https://tech-insider.org/china-spy-claim-jensen-huang-alice-huang-megaspeed-2026/" rel="noopener">Tech Insider, timeline of the claim</a>, citing NYT, AFP, NPR, PBS and BBC reports, including Jensen Huang&rsquo;s 8 Nov staff email and the board statement</li>
+        <li><a href="https://cybernews.com/ai-news/nvidia-ceo-targeted-chinese-spy/" rel="noopener">Cybernews, Nvidia CEO targeted by alleged Chinese spy</a></li>
+      </ul>
+      <p class="credit">Written 16 Nov 2026. The case is still developing and the spying allegations are unproven; Nvidia, Megaspeed and China&rsquo;s government dispute or have not confirmed them. The podcast guests&rsquo; stories are their own accounts. The SME examples and checks are my reading, not legal or security advice.</p>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap">
+    <p class="disclaimer">Shared in a personal capacity, not on behalf of or recommended by my employer. Not professional or legal advice. <a href="../../disclaimer/">Full disclaimer</a>.</p>
+    <span>Views are my own. No sponsorships or affiliate links.</span>
+    <span><a href="../../">Home</a> · <a href="https://www.linkedin.com/in/charlestay" rel="noopener">LinkedIn</a> · No cookies. The only counter is a simple visit count on the home page.</span>
+  </div>
+</footer>
+</body>
+</html>
