@@ -928,6 +928,7 @@
           <p>Early on 18 November, Singapore time, Apple&rsquo;s own status page said iCloud sign-in had issues for all users. It also listed the App Store, Apple Music and AppleCare on Device as down. People couldn&rsquo;t sign in or download apps, and some reported trouble with Apple Pay. It was the second big outage in a week, after Microsoft&rsquo;s Outlook and Teams went down on 13 November.</p>
           <p>The first question I got: does this lock my iPhone or Mac? No. Unlocking with a passcode or Face ID happens on the device. Files, installed apps, calls and SMS keep working. What stops is anything that needs Apple&rsquo;s servers: signing in, iCloud sync, downloads, Apple Music.</p>
           <p>The second question was the better one: if someone hacks my Apple Account, can they lock my devices? Yes. With your password and a sign-in code, someone can use Find My to lock your iPhone or Mac with a message on the screen, or erase it. Scammers have used this to demand money.</p>
+          <p>This is where a backup on a physical drive earns its keep. iCloud keeps the same files and photos on all your devices, so whoever controls the account can delete them everywhere at once. A Time Machine backup on an external drive sits outside your Apple Account. Plug it into another Mac, open <a href="https://support.apple.com/en-us/102613" rel="noopener">Migration Assistant ↗</a>, and your files, apps and settings come back the same day, without signing in to Apple. The locked Mac stays locked until you get your account back and Apple removes the lock.</p>
           <dl class="spec-list">
             <dt>during an outage</dt><dd>don&rsquo;t sign out, reset the phone or keep retrying your password. Wait until <a href="https://www.apple.com/support/systemstatus/" rel="noopener">Apple&rsquo;s status page ↗</a> shows green.</dd>
             <dt>messages</dt><dd>expect fake &ldquo;your Apple ID is locked&rdquo; SMS and emails. Open Settings yourself and don&rsquo;t tap the link.</dd>
@@ -935,12 +936,16 @@
             <dt>iPhone</dt><dd>turn on <a href="https://support.apple.com/en-us/120340" rel="noopener">Stolen Device Protection ↗</a> (Settings → Face ID &amp; Passcode).</dd>
             <dt>stronger</dt><dd>add two <a href="https://support.apple.com/en-us/102637" rel="noopener">security keys ↗</a> (Settings → your name → Sign-In &amp; Security). Without a key, nobody can sign in, even with your password.</dd>
             <dt>check</dt><dd>remove any device you don&rsquo;t recognise from the list under your name.</dd>
-            <dt>if locked</dt><dd>don&rsquo;t pay. Change your password at <a href="https://iforgot.apple.com/" rel="noopener">iforgot.apple.com ↗</a> and contact Apple with proof of purchase.</dd>
+            <dt>backup</dt><dd>plug in an external drive and turn on <a href="https://support.apple.com/en-us/104984" rel="noopener">Time Machine ↗</a> (System Settings → General → Time Machine). Tick &ldquo;Encrypt backup&rdquo; and write the password on paper, kept away from the Mac.</dd>
+            <dt>unplug</dt><dd>disconnect the drive after each backup. A drive in a drawer can&rsquo;t be reached by a hacker or by ransomware. If you can, swap between two drives and keep one somewhere else.</dd>
+            <dt>iPhone too</dt><dd>connect it to the Mac by cable, open Finder, choose &ldquo;Back up all of the data on your iPhone to this Mac&rdquo; and tick &ldquo;Encrypt local backup&rdquo;. Time Machine then copies that backup to the drive.</dd>
+            <dt>iCloud-only files</dt><dd>if Optimize Mac Storage is on for iCloud Drive or Photos, some files and full-size photos live only in iCloud and never reach the drive. For anything you can&rsquo;t lose, turn it off, or pick &ldquo;Download Originals to this Mac&rdquo; in Photos, if the Mac has space.</dd>
+            <dt>if locked</dt><dd>don&rsquo;t pay. Change your password at <a href="https://iforgot.apple.com/" rel="noopener">iforgot.apple.com ↗</a> and contact Apple with proof of purchase. In the meantime, restore your files from the drive onto any Mac.</dd>
             <dt>for the business</dt><dd>find out whose Apple Account each company iPhone and Mac is signed in to. If it&rsquo;s a staff member&rsquo;s personal account, that person can lock the device, even after they leave.</dd>
           </dl>
           <p><a href="https://www.macrumors.com/2026/11/17/apple-accounts-experiencing-issues/" rel="noopener">MacRumors on the outage ↗</a> · <a href="https://www.apple.com/support/systemstatus/" rel="noopener">Apple System Status ↗</a></p>
           <p>Earlier on this page: <a href="#breached-or-cut-off">Breached, or just cut off</a></p>
-          <p class="credit">Summarised on 18 Nov 2026 from MacRumors and Apple&rsquo;s status page. I&rsquo;m not a security specialist. Not affiliated with Apple.</p>
+          <p class="credit">Summarised on 18 Nov 2026 from MacRumors and Apple&rsquo;s status and support pages. Backup section added the same day. I&rsquo;m not a security specialist. Not affiliated with Apple.</p>
         </div>
       </article>
       <article class="news-item" id="breached-or-cut-off">
